@@ -83,7 +83,7 @@ class ApiController extends Controller
         }
     }
 
-    public function sub_users()
+    public function sub_users(Request $request)
     {
         $token = $request->bearerToken();
 
@@ -209,7 +209,7 @@ class ApiController extends Controller
         }
     }
 
-    public function pickup_requests($id)
+    public function pickup_requests(Request $request, $id)
     {
         $token = $request->bearerToken();
 
@@ -227,7 +227,7 @@ class ApiController extends Controller
         }
     }
 
-    public function financial_data($id)
+    public function financial_data(Request $request, $id)
     {
         $token = $request->bearerToken();
 
@@ -250,7 +250,7 @@ class ApiController extends Controller
         }
     }
 
-    public function logout($id)
+    public function logout(Request $request, $id)
     {
         $token = $request->bearerToken();
 

@@ -27,16 +27,34 @@ class ApiController extends Controller
         } 
     }
 
-    public function vehicles()
+    public function vehicles(Request $request)
     {
         $vehicles = Vehicle::limit(100)->get();
+
+        if (!empty($request->PageIndex)) {
+            if ($request->PageIndex == 1) {
+                $vehicles = Vehicle::limit(100)->get();
+            } else {
+                $offset = ($request->PageIndex - 1) * 100;
+                $vehicles = Vehicle::limit(100)->offset((int)$offset)->get();
+            }
+        }
     
         return $this->sendResponse($vehicles, 'Vehicles retrieved successfully.');
     }
 
-    public function containers()
+    public function containers(Request $request)
     {
         $containers = Container::limit(100)->get();
+
+        if (!empty($request->PageIndex)) {
+            if ($request->PageIndex == 1) {
+                $containers = Container::limit(100)->get();
+            } else {
+                $offset = ($request->PageIndex - 1) * 100;
+                $containers = Container::limit(100)->offset((int)$offset)->get();
+            }
+        }
     
         return $this->sendResponse($containers, 'Containers retrieved successfully.');
     }
@@ -83,8 +101,17 @@ class ApiController extends Controller
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-   
-        User::where('id', $id)->update(['name' => $input['name'], 'password' => \Hash::make($input['password'])]);
+
+        if (!empty($input['password'])) {
+            $check = User::where('id', $id)->first();
+            if (\Hash::check($input['old_password'], $check->password)) {
+                User::where('id', $id)->update(['name' => $input['name'], 'password' => \Hash::make($input['password'])]);
+            } else { 
+                return $this->sendError('Old password is incorrect.', ['error' => 'Unauthorised']);
+            }
+        } else {
+            User::where('id', $id)->update(['name' => $input['name']]);
+        }
 
         $user = User::where('id', $id)->first();
    
@@ -96,14 +123,18 @@ class ApiController extends Controller
         $input = $request->all();
    
         $validator = Validator::make($input, [
-            'destination' => 'required'
+            'destination' => 'string'
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+
+        if(empty($input['notes'])){
+            $input['notes'] = '';
+        }
    
-        Vehicle::where('id', $id)->update(['destination_manual' => $input['destination']]);
+        Vehicle::where('id', $id)->update(['destination_manual' => $input['destination'], 'notes' => $input['notes']]);
 
         $vehicle = Vehicle::where('id', $id)->first();
    

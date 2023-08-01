@@ -58,119 +58,214 @@ class ApiController extends Controller
 
     public function containers(Request $request)
     {
-        $containers = Container::limit(100)->get();
+        $token = $request->bearerToken();
 
-        if (!empty($request->PageIndex)) {
-            if ($request->PageIndex == 1) {
+        if (!empty($token)) {
+            $check_user = User::where('remember_token', $token)->count();
+            if ($check_user > 0) {
                 $containers = Container::limit(100)->get();
+
+                if (!empty($request->PageIndex)) {
+                    if ($request->PageIndex == 1) {
+                        $containers = Container::limit(100)->get();
+                    } else {
+                        $offset = ($request->PageIndex - 1) * 100;
+                        $containers = Container::limit(100)->offset((int)$offset)->get();
+                    }
+                }
+            
+                return $this->sendResponse($containers, 'Containers retrieved successfully.');
             } else {
-                $offset = ($request->PageIndex - 1) * 100;
-                $containers = Container::limit(100)->offset((int)$offset)->get();
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
             }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         }
-    
-        return $this->sendResponse($containers, 'Containers retrieved successfully.');
     }
 
     public function sub_users()
     {
-        $sub_users = User::where('role', '3')->limit(100)->get();
-    
-        return $this->sendResponse($sub_users, 'Sub Users retrieved successfully.');
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('remember_token', $token)->count();
+            if ($check_user > 0) {
+                $sub_users = User::where('role', '3')->limit(100)->get();
+            
+                return $this->sendResponse($sub_users, 'Sub Users retrieved successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
     }
 
     public function add_sub_user(Request $request)
     {
-        $input = $request->all();
-   
-        $validator = Validator::make($input, [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8'
-        ]);
-   
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('remember_token', $token)->count();
+            if ($check_user > 0) {
+                $input = $request->all();
+           
+                $validator = Validator::make($input, [
+                    'name' => 'required|string',
+                    'email' => 'required|email|unique:users',
+                    'password' => 'required|min:8'
+                ]);
+           
+                if($validator->fails()){
+                    return $this->sendError('Validation Error.', $validator->errors());       
+                }
+           
+           		$input['role'] = '3';
+           		$input['password'] = \Hash::make($input['password']);
+                $user = User::create($input);
+                $success['token'] =  $user->createToken('KGAutoExport')->accessToken;
+                $success['name'] =  $user->name;
+           
+                return $this->sendResponse($success, 'Sub User created successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         }
-   
-   		$input['role'] = '3';
-   		$input['password'] = \Hash::make($input['password']);
-        $user = User::create($input);
-        $success['token'] =  $user->createToken('KGAutoExport')->accessToken;
-        $success['name'] =  $user->name;
-   
-        return $this->sendResponse($success, 'Sub User created successfully.');
     }
 
     public function update_user_info(Request $request, User $user, $id)
     {
-        $input = $request->all();
-   
-        $validator = Validator::make($input, [
-            'name' => 'string',
-            'password' => 'min:8'
-        ]);
-   
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
+        $token = $request->bearerToken();
 
-        if (!empty($input['password'])) {
-            $check = User::where('id', $id)->first();
-            if (\Hash::check($input['old_password'], $check->password)) {
-                User::where('id', $id)->update(['name' => $input['name'], 'password' => \Hash::make($input['password'])]);
-            } else { 
-                return $this->sendError('Old password is incorrect.', ['error' => 'Unauthorised']);
+        if (!empty($token)) {
+            $check_user = User::where('remember_token', $token)->count();
+            if ($check_user > 0) {
+                $input = $request->all();
+           
+                $validator = Validator::make($input, [
+                    'name' => 'string',
+                    'password' => 'min:8'
+                ]);
+           
+                if($validator->fails()){
+                    return $this->sendError('Validation Error.', $validator->errors());       
+                }
+
+                if (!empty($input['password'])) {
+                    $check = User::where('id', $id)->first();
+                    if (\Hash::check($input['old_password'], $check->password)) {
+                        User::where('id', $id)->update(['name' => $input['name'], 'password' => \Hash::make($input['password'])]);
+                    } else { 
+                        return $this->sendError('Old password is incorrect.', ['error' => 'Unauthorised']);
+                    }
+                } else {
+                    User::where('id', $id)->update(['name' => $input['name']]);
+                }
+
+                $user = User::where('id', $id)->first();
+           
+                return $this->sendResponse($user, 'User updated successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
             }
         } else {
-            User::where('id', $id)->update(['name' => $input['name']]);
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         }
-
-        $user = User::where('id', $id)->first();
-   
-        return $this->sendResponse($user, 'User updated successfully.');
     }
 
     public function update_vehicle_info(Request $request, Vehicle $vehicle, $id)
     {
-        $input = $request->all();
-   
-        $validator = Validator::make($input, [
-            'destination' => 'string'
-        ]);
-   
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
+        $token = $request->bearerToken();
 
-        if(empty($input['notes'])){
-            $input['notes'] = '';
-        }
-   
-        Vehicle::where('id', $id)->update(['destination_manual' => $input['destination'], 'notes' => $input['notes']]);
+        if (!empty($token)) {
+            $check_user = User::where('remember_token', $token)->count();
+            if ($check_user > 0) {
+                $input = $request->all();
+           
+                $validator = Validator::make($input, [
+                    'destination' => 'string'
+                ]);
+           
+                if($validator->fails()){
+                    return $this->sendError('Validation Error.', $validator->errors());       
+                }
 
-        $vehicle = Vehicle::where('id', $id)->first();
-   
-        return $this->sendResponse($vehicle, 'Vehicle updated successfully.');
+                if(empty($input['notes'])){
+                    $input['notes'] = '';
+                }
+           
+                Vehicle::where('id', $id)->update(['destination_manual' => $input['destination'], 'notes' => $input['notes']]);
+
+                $vehicle = Vehicle::where('id', $id)->first();
+           
+                return $this->sendResponse($vehicle, 'Vehicle updated successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
     }
 
     public function pickup_requests($id)
     {
-        $pickup_requests = PickupRequest::where('user_id', $id)->get();
-    
-        return $this->sendResponse($pickup_requests, 'Pickup requests retrieved successfully.');
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('remember_token', $token)->count();
+            if ($check_user > 0) {
+                $pickup_requests = PickupRequest::where('user_id', $id)->get();
+            
+                return $this->sendResponse($pickup_requests, 'Pickup requests retrieved successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
     }
 
     public function financial_data($id)
     {
-        $financial_data = [];
-        $financial_data['history'] = TransactionsHistory::where('user_id', $id)->get();
-        $financial_data['total_transactions'] = TransactionsHistory::where('user_id', $id)->sum('amount');
-        $financial_data['balance'] = TransactionsHistory::where('user_id', $id)->where('status', 'paid')->sum('amount');
-        $financial_data['due_payments'] = TransactionsHistory::where('user_id', $id)->where('status', 'unpaid')->sum('amount');
-        $financial_data['due_payments_limit'] = (int)User::where('id', $id)->first()->due_payments_limit;
-    
-        return $this->sendResponse($financial_data, 'Financial data retrieved successfully.');
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('remember_token', $token)->count();
+            if ($check_user > 0) {
+                $financial_data = [];
+                $financial_data['history'] = TransactionsHistory::where('user_id', $id)->get();
+                $financial_data['total_transactions'] = TransactionsHistory::where('user_id', $id)->where('status', 'paid')->sum('amount');
+                $financial_data['balance'] = TransactionsHistory::where('user_id', $id)->where('status', 'paid')->sum('amount');
+                $financial_data['due_payments'] = TransactionsHistory::where('user_id', $id)->where('status', 'unpaid')->sum('amount');
+                $financial_data['due_payments_limit'] = (int)User::where('id', $id)->first()->due_payments_limit;
+            
+                return $this->sendResponse($financial_data, 'Financial data retrieved successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
+    public function logout($id)
+    {
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('remember_token', $token)->count();
+            if ($check_user > 0) {
+                User::where('id', $id)->update(['remember_token' => '']);
+            
+                return $this->sendResponse('[]', 'User sign out successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
     }
 
     public function sendResponse($result, $message)

@@ -19,6 +19,8 @@ class ApiController extends Controller
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')->accessToken; 
             $success['name'] =  $user->name;
+
+            User::where('id', Auth::user()->id)->update(['remember_token' => $success['token']]);
    
             return $this->sendResponse($success, 'User login successfully.');
         } 
@@ -29,18 +31,29 @@ class ApiController extends Controller
 
     public function vehicles(Request $request)
     {
-        $vehicles = Vehicle::limit(100)->get();
+        $token = $request->bearerToken();
 
-        if (!empty($request->PageIndex)) {
-            if ($request->PageIndex == 1) {
+        if (!empty($token)) {
+            $check_user = User::where('remember_token', $token)->count();
+            if ($check_user > 0) {
                 $vehicles = Vehicle::limit(100)->get();
+
+                if (!empty($request->PageIndex)) {
+                    if ($request->PageIndex == 1) {
+                        $vehicles = Vehicle::limit(100)->get();
+                    } else {
+                        $offset = ($request->PageIndex - 1) * 100;
+                        $vehicles = Vehicle::limit(100)->offset((int)$offset)->get();
+                    }
+                }
+            
+                return $this->sendResponse($vehicles, 'Vehicles retrieved successfully.');
             } else {
-                $offset = ($request->PageIndex - 1) * 100;
-                $vehicles = Vehicle::limit(100)->offset((int)$offset)->get();
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
             }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         }
-    
-        return $this->sendResponse($vehicles, 'Vehicles retrieved successfully.');
     }
 
     public function containers(Request $request)

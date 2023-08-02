@@ -36,14 +36,14 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('remember_token', $token)->count();
             if ($check_user > 0) {
-                $vehicles = Vehicle::limit(100)->get();
+                $vehicles = Vehicle::with('vehicle_images')->limit(100)->get();
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex == 1) {
-                        $vehicles = Vehicle::limit(100)->get();
+                        $vehicles = Vehicle::with('vehicle_images')->limit(100)->get();
                     } else {
                         $offset = ($request->PageIndex - 1) * 100;
-                        $vehicles = Vehicle::limit(100)->offset((int)$offset)->get();
+                        $vehicles = Vehicle::with('vehicle_images')->limit(100)->offset((int)$offset)->get();
                     }
                 }
             
@@ -63,14 +63,14 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('remember_token', $token)->count();
             if ($check_user > 0) {
-                $containers = Container::limit(100)->get();
+                $containers = Container::with('container_images')->limit(100)->get();
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex == 1) {
-                        $containers = Container::limit(100)->get();
+                        $containers = Container::with('container_images')->limit(100)->get();
                     } else {
                         $offset = ($request->PageIndex - 1) * 100;
-                        $containers = Container::limit(100)->offset((int)$offset)->get();
+                        $containers = Container::with('container_images')->limit(100)->offset((int)$offset)->get();
                     }
                 }
             

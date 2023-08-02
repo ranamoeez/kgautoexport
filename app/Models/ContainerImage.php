@@ -11,6 +11,6 @@ class ContainerImage extends Model
 
     protected $table = "container_images";
     protected $fillable = [
-        'container_id ', 'filename', 'filepath', 'type', 'filesize', 'owner_id', 'title', 'ctime'
+        'container_id', 'filename', 'filepath', 'type', 'filesize', 'owner_id', 'title', 'ctime'
     ];
 }

@@ -11,6 +11,6 @@ class VehicleImage extends Model
 
     protected $table = "vehicle_images";
     protected $fillable = [
-        'vehicle_id ', 'ctime', 'filesize', 'owner_id', 'title', 'filename', 'filepath', 'type'
+        'vehicle_id', 'ctime', 'filesize', 'owner_id', 'title', 'filename', 'filepath', 'type'
     ];
 }

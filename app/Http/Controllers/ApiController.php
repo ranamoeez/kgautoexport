@@ -36,14 +36,14 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('remember_token', $token)->count();
             if ($check_user > 0) {
-                $vehicles = Vehicle::with('vehicle_images')->limit(100)->get();
+                $vehicles = Vehicle::with('vehicle_images', 'auction', 'status')->limit(100)->get();
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex == 1) {
-                        $vehicles = Vehicle::with('vehicle_images')->limit(100)->get();
+                        $vehicles = Vehicle::with('vehicle_images', 'auction', 'status')->limit(100)->get();
                     } else {
                         $offset = ($request->PageIndex - 1) * 100;
-                        $vehicles = Vehicle::with('vehicle_images')->limit(100)->offset((int)$offset)->get();
+                        $vehicles = Vehicle::with('vehicle_images', 'auction', 'status')->limit(100)->offset((int)$offset)->get();
                     }
                 }
             

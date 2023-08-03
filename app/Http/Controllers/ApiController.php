@@ -40,8 +40,10 @@ class ApiController extends Controller
                 $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'auction', 'status');
 
                 if (!empty($request->Status)) {
-                    $status_id = Status::where('name', $request->Status)->first()->id;
-                    $vehicles = $vehicles->where('status_id', $status_id);
+                    $status = Status::where('name', $request->Status)->first();
+                    if (!empty($status->id)) {
+                        $vehicles = $vehicles->where('status_id', $status->id);
+                    }
                 }
 
                 if (!empty($request->PageIndex)) {

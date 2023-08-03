@@ -9,6 +9,7 @@ use App\Models\Vehicle;
 use App\Models\Container;
 use App\Models\PickupRequest;
 use App\Models\TransactionsHistory;
+use App\Models\Status;
 use Validator;
 
 class ApiController extends Controller
@@ -36,16 +37,21 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('remember_token', $token)->count();
             if ($check_user > 0) {
-                $vehicles = Vehicle::with('vehicle_images', 'auction', 'status')->limit(100)->get();
+                $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'auction', 'status');
+
+                if (!empty($request->Status)) {
+                    $status_id = Status::where('name', $request->Status)->first()->id;
+                    $vehicles = $vehicles->where('status_id', $status_id);
+                }
 
                 if (!empty($request->PageIndex)) {
-                    if ($request->PageIndex == 1) {
-                        $vehicles = Vehicle::with('vehicle_images', 'auction', 'status')->limit(100)->get();
-                    } else {
+                    if ($request->PageIndex > 1) {
                         $offset = ($request->PageIndex - 1) * 100;
-                        $vehicles = Vehicle::with('vehicle_images', 'auction', 'status')->limit(100)->offset((int)$offset)->get();
+                        $vehicles = $vehicles->offset((int)$offset);
                     }
                 }
+
+                $vehicles = $vehicles->limit(100)->get();
             
                 return $this->sendResponse($vehicles, 'Vehicles retrieved successfully.');
             } else {
@@ -63,14 +69,14 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('remember_token', $token)->count();
             if ($check_user > 0) {
-                $containers = Container::with('container_images')->limit(100)->get();
+                $containers = Container::orderBy('id', 'DESC')->with('container_images')->limit(100)->get();
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex == 1) {
-                        $containers = Container::with('container_images')->limit(100)->get();
+                        $containers = Container::orderBy('id', 'DESC')->with('container_images')->limit(100)->get();
                     } else {
                         $offset = ($request->PageIndex - 1) * 100;
-                        $containers = Container::with('container_images')->limit(100)->offset((int)$offset)->get();
+                        $containers = Container::orderBy('id', 'DESC')->with('container_images')->limit(100)->offset((int)$offset)->get();
                     }
                 }
             
@@ -90,7 +96,7 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('remember_token', $token)->count();
             if ($check_user > 0) {
-                $sub_users = User::where('role', '3')->limit(100)->get();
+                $sub_users = User::where('role', '3')->orderBy('id', 'DESC')->limit(100)->get();
             
                 return $this->sendResponse($sub_users, 'Sub Users retrieved successfully.');
             } else {
@@ -216,7 +222,7 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('remember_token', $token)->count();
             if ($check_user > 0) {
-                $pickup_requests = PickupRequest::where('user_id', $id)->get();
+                $pickup_requests = PickupRequest::orderBy('id', 'DESC')->with('vehicle')->where('user_id', $id)->get();
             
                 return $this->sendResponse($pickup_requests, 'Pickup requests retrieved successfully.');
             } else {

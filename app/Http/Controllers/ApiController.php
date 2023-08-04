@@ -21,7 +21,7 @@ class ApiController extends Controller
             $success['token'] =  $user->createToken('MyApp')->accessToken; 
             $success['name'] =  $user->name;
 
-            User::where('id', Auth::user()->id)->update(['remember_token' => $success['token']]);
+            User::where('id', Auth::user()->id)->update(['api_token' => $success['token']]);
    
             return $this->sendResponse($success, 'User login successfully.');
         } 
@@ -35,7 +35,7 @@ class ApiController extends Controller
         $token = $request->bearerToken();
 
         if (!empty($token)) {
-            $check_user = User::where('remember_token', $token)->count();
+            $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'auction', 'status');
 
@@ -69,7 +69,7 @@ class ApiController extends Controller
         $token = $request->bearerToken();
 
         if (!empty($token)) {
-            $check_user = User::where('remember_token', $token)->count();
+            $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $containers = Container::orderBy('id', 'DESC')->with('container_images')->limit(100)->get();
 
@@ -96,7 +96,7 @@ class ApiController extends Controller
         $token = $request->bearerToken();
 
         if (!empty($token)) {
-            $check_user = User::where('remember_token', $token)->count();
+            $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $sub_users = User::where('role', '3')->orderBy('id', 'DESC')->limit(100)->get();
             
@@ -114,7 +114,7 @@ class ApiController extends Controller
         $token = $request->bearerToken();
 
         if (!empty($token)) {
-            $check_user = User::where('remember_token', $token)->count();
+            $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $input = $request->all();
            
@@ -148,7 +148,7 @@ class ApiController extends Controller
         $token = $request->bearerToken();
 
         if (!empty($token)) {
-            $check_user = User::where('remember_token', $token)->count();
+            $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $input = $request->all();
            
@@ -188,7 +188,7 @@ class ApiController extends Controller
         $token = $request->bearerToken();
 
         if (!empty($token)) {
-            $check_user = User::where('remember_token', $token)->count();
+            $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $input = $request->all();
            
@@ -222,7 +222,7 @@ class ApiController extends Controller
         $token = $request->bearerToken();
 
         if (!empty($token)) {
-            $check_user = User::where('remember_token', $token)->count();
+            $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $pickup_requests = PickupRequest::orderBy('id', 'DESC')->with('vehicle')->where('user_id', $id)->get();
             
@@ -240,7 +240,7 @@ class ApiController extends Controller
         $token = $request->bearerToken();
 
         if (!empty($token)) {
-            $check_user = User::where('remember_token', $token)->count();
+            $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $financial_data = [];
                 $financial_data['history'] = TransactionsHistory::where('user_id', $id)->get();
@@ -263,9 +263,9 @@ class ApiController extends Controller
         $token = $request->bearerToken();
 
         if (!empty($token)) {
-            $check_user = User::where('remember_token', $token)->count();
+            $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                User::where('id', $id)->update(['remember_token' => '']);
+                User::where('id', $id)->update(['api_token' => '']);
             
                 return $this->sendResponse('[]', 'User sign out successfully.');
             } else {

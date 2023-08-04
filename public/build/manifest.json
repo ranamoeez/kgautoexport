@@ -1,0 +1,37 @@
+{
+  "public/assets/icons/chevron-down-solid.svg": {
+    "file": "assets/chevron-down-solid-f3d79d1f.svg",
+    "src": "public/assets/icons/chevron-down-solid.svg"
+  },
+  "public/assets/icons/chevron-left-solid.svg": {
+    "file": "assets/chevron-left-solid-3cd50cf7.svg",
+    "src": "public/assets/icons/chevron-left-solid.svg"
+  },
+  "public/assets/icons/chevron-right-solid.svg": {
+    "file": "assets/chevron-right-solid-ce8f55a5.svg",
+    "src": "public/assets/icons/chevron-right-solid.svg"
+  },
+  "public/assets/icons/chevron-up-solid.svg": {
+    "file": "assets/chevron-up-solid-4fda5d18.svg",
+    "src": "public/assets/icons/chevron-up-solid.svg"
+  },
+  "public/assets/login-bg.png": {
+    "file": "assets/login-bg-95b318f3.png",
+    "src": "public/assets/login-bg.png"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-76ea0196.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-66e7f68a.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/bootstrap.css",
+    "isEntry": true,
+    "src": "resources/sass/app.scss"
+  }
+}

@@ -23,6 +23,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $data['type'] = "vehicles";
+        return view('admin.index', $data);
+    }
+
+    public function user_index()
+    {
+        $data['type'] = "homepage";
+        return view('user.index', $data);
     }
 }

@@ -135,8 +135,8 @@
                 <div class="table-responsive">
                     <table class="table">
                         <thead class="text-fs-4">
-                            {{-- <th scope="col"></th>
-                            <th scope="col" class="fw-bold">Vehicle Photo</th> --}}
+                            <th scope="col"></th>
+                            {{-- <th scope="col" class="fw-bold">Vehicle Photo</th> --}}
                             <th scope="col" class="fw-bold">Delivery Date</th>
                             <th scope="col" class="fw-bold">Description</th>
                             <th scope="col" class="fw-bold">VIN</th>
@@ -155,7 +155,7 @@
                             @if(count($list) > 0)
                             @foreach($list as $key => $value)
                             <tr id="row" class="align-middle overflow-hidden shadow mb-2">
-                                {{-- <td>
+                                <td>
                                     <div class="d-flex flex-column justify-content-center">
                                         <a href class="text-link text-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -173,7 +173,7 @@
                                         </a>
                                     </div>
                                 </td>
-                                <td>
+                                {{-- <td>
                                     <img src="{{ asset('assets/FordExplorerXLT.webp') }}"
                                         class="rounded-4 table-thumbnail-image" />
                                 </td> --}}

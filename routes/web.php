@@ -20,9 +20,13 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::prefix('user')->middleware(['auth'])->group(function(){
-	Route::get('/', [App\Http\Controllers\HomeController::class, 'user_index'])->name('user-home');
+	Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('user-home');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function(){
-	Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('admin-home');
+	Route::get('/', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('admin-home');
+	Route::get('/vehicles', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('vehicles');
+	Route::get('/vehicles/delete/{id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_vehicles'])->name('delete-vehicles');
+	Route::get('/containers', [App\Http\Controllers\Admin\HomeController::class, 'containers'])->name('containers');
+	Route::get('/containers/delete/{id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_containers'])->name('delete-containers');
 });

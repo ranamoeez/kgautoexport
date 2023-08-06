@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\VehicleImage;
+use App\Models\Auction;
+use App\Models\Terminal;
+use App\Models\Status;
 
 class Vehicle extends Model
 {
@@ -22,7 +25,11 @@ class Vehicle extends Model
     	return $this->belongsTo(Auction::class, 'auction_id');
     }
 
+    public function terminal(){
+    	return $this->belongsTo(Terminal::class, 'terminal_id');
+    }
+
     public function status(){
-    	return $this->belongsTo(Status::class, 'status_id');
+        return $this->belongsTo(Status::class, 'status_id');
     }
 }

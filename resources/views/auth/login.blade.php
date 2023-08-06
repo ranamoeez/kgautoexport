@@ -49,12 +49,23 @@
                         <div class="form-group">
                             <label for="email" class="text-fs-5">{{ __('Email Address') }}</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required autofocus />
+
+                            @error('email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         <!-- Password -->
                         <div class="form-group mt-4">
                             <label for="password" class="col-sm-2 col-form-label text-fs-5">{{ __('Password') }}</label>
                             <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required>
 
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         <!-- checkbox -->
                         <div class="form-group mt-4 d-flex justify-content-between">

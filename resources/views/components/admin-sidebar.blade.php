@@ -1,6 +1,6 @@
 <div class="header-height d-flex">
 
-    <a class="navbar-brand m-auto me-md-5" href="/user">
+    <a class="navbar-brand m-auto me-md-5" href="{{ url('/admin') }}">
         <img src="{{ asset('assets/symble_logo.png') }}" style="" alt="Logo" />
     </a>
 </div>

@@ -168,8 +168,15 @@
                                     <div class="text-center text-fs-4">
                                         <select class="form-select option-select text-white"
                                             aria-label="Default select example">
-                                            <option value="1" data-color="success">Delivered</option>
-                                            <option value="2" data-color="danger">Not Delivered</option>
+                                            @if(count(@$all_status) > 0)
+                                            @foreach(@$all_status as $k => $v)
+                                                @if($value['status_id'] == @$v['id'])
+                                                <option value="{{ @$v['id'] }}" @if($v['name'] == "Delivered") data-color="success" @else data-color="danger" @endif selected>{{ $v['name'] }}</option>
+                                                @else
+                                                <option value="{{ @$v['id'] }}" @if($v['name'] == "Delivered") data-color="success" @else data-color="danger" @endif>{{ @$v['name'] }}</option>
+                                                @endif
+                                            @endforeach
+                                            @endif
                                         </select>
 
                                     </div>
@@ -178,8 +185,8 @@
                                     <div class="text-center text-fs-4">
                                         <select class="form-select option-select text-white"
                                             aria-label="Default select example">
-                                            <option value="1" data-color="success">Paid</option>
-                                            <option value="2" data-color="danger">Unpaid</option>
+                                            <option value="1" data-color="success" @if(@$value->all_paid == "1") selected @endif>Paid</option>
+                                            <option value="2" data-color="danger" @if(@$value->all_paid == "0") selected @endif>Unpaid</option>
                                         </select>
                                     </div>
                                 </td>

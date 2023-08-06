@@ -204,7 +204,7 @@
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4 p-1 rounded-pill shadow">
-                                        <span class="text-fs-4 ms-1">{{ $value->destination_manual }}</span>
+                                        <span class="text-fs-4 ms-1" style="font-size: 14px;">{{ $value->destination_manual }}</span>
                                     </div>
                                 </td>
                                 <td>
@@ -229,10 +229,11 @@
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select"
+                                        <span>{{ $value->paid_price }}</span>
+                                        <select class="form-select option-select text-white"
                                             aria-label="Default select example">
-                                            <option value="1">56,679</option>
-                                            <option value="2" data-color="danger">56,679</option>
+                                            <option value="1" data-color="success" @if(@$value->all_paid == "1") selected @endif>Paid</option>
+                                            <option value="2" data-color="danger" @if(@$value->all_paid == "0") selected @endif>Unpaid</option>
                                         </select>
                                     </div>
                                 </td>
@@ -241,8 +242,15 @@
                                     <div class="text-center text-fs-4">
                                         <select id="selectOption" class="form-select"
                                             aria-label="Default select example">
-                                            <option value="1">New</option>
-                                            <option value="2">Old</option>
+                                            @if(count(@$all_status) > 0)
+                                            @foreach(@$all_status as $k => $v)
+                                                @if($v['id'] == @$value['status_id'])
+                                                <option value="{{ @$v['id'] }}" selected>{{ $v['name'] }}</option>
+                                                @else
+                                                <option value="{{ @$v['id'] }}">{{ @$v['name'] }}</option>
+                                                @endif
+                                            @endforeach
+                                            @endif
                                         </select>
                                     </div>
                                 </td>

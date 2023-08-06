@@ -54,6 +54,7 @@ class HomeController extends Controller
         }
         if (!empty($request->unpaid)) {
         	$data['unpaid'] = $request->unpaid;
+        	$vehicles = $vehicles->where('all_paid', '0');
         }
         $vehicles = $vehicles->limit(20)->get();
         $data['list'] = $vehicles;
@@ -91,6 +92,7 @@ class HomeController extends Controller
         }
         if (!empty($request->unpaid)) {
         	$data['unpaid'] = $request->unpaid;
+        	$containers = $containers->where('all_paid', '0');
         }
         $containers = $containers->limit(20)->get();
         $data['list'] = $containers;

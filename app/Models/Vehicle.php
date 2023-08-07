@@ -8,6 +8,7 @@ use App\Models\VehicleImage;
 use App\Models\Auction;
 use App\Models\Terminal;
 use App\Models\Status;
+use App\Models\User;
 
 class Vehicle extends Model
 {
@@ -31,5 +32,9 @@ class Vehicle extends Model
 
     public function status(){
         return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function buyer(){
+        return $this->belongsTo(User::class, 'buyer_id');
     }
 }

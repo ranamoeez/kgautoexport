@@ -9,6 +9,8 @@ use App\Models\Status;
 use App\Models\Terminal;
 use App\Models\Container;
 use App\Models\ContStatus;
+use App\Models\User;
+use App\Models\LoadingPort;
 
 class HomeController extends Controller
 {
@@ -16,7 +18,7 @@ class HomeController extends Controller
     {
         $data['type'] = "vehicles";
         $data['page'] = '1';
-        $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'auction', 'terminal', 'status');
+        $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'auction', 'terminal', 'status', 'buyer');
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 20;
@@ -60,6 +62,7 @@ class HomeController extends Controller
         $data['list'] = $vehicles;
         $data['all_terminal'] = Terminal::all();
         $data['all_status'] = Status::all();
+        $data['all_buyer'] = User::where('role', '!=', '1')->get();
         return view('admin.vehicles', $data);
     }
 
@@ -74,6 +77,10 @@ class HomeController extends Controller
                 $containers = $containers->offset((int)$offset);
             }
             $data['page'] = $request->page;
+        }
+        if (!empty($request->port) && $request->port !== 'all') {
+        	$data['port'] = $request->port;
+        	$containers = $containers->where('loading_port_id', $request->port);
         }
         if (!empty($request->status) && $request->status !== 'all') {
         	$data['status'] = $request->status;
@@ -90,12 +97,24 @@ class HomeController extends Controller
 			        ->orWhere('arrival', 'LIKE', '%'.$search.'%');
 			});
         }
+        if (!empty($request->fromDate) && !empty($request->toDate)) {
+        	$data['fromDate'] = $request->fromDate;
+        	$data['toDate'] = $request->toDate;
+        	$containers = $containers->where('arrival', '<=', $request->toDate)->where('arrival', '>=', $request->fromDate);
+        } elseif(!empty($request->fromDate)) {
+        	$data['fromDate'] = $request->fromDate;
+        	$containers = $containers->where('arrival', '>=', $request->fromDate);
+        } elseif(!empty($request->toDate)) {
+        	$data['toDate'] = $request->toDate;
+        	$containers = $containers->where('arrival', '<=', $request->toDate);
+        }
         if (!empty($request->unpaid)) {
         	$data['unpaid'] = $request->unpaid;
         	$containers = $containers->where('all_paid', '0');
         }
         $containers = $containers->limit(20)->get();
         $data['list'] = $containers;
+        $data['all_port'] = LoadingPort::all();
         $data['all_status'] = ContStatus::all();
         return view('admin.containers', $data);
     }

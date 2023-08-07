@@ -19,6 +19,7 @@ class ApiController extends Controller
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')->accessToken; 
+            $success['id'] =  $user->id;
             $success['name'] =  $user->name;
 
             User::where('id', Auth::user()->id)->update(['api_token' => $success['token']]);
@@ -37,7 +38,7 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'auction', 'status');
+                $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'auction', 'terminal', 'status', 'buyer');
 
                 if (!empty($request->Status)) {
                     $status = Status::where('name', $request->Status)->first();
@@ -250,6 +251,82 @@ class ApiController extends Controller
                 $financial_data['due_payments_limit'] = (int)User::where('id', $id)->first()->due_payments_limit;
             
                 return $this->sendResponse($financial_data, 'Financial data retrieved successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
+    public function send_vehicle(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('api_token', $token)->count();
+            if ($check_user > 0) {
+                $input = $request->all();
+           
+                $validator = Validator::make($input, [
+                    'email' => 'required|email',
+                    'vehicle_id' => 'required'
+                ]);
+           
+                if($validator->fails()){
+                    return $this->sendError('Validation Error.', $validator->errors());       
+                }
+
+                $vehicle = Vehicle::where('id', $input['vehicle_id'])->first();
+
+                if (!empty($vehicle)) {
+                    \Mail::to($input['email'])->send(new \App\Mail\SendVehicle($vehicle));
+                } else {
+                    return $this->sendError('Not Found.', ['error'=>'Vehicle not found.']);
+                }
+           
+                return $this->sendResponse($vehicle, 'Email sended successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
+    public function send_pickup_request(Request $request, $id)
+    {
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('api_token', $token)->count();
+            if ($check_user > 0) {
+                $input = $request->all();
+           
+                $validator = Validator::make($input, [
+                    'vehicle_id' => 'required',
+                    'comments' => 'required'
+                ]);
+           
+                if($validator->fails()){
+                    return $this->sendError('Validation Error.', $validator->errors());       
+                }
+           
+                $vehicle = Vehicle::where('id', $input['vehicle_id'])->first();
+
+                if (!empty($vehicle)) {
+                    $pickup_request = new PickupRequest;
+                    $pickup_request->user_id = $id;
+                    $pickup_request->vehicle_id = $input['vehicle_id'];
+                    $pickup_request->comments = $input['comments'];
+                    $pickup_request->save();
+                } else {
+                    return $this->sendError('Not Found.', ['error'=>'Vehicle not found.']);
+                }
+
+                $success['id'] =  $pickup_request->id;
+           
+                return $this->sendResponse($success, 'Pickup request created successfully.');
             } else {
                 return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
             }

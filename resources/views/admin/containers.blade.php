@@ -17,9 +17,15 @@
                     <label for="port" class="fw-semibold">Port</label>
                     <select class="selectjs form-select p-2 border border-gray-200 rounded-lg" id="port" name="port">
                         <option value="all" selected>All</option>
-                        <option value="option1">Option1</option>
-                        <option value="option2">Option2</option>
-                        <option value="option3">Option3</option>
+                        @if(count(@$all_port) > 0)
+                        @foreach(@$all_port as $key => $value)
+                            @if($value['id'] == @$port)
+                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                            @else
+                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                            @endif
+                        @endforeach
+                        @endif
                     </select>
                 </div>
 
@@ -41,16 +47,16 @@
 
                 <div class="col-md-2">
                     <label for="search" class="fw-semibold">Search</label>
-                    <input type="text" class="form-control p-2" placeholder="search" name="search" value="{{ @$search }}" id="search-cont">
+                    <input type="text" class="form-control p-2" placeholder="Search" name="search" value="{{ @$search }}" id="search-cont">
                 </div>
 
                 <div class="col-md-2">
                     <label for="Date" class="fw-semibold">Date</label>
                     <div class="d-flex gap-4 align-items-center">
                         <div class="d-flex align-items-center">
-                            <input type="date" id="fromDate" name="fromDate" class="form-control" style="width: 150px;">
+                            <input type="date" id="fromDate" name="fromDate" value="{{ @$fromDate }}" class="form-control" style="width: 150px;">
                             <span class="mx-2">To</span>
-                            <input type="date" class="form-control mx-2" name="toDate" id="toDate" style="width: 150px;">
+                            <input type="date" class="form-control mx-2" name="toDate" value="{{ @$toDate }}" id="toDate" style="width: 150px;">
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="unpaid" name="unpaid" id="unpaid" @if(@$unpaid == "unpaid") checked @endif>
@@ -70,6 +76,10 @@
                             $next = (int)$page + 1;
                             $prev_params = ['page='.$prev];
                             $next_params = ['page='.$next];
+                            if (!empty(@$port)) {
+                                array_push($prev_params, 'port='.$port);
+                                array_push($next_params, 'port='.$port);
+                            }
                             if (!empty(@$status)) {
                                 array_push($prev_params, 'status='.$status);
                                 array_push($next_params, 'status='.$status);
@@ -77,6 +87,14 @@
                             if (!empty(@$search)) {
                                 array_push($prev_params, 'search='.$search);
                                 array_push($next_params, 'search='.$search);
+                            }
+                            if (!empty(@$toDate)) {
+                                array_push($prev_params, 'toDate='.$toDate);
+                                array_push($next_params, 'toDate='.$toDate);
+                            }
+                            if (!empty(@$fromDate)) {
+                                array_push($prev_params, 'fromDate='.$fromDate);
+                                array_push($next_params, 'fromDate='.$fromDate);
                             }
                             if (!empty(@$unpaid)) {
                                 array_push($prev_params, 'unpaid='.$unpaid);

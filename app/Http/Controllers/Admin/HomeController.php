@@ -11,6 +11,14 @@ use App\Models\Container;
 use App\Models\ContStatus;
 use App\Models\User;
 use App\Models\LoadingPort;
+use App\Models\Measurement;
+use App\Models\NotifyParty;
+use App\Models\DestinationPort;
+use App\Models\DischargePort;
+use App\Models\Consignee;
+use App\Models\ShippingLine;
+use App\Models\Shipper;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -119,6 +127,39 @@ class HomeController extends Controller
         return view('admin.containers', $data);
     }
 
+    public function add_container(Request $request)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filename = Storage::putFile("container", $file);
+                $data['image'] = $filename;
+            }
+            $this->cleanData($data);
+            $data['owner_id'] = Auth::user()->id;
+            $data['request_type'] = '2';
+            $data['date_created'] = time();
+            $data['search_body'] = "Booked K&G Auto Export Inc MSC REBOU AL SHARQ USED CARS TR.LLC HOUSTON TX JEBEL ALI,UAE JEBEL ALI,UAE EBKG05951642 00/00/0000 07/02/2023 00/00/0000 GA- 45'HC 00/00/0000 06/16/2023 SAME AS CONSIGNEE telex";
+            $Obj = new Container;
+            $Obj->insert($data);
+            $response = array('flag'=>true,'msg'=>'Container is added sucessfully.','action'=>'reload');
+            echo json_encode($response); return;
+        }
+        $data   = array();
+        $data['type'] = 'add-container';
+        $data['all_shipper'] = Shipper::all();
+        $data['all_shipping_line'] = ShippingLine::all();
+        $data['all_loading_port'] = LoadingPort::all();
+        $data['all_consignee'] = Consignee::all();
+        $data['all_destination_port'] = DestinationPort::all();
+        $data['all_status'] = ContStatus::all();
+        $data['all_notify_party'] = NotifyParty::all();
+        $data['all_measurement'] = Measurement::all();
+        $data['all_discharge_port'] = DischargePort::all();
+        return view('admin.add-container', $data);
+    }
+
     public function delete_vehicles($id)
     {
     	$vehicle = Vehicle::find($id);
@@ -133,5 +174,30 @@ class HomeController extends Controller
         $container->delete();
         $response = array('flag'=>true,'msg'=>'Container has been deleted.');
         echo json_encode($response); return;
+    }
+
+    public function cleanData(&$data) {
+        $unset = ['q','_token','c_id'];
+        foreach ($unset as $value) {
+            if(array_key_exists ($value,$data))  {
+                unset($data[$value]);
+            }
+        }
+        $int = ['Price','pur_price'];
+        foreach ($int as $value) {
+            if(array_key_exists ($value,$data))  {
+                $data[$value] = (int)str_replace(['(','Rs',')',' ','-','_',','], '', $data[$value]);
+            }
+
+        }
+        $phone = ['phone'];
+        foreach ($phone as $value) {
+            if(is_array($data) && array_key_exists($value,$data))  {
+                $data[$value] = str_replace(['(',')',' ','-','_','+'], '', $data[$value]);
+            }
+            if(@$data->$value) {
+                $data->$value = str_replace(['(',')',' ','-','_','+'], '', $data->$value);
+            }
+        }
     }
 }

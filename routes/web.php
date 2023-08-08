@@ -28,5 +28,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/vehicles', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('vehicles');
 	Route::get('/vehicles/delete/{id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_vehicles'])->name('delete-vehicles');
 	Route::get('/containers', [App\Http\Controllers\Admin\HomeController::class, 'containers'])->name('containers');
+	Route::get('/add-container', [App\Http\Controllers\Admin\HomeController::class, 'add_container'])->name('add-container');
+	Route::post('/add-container', [App\Http\Controllers\Admin\HomeController::class, 'add_container'])->name('save-container');
 	Route::get('/containers/delete/{id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_containers'])->name('delete-containers');
 });

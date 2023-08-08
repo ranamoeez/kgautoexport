@@ -11,6 +11,7 @@ use App\Models\PickupRequest;
 use App\Models\TransactionsHistory;
 use App\Models\Status;
 use Validator;
+use Storage;
 
 class ApiController extends Controller
 {
@@ -316,6 +317,11 @@ class ApiController extends Controller
 
                 if (!empty($vehicle)) {
                     $pickup_request = new PickupRequest;
+                    if ($request->hasFile('file')) {
+                        $file = $request->file('file');
+                        $filename = Storage::putFile("pickup-request", $file);
+                        $pickup_request->file = $filename;
+                    }
                     $pickup_request->user_id = $id;
                     $pickup_request->vehicle_id = $input['vehicle_id'];
                     $pickup_request->comments = $input['comments'];
@@ -327,6 +333,43 @@ class ApiController extends Controller
                 $success['id'] =  $pickup_request->id;
            
                 return $this->sendResponse($success, 'Pickup request created successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
+    public function send_notes(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('api_token', $token)->count();
+            if ($check_user > 0) {
+                $input = $request->all();
+           
+                $validator = Validator::make($input, [
+                    'vehicle_id' => 'required',
+                    'notes' => 'required'
+                ]);
+           
+                if($validator->fails()){
+                    return $this->sendError('Validation Error.', $validator->errors());       
+                }
+           
+                $vehicle = Vehicle::where('id', $input['vehicle_id'])->first();
+
+                if (!empty($vehicle)) {
+                    Vehicle::where('id', $input['vehicle_id'])->update(["notes_user" => $input['notes']]);
+                } else {
+                    return $this->sendError('Not Found.', ['error'=>'Vehicle not found.']);
+                }
+
+                $success['id'] =  $input['vehicle_id'];
+           
+                return $this->sendResponse($success, 'Notes sended successfully.');
             } else {
                 return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
             }

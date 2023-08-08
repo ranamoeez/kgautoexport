@@ -18,6 +18,7 @@ use App\Models\DischargePort;
 use App\Models\Consignee;
 use App\Models\ShippingLine;
 use App\Models\Shipper;
+use App\Models\Auction;
 use Auth;
 
 class HomeController extends Controller
@@ -158,6 +159,35 @@ class HomeController extends Controller
         $data['all_measurement'] = Measurement::all();
         $data['all_discharge_port'] = DischargePort::all();
         return view('admin.add-container', $data);
+    }
+
+    public function add_vehicle(Request $request)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filename = Storage::putFile("container", $file);
+                $data['image'] = $filename;
+            }
+            $this->cleanData($data);
+            $data['owner_id'] = Auth::user()->id;
+            $data['request_type'] = '2';
+            $data['date_created'] = time();
+            $data['search_body'] = "Booked K&G Auto Export Inc MSC REBOU AL SHARQ USED CARS TR.LLC HOUSTON TX JEBEL ALI,UAE JEBEL ALI,UAE EBKG05951642 00/00/0000 07/02/2023 00/00/0000 GA- 45'HC 00/00/0000 06/16/2023 SAME AS CONSIGNEE telex";
+            $Obj = new Container;
+            $Obj->insert($data);
+            $response = array('flag'=>true,'msg'=>'Container is added sucessfully.','action'=>'reload');
+            echo json_encode($response); return;
+        }
+        $data   = array();
+        $data['type'] = 'add-vehicle';
+        $data['all_status'] = Status::all();
+        $data['all_terminal'] = Terminal::all();
+        $data['all_buyer'] = User::where('role', '!=', '1')->get();
+        $data['all_auction'] = Auction::all();
+        $data['all_destination_port'] = DestinationPort::all();
+        return view('admin.add-vehicle', $data);
     }
 
     public function delete_vehicles($id)

@@ -1,0 +1,714 @@
+@extends('layouts.admin')
+
+@section('content')
+    
+    <div class="below-header-height outer-container">
+        <div class="inner-container">
+
+            <div class="px-14 d-flex justify-content-between">
+                <h4 class="fw-bold fs-md-13 fs-lg-25">
+                    Add a new vehicle
+                </h4>
+                <div class="d-flex justify-content-between">
+                    <div class="financial-btn">
+                        <button class="btn btn-primary border border-1 fs-5">
+                            Send to Buyer
+                        </button>
+                    </div>
+                    <div class="financial-btn">
+                        <button class="btn btn-primary border border-1 fs-5">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <form action="">
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <h3 class="fw-bold text-fs-4">Vehicle information</h3>
+                        <div class="mt-4">
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Status</label>
+                                <div class="col-md-9">
+                                    <select class="selectjs form-select" name="status_id">
+                                        @if(count(@$all_status) > 0)
+                                        @foreach(@$all_status as $key => $value)
+                                            @if($value['id'] == @$status)
+                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Terminal</label>
+                                <div class="col-md-9">
+                                    <select class="selectjs form-select">
+                                        @if(count(@$all_terminal) > 0)
+                                        @foreach(@$all_terminal as $key => $value)
+                                            @if($value['id'] == @$terminal)
+                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Buyer</label>
+                                <div class="col-md-9">
+                                    <select class="selectjs form-select" name="buyer">
+                                        @if(count(@$all_buyer) > 0)
+                                        @foreach(@$all_buyer as $key => $value)
+                                            @if($value['id'] == @$buyer)
+                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">VIN</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Description</label>
+                                <div class="col-md-9">
+                                    <select class="selectjs form-select">
+                                        <option value="All" selected>All</option>
+                                        <option value="option1">Option1</option>
+                                        <option value="option2">Option2</option>
+                                        <option value="option3">Option3</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <div class="row mt-2">
+                                        <div class="col-md-6">
+                                            <select class="selectjs form-select">
+                                                <option value="All" selected>All</option>
+                                                <option value="option1">Option1</option>
+                                                <option value="option2">Option2</option>
+                                                <option value="option3">Option3</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <select class="selectjs form-select">
+                                                <option value="All" selected>All</option>
+                                                <option value="option1">Option1</option>
+                                                <option value="option2">Option2</option>
+                                                <option value="option3">Option3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Client name</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Title</label>
+                                <div class="col-md-9 d-flex flex-row gap-2">
+                                    <div class="form-check">
+                                        <input id="radio1" type="radio" name="radio" class="form-check-input"
+                                            checked />
+                                        <label for="radio1" class="form-check-label">No</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio2" type="radio" name="radio" class="form-check-input" />
+                                        <label for="radio2" class="form-check-label">Yes</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio3" type="radio" name="radio" class="form-check-input" />
+                                        <label for="radio3" class="form-check-label">BOS</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio4" type="radio" name="radio" class="form-check-input" />
+                                        <label for="radio4" class="form-check-label">TBO</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Keys</label>
+                                <div class="col-md-9 d-flex flex-row gap-2">
+                                    <div class="form-check">
+                                        <input id="radio5" type="radio" name="radio_keys"
+                                            class="form-check-input" checked />
+                                        <label for="radio5" class="form-check-label">No</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio6" type="radio" name="radio_keys"
+                                            class="form-check-input" />
+                                        <label for="radio6" class="form-check-label">Yes</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Operable</label>
+                                <div class="col-md-9 d-flex flex-row gap-2">
+                                    <div class="form-check">
+                                        <input id="radio7" type="radio" name="radio_operable"
+                                            class="form-check-input" checked />
+                                        <label for="radio7" class="form-check-label">No</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio8" type="radio" name="radio_operable"
+                                            class="form-check-input" />
+                                        <label for="radio8" class="form-check-label">Yes</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Fuel Type</label>
+                                <div class="col-md-9 d-flex flex-row gap-2">
+                                    <div class="form-check">
+                                        <input id="radio1" type="radio" name="radio" class="form-check-input"
+                                            checked />
+                                        <label for="radio1" class="form-check-label">Hybrid</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio2" type="radio" name="radio" class="form-check-input" />
+                                        <label for="radio2" class="form-check-label">Electric Car</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio3" type="radio" name="radio" class="form-check-input" />
+                                        <label for="radio3" class="form-check-label">Gas Car</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio4" type="radio" name="radio" class="form-check-input" />
+                                        <label for="radio4" class="form-check-label">Car</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="fw-bold text-fs-4">Additional details</h3>
+                        <div class="mt-4">
+                            <div class="form-group row">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Auction</label>
+                                <div class="col-sm-9">
+                                    <select class="selectjs form-select">
+                                        @if(count(@$all_auction) > 0)
+                                        @foreach(@$all_auction as $key => $value)
+                                            @if($value['id'] == @$auction)
+                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Auction
+                                    location</label>
+                                <div class="col-sm-9">
+                                    <select class="selectjs form-select">
+                                        <option value="All" selected>All</option>
+                                        <option value="option1">Option1</option>
+                                        <option value="option2">Option2</option>
+                                        <option value="option3">Option3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Location</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Auction buyer</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Lot number</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" placeholder="Enter a number"
+                                        inputmode="numeric" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase date</label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Destination</label>
+                                <div class="col-sm-9">
+                                    <select class="selectjs form-select">
+                                        @if(count(@$all_destination_port) > 0)
+                                        @foreach(@$all_destination_port as $key => $value)
+                                            @if($value['id'] == @$destination_port)
+                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mt-4">
+                                <label for="notes" class="fw-semibold">Admin Notes</label>
+                                <textarea name="notes" cols="10" rows="4" value="Title received on 12 / 18r"
+                                    class="form-control"></textarea>
+                            </div>
+                            <div class="form-group mt-4">
+                                <label for="notes" class="fw-semibold">Admin Notes</label>
+                                <textarea name="notes" cols="10" rows="4" value="Title received on 12 / 18r"
+                                    class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="fw-bold text-fs-4">Transportation info</h3>
+                        <div class="mt-4">
+                            <div class="form-group row">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Carrier</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Pay date</label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup address</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Delivery
+                                    address</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Due date</label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Dispatch date</label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated del.
+                                    date</label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Actual delivery
+                                    date</label>
+                                <div class="col-sm-9">
+                                    <select class="selectjs form-select">
+                                        <option value="All" selected>All</option>
+                                        <option value="option1">Option1</option>
+                                        <option value="option2">Option2</option>
+                                        <option value="option3">Option3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Towing price</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" placeholder="Enter a price"
+                                        inputmode="numeric" />
+                                </div>
+
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Trans. Fines</label>
+                                <div class="col-sm-9">
+                                    <div class="row">
+                                        <div class="col-md-8 d-flex align-items-center">
+                                            <select class="form-select">
+                                                <option value="All" selected>Payment 45$</option>
+                                                <option value="option1">Option1</option>
+                                                <option value="option2">Option2</option>
+                                                <option value="option3">Option3</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" placeholder="0" />
+                                                <span class="input-group-text" id="basic-addon2">$</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <span class="d-flex justify-content-between align-items-center">
+                                                <div class="">Late Payment</div>
+                                                <div class="">12$</div>
+                                                <div class="">
+                                                    <div
+                                                        class="d-flex justify-content-center items-center message-icon">
+                                                        <i class="fa-circle-minus fa-solid text-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#delete_confirm_modal"></i>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="col-8">
+                                            <span class="d-flex justify-content-between align-items-center">
+                                                <div class="">Late Payment</div>
+                                                <div class="">12$</div>
+                                                <div class="">
+                                                    <div
+                                                        class="d-flex justify-content-center items-center message-icon">
+                                                        <i class="fa-circle-minus fa-solid text-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#delete_confirm_modal"></i>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mt-4">
+                                <label for="notes" class="fw-semibold">Trans. Notes</label>
+                                <textarea name="notes" cols="10" rows="4" value="Title received on 12 / 18r"
+                                    class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="fw-bold text-fs-4">Pricing details</h3>
+                        <div class="mt-4">
+                            <div class="form-group row">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Auction price</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" placeholder="Enter a price"
+                                        inputmode="numeric" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Auction Fines</label>
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-md-8 d-flex align-items-center">
+                                            <select class="form-select">
+                                                <option value="All" selected>Payment 45$</option>
+                                                <option value="option1">Option1</option>
+                                                <option value="option2">Option2</option>
+                                                <option value="option3">Option3</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" placeholder="0" />
+                                                <span class="input-group-text" id="basic-addon2">$</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <span class="d-flex justify-content-between align-items-center">
+                                                <div class="">Late Payment</div>
+                                                <div class="">12$</div>
+                                                <div class="">
+                                                    <div
+                                                        class="d-flex justify-content-center items-center message-icon">
+                                                        <i class="fa-circle-minus fa-solid text-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#delete_confirm_modal"></i>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="col-8">
+                                            <span class="d-flex justify-content-between align-items-center">
+                                                <div class="">Late Payment</div>
+                                                <div class="">12$</div>
+                                                <div class="">
+                                                    <div
+                                                        class="d-flex justify-content-center items-center message-icon">
+                                                        <i class="fa-circle-minus fa-solid text-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#delete_confirm_modal"></i>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Draft expenses</label>
+                                <div class="col-sm-9">
+
+                                    <textarea id="numeric-textarea" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group mt-4">
+                                <label for="notes" class="fw-semibold">Container info</label>
+                                <input name="notes" class="form-control p-4" disabled>
+                            </div>
+                            <div class="form-group mt-4">
+                                <button data-bs-toggle="modal" data-bs-target="#sendReminderModal" type='button'
+                                    class="btn btn-primary col-md-6 float-end border border-1  fs-5">
+                                    Reminder
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="sendReminderModal" tabindex="-1"
+                                    aria-labelledby="sendReminderModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog rounded-5">
+                                        <div class="modal-content p-3">
+                                            <div class="modal-header border-0">
+                                                <h1 class="modal-title fw-bold" id="sendReminderModalLabel"
+                                                    style="font-size: 28px">
+                                                    Send Reminder</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row mt-4">
+                                                    <label for="choose form"
+                                                        class="col-md-4 fs-5 fw-bold">Choose Form</label>
+                                                    <div class="col-md-8">
+                                                        <select class="form-select"
+                                                            aria-label="Default select example">
+                                                            <option selected>Choose option</option>
+                                                            <option value="1">One</option>
+                                                            <option value="2">Two</option>
+                                                            <option value="3">Three</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <a href="#"
+                                                    class="btn w-auto btn-primary border-0 mt-4 col-md-12 rounded-3 fs-6">Send
+                                                    reminder</a>
+
+                                                <div class="p-3">
+                                                    <div class="row shadow border rounded-5 w-100 mb-3">
+                                                        <p class="col text-fs-3 fw-bold text-center">History</p>
+                                                        <p class="col text-fs-3 fw-bold text-center">Most Recent
+                                                        </p>
+                                                    </div>
+                                                    <div class="row shadow border rounded-5 w-100 mb-3">
+                                                        <p class="col text-fs-3 fw-bold text-center">ID</p>
+                                                        <p class="col text-fs-3 fw-bold text-center">Form</p>
+                                                        <p class="col text-fs-3 fw-bold text-center">Date Send
+                                                        </p>
+                                                    </div>
+                                                    <div class="row shadow border rounded-5 w-100 mb-3">
+                                                        <p class="col text-fs-3 text-center">55427687</p>
+                                                        <p class="col text-fs-3 text-center">Form No.1</p>
+                                                        <p class="col text-fs-3 text-center">23, 3 ,2023</p>
+                                                    </div>
+                                                    <div class="row shadow border rounded-5 w-100 mb-3">
+                                                        <p class="col text-fs-3 text-center">65784248</p>
+                                                        <p class="col text-fs-3 text-center">Form No.1</p>
+                                                        <p class="col text-fs-3 text-center">23, 3 ,2023</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form action="" class="mt-5">
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="row mb-4">
+                            <label class="col-md-3 col-form-label fw-semibold">Document</label>
+                            <div class="col-md-9 d-flex flex-row shadow-lg">
+                                <input class="fbg-white border-0 form-control" aria-label="upload">
+                                <button class="btn btn-primary rounded" type="file">
+                                    <div class="d-flex align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
+                                            viewBox="0 0 19 22" fill="none">
+                                            <path
+                                                d="M13.0253 0.170898H6.05884C5.10095 0.170898 4.31722 0.954626 4.31722 1.91252V15.8455C4.31722 16.8033 5.10095 17.5871 6.05884 17.5871H16.5085C17.4664 17.5871 18.2502 16.8033 18.2502 15.8455V5.39575L13.0253 0.170898ZM16.5085 15.8455H6.05884V1.91252H12.1545V6.26656H16.5085V15.8455ZM2.5756 3.65413V19.3287H16.5085V21.0703H2.5756C1.61771 21.0703 0.833984 20.2866 0.833984 19.3287V3.65413H2.5756ZM7.80046 8.87899V10.6206H14.7669V8.87899H7.80046ZM7.80046 12.3622V14.1038H12.1545V12.3622H7.80046Z"
+                                                fill="white" />
+                                        </svg>
+                                        <span class="">Choose</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-file-pdf fa-solid fs-4 text-danger"></i>
+                                            <span class="mb-0 fs-5 fw-semibold">Third Eye</span>
+                                        </div>
+                                        <button class="btn btn-link p-0">
+                                            <i class="fas fa-ellipsis-v text-dark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-file-pdf fa-solid fs-4 text-danger"></i>
+                                            <span class="mb-0 fs-5 fw-semibold">Third Eye</span>
+                                        </div>
+                                        <button class="btn btn-link p-0">
+                                            <i class="fas fa-ellipsis-v text-dark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-file-pdf fa-solid fs-4 text-danger"></i>
+                                            <span class="mb-0 fs-5 fw-semibold">Third Eye</span>
+                                        </div>
+                                        <button class="btn btn-link p-0">
+                                            <i class="fas fa-ellipsis-v text-dark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row mb-4">
+                            <label for="" class="col-md-3 col-form-label fw-semibold">Image</label>
+                            <div class="col-md-9 d-flex flex-row shadow-lg">
+                                <input class="fbg-white border-0 form-control" aria-label="upload">
+                                <button class="btn btn-primary rounded" type="file">
+                                    <div class="d-flex align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
+                                            viewBox="0 0 19 22" fill="none">
+                                            <path
+                                                d="M13.0253 0.170898H6.05884C5.10095 0.170898 4.31722 0.954626 4.31722 1.91252V15.8455C4.31722 16.8033 5.10095 17.5871 6.05884 17.5871H16.5085C17.4664 17.5871 18.2502 16.8033 18.2502 15.8455V5.39575L13.0253 0.170898ZM16.5085 15.8455H6.05884V1.91252H12.1545V6.26656H16.5085V15.8455ZM2.5756 3.65413V19.3287H16.5085V21.0703H2.5756C1.61771 21.0703 0.833984 20.2866 0.833984 19.3287V3.65413H2.5756ZM7.80046 8.87899V10.6206H14.7669V8.87899H7.80046ZM7.80046 12.3622V14.1038H12.1545V12.3622H7.80046Z"
+                                                fill="white" />
+                                        </svg>
+                                        <span class="">Choose</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-9">
+                                <div class="container container-car-image ms-5 mx-5">
+                                    <div id="thumbnail-slider" class="splide mt-2">
+                                        <div class="splide__track">
+                                            <ul class="splide__list d-flex list-unstyled gap-2">
+                                                <li>
+                                                    <img src="{{ asset('assets/carphoto.png') }}" class="w-100"
+                                                        alt="car-image" />
+                                                </li>
+                                                <li>
+                                                    <img src="{{ asset('assets/carphoto.png') }}" class="w-100"
+                                                        alt="car-image" />
+                                                </li>
+                                                <li>
+                                                    <img src="{{ asset('assets/carphoto.png') }}" class="w-100"
+                                                        alt="car-image" />
+                                                </li>
+                                                <li>
+                                                    <img src="{{ asset('assets/carphoto.png') }}" class="w-100"
+                                                        alt="car-image" />
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+@endsection
+
+@section('script')
+
+    <script>
+        $(document).ready(() => {
+            $('.selectjs').select2();
+        })
+    </script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.select2-selection--single').removeClass('select2-selection--single');
+        });
+    </script>
+    <script>
+        const numericTextarea = document.getElementById("numeric-textarea");
+        numericTextarea.addEventListener("input", restrictToNumeric);
+        function restrictToNumeric(event) {
+            const value = event.target.value;
+            const numericValue = value.replace(/\D/g, "");
+            event.target.value = numericValue;
+        }
+    </script>
+
+    <script>
+        var input = document.querySelector("#phone");
+        window.intlTelInput(input, {
+            separateDialCode: true,
+            excludeCountries: ["in", "il"],
+            preferredCountries: ["ru", "jp", "pk", "no"]
+        });
+    </script>
+
+@endsection

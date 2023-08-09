@@ -19,9 +19,8 @@ class ApiController extends Controller
     {
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
             $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')->accessToken; 
-            $success['id'] =  $user->id;
-            $success['name'] =  $user->name;
+            $success['token'] =  $user->createToken('MyApp')->accessToken;
+            $success['user'] = $user;
 
             User::where('id', Auth::user()->id)->update(['api_token' => $success['token']]);
    
@@ -73,7 +72,7 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                $containers = Container::orderBy('id', 'DESC')->with('container_images', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->limit(100)->get();
+                $containers = Container::orderBy('id', 'DESC')->with('container_images', 'status', 'shipper', '', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->limit(100)->get();
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex == 1) {
@@ -245,7 +244,7 @@ class ApiController extends Controller
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $financial_data = [];
-                $financial_data['history'] = TransactionsHistory::where('user_id', $id)->get();
+                $financial_data['history'] = TransactionsHistory::with('vehicle')->where('user_id', $id)->get();
                 $financial_data['total_transactions'] = TransactionsHistory::where('user_id', $id)->where('status', 'paid')->sum('amount');
                 $financial_data['balance'] = TransactionsHistory::where('user_id', $id)->where('status', 'paid')->sum('amount');
                 $financial_data['due_payments'] = TransactionsHistory::where('user_id', $id)->where('status', 'unpaid')->sum('amount');

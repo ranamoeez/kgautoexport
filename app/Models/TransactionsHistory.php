@@ -13,4 +13,8 @@ class TransactionsHistory extends Model
     protected $fillable = [
         'user_id', 'amount', 'vehicle_id', 'status'
     ];
+
+    public function vehicle(){
+    	return $this->belongsTo(Auction::class, 'vehicle_id');
+    }
 }

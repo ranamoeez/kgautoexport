@@ -305,8 +305,7 @@ class ApiController extends Controller
                 $input = $request->all();
            
                 $validator = Validator::make($input, [
-                    'vehicle_id' => 'required',
-                    'comments' => 'required'
+                    'vehicle_id' => 'required'
                 ]);
            
                 if($validator->fails()){

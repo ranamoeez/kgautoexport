@@ -11,18 +11,19 @@
                 </h4>
                 <div class="d-flex justify-content-between">
                     <div class="financial-btn">
-                        <button class="btn btn-primary border border-1 fs-5">
+                        <button class="btn btn-primary border border-1 fs-5" disabled>
                             Send to Buyer
                         </button>
                     </div>
                     <div class="financial-btn">
-                        <button class="btn btn-primary border border-1 fs-5">
+                        <button class="btn btn-primary border border-1 fs-5 submit-form" type="button">
                             Save
                         </button>
                     </div>
                 </div>
             </div>
-            <form action="">
+            <form method="POST" action="{{ @$action }}" class="add-vehicle">
+                @csrf
                 <div class="row mt-4">
                     <div class="col-md-3">
                         <h3 class="fw-bold text-fs-4">Vehicle information</h3>
@@ -46,7 +47,7 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Terminal</label>
                                 <div class="col-md-9">
-                                    <select class="selectjs form-select">
+                                    <select class="selectjs form-select" name="terminal_id">
                                         @if(count(@$all_terminal) > 0)
                                         @foreach(@$all_terminal as $key => $value)
                                             @if($value['id'] == @$terminal)
@@ -62,7 +63,7 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Buyer</label>
                                 <div class="col-md-9">
-                                    <select class="selectjs form-select" name="buyer">
+                                    <select class="selectjs form-select" name="buyer_id">
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
                                             @if($value['id'] == @$buyer)
@@ -78,14 +79,14 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">VIN</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="vin" class="form-control" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Description</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select">
-                                        <option value="All" selected>All</option>
+                                        <option value="Mercedes" selected>Mercedes</option>
                                         <option value="option1">Option1</option>
                                         <option value="option2">Option2</option>
                                         <option value="option3">Option3</option>
@@ -95,7 +96,7 @@
                                     <div class="row mt-2">
                                         <div class="col-md-6">
                                             <select class="selectjs form-select">
-                                                <option value="All" selected>All</option>
+                                                <option value="C200" selected>C200</option>
                                                 <option value="option1">Option1</option>
                                                 <option value="option2">Option2</option>
                                                 <option value="option3">Option3</option>
@@ -103,7 +104,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <select class="selectjs form-select">
-                                                <option value="All" selected>All</option>
+                                                <option value="2019" selected>2019</option>
                                                 <option value="option1">Option1</option>
                                                 <option value="option2">Option2</option>
                                                 <option value="option3">Option3</option>
@@ -115,27 +116,27 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Client name</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="client_name" class="form-control" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Title</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
-                                        <input id="radio1" type="radio" name="radio" class="form-check-input"
+                                        <input id="radio1" type="radio" name="title" class="form-check-input" value="1" 
                                             checked />
                                         <label for="radio1" class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio2" type="radio" name="radio" class="form-check-input" />
+                                        <input id="radio2" type="radio" name="title" value="2" class="form-check-input" />
                                         <label for="radio2" class="form-check-label">Yes</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio3" type="radio" name="radio" class="form-check-input" />
+                                        <input id="radio3" type="radio" name="title" value="3" class="form-check-input" />
                                         <label for="radio3" class="form-check-label">BOS</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio4" type="radio" name="radio" class="form-check-input" />
+                                        <input id="radio4" type="radio" name="title" value="4" class="form-check-input" />
                                         <label for="radio4" class="form-check-label">TBO</label>
                                     </div>
                                 </div>
@@ -144,13 +145,13 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Keys</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
-                                        <input id="radio5" type="radio" name="radio_keys"
-                                            class="form-check-input" checked />
+                                        <input id="radio5" type="radio" name="keys"
+                                            class="form-check-input" value="0" checked />
                                         <label for="radio5" class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio6" type="radio" name="radio_keys"
-                                            class="form-check-input" />
+                                        <input id="radio6" type="radio" name="keys"
+                                            class="form-check-input" value="1" />
                                         <label for="radio6" class="form-check-label">Yes</label>
                                     </div>
                                 </div>
@@ -159,13 +160,13 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Operable</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
-                                        <input id="radio7" type="radio" name="radio_operable"
-                                            class="form-check-input" checked />
+                                        <input id="radio7" type="radio" name="operable"
+                                            class="form-check-input" value="0" checked />
                                         <label for="radio7" class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio8" type="radio" name="radio_operable"
-                                            class="form-check-input" />
+                                        <input id="radio8" type="radio" name="operable"
+                                            class="form-check-input" value="1" />
                                         <label for="radio8" class="form-check-label">Yes</label>
                                     </div>
                                 </div>
@@ -174,21 +175,21 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Fuel Type</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
-                                        <input id="radio1" type="radio" name="radio" class="form-check-input"
-                                            checked />
-                                        <label for="radio1" class="form-check-label">Hybrid</label>
+                                        <input id="radio9" type="radio" name="fuel_type" class="form-check-input"
+                                            checked value="1" />
+                                        <label for="radio9" class="form-check-label">Hybrid</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio2" type="radio" name="radio" class="form-check-input" />
-                                        <label for="radio2" class="form-check-label">Electric Car</label>
+                                        <input id="radio10" type="radio" name="fuel_type" class="form-check-input" value="2" />
+                                        <label for="radio10" class="form-check-label">Electric Car</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio3" type="radio" name="radio" class="form-check-input" />
-                                        <label for="radio3" class="form-check-label">Gas Car</label>
+                                        <input id="radio11" type="radio" name="fuel_type" class="form-check-input" value="3" />
+                                        <label for="radio11" class="form-check-label">Gas Car</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio4" type="radio" name="radio" class="form-check-input" />
-                                        <label for="radio4" class="form-check-label">Car</label>
+                                        <input id="radio12" type="radio" name="fuel_type" class="form-check-input" value="4" />
+                                        <label for="radio12" class="form-check-label">Other</label>
                                     </div>
                                 </div>
                             </div>
@@ -200,7 +201,7 @@
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction</label>
                                 <div class="col-sm-9">
-                                    <select class="selectjs form-select">
+                                    <select class="selectjs form-select auction" name="auction_id">
                                         @if(count(@$all_auction) > 0)
                                         @foreach(@$all_auction as $key => $value)
                                             @if($value['id'] == @$auction)
@@ -217,49 +218,64 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction
                                     location</label>
                                 <div class="col-sm-9">
-                                    <select class="selectjs form-select">
-                                        <option value="All" selected>All</option>
-                                        <option value="option1">Option1</option>
-                                        <option value="option2">Option2</option>
-                                        <option value="option3">Option3</option>
+                                    <select class="selectjs form-select auction_location" name="auction_location_id" disabled>
+                                        @if(count(@$all_auction_location) > 0)
+                                        @foreach(@$all_auction_location as $key => $value)
+                                            @if($value['id'] == @$auction_location)
+                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="address" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Location</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="location" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction buyer</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                    <select class="selectjs form-select" name="auction_buyer">
+                                        @if(count(@$all_buyer) > 0)
+                                        @foreach(@$all_buyer as $key => $value)
+                                            @if($value['id'] == @$auction_buyer)
+                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Lot number</label>
                                 <div class="col-sm-9">
-                                    <input type="number" class="form-control" placeholder="Enter a number"
+                                    <input type="number" class="form-control" name="lotnumber" placeholder="Enter a number"
                                         inputmode="numeric" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control" />
+                                    <input type="date" name="purchase_date" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Destination</label>
                                 <div class="col-sm-9">
-                                    <select class="selectjs form-select">
+                                    <select class="selectjs form-select" name="destination_port_id">
                                         @if(count(@$all_destination_port) > 0)
                                         @foreach(@$all_destination_port as $key => $value)
                                             @if($value['id'] == @$destination_port)
@@ -273,8 +289,8 @@
                                 </div>
                             </div>
                             <div class="form-group mt-4">
-                                <label for="notes" class="fw-semibold">Admin Notes</label>
-                                <textarea name="notes" cols="10" rows="4" value="Title received on 12 / 18r"
+                                <label for="notes" class="fw-semibold">Notes</label>
+                                <textarea name="notes_user" cols="10" rows="4" value="Title received on 12 / 18r"
                                     class="form-control"></textarea>
                             </div>
                             <div class="form-group mt-4">
@@ -290,69 +306,70 @@
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="transportation_address" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Carrier</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="carrier" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pay date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control" />
+                                    <input type="date" name="pdate" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="pickup_address" class="form-control" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Delivery
                                     address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="delivery_address" class="form-control" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Due date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control" />
+                                    <input type="date" name="due_date" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Dispatch date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control" />
+                                    <input type="date" name="dispatch_date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup date</label>
+                                <div class="col-sm-9">
+                                    <input type="date" name="pickup_date" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated del.
                                     date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control" />
+                                    <input type="date" name="delivery_date" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Actual delivery
                                     date</label>
                                 <div class="col-sm-9">
-                                    <select class="selectjs form-select">
-                                        <option value="All" selected>All</option>
-                                        <option value="option1">Option1</option>
-                                        <option value="option2">Option2</option>
-                                        <option value="option3">Option3</option>
-                                    </select>
+                                    <input type="date" name="delivered_on_date" class="form-control" />
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Towing price</label>
                                 <div class="col-sm-9">
-                                    <input type="number" class="form-control" placeholder="Enter a price"
+                                    <input type="number" name="towing_price" class="form-control" placeholder="Enter a price"
                                         inputmode="numeric" />
                                 </div>
 
@@ -408,7 +425,7 @@
                             </div>
                             <div class="form-group mt-4">
                                 <label for="notes" class="fw-semibold">Trans. Notes</label>
-                                <textarea name="notes" cols="10" rows="4" value="Title received on 12 / 18r"
+                                <textarea name="transportation_notes" cols="10" rows="4" value="Title received on 12 / 18r"
                                     class="form-control"></textarea>
                             </div>
                         </div>
@@ -419,7 +436,7 @@
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction price</label>
                                 <div class="col-sm-9">
-                                    <input type="number" class="form-control" placeholder="Enter a price"
+                                    <input type="number" name="auction_price" class="form-control" placeholder="Enter a price"
                                         inputmode="numeric" />
                                 </div>
                             </div>
@@ -476,13 +493,18 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Draft expenses</label>
                                 <div class="col-sm-9">
-
-                                    <textarea id="numeric-textarea" class="form-control"></textarea>
+                                    <textarea id="numeric-textarea" name="draft_expenses" class="form-control"></textarea>
                                 </div>
                             </div>
                             <div class="form-group mt-4">
                                 <label for="notes" class="fw-semibold">Container info</label>
                                 <input name="notes" class="form-control p-4" disabled>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Weight (LB)</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="weight" class="form-control" placeholder="Enter a weight" />
+                                </div>
                             </div>
                             <div class="form-group mt-4">
                                 <button data-bs-toggle="modal" data-bs-target="#sendReminderModal" type='button'
@@ -551,9 +573,8 @@
                         </div>
                     </div>
                 </div>
-            </form>
-            <form action="" class="mt-5">
-                <div class="row mt-4">
+            
+                <div class="row mt-4 pt-5">
                     <div class="col-md-6">
                         <div class="row mb-4">
                             <label class="col-md-3 col-form-label fw-semibold">Document</label>
@@ -690,6 +711,29 @@
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
+            $(document).on("change", ".auction", function () {
+                var id = $(this).find("option:selected").val();
+
+                var settings = {
+                  "url": "http://localhost/kgexport/admin/get-auction-location/"+id,
+                  "method": "GET",
+                };
+
+                $.ajax(settings).done(function (response) {
+                    response = JSON.parse(response);
+                    if (response.success == true) {
+                        $(".auction_location").html("");
+                        $(response.data).each(function (key, value) {
+                            option = "<option value="+value.id+">"+value.name+"</option>";
+                            $(".auction_location").append(option);
+                        });
+                        $(".auction_location").attr("disabled", false);
+                    }
+                });
+            });
+            $(document).on("click", ".submit-form", function () {
+                $(".add-vehicle").submit();
+            });
         });
     </script>
     <script>

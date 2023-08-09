@@ -31,6 +31,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/vehicles', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('vehicles');
 	Route::get('/add-vehicle', [App\Http\Controllers\Admin\HomeController::class, 'add_vehicle'])->name('add-vehicle');
 	Route::post('/add-vehicle', [App\Http\Controllers\Admin\HomeController::class, 'add_vehicle'])->name('save-vehicle');
+	Route::get('/get-auction-location/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_auction_location'])->name('get-auction-location');
 	Route::get('/vehicles/delete/{id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_vehicles'])->name('delete-vehicles');
 	Route::get('/containers', [App\Http\Controllers\Admin\HomeController::class, 'containers'])->name('containers');
 	Route::get('/add-container', [App\Http\Controllers\Admin\HomeController::class, 'add_container'])->name('add-container');

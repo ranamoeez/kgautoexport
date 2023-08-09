@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePickupRequestsTable extends Migration
+class CreateFinesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreatePickupRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pickup_requests', function (Blueprint $table) {
+        Schema::create('fines', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
             $table->integer('vehicle_id');
-            $table->string('comments')->nullable();
-            $table->string('file')->nullable();
-            $table->string('status')->default('waiting');
+            $table->string('type');
+            $table->string('cause');
+            $table->string('amount');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreatePickupRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pickup_requests');
+        Schema::dropIfExists('fines');
     }
 }

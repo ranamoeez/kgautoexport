@@ -12,7 +12,7 @@ class PickupRequest extends Model
 
     protected $table = "pickup_requests";
     protected $fillable = [
-        'user_id', 'vehicle_id', 'comments', 'file'
+        'user_id', 'vehicle_id', 'comments', 'file', 'status'
     ];
 
     public function vehicle(){

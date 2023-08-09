@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Vehicle;
 
 class TransactionsHistory extends Model
 {
@@ -15,6 +16,6 @@ class TransactionsHistory extends Model
     ];
 
     public function vehicle(){
-    	return $this->belongsTo(Auction::class, 'vehicle_id');
+    	return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }
 }

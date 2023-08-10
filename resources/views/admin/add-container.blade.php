@@ -19,7 +19,7 @@
                     </div>
                 </div>
             </div>
-            <form method="POST" action="{{ @$action }}">
+            <form method="POST" action="{{ @$action }}" class="make_ajax">
                 @csrf
                 <div class="row mt-4">
                     <div class="col-md-3">
@@ -386,7 +386,7 @@
                                 <button class="btn btn-primary mb-2 border-0" type="button">
                                     Letter ()
                                 </button>
-                                <button class="btn btn-primary mb-2 border-0" type="button">
+                                <button class="btn btn-primary mb-2 border-0" type="button" disabled>
                                     Send to buyer
                                 </button>
                             </div>
@@ -395,10 +395,10 @@
 
                     <div class="col-md-6">
                         <div class="row mb-4">
-                            <label for="" class="col-md-3 col-form-label fw-semibold">Documents</label>
-                            <div class="col-md-9 d-flex flex-row shadow-lg">
-                                <input class="fbg-white border-0 form-control" aria-label="upload">
-                                <button class="btn btn-primary rounded" type="file">
+                            <label for="" class="col-md-2 col-form-label fw-semibold">Documents</label>
+                            <div class="col-md-10 d-flex flex-row shadow-lg px-0">
+                                <input type="file" class="fbg-white border-0 form-control" name="documents[]" id="documents" aria-label="upload" multiple>
+                                <button class="btn btn-primary rounded upload-documents" type="button">
                                     <div class="d-flex align-items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
                                             viewBox="0 0 19 22" fill="none">
@@ -412,7 +412,7 @@
                             </div>
                         </div>
                         <div class="row mb-4">
-                            <div class="col-md-4">
+                            {{-- <div class="col-md-4">
                                 <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
                                     <div class="card-header d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
@@ -459,7 +459,7 @@
                                         <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -481,6 +481,10 @@
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
+        });
+
+        $(document).on("click", ".upload-documents", function () {
+            $("#documents").click();
         });
     </script>
     <script>

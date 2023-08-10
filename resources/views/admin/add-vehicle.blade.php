@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            <form method="POST" action="{{ @$action }}" class="add-vehicle">
+            <form method="POST" action="{{ @$action }}" class="add-vehicle make_ajax" enctype="multipart/form-data">
                 @csrf
                 <div class="row mt-4">
                     <div class="col-md-3">
@@ -85,7 +85,7 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Description</label>
                                 <div class="col-md-9">
-                                    <select class="selectjs form-select">
+                                    <select class="selectjs form-select" name="company">
                                         <option value="Mercedes" selected>Mercedes</option>
                                         <option value="option1">Option1</option>
                                         <option value="option2">Option2</option>
@@ -95,7 +95,7 @@
                                 <div class="col-12">
                                     <div class="row mt-2">
                                         <div class="col-md-6">
-                                            <select class="selectjs form-select">
+                                            <select class="selectjs form-select" name="name">
                                                 <option value="C200" selected>C200</option>
                                                 <option value="option1">Option1</option>
                                                 <option value="option2">Option2</option>
@@ -103,7 +103,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-6">
-                                            <select class="selectjs form-select">
+                                            <select class="selectjs form-select" name="model">
                                                 <option value="2019" selected>2019</option>
                                                 <option value="option1">Option1</option>
                                                 <option value="option2">Option2</option>
@@ -377,48 +377,23 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Trans. Fines</label>
                                 <div class="col-sm-9">
-                                    <div class="row">
-                                        <div class="col-md-8 d-flex align-items-center">
-                                            <select class="form-select">
+                                    <div class="row trans">
+                                        <div class="col-md-7 d-flex align-items-center">
+                                            <select class="form-select transtype">
                                                 <option value="All" selected>Payment 45$</option>
-                                                <option value="option1">Option1</option>
+                                                <option value="Late Payment">Late Payment</option>
                                                 <option value="option2">Option2</option>
                                                 <option value="option3">Option3</option>
                                             </select>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
-                                                <input type="number" class="form-control" placeholder="0" />
+                                                <input type="number" class="form-control transfine" min="0" placeholder="0" />
                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
-                                        <div class="col-8">
-                                            <span class="d-flex justify-content-between align-items-center">
-                                                <div class="">Late Payment</div>
-                                                <div class="">12$</div>
-                                                <div class="">
-                                                    <div
-                                                        class="d-flex justify-content-center items-center message-icon">
-                                                        <i class="fa-circle-minus fa-solid text-danger"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#delete_confirm_modal"></i>
-                                                    </div>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <div class="col-8">
-                                            <span class="d-flex justify-content-between align-items-center">
-                                                <div class="">Late Payment</div>
-                                                <div class="">12$</div>
-                                                <div class="">
-                                                    <div
-                                                        class="d-flex justify-content-center items-center message-icon">
-                                                        <i class="fa-circle-minus fa-solid text-danger"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#delete_confirm_modal"></i>
-                                                    </div>
-                                                </div>
-                                            </span>
+                                        <div class="col-md-1 pt-2" style="padding-right: 0px; padding-left: 0px;">
+                                            <i class="fa-circle-plus fa-solid text-success savetrans"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -443,49 +418,23 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction Fines</label>
                                 <div class="col-md-9">
-                                    <div class="row">
-                                        <div class="col-md-8 d-flex align-items-center">
-                                            <select class="form-select">
+                                    <div class="row auct">
+                                        <div class="col-md-7 d-flex align-items-center">
+                                            <select class="form-select auctiontype">
                                                 <option value="All" selected>Payment 45$</option>
-                                                <option value="option1">Option1</option>
+                                                <option value="Late Payment">Late Payment</option>
                                                 <option value="option2">Option2</option>
                                                 <option value="option3">Option3</option>
                                             </select>
                                         </div>
                                         <div class="col-md-4">
-
                                             <div class="input-group">
-                                                <input type="number" class="form-control" placeholder="0" />
+                                                <input type="number" class="form-control auctionfine" min="0" placeholder="0" />
                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
-                                        <div class="col-8">
-                                            <span class="d-flex justify-content-between align-items-center">
-                                                <div class="">Late Payment</div>
-                                                <div class="">12$</div>
-                                                <div class="">
-                                                    <div
-                                                        class="d-flex justify-content-center items-center message-icon">
-                                                        <i class="fa-circle-minus fa-solid text-danger"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#delete_confirm_modal"></i>
-                                                    </div>
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <div class="col-8">
-                                            <span class="d-flex justify-content-between align-items-center">
-                                                <div class="">Late Payment</div>
-                                                <div class="">12$</div>
-                                                <div class="">
-                                                    <div
-                                                        class="d-flex justify-content-center items-center message-icon">
-                                                        <i class="fa-circle-minus fa-solid text-danger"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#delete_confirm_modal"></i>
-                                                    </div>
-                                                </div>
-                                            </span>
+                                        <div class="col-md-1 pt-2" style="padding-right: 0px; padding-left: 0px;">
+                                            <i class="fa-circle-plus fa-solid text-success saveauction"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -577,10 +526,10 @@
                 <div class="row mt-4 pt-5">
                     <div class="col-md-6">
                         <div class="row mb-4">
-                            <label class="col-md-3 col-form-label fw-semibold">Document</label>
-                            <div class="col-md-9 d-flex flex-row shadow-lg">
-                                <input class="fbg-white border-0 form-control" aria-label="upload">
-                                <button class="btn btn-primary rounded" type="file">
+                            <label class="col-md-2 col-form-label fw-semibold">Document</label>
+                            <div class="col-md-10 d-flex flex-row shadow-lg px-0">
+                                <input type="file" class="fbg-white border-0 form-control" name="documents[]" id="documents" aria-label="upload" accept=".pdf, .csv, .xlsx, .doc, .docx" multiple>
+                                <button class="btn btn-primary rounded upload-documents" type="button">
                                     <div class="d-flex align-items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
                                             viewBox="0 0 19 22" fill="none">
@@ -594,7 +543,7 @@
                             </div>
                         </div>
                         <div class="row mb-4">
-                            <div class="col-md-4">
+                            {{-- <div class="col-md-4">
                                 <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
                                     <div class="card-header d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
@@ -641,16 +590,17 @@
                                         <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="row mb-4">
-                            <label for="" class="col-md-3 col-form-label fw-semibold">Image</label>
-                            <div class="col-md-9 d-flex flex-row shadow-lg">
-                                <input class="fbg-white border-0 form-control" aria-label="upload">
-                                <button class="btn btn-primary rounded" type="file">
+                            <label for="" class="col-md-2 col-form-label fw-semibold">Image</label>
+                            <div class="col-md-10 d-flex flex-row shadow-lg px-0">
+                                <!--end::Input group-->
+                                <input type="file" class="fbg-white border-0 form-control" name="images[]" id="images" aria-label="upload" accept=".png, .jpg, .jpeg" multiple>
+                                <button class="btn btn-primary rounded upload-images" type="button">
                                     <div class="d-flex align-items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
                                             viewBox="0 0 19 22" fill="none">
@@ -668,8 +618,8 @@
                                 <div class="container container-car-image ms-5 mx-5">
                                     <div id="thumbnail-slider" class="splide mt-2">
                                         <div class="splide__track">
-                                            <ul class="splide__list d-flex list-unstyled gap-2">
-                                                <li>
+                                            <ul class="splide__list d-flex list-unstyled gap-2 all-images">
+                                                {{-- <li>
                                                     <img src="{{ asset('assets/carphoto.png') }}" class="w-100"
                                                         alt="car-image" />
                                                 </li>
@@ -684,7 +634,7 @@
                                                 <li>
                                                     <img src="{{ asset('assets/carphoto.png') }}" class="w-100"
                                                         alt="car-image" />
-                                                </li>
+                                                </li> --}}
                                             </ul>
                                         </div>
                                     </div>
@@ -734,6 +684,84 @@
             $(document).on("click", ".submit-form", function () {
                 $(".add-vehicle").submit();
             });
+
+            $(document).on("click", ".upload-images", function () {
+                $("#images").click();
+            });
+
+            $(document).on("click", ".upload-documents", function () {
+                $("#documents").click();
+            });
+
+            $(document).on("click", ".savetrans", function () {
+                var type = $(".transtype").val();
+                var fine = $(".transfine").val();
+
+                var html = `<div class="col-12 mt-2">
+                    <span class="row align-items-center">
+                        <input type="hidden" name="trans_type[]" value="`+type+`">
+                        <input type="hidden" name="trans_fine[]" value="`+fine+`">
+                        <div class="col-md-6">`+type+`</div>
+                        <div class="col-md-3">$`+fine+`</div>
+                        <div class="col-md-3">
+                            <div class="d-flex justify-content-center items-center message-icon">
+                                <i class="fa-circle-minus fa-solid text-danger delete-trans" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal"></i>
+                            </div>
+                        </div>
+                    </span>
+                </div>`;
+
+                $(".trans").append(html);
+            });
+
+            $(document).on("click", ".saveauction", function () {
+                var type = $(".auctiontype").val();
+                var fine = $(".auctionfine").val();
+
+                var html = `<div class="col-12 mt-2">
+                    <span class="d-flex justify-content-between align-items-center">
+                        <input type="hidden" name="auction_type[]" value="`+type+`">
+                        <input type="hidden" name="auction_fine[]" value="`+fine+`">
+                        <div class="col-md-6">`+type+`</div>
+                        <div class="col-md-3">$`+fine+`</div>
+                        <div class="col-md-3">
+                            <div class="d-flex justify-content-center items-center message-icon">
+                                <i class="fa-circle-minus fa-solid text-danger delete-trans" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal"></i>
+                            </div>
+                        </div>
+                    </span>
+                </div>`;
+
+                $(".auct").append(html);
+            });
+
+            $(document).on("click", ".delete-trans", function () {
+                $(this).parent().parent().parent().parent().remove();
+            });
+
+            // $(document).on("change", "#image", function () {
+            //     $("#upload-images").submit();
+            // });
+       
+            // $(document).on("submit", "#upload-images", function () {
+            //     var formData = new FormData(this);
+
+            //     $.ajax({
+            //         type: 'POST',
+            //         url: '{{ url("vehicle-images") }}',
+            //         data: formData,
+            //         sucess: function(data){
+            //             data = JSON.parse(data);
+            //             if (data.success == true) {
+            //                 var html = `<li>
+            //                     <img src="{{ url('storage/app/vehicle') }}`+data.image+`" class="w-100"
+            //                         alt="car-image" />
+            //                 </li>`;
+            //                 $(".all-images").append(html);
+            //             }
+            //         }
+            //     });
+            // });
         });
     </script>
     <script>

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\VehicleImage;
+use App\Models\VehicleDocuments;
 use App\Models\Auction;
 use App\Models\AuctionLocation;
 use App\Models\Terminal;
@@ -21,6 +22,10 @@ class Vehicle extends Model
 
     public function vehicle_images(){
     	return $this->hasMany(VehicleImage::class, 'vehicle_id');
+    }
+
+    public function vehicle_documents(){
+        return $this->hasMany(VehicleDocuments::class, 'vehicle_id');
     }
 
     public function auction(){

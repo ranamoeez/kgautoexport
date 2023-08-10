@@ -163,6 +163,7 @@
                             <tr id="row" class="align-middle overflow-hidden shadow mb-2">
                                 <td>
                                     <div class="d-flex flex-column justify-content-center">
+                                        @if(count($value->vehicle_documents) > 0)
                                         <a href="javascript:void();" class="text-link text-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -170,6 +171,7 @@
                                                     d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                                             </svg>
                                         </a>
+                                        @endif
                                         @if(count($value->vehicle_images) > 0)
                                         <a href="javascript:void();" class="text-link text-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -217,39 +219,33 @@
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white ps-1 pe-2 py-1"
-                                            style="background-position: right; min-width: 50px"
-                                            aria-label="Default select example">
-                                            <option value="1" data-color="danger">No</option>
-                                            <option value="2" data-color="success">Yes</option>
+                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 title" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ $value->id }}">
+                                            <option value="1" data-color="danger" @if(@$value->title == "1") selected @endif>No</option>
+                                            <option value="2" data-color="success" @if(@$value->title == "2") selected @endif>Yes</option>
                                         </select>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white ps-1 pe-2 py-1"
-                                            style="background-position: right; min-width: 50px"
-                                            aria-label="Default select example">
-                                            <option value="1" data-color="success">Yes</option>
-                                            <option value="2" data-color="danger">No</option>
+                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 keys" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ $value->id }}">
+                                            <option value="1" data-color="success" @if(@$value->keys == "1") selected @endif>Yes</option>
+                                            <option value="2" data-color="danger" @if(@$value->keys == "2") selected @endif>No</option>
                                         </select>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
                                         <span>{{ $value->paid_price }}</span>
-                                        <select class="form-select option-select text-white"
-                                            aria-label="Default select example">
+                                        <select class="form-select option-select text-white payment_status" aria-label="Default select example" data-id="{{ $value->id }}">
                                             <option value="1" data-color="success" @if(@$value->all_paid == "1") selected @endif>Paid</option>
-                                            <option value="2" data-color="danger" @if(@$value->all_paid == "0") selected @endif>Unpaid</option>
+                                            <option value="0" data-color="danger" @if(@$value->all_paid == "0") selected @endif>Unpaid</option>
                                         </select>
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select id="selectOption" class="form-select"
-                                            aria-label="Default select example">
+                                        <select id="selectOption" class="form-select status" aria-label="Default select example" data-id="{{ $value->id }}">
                                             @if(count(@$all_status) > 0)
                                             @foreach(@$all_status as $k => $v)
                                                 @if($v['id'] == @$value['status_id'])
@@ -348,6 +344,104 @@
 
             $("select.option-select").each(function () {
                 updateBackgroundColor(this);
+            });
+
+            $(document).on("change", ".status", function () {
+                var form = new FormData();
+                form.append("status", $(this).find("option:selected").val());
+                form.append("id", $(this).attr("data-id"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/update-vehicle-data") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        console.log(data);
+                        if (data.success == true) {
+                            console.log('in');
+                            toastr["success"]("Vehicle data updated successfully!", "Completed!");
+                        }
+                    }
+                });
+            });
+
+            $(document).on("change", ".title", function () {
+                var form = new FormData();
+                form.append("title", $(this).find("option:selected").val());
+                form.append("id", $(this).attr("data-id"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/update-vehicle-data") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Vehicle data updated successfully!", "Completed!");
+                        }
+                    }
+                });
+            });
+
+            $(document).on("change", ".keys", function () {
+                var form = new FormData();
+                form.append("keys", $(this).find("option:selected").val());
+                form.append("id", $(this).attr("data-id"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/update-vehicle-data") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Vehicle data updated successfully!", "Completed!");
+                        }
+                    }
+                });
+            });
+
+            $(document).on("change", ".payment_status", function () {
+                var form = new FormData();
+                form.append("payment_status", $(this).find("option:selected").val());
+                form.append("id", $(this).attr("data-id"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/update-vehicle-data") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Vehicle data updated successfully!", "Completed!");
+                        }
+                    }
+                });
             });
         });
     </script>

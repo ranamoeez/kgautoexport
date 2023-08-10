@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="2hG9Onhipd8gQW4CzEzxhVefjZEvTRg2u0ecrBLT">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>Dashboard</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('img/mini-logo.png') }}">

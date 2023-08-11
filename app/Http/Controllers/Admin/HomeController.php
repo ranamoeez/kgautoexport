@@ -163,7 +163,7 @@ class HomeController extends Controller
                 $files = [];
                 foreach ($request->file('documents') as $key => $value) {
                     $file = $value;
-                    $filename = Storage::putFile('vehicle/documents'.$vehicle->id, $file);
+                    $filename = Storage::putFile('vehicle/documents/'.$vehicle->id, $file);
                     
                     $image = new VehicleDocuments;
                     $image->vehicle_id = $vehicle->id;

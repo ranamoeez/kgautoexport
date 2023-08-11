@@ -5,7 +5,12 @@
 @endsection
 
 @section('content')
-
+    
+    <style type="text/css">
+        a:hover {
+            color: #023e8a !important;
+        }
+    </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
 
@@ -173,9 +178,9 @@
                                     </ul>
                                 </td>
                                 <td>
-                                    <span class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->shipping_line->name }}
-                                    </span>
+                                    </a>
                                 </td>
                                 <td>
                                     <span class="fw-medium text-fs-3">

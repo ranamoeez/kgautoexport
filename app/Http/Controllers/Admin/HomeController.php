@@ -29,11 +29,13 @@ use Storage;
 
 class HomeController extends Controller
 {
+    // Vehicle Functions
+
     public function vehicles(Request $request)
     {
         $data['type'] = "vehicles";
         $data['page'] = '1';
-        $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'vehicle_documents', 'auction', 'terminal', 'status', 'buyer');
+        $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'vehicle_documents', 'fines', 'auction', 'terminal', 'status', 'buyer');
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 20;
@@ -79,59 +81,6 @@ class HomeController extends Controller
         $data['all_status'] = Status::all();
         $data['all_buyer'] = User::where('role', '!=', '1')->get();
         return view('admin.vehicles', $data);
-    }
-
-    public function containers(Request $request)
-    {
-        $data['type'] = "containers";
-        $data['page'] = '1';
-        $containers = Container::orderBy('id', 'DESC')->with('container_images', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement');
-        if (!empty($request->page)) {
-            if ($request->page > 1) {
-                $offset = ($request->page - 1) * 20;
-                $containers = $containers->offset((int)$offset);
-            }
-            $data['page'] = $request->page;
-        }
-        if (!empty($request->port) && $request->port !== 'all') {
-        	$data['port'] = $request->port;
-        	$containers = $containers->where('loading_port_id', $request->port);
-        }
-        if (!empty($request->status) && $request->status !== 'all') {
-        	$data['status'] = $request->status;
-        	$containers = $containers->where('status_id', $request->status);
-        }
-        if (!empty($request->search)) {
-        	$data['search'] = $request->search;
-        	$search = $request->search;
-        	$containers = $containers->where(function ($query) use ($search) {
-			    $query->where('booking_no', 'LIKE', '%'.$search.'%')
-			        ->orWhere('container_no', 'LIKE', '%'.$search.'%')
-			        ->orWhere('export_reference', 'LIKE', '%'.$search.'%')
-			        ->orWhere('departure', 'LIKE', '%'.$search.'%')
-			        ->orWhere('arrival', 'LIKE', '%'.$search.'%');
-			});
-        }
-        if (!empty($request->fromDate) && !empty($request->toDate)) {
-        	$data['fromDate'] = $request->fromDate;
-        	$data['toDate'] = $request->toDate;
-        	$containers = $containers->where('arrival', '<=', $request->toDate)->where('arrival', '>=', $request->fromDate);
-        } elseif(!empty($request->fromDate)) {
-        	$data['fromDate'] = $request->fromDate;
-        	$containers = $containers->where('arrival', '>=', $request->fromDate);
-        } elseif(!empty($request->toDate)) {
-        	$data['toDate'] = $request->toDate;
-        	$containers = $containers->where('arrival', '<=', $request->toDate);
-        }
-        if (!empty($request->unpaid)) {
-        	$data['unpaid'] = $request->unpaid;
-        	$containers = $containers->where('all_paid', '0');
-        }
-        $containers = $containers->limit(20)->get();
-        $data['list'] = $containers;
-        $data['all_port'] = LoadingPort::all();
-        $data['all_status'] = ContStatus::all();
-        return view('admin.containers', $data);
     }
 
     public function add_vehicle(Request $request)
@@ -208,6 +157,143 @@ class HomeController extends Controller
         return view('admin.add-vehicle', $data);
     }
 
+    public function edit_vehicle(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+            $this->cleanData($data);
+            $data['description'] = $data['model'].' '.$data['company'].' '.$data['name'];
+            $vehicle = Vehicle::where('id', $id)->update($data);
+            if ($request->hasFile('images')) {
+                $files = [];
+                foreach ($request->file('images') as $key => $value) {
+                    $file = $value;
+                    $filename = Storage::putFile('vehicle/images/'.$id, $file);
+                    
+                    $image = new VehicleImage;
+                    $image->vehicle_id = $id;
+                    $image->filesize = $value->getSize();
+                    $image->owner_id = Auth::user()->id;
+                    $image->title = '';
+                    $image->filename = $filename;
+                    $image->filepath = 'storage/app/';
+                    $image->type = 'warehouse';
+                    $image->save();
+                }
+            }
+            if ($request->hasFile('documents')) {
+                $files = [];
+                foreach ($request->file('documents') as $key => $value) {
+                    $file = $value;
+                    $filename = Storage::putFile('vehicle/documents/'.$id, $file);
+                    
+                    $image = new VehicleDocuments;
+                    $image->vehicle_id = $id;
+                    $image->filesize = $value->getSize();
+                    $image->filename = $filename;
+                    $image->filepath = 'storage/app/';
+                    $image->save();
+                }
+            }
+            if (!empty($data['auction_type'])) {
+                foreach ($data['auction_type'] as $key => $value) {
+                    $fine = new Fine;
+                    $fine->vehicle_id = $id;
+                    $fine->type = 'auction';
+                    $fine->cause = $value;
+                    $fine->amount = $data['auction_fine'][$key];
+                    $fine->save();
+                }
+            }
+            if (!empty($data['trans_type'])) {
+                foreach ($data['trans_type'] as $key => $value) {
+                    $fine = new Fine;
+                    $fine->vehicle_id = $id;
+                    $fine->type = 'transaction';
+                    $fine->cause = $value;
+                    $fine->amount = $data['trans_fine'][$key];
+                    $fine->save();
+                }
+            }
+            $response = array('flag'=>true,'msg'=>'Vehicle is updated sucessfully.','action'=>'reload');
+            return json_encode($response);
+        }
+        $data   = array();
+        $data['type'] = 'vehicles';
+        $data['action'] = url('admin/vehicles/edit/'.$id);
+        $data['vehicle'] = Vehicle::with('vehicle_images', 'vehicle_documents', 'fines', 'auction', 'auction_location', 'terminal', 'status', 'buyer')->where('id', $id)->first();
+        $data['all_status'] = Status::all();
+        $data['all_terminal'] = Terminal::all();
+        $data['all_buyer'] = User::where('role', '!=', '1')->get();
+        $data['all_auction'] = Auction::all();
+        $data['all_auction_location'] = AuctionLocation::all();
+        $data['all_destination_port'] = DestinationPort::all();
+        return view('admin.edit-vehicle', $data);
+    }
+
+    public function delete_vehicles($id)
+    {
+        $vehicle = Vehicle::find($id);
+        $vehicle->delete();
+        $response = array('flag'=>true,'msg'=>'Vehicle has been deleted.');
+        echo json_encode($response); return;
+    }
+
+    // Container Functions
+
+    public function containers(Request $request)
+    {
+        $data['type'] = "containers";
+        $data['page'] = '1';
+        $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 20;
+                $containers = $containers->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        if (!empty($request->port) && $request->port !== 'all') {
+        	$data['port'] = $request->port;
+        	$containers = $containers->where('loading_port_id', $request->port);
+        }
+        if (!empty($request->status) && $request->status !== 'all') {
+        	$data['status'] = $request->status;
+        	$containers = $containers->where('status_id', $request->status);
+        }
+        if (!empty($request->search)) {
+        	$data['search'] = $request->search;
+        	$search = $request->search;
+        	$containers = $containers->where(function ($query) use ($search) {
+			    $query->where('booking_no', 'LIKE', '%'.$search.'%')
+			        ->orWhere('container_no', 'LIKE', '%'.$search.'%')
+			        ->orWhere('export_reference', 'LIKE', '%'.$search.'%')
+			        ->orWhere('departure', 'LIKE', '%'.$search.'%')
+			        ->orWhere('arrival', 'LIKE', '%'.$search.'%');
+			});
+        }
+        if (!empty($request->fromDate) && !empty($request->toDate)) {
+        	$data['fromDate'] = $request->fromDate;
+        	$data['toDate'] = $request->toDate;
+        	$containers = $containers->where('arrival', '<=', $request->toDate)->where('arrival', '>=', $request->fromDate);
+        } elseif(!empty($request->fromDate)) {
+        	$data['fromDate'] = $request->fromDate;
+        	$containers = $containers->where('arrival', '>=', $request->fromDate);
+        } elseif(!empty($request->toDate)) {
+        	$data['toDate'] = $request->toDate;
+        	$containers = $containers->where('arrival', '<=', $request->toDate);
+        }
+        if (!empty($request->unpaid)) {
+        	$data['unpaid'] = $request->unpaid;
+        	$containers = $containers->where('all_paid', '0');
+        }
+        $containers = $containers->limit(20)->get();
+        $data['list'] = $containers;
+        $data['all_port'] = LoadingPort::all();
+        $data['all_status'] = ContStatus::all();
+        return view('admin.containers', $data);
+    }
+
     public function add_container(Request $request)
     {
         if($request->isMethod('post')){
@@ -252,6 +338,55 @@ class HomeController extends Controller
         return view('admin.add-container', $data);
     }
 
+    public function edit_container(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+            $this->cleanData($data);
+            $container = Container::where('id', $id)->update($data);
+            if ($request->hasFile('documents')) {
+                $files = [];
+                foreach ($request->file('documents') as $key => $value) {
+                    $file = $value;
+                    $filename = Storage::putFile('container/'.$id, $file);
+                    
+                    $image = new ContainerImage;
+                    $image->container_id = $id;
+                    $image->filesize = $value->getSize();
+                    $image->title = '';
+                    $image->owner_id = Auth::user()->id;
+                    $image->filename = $filename;
+                    $image->filepath = 'storage/app/';
+                    $image->save();
+                }
+            }
+            $response = array('flag'=>true,'msg'=>'Container is updated sucessfully.','action'=>'reload');
+            return json_encode($response);
+        }
+        $data = array();
+        $data['type'] = 'containers';
+        $data['action'] = url('admin/containers/edit/'.$id);
+        $data['container'] = Container::with('container_images', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('id', $id)->first();
+        $data['all_shipper'] = Shipper::all();
+        $data['all_shipping_line'] = ShippingLine::all();
+        $data['all_loading_port'] = LoadingPort::all();
+        $data['all_consignee'] = Consignee::all();
+        $data['all_destination_port'] = DestinationPort::all();
+        $data['all_status'] = ContStatus::all();
+        $data['all_notify_party'] = NotifyParty::all();
+        $data['all_measurement'] = Measurement::all();
+        $data['all_discharge_port'] = DischargePort::all();
+        return view('admin.edit-container', $data);
+    }
+
+    public function delete_containers($id)
+    {
+        $container = Container::find($id);
+        $container->delete();
+        $response = array('flag'=>true,'msg'=>'Container has been deleted.');
+        echo json_encode($response); return;
+    }
+
     // public function vehicle_images(Request $request)
     // {
     //     if ($request->hasFile('image')) {
@@ -262,12 +397,6 @@ class HomeController extends Controller
     //     }
     //     return json_encode(['success'=>false]);
     // }
-
-    public function get_auction_location($id)
-    {
-    	$data = AuctionLocation::where("auction_id", $id)->get();
-    	return json_encode(["success"=>true, "data" => $data]);
-    }
 
     public function update_vehicle_data(Request $request)
     {
@@ -301,20 +430,10 @@ class HomeController extends Controller
         return json_encode(["success"=>true, 'action'=>'reload']);
     }
 
-    public function delete_vehicles($id)
+    public function get_auction_location($id)
     {
-    	$vehicle = Vehicle::find($id);
-        $vehicle->delete();
-        $response = array('flag'=>true,'msg'=>'Vehicle has been deleted.');
-        echo json_encode($response); return;
-    }
-
-    public function delete_containers($id)
-    {
-    	$container = Container::find($id);
-        $container->delete();
-        $response = array('flag'=>true,'msg'=>'Container has been deleted.');
-        echo json_encode($response); return;
+    	$data = AuctionLocation::where("auction_id", $id)->get();
+    	return json_encode(["success"=>true, "data" => $data]);
     }
 
     public function cleanData(&$data) {

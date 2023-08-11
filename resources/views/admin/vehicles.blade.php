@@ -6,6 +6,11 @@
 
 @section('content')
 
+    <style type="text/css">
+        a:hover {
+            color: #023e8a !important;
+        }
+    </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
 
@@ -192,29 +197,29 @@
                                         class="rounded-4 table-thumbnail-image" />
                                 </td> --}}
                                 <td>
-                                    <span class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ $value->delivery_date }}
-                                    </span>
+                                    </a>
                                 </td>
                                 <td>
-                                    <span class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ $value->description }}
-                                    </span>
+                                    </a>
                                 </td>
                                 <td>
-                                    <span class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ $value->vin }}
-                                    </span>
+                                    </a>
                                 </td>
                                 <td>
-                                    <span class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->buyer->name }}
-                                    </span>
+                                    </a>
                                 </td>
                                 <td>
-                                    <span class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ $value->client_name }}
-                                    </span>
+                                    </a>
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4 p-1 rounded-pill shadow">

@@ -416,8 +416,8 @@
                             </div>
                         </div>
                         <div class="row mb-4">
-                            @if(count(@$container->container_images) > 0)
-                            @foreach($container->container_images as $key => $value)
+                            @if(count(@$container->container_documents) > 0)
+                            @foreach($container->container_documents as $key => $value)
                             <div class="col-md-4">
                                 <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
                                     <div class="card-header d-flex align-items-center justify-content-between">

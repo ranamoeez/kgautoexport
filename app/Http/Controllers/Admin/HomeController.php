@@ -366,7 +366,7 @@ class HomeController extends Controller
         $data = array();
         $data['type'] = 'containers';
         $data['action'] = url('admin/containers/edit/'.$id);
-        $data['container'] = Container::with('container_images', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('id', $id)->first();
+        $data['container'] = Container::with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('id', $id)->first();
         $data['all_shipper'] = Shipper::all();
         $data['all_shipping_line'] = ShippingLine::all();
         $data['all_loading_port'] = LoadingPort::all();

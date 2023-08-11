@@ -669,7 +669,7 @@
                 var id = $(this).find("option:selected").val();
 
                 var settings = {
-                  "url": "http://localhost/kgexport/admin/get-auction-location/"+id,
+                  "url": "{{ url('admin/get-auction-location/') }}"+id,
                   "method": "GET",
                 };
 

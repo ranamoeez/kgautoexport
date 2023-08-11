@@ -11,6 +11,7 @@ use App\Models\AuctionLocation;
 use App\Models\Terminal;
 use App\Models\Status;
 use App\Models\User;
+use App\Models\Fine;
 
 class Vehicle extends Model
 {
@@ -26,6 +27,10 @@ class Vehicle extends Model
 
     public function vehicle_documents(){
         return $this->hasMany(VehicleDocuments::class, 'vehicle_id');
+    }
+
+    public function fines(){
+        return $this->hasMany(Fine::class, 'vehicle_id');
     }
 
     public function auction(){

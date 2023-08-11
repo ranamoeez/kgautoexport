@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@section('title')
+    Vehicles
+@endsection
+
 @section('content')
 
     <div class="below-header-height outer-container">
@@ -363,9 +367,7 @@
                     data: form,
                     success: function(data){
                         data = JSON.parse(data);
-                        console.log(data);
                         if (data.success == true) {
-                            console.log('in');
                             toastr["success"]("Vehicle data updated successfully!", "Completed!");
                         }
                     }

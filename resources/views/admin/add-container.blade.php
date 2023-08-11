@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@section('title')
+    Add Container
+@endsection
+
 @section('content')
     
     <div class="below-header-height outer-container">
@@ -88,7 +92,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="mt-4">
+                        <div class="mt-4 pt-4">
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Container No.</label>
                                 <div class="col-sm-9">
@@ -374,7 +378,7 @@
                                 <button class="btn btn-primary mb-2 border-0">
                                     Save
                                 </button>
-                                <a href="{{ url('admin/add-container') }}" class="btn btn-primary mb-2 border-0">
+                                <a href="{{ url('admin/containers/add') }}" class="btn btn-primary mb-2 border-0">
                                     Cancel
                                 </a>
                                 <button class="btn btn-primary mb-2 border-0" type="button">

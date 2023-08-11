@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@section('title')
+    Containers
+@endsection
+
 @section('content')
 
     <div class="below-header-height outer-container">
@@ -129,7 +133,7 @@
                             <th scope="col" class="fw-bold">Shipping line</th>
                             <th scope="col" class="fw-bold">Dates</th>
                             <th scope="col" class="fw-bold">Status</th>
-                            <th scope="col" class="fw-bold">P. status</th>
+                            <th scope="col" class="fw-bold">P. Status</th>
                             <th scope="col" class="fw-bold">Tracking</th>
                             <th scope="col" class="fw-bold"></th>
                         </thead>
@@ -184,8 +188,7 @@
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white"
-                                            aria-label="Default select example">
+                                        <select class="form-select option-select text-white status" aria-label="Default select example" data-id="{{ $value->id }}">
                                             @if(count(@$all_status) > 0)
                                             @foreach(@$all_status as $k => $v)
                                                 @if($value['status_id'] == @$v['id'])
@@ -201,10 +204,9 @@
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white"
-                                            aria-label="Default select example">
+                                        <select class="form-select option-select text-white payment_status" aria-label="Default select example" data-id="{{ $value->id }}">
                                             <option value="1" data-color="success" @if(@$value->all_paid == "1") selected @endif>Paid</option>
-                                            <option value="2" data-color="danger" @if(@$value->all_paid == "0") selected @endif>Unpaid</option>
+                                            <option value="0" data-color="danger" @if(@$value->all_paid == "0") selected @endif>Unpaid</option>
                                         </select>
                                     </div>
                                 </td>
@@ -303,6 +305,54 @@
             $(document).on("click", ".delete", function () {
                 $("#delete-link").attr("href", $(this).attr('data-url'));
                 $("#removeRowModal").modal("show");
+            });
+
+            $(document).on("change", ".status", function () {
+                var form = new FormData();
+                form.append("status", $(this).find("option:selected").val());
+                form.append("id", $(this).attr("data-id"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/update-container-data") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Container data updated successfully!", "Completed!");
+                        }
+                    }
+                });
+            });
+
+            $(document).on("change", ".payment_status", function () {
+                var form = new FormData();
+                form.append("payment_status", $(this).find("option:selected").val());
+                form.append("id", $(this).attr("data-id"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/update-container-data") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Container data updated successfully!", "Completed!");
+                        }
+                    }
+                });
             });
         });
     </script>

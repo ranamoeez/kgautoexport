@@ -14,7 +14,7 @@
             </a>
         </li>
         <li class="side_menu_item">
-            <a href="{{ url('admin/add-vehicle') }}" @if(@$type == 'add-vehicle') class="active" @endif>
+            <a href="{{ url('admin/vehicles/add') }}" @if(@$type == 'add-vehicle') class="active" @endif>
                 <i class="fas fa-car"></i>
                 <span>Add New Vehicle</span>
             </a>
@@ -26,7 +26,7 @@
             </a>
         </li>
         <li class="side_menu_item">
-            <a href="{{ url('admin/add-container') }}" @if(@$type == 'add-container') class="active" @endif>
+            <a href="{{ url('admin/containers/add') }}" @if(@$type == 'add-container') class="active" @endif>
                 <i class="fas fa-box"></i>
                 <span>Add new container</span>
             </a>

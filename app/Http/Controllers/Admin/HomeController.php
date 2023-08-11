@@ -29,7 +29,7 @@ use Storage;
 
 class HomeController extends Controller
 {
-    public function index(Request $request)
+    public function vehicles(Request $request)
     {
         $data['type'] = "vehicles";
         $data['page'] = '1';
@@ -134,50 +134,6 @@ class HomeController extends Controller
         return view('admin.containers', $data);
     }
 
-    public function add_container(Request $request)
-    {
-        if($request->isMethod('post')){
-            $data = $request->all();
-            $this->cleanData($data);
-            $data['owner_id'] = Auth::user()->id;
-            $data['request_type'] = '2';
-            $data['date_created'] = time();
-            $data['search_body'] = "Booked K&G Auto Export Inc MSC REBOU AL SHARQ USED CARS TR.LLC HOUSTON TX JEBEL ALI,UAE JEBEL ALI,UAE EBKG05951642 00/00/0000 07/02/2023 00/00/0000 GA- 45'HC 00/00/0000 06/16/2023 SAME AS CONSIGNEE telex";
-            $container = Container::create($data);
-            if ($request->hasFile('documents')) {
-                $files = [];
-                foreach ($request->file('documents') as $key => $value) {
-                    $file = $value;
-                    $filename = Storage::putFile('container', $file);
-                    
-                    $image = new ContainerImage;
-                    $image->container_id = $container->id;
-                    $image->filesize = $value->getSize();
-                    $image->title = '';
-                    $image->owner_id = Auth::user()->id;
-                    $image->filename = $filename;
-                    $image->filepath = 'storage/app/';
-                    $image->save();
-                }
-            }
-            $response = array('flag'=>true,'msg'=>'Container is added sucessfully.','action'=>'reload');
-            return json_encode($response);
-        }
-        $data   = array();
-        $data['type'] = 'add-container';
-        $data['action'] = url('admin/add-container');
-        $data['all_shipper'] = Shipper::all();
-        $data['all_shipping_line'] = ShippingLine::all();
-        $data['all_loading_port'] = LoadingPort::all();
-        $data['all_consignee'] = Consignee::all();
-        $data['all_destination_port'] = DestinationPort::all();
-        $data['all_status'] = ContStatus::all();
-        $data['all_notify_party'] = NotifyParty::all();
-        $data['all_measurement'] = Measurement::all();
-        $data['all_discharge_port'] = DischargePort::all();
-        return view('admin.add-container', $data);
-    }
-
     public function add_vehicle(Request $request)
     {
         if($request->isMethod('post')){
@@ -190,7 +146,7 @@ class HomeController extends Controller
                 $files = [];
                 foreach ($request->file('images') as $key => $value) {
                     $file = $value;
-                    $filename = Storage::putFile('vehicle/images', $file);
+                    $filename = Storage::putFile('vehicle/images/'.$vehicle->id, $file);
                     
                     $image = new VehicleImage;
                     $image->vehicle_id = $vehicle->id;
@@ -207,7 +163,7 @@ class HomeController extends Controller
                 $files = [];
                 foreach ($request->file('documents') as $key => $value) {
                     $file = $value;
-                    $filename = Storage::putFile('vehicle/documents', $file);
+                    $filename = Storage::putFile('vehicle/documents'.$vehicle->id, $file);
                     
                     $image = new VehicleDocuments;
                     $image->vehicle_id = $vehicle->id;
@@ -218,31 +174,31 @@ class HomeController extends Controller
                 }
             }
             if (!empty($data['auction_type'])) {
-            	foreach ($data['auction_type'] as $key => $value) {
-            		$fine = new Fine;
-            		$fine->vehicle_id = $vehicle->id;
-            		$fine->type = 'auction';
-            		$fine->cause = $value;
-            		$fine->amount = $data['auction_fine'][$key];
-            		$fine->save();
-            	}
+                foreach ($data['auction_type'] as $key => $value) {
+                    $fine = new Fine;
+                    $fine->vehicle_id = $vehicle->id;
+                    $fine->type = 'auction';
+                    $fine->cause = $value;
+                    $fine->amount = $data['auction_fine'][$key];
+                    $fine->save();
+                }
             }
             if (!empty($data['trans_type'])) {
-            	foreach ($data['trans_type'] as $key => $value) {
-            		$fine = new Fine;
-            		$fine->vehicle_id = $vehicle->id;
-            		$fine->type = 'transaction';
-            		$fine->cause = $value;
-            		$fine->amount = $data['trans_fine'][$key];
-            		$fine->save();
-            	}
+                foreach ($data['trans_type'] as $key => $value) {
+                    $fine = new Fine;
+                    $fine->vehicle_id = $vehicle->id;
+                    $fine->type = 'transaction';
+                    $fine->cause = $value;
+                    $fine->amount = $data['trans_fine'][$key];
+                    $fine->save();
+                }
             }
             $response = array('flag'=>true,'msg'=>'Vehicle is added sucessfully.','action'=>'reload');
             return json_encode($response);
         }
         $data   = array();
         $data['type'] = 'add-vehicle';
-        $data['action'] = url('admin/add-vehicle');
+        $data['action'] = url('admin/vehicles/add');
         $data['all_status'] = Status::all();
         $data['all_terminal'] = Terminal::all();
         $data['all_buyer'] = User::where('role', '!=', '1')->get();
@@ -250,6 +206,50 @@ class HomeController extends Controller
         $data['all_auction_location'] = AuctionLocation::all();
         $data['all_destination_port'] = DestinationPort::all();
         return view('admin.add-vehicle', $data);
+    }
+
+    public function add_container(Request $request)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+            $this->cleanData($data);
+            $data['owner_id'] = Auth::user()->id;
+            $data['request_type'] = '2';
+            $data['date_created'] = time();
+            $data['search_body'] = "Booked K&G Auto Export Inc MSC REBOU AL SHARQ USED CARS TR.LLC HOUSTON TX JEBEL ALI,UAE JEBEL ALI,UAE EBKG05951642 00/00/0000 07/02/2023 00/00/0000 GA- 45'HC 00/00/0000 06/16/2023 SAME AS CONSIGNEE telex";
+            $container = Container::create($data);
+            if ($request->hasFile('documents')) {
+                $files = [];
+                foreach ($request->file('documents') as $key => $value) {
+                    $file = $value;
+                    $filename = Storage::putFile('container/'.$container->id, $file);
+                    
+                    $image = new ContainerImage;
+                    $image->container_id = $container->id;
+                    $image->filesize = $value->getSize();
+                    $image->title = '';
+                    $image->owner_id = Auth::user()->id;
+                    $image->filename = $filename;
+                    $image->filepath = 'storage/app/';
+                    $image->save();
+                }
+            }
+            $response = array('flag'=>true,'msg'=>'Container is added sucessfully.','action'=>'reload');
+            return json_encode($response);
+        }
+        $data   = array();
+        $data['type'] = 'add-container';
+        $data['action'] = url('admin/containers/add');
+        $data['all_shipper'] = Shipper::all();
+        $data['all_shipping_line'] = ShippingLine::all();
+        $data['all_loading_port'] = LoadingPort::all();
+        $data['all_consignee'] = Consignee::all();
+        $data['all_destination_port'] = DestinationPort::all();
+        $data['all_status'] = ContStatus::all();
+        $data['all_notify_party'] = NotifyParty::all();
+        $data['all_measurement'] = Measurement::all();
+        $data['all_discharge_port'] = DischargePort::all();
+        return view('admin.add-container', $data);
     }
 
     // public function vehicle_images(Request $request)
@@ -281,11 +281,24 @@ class HomeController extends Controller
     	if (!empty($request->keys)) {
     		$data["keys"] = $request->keys;
     	}
-    	if (!empty($request->payment_status)) {
+    	if (!empty($request->payment_status) || $request->payment_status == '0') {
     		$data["all_paid"] = $request->payment_status;
     	}
     	Vehicle::where('id', $request->id)->update($data);
-    	return json_encode(["success"=>true]);
+    	return json_encode(["success"=>true, 'action'=>'reload']);
+    }
+
+    public function update_container_data(Request $request)
+    {
+        $data = [];
+        if (!empty($request->status)) {
+            $data["status_id"] = $request->status;
+        }
+        if (!empty($request->payment_status) || $request->payment_status == '0') {
+            $data["all_paid"] = $request->payment_status;
+        }
+        Container::where('id', $request->id)->update($data);
+        return json_encode(["success"=>true, 'action'=>'reload']);
     }
 
     public function delete_vehicles($id)

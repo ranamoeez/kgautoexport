@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@section('title')
+    Add Vehicle
+@endsection
+
 @section('content')
     
     <div class="below-header-height outer-container">

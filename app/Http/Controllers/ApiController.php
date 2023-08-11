@@ -42,7 +42,7 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'vehicle_documents', 'auction', 'auction_location', 'terminal', 'status', 'buyer');
+                $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'vehicle_documents', 'fines', 'auction', 'auction_location', 'terminal', 'status', 'buyer');
 
                 if (!empty($request->Status)) {
                     $status = Status::where('name', $request->Status)->first();

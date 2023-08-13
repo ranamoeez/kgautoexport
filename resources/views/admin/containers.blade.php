@@ -318,7 +318,7 @@
                 $("#removeRowModal").modal("hide");
                 setTimeout(function () {
                     location.reload();
-                }, 4000);
+                }, 3000);
             });
 
             $(document).on("change", ".status", function () {

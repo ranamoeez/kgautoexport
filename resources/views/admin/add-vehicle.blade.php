@@ -6,6 +6,11 @@
 
 @section('content')
     
+    <style type="text/css">
+        .select2-selection {
+            min-height: 37px;
+        }
+    </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
 
@@ -36,6 +41,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Status</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="status_id">
+                                        <option value=""></option>
                                         @if(count(@$all_status) > 0)
                                         @foreach(@$all_status as $key => $value)
                                             @if($value['id'] == @$status)
@@ -52,6 +58,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Terminal</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="terminal_id">
+                                        <option value=""></option>
                                         @if(count(@$all_terminal) > 0)
                                         @foreach(@$all_terminal as $key => $value)
                                             @if($value['id'] == @$terminal)
@@ -68,6 +75,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Buyer</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="buyer_id">
+                                        <option value=""></option>
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
                                             @if($value['id'] == @$buyer)
@@ -89,8 +97,8 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Description</label>
                                 <div class="col-md-9">
-                                    <select class="selectjs form-select" name="company">
-                                        <option value="Mercedes" selected>Mercedes</option>
+                                    <select class="selectjs form-select" name="company" required>
+                                        <option value="Mercedes">Mercedes</option>
                                         <option value="option1">Option1</option>
                                         <option value="option2">Option2</option>
                                         <option value="option3">Option3</option>
@@ -99,16 +107,16 @@
                                 <div class="col-12">
                                     <div class="row mt-2">
                                         <div class="col-md-6">
-                                            <select class="selectjs form-select" name="name">
-                                                <option value="C200" selected>C200</option>
+                                            <select class="selectjs form-select" name="name" required>
+                                                <option value="C200">C200</option>
                                                 <option value="option1">Option1</option>
                                                 <option value="option2">Option2</option>
                                                 <option value="option3">Option3</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
-                                            <select class="selectjs form-select" name="model">
-                                                <option value="2019" selected>2019</option>
+                                            <select class="selectjs form-select" name="model" required>
+                                                <option value="2019">2019</option>
                                                 <option value="option1">Option1</option>
                                                 <option value="option2">Option2</option>
                                                 <option value="option3">Option3</option>
@@ -150,12 +158,12 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio5" type="radio" name="keys"
-                                            class="form-check-input" value="0" checked />
+                                            class="form-check-input" value="1" checked />
                                         <label for="radio5" class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio6" type="radio" name="keys"
-                                            class="form-check-input" value="1" />
+                                            class="form-check-input" value="2" />
                                         <label for="radio6" class="form-check-label">Yes</label>
                                     </div>
                                 </div>
@@ -165,12 +173,12 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio7" type="radio" name="operable"
-                                            class="form-check-input" value="0" checked />
+                                            class="form-check-input" value="1" checked />
                                         <label for="radio7" class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio8" type="radio" name="operable"
-                                            class="form-check-input" value="1" />
+                                            class="form-check-input" value="2" />
                                         <label for="radio8" class="form-check-label">Yes</label>
                                     </div>
                                 </div>
@@ -206,6 +214,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select auction" name="auction_id">
+                                        <option value=""></option>
                                         @if(count(@$all_auction) > 0)
                                         @foreach(@$all_auction as $key => $value)
                                             @if($value['id'] == @$auction)
@@ -223,6 +232,7 @@
                                     location</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select auction_location" name="auction_location_id" disabled>
+                                        <option value=""></option>
                                         @if(count(@$all_auction_location) > 0)
                                         @foreach(@$all_auction_location as $key => $value)
                                             @if($value['id'] == @$auction_location)
@@ -251,6 +261,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction buyer</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="auction_buyer">
+                                        <option value=""></option>
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
                                             @if($value['id'] == @$auction_buyer)
@@ -280,6 +291,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Destination</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="destination_port_id">
+                                        <option value=""></option>
                                         @if(count(@$all_destination_port) > 0)
                                         @foreach(@$all_destination_port as $key => $value)
                                             @if($value['id'] == @$destination_port)

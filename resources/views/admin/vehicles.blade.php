@@ -237,8 +237,10 @@
                                 <td>
                                     <div class="text-center text-fs-4">
                                         <select class="form-select option-select text-white ps-1 pe-2 py-1 keys" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ $value->id }}">
-                                            <option value="1" data-color="success" @if(@$value->keys == "1") selected @endif>Yes</option>
-                                            <option value="2" data-color="danger" @if(@$value->keys == "2") selected @endif>No</option>
+                                            <option value="1" data-color="danger" @if(@$value->keys == "1") selected @endif>No</option>
+                                            <option value="2" data-color="success" @if(@$value->keys == "2") selected @endif>Yes</option>
+                                            <option value="3" data-color="danger" @if(@$value->keys == "3") selected @endif>BOS</option>
+                                            <option value="4" data-color="success" @if(@$value->keys == "4") selected @endif>TBO</option>
                                         </select>
                                     </div>
                                 </td>
@@ -312,7 +314,9 @@
                         <div class="modal-body">
                             <div class="row mt-4">
                                 <div class="col-md-6">
-                                    <a href="#" id="delete-link" class="btn btn-danger border-0 mt-4 col-md-12 rounded-3 fs-5">Ok</a>
+                                    <form method="GET" action="" class="make_ajax delete-vehicle">
+                                    </form>
+                                    <button id="delete-link" type="button" class="btn btn-danger border-0 mt-4 col-md-12 rounded-3 fs-5">Ok</button>
                                 </div>
                                 <div class="col-md-6">
                                     <a href="#" class="btn btn-warning border-0 mt-4 col-md-12 rounded-3 fs-5"
@@ -459,8 +463,15 @@
                 $("#filters-form").submit();
             });
             $(document).on("click", ".delete", function () {
-                $("#delete-link").attr("href", $(this).attr('data-url'));
+                $(".delete-vehicle").attr("action", $(this).attr('data-url'));
                 $("#removeRowModal").modal("show");
+            });
+            $(document).on("click", "#delete-link", function () {
+                $(".delete-vehicle").submit();
+                $("#removeRowModal").modal("hide");
+                setTimeout(function () {
+                    location.reload();
+                }, 4000);
             });
         });
     </script>

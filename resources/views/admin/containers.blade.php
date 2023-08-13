@@ -256,6 +256,8 @@
                         <div class="modal-body">
                             <div class="row mt-4">
                                 <div class="col-md-6">
+                                    <form method="GET" action="" class="make_ajax delete-container">
+                                    </form>
                                     <a href="#" id="delete-link" class="btn btn-danger border-0 mt-4 col-md-12 rounded-3 fs-5">Ok</a>
                                 </div>
                                 <div class="col-md-6">
@@ -308,8 +310,15 @@
                 $("#filters-form").submit();
             });
             $(document).on("click", ".delete", function () {
-                $("#delete-link").attr("href", $(this).attr('data-url'));
+                $(".delete-container").attr("action", $(this).attr('data-url'));
                 $("#removeRowModal").modal("show");
+            });
+            $(document).on("click", "#delete-link", function () {
+                $(".delete-container").submit();
+                $("#removeRowModal").modal("hide");
+                setTimeout(function () {
+                    location.reload();
+                }, 4000);
             });
 
             $(document).on("change", ".status", function () {

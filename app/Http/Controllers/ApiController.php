@@ -42,7 +42,9 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'vehicle_documents', 'fines', 'auction', 'auction_location', 'terminal', 'status', 'buyer');
+                $user_id = User::where('api_token', $token)->first()->id;
+
+                $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'vehicle_documents', 'fines', 'auction', 'auction_location', 'terminal', 'status', 'buyer')->where('owner_id', $user_id);
 
                 if (!empty($request->Status)) {
                     $status = Status::where('name', $request->Status)->first();
@@ -76,14 +78,16 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->limit(100)->get();
+                $user_id = User::where('api_token', $token)->first()->id;
+
+                $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('owner_id', $user_id)->limit(100)->get();
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex == 1) {
-                        $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->limit(100)->get();
+                        $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('owner_id', $user_id)->limit(100)->get();
                     } else {
                         $offset = ($request->PageIndex - 1) * 100;
-                        $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->limit(100)->offset((int)$offset)->get();
+                        $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('owner_id', $user_id)->limit(100)->offset((int)$offset)->get();
                     }
                 }
             
@@ -103,7 +107,9 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                $sub_users = User::where('role', '3')->orderBy('id', 'DESC')->limit(100)->get();
+                $user_id = User::where('api_token', $token)->first()->id;
+
+                $sub_users = User::where('role', '3')->where('main_user_id', $user_id)->orderBy('id', 'DESC')->limit(100)->get();
             
                 return $this->sendResponse($sub_users, 'Sub Users retrieved successfully.');
             } else {
@@ -122,6 +128,7 @@ class ApiController extends Controller
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $input = $request->all();
+                $user_id = User::where('api_token', $token)->first()->id;
            
                 $validator = Validator::make($input, [
                     'name' => 'required|string',
@@ -133,8 +140,9 @@ class ApiController extends Controller
                     return $this->sendError('Validation Error.', $validator->errors());       
                 }
            
-           		$input['role'] = '3';
+           		$input['role'] = '4';
            		$input['password'] = \Hash::make($input['password']);
+                $input['main_user_id'] = $user_id;
                 $user = User::create($input);
                 $success['token'] =  $user->createToken('KGAutoExport')->accessToken;
                 $success['name'] =  $user->name;

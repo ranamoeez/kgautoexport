@@ -109,7 +109,7 @@ class ApiController extends Controller
             if ($check_user > 0) {
                 $user_id = User::where('api_token', $token)->first()->id;
 
-                $sub_users = User::where('role', '3')->where('main_user_id', $user_id)->orderBy('id', 'DESC')->limit(100)->get();
+                $sub_users = User::where('role', '4')->where('main_user_id', $user_id)->orderBy('id', 'DESC')->limit(100)->get();
             
                 return $this->sendResponse($sub_users, 'Sub Users retrieved successfully.');
             } else {

@@ -144,10 +144,8 @@ class ApiController extends Controller
            		$input['password'] = \Hash::make($input['password']);
                 $input['main_user_id'] = $user_id;
                 $user = User::create($input);
-                $success['token'] =  $user->createToken('KGAutoExport')->accessToken;
-                $success['name'] =  $user->name;
            
-                return $this->sendResponse($success, 'Sub User created successfully.');
+                return $this->sendResponse($user, 'Sub User created successfully.');
             } else {
                 return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
             }

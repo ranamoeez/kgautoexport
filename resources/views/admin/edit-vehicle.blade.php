@@ -408,7 +408,7 @@
                                                         <div class="col-md-3">${{ $value->amount }}</div>
                                                         <div class="col-md-3">
                                                             <div class="d-flex justify-content-center items-center message-icon">
-                                                                <i class="fa-circle-minus fa-solid text-danger delete_transaction" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal"></i>
+                                                                <i class="fa-circle-minus fa-solid text-danger delete-fines" data-url="{{ url('admin/delete-vehicle-fines', $value->id) }}" style="cursor: pointer;"></i>
                                                             </div>
                                                         </div>
                                                     </span>
@@ -466,7 +466,7 @@
                                                         <div class="col-md-3">${{ $value->amount }}</div>
                                                         <div class="col-md-3">
                                                             <div class="d-flex justify-content-center items-center message-icon">
-                                                                <i class="fa-circle-minus fa-solid text-danger delete_auction" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal"></i>
+                                                                <i class="fa-circle-minus fa-solid text-danger delete-fines" data-url="{{ url('admin/delete-vehicle-fines', $value->id) }}" style="cursor: pointer;"></i>
                                                             </div>
                                                         </div>
                                                     </span>
@@ -587,15 +587,14 @@
                                 <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
                                     <div class="card-header d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <i class="fa-file-pdf fa-solid fs-4 text-danger"></i>
-                                            <span class="mb-0 fs-5 fw-semibold">Third Eye</span>
+                                            <i class="fa-file-pdf fa-solid fs-4"></i>
                                         </div>
-                                        <button class="btn btn-link p-0">
-                                            <i class="fas fa-ellipsis-v text-dark"></i>
+                                        <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-vehicle-documents', $value->id) }}">
+                                            <i class="fas fa-trash text-danger"></i>
                                         </button>
                                     </div>
                                     <div class="card-body">
-                                        <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
+                                        <img src="{{ asset('assets/file.png') }}" class="w-100" style="height: 140px;" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -624,6 +623,27 @@
                             </div>
                         </div>
                         <div class="row mb-4">
+                            @if(count(@$vehicle->vehicle_images) > 0)
+                            @foreach($vehicle->vehicle_images as $key => $value)
+                            <div class="col-md-4">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-image fa-solid fs-4"></i>
+                                        </div>
+                                        <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
+                                            <i class="fas fa-trash text-danger"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="{{ url($value->filepath.$value->filename) }}" class="w-100 h-100" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                            @endif
+                        </div>
+                        {{-- <div class="row mb-4">
                             <div class="col-md-9">
                                 <div class="container container-car-image ms-5 mx-5">
                                     <div id="thumbnail-slider" class="splide mt-2">
@@ -642,7 +662,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </form>
@@ -720,7 +740,7 @@
                 var fine = $(".auctionfine").val();
 
                 var html = `<div class="col-12 mt-2">
-                    <span class="d-flex justify-content-between align-items-center">
+                    <span class="row align-items-center">
                         <input type="hidden" name="auction_type[]" value="`+type+`">
                         <input type="hidden" name="auction_fine[]" value="`+fine+`">
                         <div class="col-md-6">`+type+`</div>
@@ -738,6 +758,60 @@
 
             $(document).on("click", ".delete-trans", function () {
                 $(this).parent().parent().parent().parent().remove();
+            });
+
+            $(document).on("click", ".delete-fines", function () {
+                var url = $(this).attr('data-url');
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Vehicle fine deleted successfully!", "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        }
+                    }
+                });
+            });
+
+            $(document).on("click", ".delete-documents", function () {
+                var url = $(this).attr('data-url');
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Vehicle document deleted successfully!", "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        }
+                    }
+                });
+            });
+
+            $(document).on("click", ".delete-images", function () {
+                var url = $(this).attr('data-url');
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Vehicle image deleted successfully!", "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        }
+                    }
+                });
             });
 
             // $(document).on("change", "#image", function () {

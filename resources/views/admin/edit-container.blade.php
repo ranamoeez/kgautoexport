@@ -422,15 +422,14 @@
                                 <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
                                     <div class="card-header d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <i class="fa-file-pdf fa-solid fs-4 text-danger"></i>
-                                            <span class="mb-0 fs-5 fw-semibold">Third Eye</span>
+                                            <i class="fa-file-pdf fa-solid fs-4"></i>
                                         </div>
-                                        <button class="btn btn-link p-0">
-                                            <i class="fas fa-ellipsis-v text-dark"></i>
+                                        <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-container-documents', $value->id) }}">
+                                            <i class="fas fa-trash text-danger"></i>
                                         </button>
                                     </div>
                                     <div class="card-body">
-                                        <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
+                                        <img src="{{ asset('assets/file.png') }}" class="w-100" style="height: 140px;" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -461,6 +460,24 @@
 
         $(document).on("click", ".upload-documents", function () {
             $("#documents").click();
+        });
+
+        $(document).on("click", ".delete-documents", function () {
+            var url = $(this).attr('data-url');
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(data){
+                    data = JSON.parse(data);
+                    if (data.success == true) {
+                        toastr["success"]("Container document deleted successfully!", "Completed!");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    }
+                }
+            });
         });
     </script>
     <script>

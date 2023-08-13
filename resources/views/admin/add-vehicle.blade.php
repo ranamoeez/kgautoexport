@@ -735,7 +735,7 @@
                 var fine = $(".auctionfine").val();
 
                 var html = `<div class="col-12 mt-2">
-                    <span class="d-flex justify-content-between align-items-center">
+                    <span class="row align-items-center">
                         <input type="hidden" name="auction_type[]" value="`+type+`">
                         <input type="hidden" name="auction_fine[]" value="`+fine+`">
                         <div class="col-md-6">`+type+`</div>

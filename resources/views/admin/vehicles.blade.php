@@ -270,9 +270,9 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->terminal->name }}
-                                    </span>
+                                    </a>
                                 </td>
                                 <td>
                                     <div class="border border-1 p-2 rounded-3">

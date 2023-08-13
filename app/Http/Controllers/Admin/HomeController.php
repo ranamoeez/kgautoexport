@@ -79,7 +79,7 @@ class HomeController extends Controller
         $data['list'] = $vehicles;
         $data['all_terminal'] = Terminal::all();
         $data['all_status'] = Status::all();
-        $data['all_buyer'] = User::where('role', '!=', '1')->get();
+        $data['all_buyer'] = User::where('role', '2')->get();
         return view('admin.vehicles', $data);
     }
 
@@ -150,7 +150,7 @@ class HomeController extends Controller
         $data['action'] = url('admin/vehicles/add');
         $data['all_status'] = Status::all();
         $data['all_terminal'] = Terminal::all();
-        $data['all_buyer'] = User::where('role', '!=', '1')->get();
+        $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_auction'] = Auction::all();
         $data['all_auction_location'] = AuctionLocation::all();
         $data['all_destination_port'] = DestinationPort::all();
@@ -161,9 +161,6 @@ class HomeController extends Controller
     {
         if($request->isMethod('post')){
             $data = $request->all();
-            $this->cleanData($data);
-            $data['description'] = $data['model'].' '.$data['company'].' '.$data['name'];
-            $vehicle = Vehicle::where('id', $id)->update($data);
             if ($request->hasFile('images')) {
                 $files = [];
                 foreach ($request->file('images') as $key => $value) {
@@ -215,6 +212,18 @@ class HomeController extends Controller
                     $fine->save();
                 }
             }
+            $this->cleanData($data);
+            $data['description'] = $data['model'].' '.$data['company'].' '.$data['name'];
+            unset($data['model']);
+            unset($data['company']);
+            unset($data['name']);
+            unset($data['documents']);
+            unset($data['images']);
+            unset($data['trans_type']);
+            unset($data['trans_fine']);
+            unset($data['auction_type']);
+            unset($data['auction_fine']);
+            $vehicle = Vehicle::where('id', $id)->update($data);
             $response = array('flag'=>true,'msg'=>'Vehicle is updated sucessfully.','action'=>'reload');
             return json_encode($response);
         }
@@ -224,7 +233,7 @@ class HomeController extends Controller
         $data['vehicle'] = Vehicle::with('vehicle_images', 'vehicle_documents', 'fines', 'auction', 'auction_location', 'terminal', 'status', 'buyer')->where('id', $id)->first();
         $data['all_status'] = Status::all();
         $data['all_terminal'] = Terminal::all();
-        $data['all_buyer'] = User::where('role', '!=', '1')->get();
+        $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_auction'] = Auction::all();
         $data['all_auction_location'] = AuctionLocation::all();
         $data['all_destination_port'] = DestinationPort::all();
@@ -342,8 +351,6 @@ class HomeController extends Controller
     {
         if($request->isMethod('post')){
             $data = $request->all();
-            $this->cleanData($data);
-            $container = Container::where('id', $id)->update($data);
             if ($request->hasFile('documents')) {
                 $files = [];
                 foreach ($request->file('documents') as $key => $value) {
@@ -360,6 +367,9 @@ class HomeController extends Controller
                     $image->save();
                 }
             }
+            $this->cleanData($data);
+            unset($data['documents']);
+            $container = Container::where('id', $id)->update($data);
             $response = array('flag'=>true,'msg'=>'Container is updated sucessfully.','action'=>'reload');
             return json_encode($response);
         }
@@ -427,6 +437,40 @@ class HomeController extends Controller
             $data["all_paid"] = $request->payment_status;
         }
         Container::where('id', $request->id)->update($data);
+        return json_encode(["success"=>true, 'action'=>'reload']);
+    }
+
+    public function delete_vehicle_fines($id)
+    {
+        $vehicle = Fine::find($id);
+        $vehicle->delete();
+        return json_encode(["success"=>true, 'action'=>'reload']);
+    }
+
+    public function delete_vehicle_documents($id)
+    {
+        $vehicle = VehicleDocuments::find($id);
+        $path = $vehicle->filepath.$vehicle->filename;
+        \File::delete($path);
+        $vehicle->delete();
+        return json_encode(["success"=>true, 'action'=>'reload']);
+    }
+
+    public function delete_vehicle_images($id)
+    {
+        $vehicle = VehicleImage::find($id);
+        $path = $vehicle->filepath.$vehicle->filename;
+        \File::delete($path);
+        $vehicle->delete();
+        return json_encode(["success"=>true, 'action'=>'reload']);
+    }
+
+    public function delete_container_documents($id)
+    {
+        $container = ContainerImage::find($id);
+        $path = $container->filepath.$container->filename;
+        \File::delete($path);
+        $container->delete();
         return json_encode(["success"=>true, 'action'=>'reload']);
     }
 

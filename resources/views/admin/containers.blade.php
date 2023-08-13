@@ -147,17 +147,17 @@
                             @foreach($list as $key => $value)
                             <tr class="align-middle overflow-hidden shadow mb-2">
                                 <td>
-                                    <span class="fw-bold mb-2 text-fs-3">
+                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
                                         Booking : {{ $value->booking_no }}
-                                    </span>
+                                    </a>
                                     <br>
-                                    <span class="fw-bold mb-2 text-fs-3">
+                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
                                         Container : {{ $value->container_no }}
-                                    </span>
+                                    </a>
                                     <br>
-                                    <span class="fw-bold mb-2 text-fs-3">
+                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
                                         REF : {{ $value->export_reference }}
-                                    </span>
+                                    </a>
                                 </td>
                                 <td>
                                     <ul class="p-0 text-fs-3">
@@ -183,13 +183,13 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <span class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         Departure : {{ $value->departure }}
-                                    </span>
+                                    </a>
                                     <br>
-                                    <span class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         Arrival : {{ $value->arrival }}
-                                    </span>
+                                    </a>
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">

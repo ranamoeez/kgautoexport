@@ -10,6 +10,7 @@ use App\Models\Container;
 use App\Models\PickupRequest;
 use App\Models\TransactionsHistory;
 use App\Models\Status;
+use App\Models\AssignVehicle;
 use Validator;
 use Storage;
 

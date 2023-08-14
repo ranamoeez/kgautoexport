@@ -27,6 +27,7 @@ Route::get('financial-data/{id}', [ApiController::class, 'financial_data']);
 Route::post('send-vehicle', [ApiController::class, 'send_vehicle']);
 Route::post('send-pickup-request/{id}', [ApiController::class, 'send_pickup_request']);
 Route::post('send-notes', [ApiController::class, 'send_notes']);
+Route::post('add-user-to-vehicle', [ApiController::class, 'add_user_to_vehicle']);
 Route::get('logout/{id}', [ApiController::class, 'logout']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

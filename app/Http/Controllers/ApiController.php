@@ -392,6 +392,44 @@ class ApiController extends Controller
         }
     }
 
+    public function add_user_to_vehicle(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('api_token', $token)->count();
+            if ($check_user > 0) {
+                $input = $request->all();
+           
+                $validator = Validator::make($input, [
+                    'vehicle_id' => 'required',
+                    'user_id' => 'required'
+                ]);
+           
+                if($validator->fails()){
+                    return $this->sendError('Validation Error.', $validator->errors());       
+                }
+
+                $vehicle = Vehicle::where('id', $input['vehicle_id'])->first();
+
+                if (!empty($vehicle)) {
+                    $vehicle = new AssignVehicle;
+                    $vehicle->user_id = $input['user_id'];
+                    $vehicle->vehicle_id = $input['vehicle_id'];
+                    $vehicle->save();
+                } else {
+                    return $this->sendError('Not Found.', ['error'=>'Vehicle not found.']);
+                }
+           
+                return $this->sendResponse($vehicle, 'User added to vehicle successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
     public function logout(Request $request, $id)
     {
         $token = $request->bearerToken();

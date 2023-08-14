@@ -311,7 +311,7 @@ class HomeController extends Controller
                 $user_id = $v->user_id;
                 if (!in_array($user_id, $unique)) {
                     array_push($unique, $user_id);
-                    $vehicles = AssignVehicle::with('vehicle')->where('assigned_to', $value->id)->get();
+                    $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value->id)->get();
                     $v->vehicles = $vehicles;
                     array_push($buyers, $v);
                 }

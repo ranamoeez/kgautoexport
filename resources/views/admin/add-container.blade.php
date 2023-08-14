@@ -306,7 +306,7 @@
                         <div class="row mb-4">
                             <div class="col-md-9">
                                 <button class="btn btn-primary mb-2 border-0" data-bs-toggle="modal"
-                                    data-bs-target="#addNewBuyerModal" type="button">
+                                    data-bs-target="#addNewBuyerModal" type="button" disabled>
                                     Add new buyer
                                 </button>
 

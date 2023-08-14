@@ -231,6 +231,8 @@
                                         <select class="form-select option-select text-white ps-1 pe-2 py-1 title" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ $value->id }}">
                                             <option value="1" data-color="danger" @if(@$value->title == "1") selected @endif>No</option>
                                             <option value="2" data-color="success" @if(@$value->title == "2") selected @endif>Yes</option>
+                                            <option value="3" data-color="success" @if(@$value->title == "3") selected @endif>BOS</option>
+                                            <option value="4" data-color="success" @if(@$value->title == "4") selected @endif>TBO</option>
                                         </select>
                                     </div>
                                 </td>
@@ -239,8 +241,6 @@
                                         <select class="form-select option-select text-white ps-1 pe-2 py-1 keys" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ $value->id }}">
                                             <option value="1" data-color="danger" @if(@$value->keys == "1") selected @endif>No</option>
                                             <option value="2" data-color="success" @if(@$value->keys == "2") selected @endif>Yes</option>
-                                            <option value="3" data-color="danger" @if(@$value->keys == "3") selected @endif>BOS</option>
-                                            <option value="4" data-color="success" @if(@$value->keys == "4") selected @endif>TBO</option>
                                         </select>
                                     </div>
                                 </td>

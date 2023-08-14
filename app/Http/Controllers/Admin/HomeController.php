@@ -24,6 +24,8 @@ use App\Models\VehicleImage;
 use App\Models\VehicleDocuments;
 use App\Models\ContainerImage;
 use App\Models\Fine;
+use App\Models\AssignVehicle;
+use App\Models\ContainerVehicle;
 use Auth;
 use Storage;
 
@@ -89,8 +91,12 @@ class HomeController extends Controller
             $data = $request->all();
             $this->cleanData($data);
             $data['description'] = $data['model'].' '.$data['company'].' '.$data['name'];
-            $data['owner_id'] = Auth::user()->id;
+            $data['owner_id'] = '0';
             $vehicle = Vehicle::create($data);
+            $assign = new AssignVehicle;
+            $assign->user_id = Auth::user()->id;
+            $assign->vehicle_id = $vehicle->id;
+            $assign->save();
             if ($request->hasFile('images')) {
                 $files = [];
                 foreach ($request->file('images') as $key => $value) {
@@ -297,6 +303,21 @@ class HomeController extends Controller
         	$containers = $containers->where('all_paid', '0');
         }
         $containers = $containers->limit(20)->get();
+        foreach ($containers as $key => $value) {
+            $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();
+            $unique = [];
+            $buyers = [];
+            foreach ($buyer as $k => $v) {
+                $user_id = $v->user_id;
+                if (!in_array($user_id, $unique)) {
+                    array_push($unique, $user_id);
+                    $vehicles = AssignVehicle::with('vehicle')->where('assigned_to', $value->id)->get();
+                    $v->vehicles = $vehicles;
+                    array_push($buyers, $v);
+                }
+            }
+            $containers[$key]->buyers = $buyers;
+        }
         $data['list'] = $containers;
         $data['all_port'] = LoadingPort::all();
         $data['all_status'] = ContStatus::all();
@@ -377,6 +398,7 @@ class HomeController extends Controller
         $data['type'] = 'containers';
         $data['action'] = url('admin/containers/edit/'.$id);
         $data['container'] = Container::with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('id', $id)->first();
+        $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_shipper'] = Shipper::all();
         $data['all_shipping_line'] = ShippingLine::all();
         $data['all_loading_port'] = LoadingPort::all();
@@ -478,6 +500,33 @@ class HomeController extends Controller
     {
     	$data = AuctionLocation::where("auction_id", $id)->get();
     	return json_encode(["success"=>true, "data" => $data]);
+    }
+
+    public function get_vehicles($id)
+    {
+        if ($id == '0') {
+            return json_encode(["success"=>false, "vehicles"=>array()]);
+        }
+        $data = AssignVehicle::with('vehicle')->where("user_id", $id)->where("assigned_to", "0")->get();
+        return json_encode(["success"=>true, "vehicles" => $data]);
+    }
+
+    public function assign_vehicle(Request $request)
+    {
+        $vehicle_id = explode(",", $request->vehicle_id);
+        $container_id = $request->container_id;
+        $user_id = $request->user_id;
+
+        foreach ($vehicle_id as $key => $value) {
+            $save = new ContainerVehicle;
+            $save->container_id = $container_id;
+            $save->user_id = $user_id;
+            $save->vehicle_id = $value;
+            $save->save();
+            AssignVehicle::where("vehicle_id", $vehicle_id)->where('user_id', $user_id)->update(["assigned_to"=>$container_id]);
+        }
+
+        return json_encode(["success"=>true, "action" => 'reload']);
     }
 
     public function cleanData(&$data) {

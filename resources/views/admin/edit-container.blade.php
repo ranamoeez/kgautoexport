@@ -327,17 +327,18 @@
                                                     <label for="choose form"
                                                         class="col-md-4 fs-5 fw-bold">Choose Form</label>
                                                     <div class="col-md-8">
-                                                        <select class="form-select"
-                                                            aria-label="Default select example">
-                                                            <option selected>Select Buyer</option>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
+                                                        <select class="form-select buyers" aria-label="Default select example">
+                                                            <option value="0" selected>Select Buyer</option>
+                                                            @if(count(@$all_buyer) > 0)
+                                                            @foreach(@$all_buyer as $key => $value)
+                                                                <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                                            @endforeach
+                                                            @endif
                                                         </select>
                                                     </div>
                                                 </div>
 
-                                                <div class="p-3 mt-4">
+                                                <div class="p-3 mt-4 vehicles">
                                                     <div class="row shadow border rounded-5 w-100 mb-3">
                                                         <p class="col text-fs-3 fw-bold text-center">Buyer
                                                             Vehicles</p>
@@ -350,27 +351,8 @@
                                                         </p>
                                                         <p class="col text-fs-3 fw-bold text-center">Select</p>
                                                     </div>
-                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-2">
-                                                        <div class="col text-fs-3 text-center">55427687</div>
-                                                        <div class="col text-fs-3 text-center">KIA2019</div>
-                                                        <div
-                                                            class="col d-flex justify-content-center align-items-center">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                value="" id="flexCheckChecked" checked>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-2">
-                                                        <div class="col text-fs-3 text-center">55427687</div>
-                                                        <div class="col text-fs-3 text-center">KIA2019</div>
-                                                        <div
-                                                            class="col d-flex justify-content-center align-items-center">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                value="" id="flexCheckChecked">
-                                                        </div>
-                                                    </div>
                                                 </div>
-                                                <a href="#"
-                                                    class="btn w-auto btn-primary border-0 mt-2 col-md-12 rounded-3 fs-6">Add</a>
+                                                <button class="btn w-auto btn-primary border-0 mt-2 col-md-12 rounded-3 fs-6 add-vehicles" data-id="{{ $container->id }}" type="button">Add</button>
                                             </div>
                                         </div>
                                     </div>
@@ -471,10 +453,74 @@
                 success: function(data){
                     data = JSON.parse(data);
                     if (data.success == true) {
+                        $("#addNewBuyerModal").modal('hide');
                         toastr["success"]("Container document deleted successfully!", "Completed!");
+                    }
+                }
+            });
+        });
+
+        $(document).on("click", ".add-vehicles", function () {
+            var checked = [];
+            $(".vehicle_id:checked").each(function (key, value) {
+                checked.push($(value).val());
+            });
+
+            var form = new FormData();
+            form.append("vehicle_id", checked.join(','));
+            form.append("user_id", $(".buyers option:selected").val());
+            form.append("container_id", $(this).attr("data-id"));
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ url('admin/assign-vehicle') }}",
+                processData: false,
+                contentType: false,
+                cache: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: form,
+                success: function(data){
+                    data = JSON.parse(data);
+                    if (data.success == true) {
+                        toastr["success"]("New buyer is added successfully!", "Completed!");
                         setTimeout(function () {
                             location.reload();
                         }, 2000);
+                    }
+                }
+            });
+        });
+
+        $(document).on("change", ".buyers", function () {
+            var id = $(this).find('option:selected').val();
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('admin/get-vehicles') }}"+"/"+id,
+                success: function(data){
+                    data = JSON.parse(data);
+                    $(".vehicle-data").remove();
+                    if (data.success == true) {
+                        if (data.vehicles.length == 0) {
+                            var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
+                                <div class="text-fs-3 text-center">No vehicle found</div>
+                            </div>`;
+                            $(".vehicles").append(html);
+                        } else {
+                            $(data.vehicles).each(function (key, value) {
+                                var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
+                                    <div class="col text-fs-3 text-center">`+value.vehicle.vin+`</div>
+                                    <div class="col text-fs-3 text-center">`+value.vehicle.description+`</div>
+                                    <div class="col d-flex justify-content-center align-items-center">
+                                        <input class="form-check-input vehicle_id" id="vehicle_id" name"vehicle_id" type="checkbox"
+                                            value="`+value.vehicle.id+`">
+                                    </div>
+                                </div>`;
+                                $(".vehicles").append(html);
+                            });
+                        }
                     }
                 }
             });

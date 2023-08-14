@@ -161,20 +161,16 @@
                                 </td>
                                 <td>
                                     <ul class="p-0 text-fs-3">
-                                        <span class="fw-bold">Buyer : Mohammad Alani</span>
+                                        @if(count(@$value->buyers) > 0)
+                                        @foreach(@$value->buyers as $k => $v)
+                                        <span class="fw-bold">Buyer : {{ @$v->user->name }}</span>
+                                        @foreach($v->vehicles as $ke => $val)
                                         <li class="list-unstyled">
-                                            » Toyota Land cruiser LC300
+                                            » {{ @$val->vehicle->description }}
                                         </li>
-                                        <li class="list-unstyled">
-                                            » Toyota Land cruiser LC300
-                                        </li>
-                                        <span class="fw-bold">Buyer : Karam Alani</span>
-                                        <li class="list-unstyled">
-                                            » Toyota Land cruiser LC300
-                                        </li>
-                                        <li class="list-unstyled">
-                                            » Toyota Land cruiser LC300
-                                        </li>
+                                        @endforeach
+                                        @endforeach
+                                        @endif
                                     </ul>
                                 </td>
                                 <td>

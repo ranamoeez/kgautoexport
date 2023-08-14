@@ -90,6 +90,11 @@ class ApiController extends Controller
                         $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('owner_id', $user_id)->limit(100)->offset((int)$offset)->get();
                     }
                 }
+
+                foreach ($containers as $key => $value) {
+                    $vehicles = AssignVehicle::with('user', 'vehicle')->where('assigned_to', $value->id)->get();
+                    $containers[$key]['vehicles'] = $vehicles;
+                }
             
                 return $this->sendResponse($containers, 'Containers retrieved successfully.');
             } else {

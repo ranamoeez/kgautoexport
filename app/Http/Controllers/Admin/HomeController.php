@@ -278,6 +278,7 @@ class HomeController extends Controller
     {
         $vehicle = Vehicle::find($id);
         $vehicle->delete();
+        AssignVehicle::where('vehicle_id', $id)->delete();
         $response = array('flag'=>true,'msg'=>'Vehicle has been deleted.');
         echo json_encode($response); return;
     }

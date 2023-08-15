@@ -172,7 +172,7 @@
                             <tr id="row" class="align-middle overflow-hidden shadow mb-2">
                                 <td>
                                     <div class="d-flex flex-column justify-content-center">
-                                        @if(count($value->vehicle->vehicle_documents) > 0)
+                                        @if(count(@$value->vehicle->vehicle_documents) > 0)
                                         <a href="javascript:void();" class="text-link text-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -181,7 +181,7 @@
                                             </svg>
                                         </a>
                                         @endif
-                                        @if(count($value->vehicle->vehicle_images) > 0)
+                                        @if(count(@$value->vehicle->vehicle_images) > 0)
                                         <a href="javascript:void();" class="text-link text-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

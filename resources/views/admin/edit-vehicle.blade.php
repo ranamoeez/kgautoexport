@@ -594,7 +594,7 @@
                                         </button>
                                     </div>
                                     <div class="card-body">
-                                        <img src="{{ asset('assets/file.png') }}" class="w-100" style="height: 140px;" alt="" />
+                                        <img src="{{ asset('assets/file.png') }}" class="w-100" style="height: 160px;" alt="" />
                                     </div>
                                 </div>
                             </div>

@@ -44,7 +44,7 @@
             </a>
         </li>
         <li class="side_menu_item">
-            <a href="{{ url('admin/system-configuration') }}" @if(@$type == 'system-configuration') class="active" @endif>
+            <a href="{{ url('admin/system-configuration/auto-status') }}" @if(@$type == 'system-configuration') class="active" @endif>
                 <i class="fas fa-chart-bar"></i>
                 <span>System Configuration</span>
             </a>

@@ -636,7 +636,7 @@
                                         </button>
                                     </div>
                                     <div class="card-body">
-                                        <img src="{{ url($value->filepath.$value->filename) }}" class="w-100" style="height: 140px;" alt="" />
+                                        <img src="{{ url($value->filepath.$value->filename) }}" class="w-100" style="height: 160px;" alt="" />
                                     </div>
                                 </div>
                             </div>

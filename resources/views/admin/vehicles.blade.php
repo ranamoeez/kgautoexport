@@ -263,7 +263,7 @@
                                         <select id="selectOption" class="form-select status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
                                             @if(count(@$all_status) > 0)
                                             @foreach(@$all_status as $k => $v)
-                                                @if(@$v['id'] == @$value['status_id'])
+                                                @if(@$v['id'] == @$value->vehicle->status_id)
                                                 <option value="{{ @$v['id'] }}" selected>{{ @$v['name'] }}</option>
                                                 @else
                                                 <option value="{{ @$v['id'] }}">{{ @$v['name'] }}</option>

@@ -45,23 +45,24 @@ class ApiController extends Controller
             if ($check_user > 0) {
                 $user_id = User::where('api_token', $token)->first()->id;
 
-                $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'vehicle_documents', 'fines', 'auction', 'auction_location', 'terminal', 'status', 'buyer')->where('owner_id', $user_id);
+                $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', $user_id)->limit(100)->get();
 
                 if (!empty($request->Status)) {
                     $status = Status::where('name', $request->Status)->first();
                     if (!empty($status->id)) {
-                        $vehicles = $vehicles->where('status_id', $status->id);
+                        $status_id = $status->id;
+                        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', ['user' => function ($query) use($status_id) {
+                            $query->where('status_id', $status_id);
+                        }], 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', $user_id)->limit(100)->get();
                     }
                 }
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex > 1) {
                         $offset = ($request->PageIndex - 1) * 100;
-                        $vehicles = $vehicles->offset((int)$offset);
+                        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', $user_id)->offset((int)$offset)->limit(100)->get();
                     }
                 }
-
-                $vehicles = $vehicles->limit(100)->get();
             
                 return $this->sendResponse($vehicles, 'Vehicles retrieved successfully.');
             } else {

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Vehicle;
+use App\Models\Container;
 
 class AssignVehicle extends Model
 {
@@ -22,5 +23,9 @@ class AssignVehicle extends Model
 
     public function vehicle(){
     	return $this->belongsTo(Vehicle::class, 'vehicle_id');
+    }
+
+    public function container(){
+    	return $this->belongsTo(Container::class, 'assigned_to');
     }
 }

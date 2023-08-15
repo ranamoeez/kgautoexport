@@ -172,7 +172,7 @@
                             <tr id="row" class="align-middle overflow-hidden shadow mb-2">
                                 <td>
                                     <div class="d-flex flex-column justify-content-center">
-                                        @if(count($value->vehicle_documents) > 0)
+                                        @if(count($value->vehicle->vehicle_documents) > 0)
                                         <a href="javascript:void();" class="text-link text-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -181,7 +181,7 @@
                                             </svg>
                                         </a>
                                         @endif
-                                        @if(count($value->vehicle_images) > 0)
+                                        @if(count($value->vehicle->vehicle_images) > 0)
                                         <a href="javascript:void();" class="text-link text-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -197,66 +197,66 @@
                                         class="rounded-4 table-thumbnail-image" />
                                 </td> --}}
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ $value->delivery_date }}
+                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                        {{ $value->vehicle->delivery_date }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ $value->description }}
+                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                        {{ $value->vehicle->description }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ $value->vin }}
+                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                        {{ $value->vehicle->vin }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ @$value->buyer->name }}
+                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                        {{ @$value->vehicle->buyer->name }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ $value->client_name }}
+                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                        {{ $value->vehicle->client_name }}
                                     </a>
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4 p-1 rounded-pill shadow">
-                                        <span class="text-fs-4 ms-1" style="font-size: 14px;">{{ $value->destination_manual }}</span>
+                                        <span class="text-fs-4 ms-1" style="font-size: 14px;">{{ $value->vehicle->destination_manual }}</span>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 title" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ $value->id }}">
-                                            <option value="1" data-color="danger" @if(@$value->title == "1") selected @endif>No</option>
-                                            <option value="2" data-color="success" @if(@$value->title == "2") selected @endif>Yes</option>
-                                            <option value="3" data-color="success" @if(@$value->title == "3") selected @endif>BOS</option>
-                                            <option value="4" data-color="success" @if(@$value->title == "4") selected @endif>TBO</option>
+                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 title" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ $value->vehicle->id }}">
+                                            <option value="1" data-color="danger" @if(@$value->vehicle->title == "1") selected @endif>No</option>
+                                            <option value="2" data-color="success" @if(@$value->vehicle->title == "2") selected @endif>Yes</option>
+                                            <option value="3" data-color="success" @if(@$value->vehicle->title == "3") selected @endif>BOS</option>
+                                            <option value="4" data-color="success" @if(@$value->vehicle->title == "4") selected @endif>TBO</option>
                                         </select>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 keys" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ $value->id }}">
-                                            <option value="1" data-color="danger" @if(@$value->keys == "1") selected @endif>No</option>
-                                            <option value="2" data-color="success" @if(@$value->keys == "2") selected @endif>Yes</option>
+                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 keys" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ $value->vehicle->id }}">
+                                            <option value="1" data-color="danger" @if(@$value->vehicle->keys == "1") selected @endif>No</option>
+                                            <option value="2" data-color="success" @if(@$value->vehicle->keys == "2") selected @endif>Yes</option>
                                         </select>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <span>{{ $value->paid_price }}</span>
-                                        <select class="form-select option-select text-white payment_status" aria-label="Default select example" data-id="{{ $value->id }}">
-                                            <option value="1" data-color="success" @if(@$value->all_paid == "1") selected @endif>Paid</option>
-                                            <option value="0" data-color="danger" @if(@$value->all_paid == "0") selected @endif>Unpaid</option>
+                                        <span>{{ $value->vehicle->paid_price }}</span>
+                                        <select class="form-select option-select text-white payment_status" aria-label="Default select example" data-id="{{ $value->vehicle->id }}">
+                                            <option value="1" data-color="success" @if(@$value->vehicle->all_paid == "1") selected @endif>Paid</option>
+                                            <option value="0" data-color="danger" @if(@$value->vehicle->all_paid == "0") selected @endif>Unpaid</option>
                                         </select>
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select id="selectOption" class="form-select status" aria-label="Default select example" data-id="{{ $value->id }}">
+                                        <select id="selectOption" class="form-select status" aria-label="Default select example" data-id="{{ $value->vehicle->id }}">
                                             @if(count(@$all_status) > 0)
                                             @foreach(@$all_status as $k => $v)
                                                 @if($v['id'] == @$value['status_id'])
@@ -270,20 +270,20 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ @$value->terminal->name }}
+                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                        {{ @$value->vehicle->terminal->name }}
                                     </a>
                                 </td>
                                 <td>
                                     <div class="border border-1 p-2 rounded-3">
                                         <p class="text-fs-3 m-0">
-                                            {{ $value->notes }}
+                                            {{ $value->vehicle->notes }}
                                         </p>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-center items-center message-icon">
-                                        <i class="fa-circle-minus fa-solid fs-3 text-danger delete" data-url="{{ url('admin/vehicles/delete', $value->id) }}" style="cursor: pointer;"></i>
+                                        <i class="fa-circle-minus fa-solid fs-3 text-danger delete" data-url="{{ url('admin/vehicles/delete', $value->vehicle->id) }}" style="cursor: pointer;"></i>
                                     </div>
                                 </td>
                             </tr>

@@ -37,47 +37,62 @@ class HomeController extends Controller
     {
         $data['type'] = "vehicles";
         $data['page'] = '1';
-        $vehicles = Vehicle::orderBy('id', 'DESC')->with('vehicle_images', 'vehicle_documents', 'fines', 'auction', 'terminal', 'status', 'buyer');
+        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->get();
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 20;
-                $vehicles = $vehicles->offset((int)$offset);
+                $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', $user_id)->offset((int)$offset)->limit(20)->get();
             }
             $data['page'] = $request->page;
         }
         if (!empty($request->terminal) && $request->terminal !== 'all') {
         	$data['terminal'] = $request->terminal;
-        	$vehicles = $vehicles->where('terminal_id', $request->terminal);
+            $terminal = $request->terminal;
+            $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($terminal) {
+                $query->where('terminal_id', $terminal);
+            })->limit(20)->get();
         }
         if (!empty($request->status) && $request->status !== 'all') {
         	$data['status'] = $request->status;
-        	$vehicles = $vehicles->where('status_id', $request->status);
+            $status = $request->status;
+        	$vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($status) {
+                $query->where('status_id', $status);
+            })->limit(20)->get();
         }
         if (!empty($request->destination) && $request->destination !== 'all') {
         	$data['destination'] = $request->destination;
-        	$vehicles = $vehicles->where('destination_manual', $request->destination);
+            $destination = $request->destination;
+            $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($destination) {
+                $query->where('destination_manual', $destination);
+            })->limit(20)->get();
         }
         if (!empty($request->buyer) && $request->buyer !== 'all') {
         	$data['buyer'] = $request->buyer;
-        	$vehicles = $vehicles->where('buyer_id', $request->buyer);
+            $buyer = $request->buyer;
+            $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($buyer) {
+                $query->where('buyer_id', $buyer);
+            })->limit(20)->get();
         }
         if (!empty($request->search)) {
         	$data['search'] = $request->search;
         	$search = $request->search;
-        	$vehicles = $vehicles->where(function ($query) use ($search) {
-			    $query->where('delivery_date', 'LIKE', '%'.$search.'%')
-			        ->orWhere('description', 'LIKE', '%'.$search.'%')
-			        ->orWhere('vin', 'LIKE', '%'.$search.'%')
-			        ->orWhere('client_name', 'LIKE', '%'.$search.'%')
-			        ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
-			        ->orWhere('notes', 'LIKE', '%'.$search.'%');
-			});
+            $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('delivery_date', 'LIKE', '%'.$search.'%')
+                    ->orWhere('description', 'LIKE', '%'.$search.'%')
+                    ->orWhere('vin', 'LIKE', '%'.$search.'%')
+                    ->orWhere('client_name', 'LIKE', '%'.$search.'%')
+                    ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
+                    ->orWhere('notes', 'LIKE', '%'.$search.'%');
+                });
+            })->limit(20)->get();
         }
         if (!empty($request->unpaid)) {
         	$data['unpaid'] = $request->unpaid;
-        	$vehicles = $vehicles->where('all_paid', '0');
+            $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas('vehicle', function ($query) {
+                $query->where('all_paid', '0');
+            })->limit(20)->get();
         }
-        $vehicles = $vehicles->limit(20)->get();
         $data['list'] = $vehicles;
         $data['all_terminal'] = Terminal::all();
         $data['all_status'] = Status::all();

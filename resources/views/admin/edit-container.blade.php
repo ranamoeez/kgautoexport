@@ -205,19 +205,91 @@
                     <div class="col-md-3">
                         <h3 class="fw-bold text-fs-4">Shipper information</h3>
                         <div class="mt-4">
-                            <div class="form-group row">
+                            <div class="form-group row px-4">
                                 <label for="notes" class="fw-semibold">Shipper information</label>
-                                <textarea name="notes" cols="10" rows="8"
-                                    class="form-control shadow-lg bg-white"
-                                    placeholder="Company name: K&G Auto Export Inc Address: 3361 W Vine Street STE# 208 Kissimmee, FL 34741 Phone number: 912-921-4443 Fax: 912-216-0011E-mail: info@kgautoexport.com Contact person: Anna MedvedevaAES Number XTN:"
-                                    disabled></textarea>
+                                <div class="shipper-info p-3 row mt-2" style="border: 1px solid black; border-radius: 10px;">
+                                @if(!empty(@$container->shipper))
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Company Name:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->shipper->company_name }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Address:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->shipper->address }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Phone Number:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->shipper->phone_number }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Fax:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->shipper->fax }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">E-mail:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->shipper->email }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-0">Contact Person:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-0">{{ $container->shipper->contact_person }}</p>
+                                    </div>
+                                @endif
+                                </div>
                             </div>
-                            <div class="form-group mt-4 row">
+                            <div class="form-group mt-4 row px-4">
                                 <label for="notes" class="fw-semibold">Consignee information</label>
-                                <textarea name="notes" cols="10" rows="10"
-                                    class="form-control shadow-lg bg-white"
-                                    placeholder="Company name: KARAM AL SHARQ FOR STORING AND CARS TRADE Address: SAMI AL BAROUDI STREET, KHELDA MALL, 3RD FLOOR, OFF# 12 AMMAN, JORDA Phone number: 96265338818 Fax: 96265339400 E-mail: hamdoon@karamalsharq.com Contact person: Hamdoon Al Ani"
-                                    disabled></textarea>
+                                <div class="consignee-info p-3 row mt-2" style="border: 1px solid black; border-radius: 10px;">
+                                @if(!empty(@$container->consignee))
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Company Name:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->consignee->company_name }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Address:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->consignee->address }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Phone Number:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->consignee->phone_number }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Fax:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->consignee->fax }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">E-mail:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->consignee->email }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-0">Contact Person:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-0">{{ $container->consignee->contact_person }}</p>
+                                    </div>
+                                @endif
+                                </div>
                             </div>
                         </div>
                     </div>

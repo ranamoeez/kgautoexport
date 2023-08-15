@@ -263,8 +263,9 @@ class HomeController extends Controller
         }
         $data   = array();
         $data['type'] = 'vehicles';
-        $data['action'] = url('admin/vehicles/edit/'.$id);
-        $data['vehicle'] = Vehicle::with('vehicle_images', 'vehicle_documents', 'fines', 'auction', 'auction_location', 'terminal', 'status', 'buyer')->where('id', $id)->first();
+        $vehicle_id = AssignVehicle::where('id', $id)->first()->vehicle_id;
+        $data['action'] = url('admin/vehicles/edit/'.$vehicle_id);
+        $data['list'] = AssignVehicle::with('vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.shipping_line')->where('id', $id)->first();
         $data['all_status'] = Status::all();
         $data['all_terminal'] = Terminal::all();
         $data['all_buyer'] = User::where('role', '2')->get();

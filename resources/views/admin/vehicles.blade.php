@@ -201,27 +201,27 @@
                                         class="rounded-4 table-thumbnail-image" />
                                 </td> --}}
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->delivery_date }}
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->description }}
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->vin }}
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->buyer->name }}
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->client_name }}
                                     </a>
                                 </td>
@@ -274,7 +274,7 @@
                                     </div>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->terminal->name }}
                                     </a>
                                 </td>

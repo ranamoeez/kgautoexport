@@ -38,7 +38,7 @@
                                     <select class="selectjs form-select" name="status_id">
                                         @if(count(@$all_status) > 0)
                                         @foreach(@$all_status as $key => $value)
-                                            @if($value['id'] == @$vehicle->status_id)
+                                            @if($value['id'] == @$list->vehicle->status_id)
                                             <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
                                             @else
                                             <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
@@ -54,7 +54,7 @@
                                     <select class="selectjs form-select" name="terminal_id">
                                         @if(count(@$all_terminal) > 0)
                                         @foreach(@$all_terminal as $key => $value)
-                                            @if($value['id'] == @$vehicle->terminal_id)
+                                            @if($value['id'] == @$list->vehicle->terminal_id)
                                             <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
                                             @else
                                             <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
@@ -70,7 +70,7 @@
                                     <select class="selectjs form-select" name="buyer_id">
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
-                                            @if($value['id'] == @$vehicle->buyer_id)
+                                            @if($value['id'] == @$list->vehicle->buyer_id)
                                             <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
                                             @else
                                             <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
@@ -83,7 +83,7 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">VIN</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="vin" value="{{ $vehicle->vin }}" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="vin" value="{{ $list->vehicle->vin }}" class="form-control" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -120,27 +120,27 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Client name</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="client_name" value="{{ $vehicle->client_name }}" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="client_name" value="{{ $list->vehicle->client_name }}" class="form-control" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Title</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
-                                        <input id="radio1" type="radio" name="title" class="form-check-input" value="1" @if($vehicle->title == '1') checked @endif 
+                                        <input id="radio1" type="radio" name="title" class="form-check-input" value="1" @if($list->vehicle->title == '1') checked @endif 
                                             checked />
                                         <label for="radio1" class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio2" type="radio" name="title" value="2" @if($vehicle->title == '2') checked @endif class="form-check-input" />
+                                        <input id="radio2" type="radio" name="title" value="2" @if($list->vehicle->title == '2') checked @endif class="form-check-input" />
                                         <label for="radio2" class="form-check-label">Yes</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio3" type="radio" name="title" value="3" @if($vehicle->title == '3') checked @endif class="form-check-input" />
+                                        <input id="radio3" type="radio" name="title" value="3" @if($list->vehicle->title == '3') checked @endif class="form-check-input" />
                                         <label for="radio3" class="form-check-label">BOS</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio4" type="radio" name="title" value="4" @if($vehicle->title == '4') checked @endif class="form-check-input" />
+                                        <input id="radio4" type="radio" name="title" value="4" @if($list->vehicle->title == '4') checked @endif class="form-check-input" />
                                         <label for="radio4" class="form-check-label">TBO</label>
                                     </div>
                                 </div>
@@ -150,12 +150,12 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio5" type="radio" name="keys"
-                                            class="form-check-input" value="1" @if($vehicle->keys == '1') checked @endif />
+                                            class="form-check-input" value="1" @if($list->vehicle->keys == '1') checked @endif />
                                         <label for="radio5" class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio6" type="radio" name="keys"
-                                            class="form-check-input" value="2" @if($vehicle->keys == '2') checked @endif />
+                                            class="form-check-input" value="2" @if($list->vehicle->keys == '2') checked @endif />
                                         <label for="radio6" class="form-check-label">Yes</label>
                                     </div>
                                 </div>
@@ -165,12 +165,12 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio7" type="radio" name="operable"
-                                            class="form-check-input" value="1" @if($vehicle->operable == '1') checked @endif />
+                                            class="form-check-input" value="1" @if($list->vehicle->operable == '1') checked @endif />
                                         <label for="radio7" class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio8" type="radio" name="operable"
-                                            class="form-check-input" value="2" @if($vehicle->operable == '2') checked @endif />
+                                            class="form-check-input" value="2" @if($list->vehicle->operable == '2') checked @endif />
                                         <label for="radio8" class="form-check-label">Yes</label>
                                     </div>
                                 </div>
@@ -180,19 +180,19 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio9" type="radio" name="fuel_type" class="form-check-input"
-                                            @if($vehicle->fuel_type == '1') checked @endif value="1" />
+                                            @if($list->vehicle->fuel_type == '1') checked @endif value="1" />
                                         <label for="radio9" class="form-check-label">Hybrid</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio10" type="radio" name="fuel_type" @if($vehicle->fuel_type == '2') checked @endif class="form-check-input" value="2" />
+                                        <input id="radio10" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == '2') checked @endif class="form-check-input" value="2" />
                                         <label for="radio10" class="form-check-label">Electric Car</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio11" type="radio" name="fuel_type" @if($vehicle->fuel_type == '3') checked @endif class="form-check-input" value="3" />
+                                        <input id="radio11" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == '3') checked @endif class="form-check-input" value="3" />
                                         <label for="radio11" class="form-check-label">Gas Car</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio12" type="radio" name="fuel_type" @if($vehicle->fuel_type == '4') checked @endif class="form-check-input" value="4" />
+                                        <input id="radio12" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == '4') checked @endif class="form-check-input" value="4" />
                                         <label for="radio12" class="form-check-label">Other</label>
                                     </div>
                                 </div>
@@ -208,7 +208,7 @@
                                     <select class="selectjs form-select auction" name="auction_id">
                                         @if(count(@$all_auction) > 0)
                                         @foreach(@$all_auction as $key => $value)
-                                            @if($value['id'] == @$vehicle->auction_id)
+                                            @if($value['id'] == @$list->vehicle->auction_id)
                                             <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
                                             @else
                                             <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
@@ -225,7 +225,7 @@
                                     <select class="selectjs form-select auction_location" name="auction_location_id">
                                         @if(count(@$all_auction_location) > 0)
                                         @foreach(@$all_auction_location as $key => $value)
-                                            @if($value['id'] == @$vehicle->auction_location_id)
+                                            @if($value['id'] == @$list->vehicle->auction_location_id)
                                             <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
                                             @else
                                             <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
@@ -238,13 +238,13 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="address" value="{{ $vehicle->address }}" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="address" value="{{ $list->vehicle->address }}" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Location</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="location" value="{{ $vehicle->location }}" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="location" value="{{ $list->vehicle->location }}" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
@@ -253,7 +253,7 @@
                                     <select class="selectjs form-select" name="auction_buyer">
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
-                                            @if($value['id'] == @$vehicle->auction_buyer)
+                                            @if($value['id'] == @$list->vehicle->auction_buyer)
                                             <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
                                             @else
                                             <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
@@ -266,14 +266,14 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Lot number</label>
                                 <div class="col-sm-9">
-                                    <input type="number" class="form-control" name="lotnumber" value="{{ $vehicle->lotnumber }}" placeholder="Enter a number"
+                                    <input type="number" class="form-control" name="lotnumber" value="{{ $list->vehicle->lotnumber }}" placeholder="Enter a number"
                                         inputmode="numeric" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="purchase_date" value="{{ $vehicle->purchase_date }}" class="form-control" />
+                                    <input type="date" name="purchase_date" value="{{ $list->vehicle->purchase_date }}" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
@@ -282,7 +282,7 @@
                                     <select class="selectjs form-select" name="destination_port_id">
                                         @if(count(@$all_destination_port) > 0)
                                         @foreach(@$all_destination_port as $key => $value)
-                                            @if($value['id'] == @$vehicle->destination_port_id)
+                                            @if($value['id'] == @$list->vehicle->destination_port_id)
                                             <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
                                             @else
                                             <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
@@ -295,12 +295,12 @@
                             <div class="form-group mt-4">
                                 <label for="notes" class="fw-semibold">Notes</label>
                                 <textarea name="notes_user" cols="10" rows="4" value="Title received on 12 / 18r"
-                                    class="form-control">{{ $vehicle->notes_user }}</textarea>
+                                    class="form-control">{{ $list->vehicle->notes_user }}</textarea>
                             </div>
                             <div class="form-group mt-4">
                                 <label for="notes" class="fw-semibold">Admin Notes</label>
                                 <textarea name="notes" cols="10" rows="4" value="Title received on 12 / 18r"
-                                    class="form-control">{{ $vehicle->notes }}</textarea>
+                                    class="form-control">{{ $list->vehicle->notes }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -310,70 +310,70 @@
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="transportation_address" value="{{ $vehicle->transportation_address }}" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="transportation_address" value="{{ $list->vehicle->transportation_address }}" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Carrier</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="carrier" value="{{ $vehicle->carrier }}" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="carrier" value="{{ $list->vehicle->carrier }}" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pay date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="pdate" value="{{ $vehicle->pdate }}" class="form-control" />
+                                    <input type="date" name="pdate" value="{{ $list->vehicle->pdate }}" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="pickup_address" value="{{ $vehicle->pickup_address }}" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="pickup_address" value="{{ $list->vehicle->pickup_address }}" class="form-control" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Delivery
                                     address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="delivery_address" value="{{ $vehicle->delivery_address }}" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="delivery_address" value="{{ $list->vehicle->delivery_address }}" class="form-control" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Due date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="due_date" value="{{ $vehicle->due_date }}" class="form-control" />
+                                    <input type="date" name="due_date" value="{{ $list->vehicle->due_date }}" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Dispatch date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="dispatch_date" value="{{ $vehicle->dispatch_date }}" class="form-control" />
+                                    <input type="date" name="dispatch_date" value="{{ $list->vehicle->dispatch_date }}" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="pickup_date" value="{{ $vehicle->pickup_date }}" class="form-control" />
+                                    <input type="date" name="pickup_date" value="{{ $list->vehicle->pickup_date }}" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated del.
                                     date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="delivery_date" value="{{ $vehicle->delivery_date }}" class="form-control" />
+                                    <input type="date" name="delivery_date" value="{{ $list->vehicle->delivery_date }}" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Actual delivery
                                     date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="delivered_on_date" value="{{ $vehicle->delivered_on_date }}" class="form-control" />
+                                    <input type="date" name="delivered_on_date" value="{{ $list->vehicle->delivered_on_date }}" class="form-control" />
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Towing price</label>
                                 <div class="col-sm-9">
-                                    <input type="number" name="towing_price" value="{{ $vehicle->towing_price }}" class="form-control" placeholder="Enter a price"
+                                    <input type="number" name="towing_price" value="{{ $list->vehicle->towing_price }}" class="form-control" placeholder="Enter a price"
                                         inputmode="numeric" />
                                 </div>
 
@@ -399,8 +399,8 @@
                                         <div class="col-md-1 pt-2" style="padding-right: 0px; padding-left: 0px;">
                                             <i class="fa-circle-plus fa-solid text-success savetrans"></i>
                                         </div>
-                                        @if(count(@$vehicle->fines) > 0)
-                                        @foreach($vehicle->fines as $key => $value)
+                                        @if(count(@$list->vehicle->fines) > 0)
+                                        @foreach($list->vehicle->fines as $key => $value)
                                             @if($value->type == 'transaction')
                                                 <div class="col-12 mt-2">
                                                     <span class="row align-items-center">
@@ -422,7 +422,7 @@
                             <div class="form-group mt-4">
                                 <label for="notes" class="fw-semibold">Trans. Notes</label>
                                 <textarea name="transportation_notes" cols="10" rows="4" value="Title received on 12 / 18r"
-                                    class="form-control">{{ $vehicle->transportation_notes }}</textarea>
+                                    class="form-control">{{ $list->vehicle->transportation_notes }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -432,7 +432,7 @@
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction price</label>
                                 <div class="col-sm-9">
-                                    <input type="number" name="auction_price" value="{{ $vehicle->auction_price }}" class="form-control" placeholder="Enter a price"
+                                    <input type="number" name="auction_price" value="{{ $list->vehicle->auction_price }}" class="form-control" placeholder="Enter a price"
                                         inputmode="numeric" />
                                 </div>
                             </div>
@@ -457,8 +457,8 @@
                                         <div class="col-md-1 pt-2" style="padding-right: 0px; padding-left: 0px;">
                                             <i class="fa-circle-plus fa-solid text-success saveauction"></i>
                                         </div>
-                                        @if(count(@$vehicle->fines) > 0)
-                                        @foreach($vehicle->fines as $key => $value)
+                                        @if(count(@$list->vehicle->fines) > 0)
+                                        @foreach($list->vehicle->fines as $key => $value)
                                             @if($value->type == 'auction')
                                                 <div class="col-12 mt-2">
                                                     <span class="row align-items-center">
@@ -480,17 +480,50 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Draft expenses</label>
                                 <div class="col-sm-9">
-                                    <textarea id="numeric-textarea" name="draft_expenses" class="form-control">{{ $vehicle->draft_expenses }}</textarea>
+                                    <textarea id="numeric-textarea" name="draft_expenses" class="form-control">{{ $list->vehicle->draft_expenses }}</textarea>
                                 </div>
                             </div>
-                            <div class="form-group mt-4">
+                            <div class="form-group mt-4 px-2">
                                 <label for="notes" class="fw-semibold">Container info</label>
-                                <input name="notes" class="form-control p-4" disabled>
+                                <div class="container-info p-3 row mt-2" style="border: 1px solid black; border-radius: 10px;">
+                                    @if(!empty(@$list->container))
+                                        <div class="col-md-5">
+                                            <p class="mb-1"><b>Container No:</b></p>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <p class="mb-1"><b>{{ $list->container->container_no }}</b></p>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <p class="mb-1">Shipped Date:</p>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <p class="mb-1">{{ $list->container->departure }}</p>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <p class="mb-1">Arrival Date:</p>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <p class="mb-1">{{ $list->container->arrival }}</p>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <p class="mb-1">Shipping Line:</p>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <p class="mb-1">{{ $list->container->shipping_line->name }}</p>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <p class="mb-1">Vessel Line:</p>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <p class="mb-1">{{ $list->container->vessel_name }}</p>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Weight (LB)</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="weight" value="{{ $vehicle->weight }}" class="form-control" placeholder="Enter a weight" />
+                                    <input type="text" name="weight" value="{{ $list->vehicle->weight }}" class="form-control" placeholder="Enter a weight" />
                                 </div>
                             </div>
                             <div class="form-group mt-4">
@@ -581,8 +614,8 @@
                             </div>
                         </div>
                         <div class="row mb-4">
-                            @if(count(@$vehicle->vehicle_documents) > 0)
-                            @foreach($vehicle->vehicle_documents as $key => $value)
+                            @if(count(@$list->vehicle->vehicle_documents) > 0)
+                            @foreach($list->vehicle->vehicle_documents as $key => $value)
                             <div class="col-md-4">
                                 <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
                                     <div class="card-header d-flex align-items-center justify-content-between">
@@ -625,8 +658,8 @@
                             </div>
                         </div>
                         <div class="row mb-4">
-                            @if(count(@$vehicle->vehicle_images) > 0)
-                            @foreach($vehicle->vehicle_images as $key => $value)
+                            @if(count(@$list->vehicle->vehicle_images) > 0)
+                            @foreach($list->vehicle->vehicle_images as $key => $value)
                             <div class="col-md-4">
                                 <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
                                     <div class="card-header d-flex align-items-center justify-content-between">
@@ -651,8 +684,8 @@
                                     <div id="thumbnail-slider" class="splide mt-2">
                                         <div class="splide__track">
                                             <ul class="splide__list d-flex list-unstyled gap-2 all-images">
-                                                @if(count(@$vehicle->vehicle_images) > 0)
-                                                @foreach($vehicle->vehicle_images as $key => $value)
+                                                @if(count(@$list->vehicle->vehicle_images) > 0)
+                                                @foreach($list->vehicle->vehicle_images as $key => $value)
                                                 <li>
                                                     <img src="{{ url($value->filepath.$value->filename) }}" class="w-100"
                                                         alt="car-image" />

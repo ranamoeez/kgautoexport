@@ -544,7 +544,7 @@
                         <div class="row mb-4">
                             <label class="col-md-2 col-form-label fw-semibold">Document</label>
                             <div class="col-md-10 d-flex flex-row shadow-lg px-0">
-                                <input type="file" class="fbg-white border-0 form-control" name="documents[]" id="documents" aria-label="upload" accept=".pdf, .csv, .xlsx, .doc, .docx, .txt" multiple>
+                                <input type="file" class="fbg-white border-0 form-control" name="documents[]" id="documents" aria-label="upload" accept=".pdf" multiple>
                                 <button class="btn btn-primary rounded upload-documents" type="button">
                                     <div class="d-flex align-items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"

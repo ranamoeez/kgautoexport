@@ -170,7 +170,7 @@
                             @if(count($list) > 0)
                             @foreach($list as $key => $value)
                             <tr id="row" class="align-middle overflow-hidden shadow mb-2">
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="d-flex flex-column justify-content-center">
                                         @if(!empty(@$value->vehicle->vehicle_documents))
                                             @if(count(@$value->vehicle->vehicle_documents) > 0)
@@ -200,47 +200,47 @@
                                     <img src="{{ asset('assets/FordExplorerXLT.webp') }}"
                                         class="rounded-4 table-thumbnail-image" />
                                 </td> --}}
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->delivery_date }}
                                     </a>
                                 </td>
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->description }}
                                     </a>
                                 </td>
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->vin }}
                                     </a>
                                 </td>
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->buyer->name }}
                                     </a>
                                 </td>
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->client_name }}
                                     </a>
                                 </td>
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4 p-1 rounded-pill shadow">
                                         <span class="text-fs-4 ms-1" style="font-size: 14px;">{{ @$value->vehicle->destination_manual }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 title" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
+                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 title" style="background-position: right; min-width: 50px;" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
                                             <option value="1" data-color="danger" @if(@$value->vehicle->title == "1") selected @endif>No</option>
-                                            <option value="2" data-color="success" @if(@$value->vehicle->title == "2") selected @endif>Yes</option>
+                                            <option value="2" data-color="info" @if(@$value->vehicle->title == "2") selected @endif>Yes</option>
                                             <option value="3" data-color="success" @if(@$value->vehicle->title == "3") selected @endif>BOS</option>
-                                            <option value="4" data-color="success" @if(@$value->vehicle->title == "4") selected @endif>TBO</option>
+                                            <option value="4" data-color="warning" @if(@$value->vehicle->title == "4") selected @endif>TBO</option>
                                         </select>
                                     </div>
                                 </td>
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
                                         <select class="form-select option-select text-white ps-1 pe-2 py-1 keys" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
                                             <option value="1" data-color="danger" @if(@$value->vehicle->keys == "1") selected @endif>No</option>
@@ -248,17 +248,17 @@
                                         </select>
                                     </div>
                                 </td>
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
                                         <span>{{ @$value->vehicle->paid_price }}</span>
                                         <select class="form-select option-select text-white payment_status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
-                                            <option value="1" data-color="success" @if(@$value->vehicle->all_paid == "1") selected @endif>Paid</option>
+                                            <option value="1" data-color="info" @if(@$value->vehicle->all_paid == "1") selected @endif>Paid</option>
                                             <option value="0" data-color="danger" @if(@$value->vehicle->all_paid == "0") selected @endif>Unpaid</option>
                                         </select>
                                     </div>
                                 </td>
 
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
                                         <select id="selectOption" class="form-select status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
                                             @if(count(@$all_status) > 0)
@@ -273,19 +273,19 @@
                                         </select>
                                     </div>
                                 </td>
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->terminal->name }}
                                     </a>
                                 </td>
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="border border-1 p-2 rounded-3">
                                         <p class="text-fs-3 m-0">
                                             {{ @$value->vehicle->notes }}
                                         </p>
                                     </div>
                                 </td>
-                                <td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="d-flex justify-content-center items-center message-icon">
                                         <i class="fa-circle-minus fa-solid fs-3 text-danger delete" data-url="{{ url('admin/vehicles/delete', @$value->vehicle->id) }}" style="cursor: pointer;"></i>
                                     </div>

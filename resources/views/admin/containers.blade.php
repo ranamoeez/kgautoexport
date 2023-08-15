@@ -146,7 +146,7 @@
                             @if(count($list) > 0)
                             @foreach($list as $key => $value)
                             <tr class="align-middle overflow-hidden shadow mb-2">
-                                <td>
+                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
                                         Booking : {{ $value->booking_no }}
                                     </a>
@@ -159,7 +159,7 @@
                                         REF : {{ $value->export_reference }}
                                     </a>
                                 </td>
-                                <td>
+                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <ul class="p-0 text-fs-3">
                                         @if(count(@$value->buyers) > 0)
                                         @foreach(@$value->buyers as $k => $v)
@@ -173,12 +173,12 @@
                                         @endif
                                     </ul>
                                 </td>
-                                <td>
+                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->shipping_line->name }}
                                     </a>
                                 </td>
-                                <td>
+                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         Departure : {{ $value->departure }}
                                     </a>
@@ -187,15 +187,15 @@
                                         Arrival : {{ $value->arrival }}
                                     </a>
                                 </td>
-                                <td>
+                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
                                         <select class="form-select option-select text-white status" aria-label="Default select example" data-id="{{ $value->id }}">
                                             @if(count(@$all_status) > 0)
                                             @foreach(@$all_status as $k => $v)
-                                                @if($value['status_id'] == @$v['id'])
-                                                <option value="{{ @$v['id'] }}" @if($v['name'] == "Delivered") data-color="success" @else data-color="danger" @endif selected>{{ $v['name'] }}</option>
+                                                @if($value->status_id == @$v['id'])
+                                                <option value="{{ @$v['id'] }}" @if($v['name'] == "Delivered") data-color="success" @elseif($v['name'] == "Booked") data-color="warning" @else data-color="danger" @endif selected>{{ $v['name'] }}</option>
                                                 @else
-                                                <option value="{{ @$v['id'] }}" @if($v['name'] == "Delivered") data-color="success" @else data-color="danger" @endif>{{ @$v['name'] }}</option>
+                                                <option value="{{ @$v['id'] }}" @if($v['name'] == "Delivered") data-color="success" @elseif($v['name'] == "Booked") data-color="warning" @else data-color="danger" @endif>{{ @$v['name'] }}</option>
                                                 @endif
                                             @endforeach
                                             @endif
@@ -203,26 +203,25 @@
 
                                     </div>
                                 </td>
-                                <td>
+                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
                                         <select class="form-select option-select text-white payment_status" aria-label="Default select example" data-id="{{ $value->id }}">
-                                            <option value="1" data-color="success" @if(@$value->all_paid == "1") selected @endif>Paid</option>
+                                            <option value="1" data-color="info" @if(@$value->all_paid == "1") selected @endif>Paid</option>
                                             <option value="0" data-color="danger" @if(@$value->all_paid == "0") selected @endif>Unpaid</option>
                                         </select>
                                     </div>
                                 </td>
-                                <td>
+                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <button class="btn btn-primary text-fs-4 border-0">
+                                        <button class="btn btn-primary text-fs-4 border-0 tracking" type="button" data-text="{{ @$value->shipping_line->name }}" data-id="{{ @$value->container_no }}">
                                             Tracking
                                         </button>
                                     </div>
                                 </td>
-                                <td>
+                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="d-flex justify-content-center items-center message-icon">
                                         <i class="fa-solid fa-circle-xmark fs-3 text-danger delete" data-url="{{ url('admin/containers/delete', $value->id) }}" style="cursor: pointer;"></i>
                                     </div>
-
                                 </td>
                             </tr>
                             @endforeach
@@ -363,6 +362,22 @@
                         }
                     }
                 });
+            });
+
+            $(document).on("click", ".tracking", function () {
+                var data = $(this).attr('data-text');
+                var id = $(this).attr('data-id');
+                if (id == "") {
+                    toastr["error"]("Container number is empty!", "Failed!");
+                } else {
+                    if (data == "MAERSK LINE") {
+                        window.open("https://www.maersk.com/tracking/"+id);
+                    } else if (data == "HAPAG-LLOYD") {
+                        window.open("https://www.hapag-lloyd.com/en/online-business/track/track-by-container-solution.html?container="+id);
+                    } else {
+                        window.open("https://www.searates.com/container/tracking/?container="+id+"&sealine=AUTO");
+                    }
+                }
             });
         });
     </script>

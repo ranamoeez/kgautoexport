@@ -222,7 +222,7 @@
                                 </td>
                                 <td>
                                     <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ $value->vehicle->client_name }}
+                                        {{ @$value->vehicle->client_name }}
                                     </a>
                                 </td>
                                 <td>
@@ -232,7 +232,7 @@
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 title" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ $value->vehicle->id }}">
+                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 title" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
                                             <option value="1" data-color="danger" @if(@$value->vehicle->title == "1") selected @endif>No</option>
                                             <option value="2" data-color="success" @if(@$value->vehicle->title == "2") selected @endif>Yes</option>
                                             <option value="3" data-color="success" @if(@$value->vehicle->title == "3") selected @endif>BOS</option>
@@ -263,8 +263,8 @@
                                         <select id="selectOption" class="form-select status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
                                             @if(count(@$all_status) > 0)
                                             @foreach(@$all_status as $k => $v)
-                                                @if($v['id'] == @$value['status_id'])
-                                                <option value="{{ @$v['id'] }}" selected>{{ $v['name'] }}</option>
+                                                @if(@$v['id'] == @$value['status_id'])
+                                                <option value="{{ @$v['id'] }}" selected>{{ @$v['name'] }}</option>
                                                 @else
                                                 <option value="{{ @$v['id'] }}">{{ @$v['name'] }}</option>
                                                 @endif

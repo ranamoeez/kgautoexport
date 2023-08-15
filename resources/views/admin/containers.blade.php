@@ -166,7 +166,7 @@
                                         <span class="fw-bold">Buyer : {{ @$v->user->name }}</span>
                                         @foreach($v->vehicles as $ke => $val)
                                         <li class="list-unstyled">
-                                            » {{ @$val->vehicle->description }}
+                                            » <a href="{{ url('admin/vehicles/edit', $val->vehicle->id) }}" style="text-decoration: none; color: #000000;">{{ @$val->vehicle->description }}</a>
                                         </li>
                                         @endforeach
                                         @endforeach

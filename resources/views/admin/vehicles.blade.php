@@ -201,33 +201,33 @@
                                         class="rounded-4 table-thumbnail-image" />
                                 </td> --}}
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ $value->vehicle->delivery_date }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ $value->vehicle->description }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ $value->vehicle->vin }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->buyer->name }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ $value->vehicle->client_name }}
                                     </a>
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4 p-1 rounded-pill shadow">
-                                        <span class="text-fs-4 ms-1" style="font-size: 14px;">{{ $value->vehicle->destination_manual }}</span>
+                                        <span class="text-fs-4 ms-1" style="font-size: 14px;">{{ @$value->vehicle->destination_manual }}</span>
                                     </div>
                                 </td>
                                 <td>
@@ -274,20 +274,20 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/vehicles/edit', $value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->terminal->name }}
                                     </a>
                                 </td>
                                 <td>
                                     <div class="border border-1 p-2 rounded-3">
                                         <p class="text-fs-3 m-0">
-                                            {{ $value->vehicle->notes }}
+                                            {{ @$value->vehicle->notes }}
                                         </p>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-center items-center message-icon">
-                                        <i class="fa-circle-minus fa-solid fs-3 text-danger delete" data-url="{{ url('admin/vehicles/delete', $value->vehicle->id) }}" style="cursor: pointer;"></i>
+                                        <i class="fa-circle-minus fa-solid fs-3 text-danger delete" data-url="{{ url('admin/vehicles/delete', @$value->vehicle->id) }}" style="cursor: pointer;"></i>
                                     </div>
                                 </td>
                             </tr>

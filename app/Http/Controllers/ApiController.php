@@ -51,9 +51,9 @@ class ApiController extends Controller
                     $status = Status::where('name', $request->Status)->first();
                     if (!empty($status->id)) {
                         $status_id = $status->id;
-                        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', ['user' => function ($query) use($status_id) {
-                            $query->where('status_id', $status_id);
-                        }], 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', $user_id)->limit(100)->get();
+                        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($status_id) {
+                                $query->where('status_id', $status_id);
+                            })->where('user_id', $user_id)->limit(100)->get();
                     }
                 }
 

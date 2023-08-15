@@ -202,17 +202,17 @@
                                 </td> --}}
                                 <td>
                                     <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ $value->vehicle->delivery_date }}
+                                        {{ @$value->vehicle->delivery_date }}
                                     </a>
                                 </td>
                                 <td>
                                     <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ $value->vehicle->description }}
+                                        {{ @$value->vehicle->description }}
                                     </a>
                                 </td>
                                 <td>
                                     <a href="{{ url('admin/vehicles/edit', @$value->vehicle->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ $value->vehicle->vin }}
+                                        {{ @$value->vehicle->vin }}
                                     </a>
                                 </td>
                                 <td>
@@ -242,7 +242,7 @@
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 keys" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ $value->vehicle->id }}">
+                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 keys" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
                                             <option value="1" data-color="danger" @if(@$value->vehicle->keys == "1") selected @endif>No</option>
                                             <option value="2" data-color="success" @if(@$value->vehicle->keys == "2") selected @endif>Yes</option>
                                         </select>
@@ -250,8 +250,8 @@
                                 </td>
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <span>{{ $value->vehicle->paid_price }}</span>
-                                        <select class="form-select option-select text-white payment_status" aria-label="Default select example" data-id="{{ $value->vehicle->id }}">
+                                        <span>{{ @$value->vehicle->paid_price }}</span>
+                                        <select class="form-select option-select text-white payment_status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
                                             <option value="1" data-color="success" @if(@$value->vehicle->all_paid == "1") selected @endif>Paid</option>
                                             <option value="0" data-color="danger" @if(@$value->vehicle->all_paid == "0") selected @endif>Unpaid</option>
                                         </select>
@@ -260,7 +260,7 @@
 
                                 <td>
                                     <div class="text-center text-fs-4">
-                                        <select id="selectOption" class="form-select status" aria-label="Default select example" data-id="{{ $value->vehicle->id }}">
+                                        <select id="selectOption" class="form-select status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
                                             @if(count(@$all_status) > 0)
                                             @foreach(@$all_status as $k => $v)
                                                 @if($v['id'] == @$value['status_id'])

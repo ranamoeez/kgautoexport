@@ -207,17 +207,11 @@
                         <div class="mt-4">
                             <div class="form-group row">
                                 <label for="notes" class="fw-semibold">Shipper information</label>
-                                <textarea name="notes" cols="10" rows="8"
-                                    class="form-control shadow-lg bg-white"
-                                    placeholder="Company name: K&G Auto Export Inc Address: 3361 W Vine Street STE# 208 Kissimmee, FL 34741 Phone number: 912-921-4443 Fax: 912-216-0011E-mail: info@kgautoexport.com Contact person: Anna MedvedevaAES Number XTN:"
-                                    disabled></textarea>
+                                <textarea name="notes" cols="10" rows="8" class="form-control shadow-lg bg-white" disabled></textarea>
                             </div>
                             <div class="form-group mt-4 row">
                                 <label for="notes" class="fw-semibold">Consignee information</label>
-                                <textarea name="notes" cols="10" rows="10"
-                                    class="form-control shadow-lg bg-white"
-                                    placeholder="Company name: KARAM AL SHARQ FOR STORING AND CARS TRADE Address: SAMI AL BAROUDI STREET, KHELDA MALL, 3RD FLOOR, OFF# 12 AMMAN, JORDA Phone number: 96265338818 Fax: 96265339400 E-mail: hamdoon@karamalsharq.com Contact person: Hamdoon Al Ani"
-                                    disabled></textarea>
+                                <textarea name="notes" cols="10" rows="10" class="form-control shadow-lg bg-white" disabled></textarea>
                             </div>
                         </div>
                     </div>

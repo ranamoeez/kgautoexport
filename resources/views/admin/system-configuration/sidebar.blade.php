@@ -7,7 +7,7 @@
         aria-labelledby="headingOne" data-bs-parent="#accordionConfig">
         <div class="accordion-body">
             <div class="d-flex flex-column">
-                <a href="{{ url('admin/systemConfiguration-users.html') }}"
+                <a href="{{ url('admin/system-configuration/users') }}"
                     class="fw-semibold text-dark text-decoration-none">
                     Users
                 </a>

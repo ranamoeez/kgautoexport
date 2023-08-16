@@ -273,11 +273,13 @@
       data: new FormData(this),
       headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
       success: function (res) {
+        res = JSON.parse(res);
         removeWait(btn, btntxt);
         afterAajaxCall('success',res);
         return false;
       },
       error: function (err) {
+        res = JSON.parse(res);
         removeWait(btn, btntxt);
         afterAajaxCall('error',err);
         return false;

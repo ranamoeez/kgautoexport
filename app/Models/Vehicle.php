@@ -12,10 +12,12 @@ use App\Models\Terminal;
 use App\Models\Status;
 use App\Models\User;
 use App\Models\Fine;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vehicle extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'auction_id', 'address', 'location', 'transportation_address', 'pickup_address', 'delivery_address', 'towing_price', 'auction_location_id', 'draft', 'status_id', 'buyer_id', 'description', 'lotnumber', 'notes', 'transportation_notes', 'car_price', 'transport_price', 'auction_price', 'service_fee', 'draft_expenses', 'destination_port_id', 'purchase_date', 'terminal_id', 'dispatch_date', 'delivery_date', 'delivered_on_date', 'vin', 'operable', 'keys', 'title', 'engine', 'usetype_id', 'bodytrim_id', 'class_id', 'weight', 'fuel_type', 'owner_id', 'container_buyer_id', 'paid_price', 'all_paid', 'pdate', 'delivered_on_date_ym', 'pickup_date', 'search_body', 'auction_buyer', 'destination_manual', 'client_name', 'carrier', 'position', 'has_photo', 'ref', 'notes_user', 'notes_document'

@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\Container;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AssignVehicle extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = "assign_vehicle";
     protected $fillable = [

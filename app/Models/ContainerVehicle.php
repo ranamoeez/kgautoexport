@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Container;
 use App\Models\AssignVehicle;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ContainerVehicle extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = "container_vehicles";
     protected $fillable = [

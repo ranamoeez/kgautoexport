@@ -58,6 +58,21 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/get-vehicles/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicles'])->name('get-vehicles');
 	Route::post('/assign-vehicle', [App\Http\Controllers\Admin\HomeController::class, 'assign_vehicle'])->name('assign-vehicle');
 
+	Route::get('/system-configuration/users', [App\Http\Controllers\Admin\SystemConfigController::class, 'users'])->name('users');
+	Route::post('/system-configuration/users/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_user'])->name('add-user');
+	Route::get('/system-configuration/users/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_user'])->name('edit-user');
+	Route::post('/system-configuration/users/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_user'])->name('update-user');
+	Route::get('/system-configuration/users/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_user'])->name('delete-user');
+
 	Route::get('/system-configuration/auto-status', [App\Http\Controllers\Admin\SystemConfigController::class, 'auto_status'])->name('auto-status');
+	Route::post('/system-configuration/auto-status/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_auto_status'])->name('add-auto-status');
+	Route::get('/system-configuration/auto-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auto_status'])->name('edit-auto-status');
+	Route::post('/system-configuration/auto-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auto_status'])->name('update-auto-status');
+	Route::get('/system-configuration/auto-status/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_auto_status'])->name('delete-auto-status');
+
 	Route::get('/system-configuration/container-status', [App\Http\Controllers\Admin\SystemConfigController::class, 'container_status'])->name('container-status');
+	Route::post('/system-configuration/container-status/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_container_status'])->name('add-container-status');
+	Route::get('/system-configuration/container-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_container_status'])->name('edit-container-status');
+	Route::post('/system-configuration/container-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_container_status'])->name('update-container-status');
+	Route::get('/system-configuration/container-status/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_container_status'])->name('delete-container-status');
 });

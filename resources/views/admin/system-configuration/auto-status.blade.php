@@ -23,7 +23,7 @@
                     <div class="d-flex justify-content-between">
                         <div class="d-flex align-items-center">
                             <h3 class="fw-bold fs-5 mb-0">Vehicle Status</h3>
-                            <button class="btn border-0" data-bs-toggle="modal" data-bs-target="#modal" type="button">
+                            <button class="btn border-0 add" type="button">
                                 <img src="{{ asset('assets/plus_green.svg') }}" alt="add" />
                             </button>
                             <div class="modal fade new buyer" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">

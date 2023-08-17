@@ -327,13 +327,11 @@
                                 <div class="modal-body">
                                     <div class="row mt-4">
                                         <div class="col-md-6">
-                                            <form method="GET" action="" class="make_ajax delete-vehicle">
-                                            </form>
                                             <button id="delete-link" type="button" class="btn btn-danger border-0 mt-4 col-md-12 rounded-3 fs-5">Ok</button>
                                         </div>
                                         <div class="col-md-6">
-                                            <a href="#" class="btn btn-warning border-0 mt-4 col-md-12 rounded-3 fs-5"
-                                                data-bs-dismiss="modal">Cancel</a>
+                                            <button class="btn btn-warning border-0 mt-4 col-md-12 rounded-3 fs-5" type="button" 
+                                                data-bs-dismiss="modal">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
@@ -653,13 +651,13 @@
             });
 
             $(document).on("click", ".delete", function () {
-                $(".delete-vehicle").attr("action", $(this).attr('data-url'));
+                $("#delete-link").attr("data-url", $(this).attr('data-url'));
                 $("#removeRowModal").modal("show");
             });
             $(document).on("click", "#delete-link", function () {
                 $.ajax({
                     type: "GET",
-                    url: $(".delete-vehicle").attr("action"),
+                    url: $(this).attr("data-url"),
                     success: function (res) {
                         res = JSON.parse(res);
                         $("#removeRowModal").modal("hide");

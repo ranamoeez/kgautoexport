@@ -242,7 +242,7 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                $pickup_requests = PickupRequest::orderBy('id', 'DESC')->with('vehicle')->where('user_id', $id)->get();
+                $pickup_requests = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle')->where('user_id', $id)->get();
             
                 return $this->sendResponse($pickup_requests, 'Pickup requests retrieved successfully.');
             } else {

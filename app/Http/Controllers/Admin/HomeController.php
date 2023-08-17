@@ -26,6 +26,7 @@ use App\Models\ContainerImage;
 use App\Models\Fine;
 use App\Models\AssignVehicle;
 use App\Models\ContainerVehicle;
+use App\Models\PickupRequest;
 use Auth;
 use Storage;
 
@@ -449,16 +450,22 @@ class HomeController extends Controller
         echo json_encode($response); return;
     }
 
-    // public function vehicle_images(Request $request)
-    // {
-    //     if ($request->hasFile('image')) {
-    //         $file = $request->file('image');
-    //         $filename = Storage::putFile("vehicle", $file);
-
-    //     	return json_encode(['success'=>true, "data"=>$filename]);
-    //     }
-    //     return json_encode(['success'=>false]);
-    // }
+    public function pickup_history(Request $request)
+    {
+        $data['type'] = "pickup-history";
+        $data['page'] = '1';
+        $pickup = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 20;
+                $pickup = $pickup->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $pickup = $pickup->limit(20)->get();
+        $data['list'] = $pickup;
+        return view('admin.pickup-history', $data);
+    }
 
     public function update_vehicle_data(Request $request)
     {
@@ -489,6 +496,14 @@ class HomeController extends Controller
             $data["all_paid"] = $request->payment_status;
         }
         Container::where('id', $request->id)->update($data);
+        return json_encode(["success"=>true, 'action'=>'reload']);
+    }
+
+    public function update_pickup_data(Request $request)
+    {
+        $data = [];
+        $data["status"] = $request->status;
+        PickupRequest::where('id', $request->id)->update($data);
         return json_encode(["success"=>true, 'action'=>'reload']);
     }
 

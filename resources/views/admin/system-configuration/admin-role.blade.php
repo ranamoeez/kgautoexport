@@ -22,7 +22,7 @@
                 <div class="col-md-9">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex align-items-center">
-                            <h3 class="fw-bold fs-5 mb-0">Vehicle Status</h3>
+                            <h3 class="fw-bold fs-5">Admin Roles</h3>
                             <button class="btn border-0 add" type="button">
                                 <img src="{{ asset('assets/plus_green.svg') }}" alt="add" />
                             </button>
@@ -30,15 +30,15 @@
                                 <div class="modal-dialog rounded-5" style="max-width: 746px; width: 746px;">
                                     <div class="modal-content p-3">
                                         <div class="modal-header border-0">
-                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Status</h1>
+                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Role</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ url('admin/system-configuration/auto-status/add') }}" method="POST" class="form">
+                                            <form action="{{ url('admin/system-configuration/admin-role/add') }}" method="POST" class="form">
                                                 @csrf
                                                 <div class="row mt-4">
 
-                                                    <div class="col-md-6 mb-4">
+                                                    <div class="col-md-12 mb-4">
                                                         <!-- username -->
                                                         <div class="row">
                                                             <label for="" class="col-md-4">Name</label>
@@ -52,18 +52,6 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-6 mb-4">
-                                                        <!-- Company -->
-                                                        <div class="row">
-                                                            <label for="" class="col-md-4">Position</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group shadow-lg rounded-4">
-                                                                    <input type="number" name="position" id="position" 
-                                                                        class="py-2 form-control rounded-end-4" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-4">
                                                     <button class="btn btn-primary px-5" type="submit">
@@ -81,22 +69,16 @@
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class="text-fs-4">
-                                    <th scope="col" class="fw-bold">Name</th>
-                                    <th scope="col" class="fw-bold">Position</th>
+                                    <th scope="col" class="fw-bold">Role Title</th>
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
-                                    @if(count(@$status) > 0)
-                                    @foreach(@$status as $key => $value)
+                                    @if(count(@$role) > 0)
+                                    @foreach(@$role as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td>
                                             <p class=" text-fs-3">
                                                 {{ @$value->name }}
-                                            </p>
-                                        </td>
-                                        <td>
-                                            <p class=" text-fs-3">
-                                                {{ @$value->position }}
                                             </p>
                                         </td>
                                         <td>
@@ -105,7 +87,7 @@
                                                     <i class="fa-solid fa-edit edit" data-id="{{ @$value->id }}" style="cursor: pointer;"></i>
                                                 </p>
                                                 <p class="fs-5 text-danger">
-                                                    <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/auto-status/delete', @$value->id) }}" style="cursor: pointer;"></i>
+                                                    <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/admin-role/delete', @$value->id) }}" style="cursor: pointer;"></i>
                                                 </p>
                                             </div>
                                         </td>
@@ -113,7 +95,7 @@
                                     @endforeach
                                     @else
                                     <tr>
-                                        <td colspan="3">No data found</td>
+                                        <td colspan="2">No data found</td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -137,7 +119,7 @@
                                             <button id="delete-link" type="button" class="btn btn-danger border-0 mt-4 col-md-12 rounded-3 fs-5">Ok</button>
                                         </div>
                                         <div class="col-md-6">
-                                            <button type="button" class="btn btn-warning border-0 mt-4 col-md-12 rounded-3 fs-5"
+                                            <button class="btn btn-warning border-0 mt-4 col-md-12 rounded-3 fs-5" type="button" 
                                                 data-bs-dismiss="modal">Cancel</button>
                                         </div>
                                     </div>
@@ -203,7 +185,7 @@
                 $("#position").val('');
 
                 $("#modal").modal("show");
-                $(".form").attr("action", "{{ url('admin/system-configuration/auto-status/add') }}");
+                $(".form").attr("action", "{{ url('admin/system-configuration/admin-role/add') }}");
                         
             });
 
@@ -212,7 +194,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('admin/system-configuration/auto-status/edit') }}/"+id,
+                    url: "{{ url('admin/system-configuration/admin-role/edit') }}/"+id,
                     success: function (res) {
                         res = JSON.parse(res);
                         console.log(res);
@@ -222,7 +204,7 @@
                             $("#position").val(res.data.position);
 
                             $("#modal").modal("show");
-                            $(".form").attr("action", "{{ url('admin/system-configuration/auto-status/edit') }}/"+id);
+                            $(".form").attr("action", "{{ url('admin/system-configuration/admin-role/edit') }}/"+id);
                         }
                     }
                 });

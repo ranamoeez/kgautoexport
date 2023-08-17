@@ -11,15 +11,15 @@
                     class="fw-semibold text-dark text-decoration-none">
                     Users
                 </a>
-                <a href="{{ url('admin/systemConfiguration-adminRole.html') }}"
+                <a href="{{ url('admin/system-configuration/admin-role') }}"
                     class="fw-semibold text-dark text-decoration-none">
                     Admin
                 </a>
-                <a href="{{ url('admin/systemConfiguration-listOfGroup.html') }}"
+                <a href="{{ url('admin/system-configuration/group-list') }}"
                     class="fw-semibold text-dark text-decoration-none">
                     List of groups
                 </a>
-                <a href="{{ url('admin/systemConfiguration-loginHistory.html') }}"
+                <a href="{{ url('admin/system-configuration/login-history') }}"
                     class="fw-semibold text-dark text-decoration-none">
                     Log in history
                 </a>

@@ -58,11 +58,28 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/get-vehicles/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicles'])->name('get-vehicles');
 	Route::post('/assign-vehicle', [App\Http\Controllers\Admin\HomeController::class, 'assign_vehicle'])->name('assign-vehicle');
 
+	Route::get('/pickup-history', [App\Http\Controllers\Admin\HomeController::class, 'pickup_history'])->name('pickup-history');
+	Route::post('/update-pickup-data', [App\Http\Controllers\Admin\HomeController::class, 'update_pickup_data'])->name('update-pickup-data');
+	
 	Route::get('/system-configuration/users', [App\Http\Controllers\Admin\SystemConfigController::class, 'users'])->name('users');
 	Route::post('/system-configuration/users/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_user'])->name('add-user');
 	Route::get('/system-configuration/users/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_user'])->name('edit-user');
 	Route::post('/system-configuration/users/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_user'])->name('update-user');
 	Route::get('/system-configuration/users/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_user'])->name('delete-user');
+
+	Route::get('/system-configuration/admin-role', [App\Http\Controllers\Admin\SystemConfigController::class, 'admin_role'])->name('admin-role');
+	Route::post('/system-configuration/admin-role/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_admin_role'])->name('add-admin-role');
+	Route::get('/system-configuration/admin-role/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_admin_role'])->name('edit-admin-role');
+	Route::post('/system-configuration/admin-role/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_admin_role'])->name('update-admin-role');
+	Route::get('/system-configuration/admin-role/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_admin_role'])->name('delete-admin-role');
+
+	Route::get('/system-configuration/group-list', [App\Http\Controllers\Admin\SystemConfigController::class, 'group_list'])->name('group-list');
+	Route::post('/system-configuration/group-list/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_group_list'])->name('add-group-list');
+	Route::get('/system-configuration/group-list/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_group_list'])->name('edit-group-list');
+	Route::post('/system-configuration/group-list/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_group_list'])->name('update-group-list');
+	Route::get('/system-configuration/group-list/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_group_list'])->name('delete-group-list');
+
+	Route::get('/system-configuration/login-history', [App\Http\Controllers\Admin\SystemConfigController::class, 'login_history'])->name('login-history');
 
 	Route::get('/system-configuration/auto-status', [App\Http\Controllers\Admin\SystemConfigController::class, 'auto_status'])->name('auto-status');
 	Route::post('/system-configuration/auto-status/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_auto_status'])->name('add-auto-status');

@@ -8,8 +8,11 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Group;
 use App\Models\UserLoginLog;
-use App\Models\Status;
 use App\Models\ContStatus;
+use App\Models\Shipper;
+use App\Models\Consignee;
+use App\Models\Terminal;
+use App\Models\Status;
 
 class SystemConfigController extends Controller
 {
@@ -191,7 +194,7 @@ class SystemConfigController extends Controller
     {
         $data['type'] = "system-configuration";
         $data['page'] = '1';
-        $history = UserLoginLog::with('user');
+        $history = UserLoginLog::orderBy('id', 'DESC')->with('user');
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;
@@ -202,61 +205,6 @@ class SystemConfigController extends Controller
         $history = $history->limit(10)->get();
         $data['history'] = $history;
         return view('admin.system-configuration.login-history', $data);
-    }
-
-    // Auto Status Functions
-
-    public function auto_status(Request $request)
-    {
-        $data['type'] = "system-configuration";
-        $data['status'] = Status::all();
-        return view('admin.system-configuration.auto-status', $data);
-    }
-
-    public function add_auto_status(Request $request)
-    {
-        $data = $request->all();
-        $check_status = Status::where("name", $data['name'])->count();
-        if ($check_status == 0) {
-            Status::create($data);
-
-            return json_encode(["success"=>true, "msg"=>"Vehicle status added successfully!", "action"=>"reload"]);
-        } else {
-            return json_encode(["success"=>false, "msg"=>"Vehicle status already exists!"]);
-        }
-    }
-
-    public function edit_auto_status(Request $request, $id)
-    {
-        if($request->isMethod('post')){
-            $data = $request->all();
-
-            if (!empty($data['name'])) {
-                $check_status = Status::where("name", $data['name'])->where('id', '!=', $id)->count();
-                if ($check_status == 0) {
-                    unset($data['_token']);
-                    Status::where('id', $id)->update($data);
-
-                    return json_encode(["success"=>true, "msg"=>"Vehicle status updated successfully!", "action"=>"reload"]);
-                } else {
-                    return json_encode(["success"=>false, "msg"=>"Vehicle status already exists!"]);
-                }
-            } else {
-                unset($data['_token']);
-                Status::where('id', $id)->update($data);
-                
-                return json_encode(["success"=>true, "msg"=>"Vehicle status updated successfully!", "action"=>"reload"]);
-            }
-        }
-
-        $data = Status::where('id', $id)->first(); 
-        return json_encode(["success"=>true, "data"=>$data]);
-    }
-
-    public function delete_auto_status($id)
-    {
-        Status::find($id)->delete();
-        return json_encode(["success"=>true, "msg"=>"Vehicle status deleted successfully!"]);
     }
 
     // Container Status Functions
@@ -312,5 +260,189 @@ class SystemConfigController extends Controller
     {
         ContStatus::find($id)->delete();
         return json_encode(["success"=>true, "msg"=>"Container status deleted successfully!"]);
+    }
+
+    // Shipper Functions
+
+    public function shipper(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $shipper = Shipper::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $shipper = $shipper->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $shipper = $shipper->limit(10)->get();
+        $data['shipper'] = $shipper;
+        return view('admin.system-configuration.shipper', $data);
+    }
+
+    public function add_shipper(Request $request)
+    {
+        $data = $request->all();
+        Shipper::create($data);
+        return json_encode(["success"=>true, "msg"=>"Shipper added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_shipper(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            Shipper::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Shipper updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = Shipper::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_shipper($id)
+    {
+        Shipper::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Shipper deleted successfully!"]);
+    }
+
+    // Consignee Functions
+
+    public function consignee(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $consignee = Consignee::orderBy('id', 'DESC')->with('shipper');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $consignee = $consignee->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $consignee = $consignee->limit(10)->get();
+        $data['consignee'] = $consignee;
+        $data['shipper'] = Shipper::all();
+        return view('admin.system-configuration.consignee', $data);
+    }
+
+    public function add_consignee(Request $request)
+    {
+        $data = $request->all();
+        Consignee::create($data);
+        return json_encode(["success"=>true, "msg"=>"Consignee added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_consignee(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            Consignee::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Consignee updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = Consignee::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_consignee($id)
+    {
+        Consignee::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Consignee deleted successfully!"]);
+    }
+
+    // Terminal Functions
+
+    public function terminal(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['terminal'] = Terminal::all();
+        return view('admin.system-configuration.terminal', $data);
+    }
+
+    public function add_terminal(Request $request)
+    {
+        $data = $request->all();
+        Terminal::create($data);
+        return json_encode(["success"=>true, "msg"=>"Terminal added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_terminal(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            Terminal::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Terminal updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = Terminal::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_terminal($id)
+    {
+        Terminal::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Terminal deleted successfully!"]);
+    }
+
+    // Auto Status Functions
+
+    public function auto_status(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['status'] = Status::all();
+        return view('admin.system-configuration.auto-status', $data);
+    }
+
+    public function add_auto_status(Request $request)
+    {
+        $data = $request->all();
+        $check_status = Status::where("name", $data['name'])->count();
+        if ($check_status == 0) {
+            Status::create($data);
+
+            return json_encode(["success"=>true, "msg"=>"Vehicle status added successfully!", "action"=>"reload"]);
+        } else {
+            return json_encode(["success"=>false, "msg"=>"Vehicle status already exists!"]);
+        }
+    }
+
+    public function edit_auto_status(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            if (!empty($data['name'])) {
+                $check_status = Status::where("name", $data['name'])->where('id', '!=', $id)->count();
+                if ($check_status == 0) {
+                    unset($data['_token']);
+                    Status::where('id', $id)->update($data);
+
+                    return json_encode(["success"=>true, "msg"=>"Vehicle status updated successfully!", "action"=>"reload"]);
+                } else {
+                    return json_encode(["success"=>false, "msg"=>"Vehicle status already exists!"]);
+                }
+            } else {
+                unset($data['_token']);
+                Status::where('id', $id)->update($data);
+                
+                return json_encode(["success"=>true, "msg"=>"Vehicle status updated successfully!", "action"=>"reload"]);
+            }
+        }
+
+        $data = Status::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_auto_status($id)
+    {
+        Status::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Vehicle status deleted successfully!"]);
     }
 }

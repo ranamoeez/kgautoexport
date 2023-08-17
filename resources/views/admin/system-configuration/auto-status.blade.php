@@ -198,7 +198,7 @@
 
             $(document).on("click", ".add", function () {
                 
-                $("#modalLabel").text("Add new Status");
+                $("#modalLabel").text("Add New Status");
                 $("#name").val('');
                 $("#position").val('');
 

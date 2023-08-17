@@ -180,7 +180,7 @@
 
             $(document).on("click", ".add", function () {
                 
-                $("#modalLabel").text("Add new Status");
+                $("#modalLabel").text("Add New Role");
                 $("#name").val('');
                 $("#position").val('');
 
@@ -199,7 +199,7 @@
                         res = JSON.parse(res);
                         console.log(res);
                         if (res.success == true) {
-                            $("#modalLabel").text("Edit Vehicle Status");
+                            $("#modalLabel").text("Edit Role");
                             $("#name").val(res.data.name);
                             $("#position").val(res.data.position);
 

@@ -81,6 +81,24 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 
 	Route::get('/system-configuration/login-history', [App\Http\Controllers\Admin\SystemConfigController::class, 'login_history'])->name('login-history');
 
+	Route::get('/system-configuration/shipper', [App\Http\Controllers\Admin\SystemConfigController::class, 'shipper'])->name('shipper');
+	Route::post('/system-configuration/shipper/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_shipper'])->name('add-shipper');
+	Route::get('/system-configuration/shipper/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_shipper'])->name('edit-shipper');
+	Route::post('/system-configuration/shipper/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_shipper'])->name('update-shipper');
+	Route::get('/system-configuration/shipper/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_shipper'])->name('delete-shipper');
+
+	Route::get('/system-configuration/consignee', [App\Http\Controllers\Admin\SystemConfigController::class, 'consignee'])->name('consignee');
+	Route::post('/system-configuration/consignee/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_consignee'])->name('add-consignee');
+	Route::get('/system-configuration/consignee/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_consignee'])->name('edit-consignee');
+	Route::post('/system-configuration/consignee/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_consignee'])->name('update-consignee');
+	Route::get('/system-configuration/consignee/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_consignee'])->name('delete-consignee');
+
+	Route::get('/system-configuration/terminal', [App\Http\Controllers\Admin\SystemConfigController::class, 'terminal'])->name('terminal');
+	Route::post('/system-configuration/terminal/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_terminal'])->name('add-terminal');
+	Route::get('/system-configuration/terminal/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_terminal'])->name('edit-terminal');
+	Route::post('/system-configuration/terminal/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_terminal'])->name('update-terminal');
+	Route::get('/system-configuration/terminal/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_terminal'])->name('delete-terminal');
+
 	Route::get('/system-configuration/auto-status', [App\Http\Controllers\Admin\SystemConfigController::class, 'auto_status'])->name('auto-status');
 	Route::post('/system-configuration/auto-status/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_auto_status'])->name('add-auto-status');
 	Route::get('/system-configuration/auto-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auto_status'])->name('edit-auto-status');

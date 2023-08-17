@@ -42,15 +42,15 @@
                     class="fw-semibold text-dark text-decoration-none">
                     Status
                 </a>
-                <a href="{{ url('admin/systemConfiguration-shipper.html') }}"
+                <a href="{{ url('admin/system-configuration/shipper') }}"
                     class="fw-semibold text-dark text-decoration-none">
                     Shipper
                 </a>
-                <a href="{{ url('admin/systemConfiguration-consignee.html') }}"
+                <a href="{{ url('admin/system-configuration/consignee') }}"
                     class="fw-semibold text-dark text-decoration-none">
                     Consignee
                 </a>
-                <a href="{{ url('admin/systemConfiguration-terminal.html') }}"
+                <a href="{{ url('admin/system-configuration/terminal') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Terminal
                 </a>

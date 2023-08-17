@@ -253,12 +253,12 @@
                                 <div class="col-md-6">
                                     <form method="GET" action="" class="make_ajax delete-container">
                                     </form>
-                                    <a href="#" id="delete-link" class="btn btn-danger border-0 mt-4 col-md-12 rounded-3 fs-5">Ok</a>
+                                    <button id="delete-link" class="btn btn-danger border-0 mt-4 col-md-12 rounded-3 fs-5">Ok</button>
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="#"
+                                    <button
                                         class="btn btn-warning border-0 mt-4 col-md-12 rounded-3 fs-5"
-                                        data-bs-dismiss="modal">Cancel</a>
+                                        data-bs-dismiss="modal">Cancel</button>
                                 </div>
                             </div>
                         </div>

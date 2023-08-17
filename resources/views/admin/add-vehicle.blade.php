@@ -31,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <form method="POST" action="{{ @$action }}" class="add-vehicle make_ajax" enctype="multipart/form-data">
+            <form method="POST" action="{{ @$action }}" class="add-vehicle form" enctype="multipart/form-data">
                 @csrf
                 <div class="row mt-4">
                     <div class="col-md-3">
@@ -699,6 +699,32 @@
             });
             $(document).on("click", ".submit-form", function () {
                 $(".add-vehicle").submit();
+            });
+
+            $(document).on("submit", ".form", function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: $(this).attr("method"),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                    success: function (res) {
+                        // res = JSON.parse(res);
+                        console.log(res);
+                        if (res.success == true) {
+                            toastr["success"](res.msg, "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            toastr["error"](res.msg, "Failed!");
+                        }
+                    }
+                });
             });
 
             $(document).on("click", ".upload-images", function () {

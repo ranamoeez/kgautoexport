@@ -6,6 +6,11 @@
 
 @section('content')
     
+    <style type="text/css">
+        .select2-selection {
+            min-height: 37px;
+        }
+    </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
 
@@ -23,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <form method="POST" action="{{ @$action }}" class="make_ajax">
+            <form method="POST" action="{{ @$action }}" class="form">
                 @csrf
                 <div class="row mt-4">
                     <div class="col-md-3">
@@ -32,13 +37,14 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Booking No.</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" name="booking_no" value="{{ $container->booking_no }}" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="booking_no" value="{{ $container->booking_no }}" placeholder="John Sabestin" required="" />
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Shipper</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="shipper_id">
+                                        <option value=""></option>
                                         @if(count(@$all_shipper) > 0)
                                         @foreach(@$all_shipper as $key => $value)
                                             @if($value['id'] == @$container->shipper_id)
@@ -55,6 +61,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Shipping Line</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="shipping_line_id">
+                                        <option value=""></option>
                                         @if(count(@$all_shipping_line) > 0)
                                         @foreach(@$all_shipping_line as $key => $value)
                                             @if($value['id'] == @$container->shipping_line_id)
@@ -71,6 +78,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Loading Port</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="loading_port_id">
+                                        <option value=""></option>
                                         @if(count(@$all_loading_port) > 0)
                                         @foreach(@$all_loading_port as $key => $value)
                                             @if($value['id'] == @$container->loading_port_id)
@@ -103,6 +111,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Consignee</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="consignee_id">
+                                        <option value=""></option>
                                         @if(count(@$all_consignee) > 0)
                                         @foreach(@$all_consignee as $key => $value)
                                             @if($value['id'] == @$container->consignee_id)
@@ -132,6 +141,7 @@
                                     Port</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="destination_port_id">
+                                        <option value=""></option>
                                         @if(count(@$all_destination_port) > 0)
                                         @foreach(@$all_destination_port as $key => $value)
                                             @if($value['id'] == @$container->destination_port_id)
@@ -159,6 +169,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Status</label>
                                 <div class="col-sm-9">
                                     <select class="form-select" name="status_id">
+                                        <option value=""></option>
                                         @if(count(@$all_status) > 0)
                                         @foreach(@$all_status as $key => $value)
                                             @if($value['id'] == @$container->status_id)
@@ -182,6 +193,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Notify Party</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="notify_part_id">
+                                        <option value=""></option>
                                         @if(count(@$all_notify_party) > 0)
                                         @foreach(@$all_notify_party as $key => $value)
                                             @if($value['id'] == @$container->notify_part_id)
@@ -595,6 +607,32 @@
                                 $(".vehicles").append(html);
                             });
                         }
+                    }
+                }
+            });
+        });
+
+        $(document).on("submit", ".form", function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: $(this).attr("method"),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                url: $(this).attr("action"),
+                data: new FormData(this),
+                headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                success: function (res) {
+                    // res = JSON.parse(res);
+                    console.log(res);
+                    if (res.success == true) {
+                        toastr["success"](res.msg, "Completed!");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        toastr["error"](res.msg, "Failed!");
                     }
                 }
             });

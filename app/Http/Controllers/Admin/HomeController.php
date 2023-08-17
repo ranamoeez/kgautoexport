@@ -176,7 +176,7 @@ class HomeController extends Controller
                     $fine->save();
                 }
             }
-            $response = array('flag'=>true,'msg'=>'Vehicle is added sucessfully.','action'=>'reload');
+            $response = array('success'=>true,'msg'=>'Vehicle is added sucessfully.','action'=>'reload');
             return json_encode($response);
         }
         $data   = array();
@@ -258,7 +258,7 @@ class HomeController extends Controller
             unset($data['auction_type']);
             unset($data['auction_fine']);
             $vehicle = Vehicle::where('id', $id)->update($data);
-            $response = array('flag'=>true,'msg'=>'Vehicle is updated sucessfully.','action'=>'reload');
+            $response = array('success'=>true,'msg'=>'Vehicle is updated sucessfully.','action'=>'reload');
             return json_encode($response);
         }
         $data   = array();
@@ -280,7 +280,7 @@ class HomeController extends Controller
         $vehicle = Vehicle::find($id);
         $vehicle->delete();
         AssignVehicle::where('vehicle_id', $id)->delete();
-        $response = array('flag'=>true,'msg'=>'Vehicle has been deleted.');
+        $response = array('success'=>true,'msg'=>'Vehicle has been deleted.');
         echo json_encode($response); return;
     }
 
@@ -380,7 +380,7 @@ class HomeController extends Controller
                     $image->save();
                 }
             }
-            $response = array('flag'=>true,'msg'=>'Container is added sucessfully.','action'=>'reload');
+            $response = array('success'=>true,'msg'=>'Container is added sucessfully.','action'=>'reload');
             return json_encode($response);
         }
         $data   = array();
@@ -421,7 +421,7 @@ class HomeController extends Controller
             $this->cleanData($data);
             unset($data['documents']);
             $container = Container::where('id', $id)->update($data);
-            $response = array('flag'=>true,'msg'=>'Container is updated sucessfully.','action'=>'reload');
+            $response = array('success'=>true,'msg'=>'Container is updated sucessfully.','action'=>'reload');
             return json_encode($response);
         }
         $data = array();
@@ -445,7 +445,7 @@ class HomeController extends Controller
     {
         $container = Container::find($id);
         $container->delete();
-        $response = array('flag'=>true,'msg'=>'Container has been deleted.');
+        $response = array('success'=>true,'msg'=>'Container has been deleted.');
         echo json_encode($response); return;
     }
 

@@ -318,13 +318,11 @@
                         <div class="modal-body">
                             <div class="row mt-4">
                                 <div class="col-md-6">
-                                    <form method="GET" action="" class="make_ajax delete-vehicle">
-                                    </form>
-                                    <button id="delete-link" type="button" class="btn btn-danger border-0 mt-4 col-md-12 rounded-3 fs-5">Ok</button>
+                                    <button id="delete-link" type="button" class="btn btn-danger border-0 mt-4 col-md-12 rounded-3 fs-5" type="button">Ok</button>
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="#" class="btn btn-warning border-0 mt-4 col-md-12 rounded-3 fs-5"
-                                        data-bs-dismiss="modal">Cancel</a>
+                                    <button class="btn btn-warning border-0 mt-4 col-md-12 rounded-3 fs-5"
+                                        data-bs-dismiss="modal" type="button">Cancel</button>
                                 </div>
                             </div>
                         </div>
@@ -467,15 +465,24 @@
                 $("#filters-form").submit();
             });
             $(document).on("click", ".delete", function () {
-                $(".delete-vehicle").attr("action", $(this).attr('data-url'));
+                $("#delete-link").attr("data-url", $(this).attr('data-url'));
                 $("#removeRowModal").modal("show");
             });
             $(document).on("click", "#delete-link", function () {
-                $(".delete-vehicle").submit();
-                $("#removeRowModal").modal("hide");
-                setTimeout(function () {
-                    location.reload();
-                }, 3000);
+                $.ajax({
+                    type: 'GET',
+                    url: $(this).attr('data-url'),
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            $("#removeRowModal").modal("hide");
+                            toastr["success"]("Vehicle deleted successfully!", "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 3000);
+                        }
+                    }
+                });
             });
         });
     </script>

@@ -6,6 +6,11 @@
 
 @section('content')
     
+    <style type="text/css">
+        .select2-selection {
+            min-height: 37px;
+        }
+    </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
 
@@ -26,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <form method="POST" action="{{ @$action }}" class="add-vehicle make_ajax" enctype="multipart/form-data">
+            <form method="POST" action="{{ @$action }}" class="add-vehicle form" enctype="multipart/form-data">
                 @csrf
                 <div class="row mt-4">
                     <div class="col-md-3">
@@ -36,6 +41,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Status</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="status_id">
+                                        <option value=""></option>
                                         @if(count(@$all_status) > 0)
                                         @foreach(@$all_status as $key => $value)
                                             @if($value['id'] == @$list->vehicle->status_id)
@@ -52,6 +58,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Terminal</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="terminal_id">
+                                        <option value=""></option>
                                         @if(count(@$all_terminal) > 0)
                                         @foreach(@$all_terminal as $key => $value)
                                             @if($value['id'] == @$list->vehicle->terminal_id)
@@ -68,6 +75,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Buyer</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="buyer_id">
+                                        <option value=""></option>
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
                                             @if($value['id'] == @$list->vehicle->buyer_id)
@@ -206,6 +214,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select auction" name="auction_id">
+                                        <option value=""></option>
                                         @if(count(@$all_auction) > 0)
                                         @foreach(@$all_auction as $key => $value)
                                             @if($value['id'] == @$list->vehicle->auction_id)
@@ -223,6 +232,7 @@
                                     location</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select auction_location" name="auction_location_id">
+                                        <option value=""></option>
                                         @if(count(@$all_auction_location) > 0)
                                         @foreach(@$all_auction_location as $key => $value)
                                             @if($value['id'] == @$list->vehicle->auction_location_id)
@@ -251,6 +261,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction buyer</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="auction_buyer">
+                                        <option value=""></option>
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
                                             @if($value['id'] == @$list->vehicle->auction_buyer)
@@ -280,6 +291,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Destination</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="destination_port_id">
+                                        <option value=""></option>
                                         @if(count(@$all_destination_port) > 0)
                                         @foreach(@$all_destination_port as $key => $value)
                                             @if($value['id'] == @$list->vehicle->destination_port_id)
@@ -739,6 +751,32 @@
             });
             $(document).on("click", ".submit-form", function () {
                 $(".add-vehicle").submit();
+            });
+
+            $(document).on("submit", ".form", function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: $(this).attr("method"),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                    success: function (res) {
+                        // res = JSON.parse(res);
+                        console.log(res);
+                        if (res.success == true) {
+                            toastr["success"](res.msg, "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            toastr["error"](res.msg, "Failed!");
+                        }
+                    }
+                });
             });
 
             $(document).on("click", ".upload-images", function () {

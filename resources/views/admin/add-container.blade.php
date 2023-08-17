@@ -6,6 +6,11 @@
 
 @section('content')
     
+    <style type="text/css">
+        .select2-selection {
+            min-height: 37px;
+        }
+    </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
 
@@ -32,13 +37,14 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Booking No.</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" name="booking_no" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="booking_no" placeholder="John Sabestin" required="" />
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Shipper</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="shipper_id">
+                                        <option value=""></option>
                                         @if(count(@$all_shipper) > 0)
                                         @foreach(@$all_shipper as $key => $value)
                                             @if($value['id'] == @$shipper)
@@ -55,6 +61,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Shipping Line</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="shipping_line_id">
+                                        <option value=""></option>
                                         @if(count(@$all_shipping_line) > 0)
                                         @foreach(@$all_shipping_line as $key => $value)
                                             @if($value['id'] == @$shipping_line)
@@ -71,6 +78,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Loading Port</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="loading_port_id">
+                                        <option value=""></option>
                                         @if(count(@$all_loading_port) > 0)
                                         @foreach(@$all_loading_port as $key => $value)
                                             @if($value['id'] == @$loading_port)
@@ -103,6 +111,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Consignee</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="consignee_id">
+                                        <option value=""></option>
                                         @if(count(@$all_consignee) > 0)
                                         @foreach(@$all_consignee as $key => $value)
                                             @if($value['id'] == @$consignee)
@@ -132,6 +141,7 @@
                                     Port</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="destination_port_id">
+                                        <option value=""></option>
                                         @if(count(@$all_destination_port) > 0)
                                         @foreach(@$all_destination_port as $key => $value)
                                             @if($value['id'] == @$destination_port)
@@ -159,6 +169,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Status</label>
                                 <div class="col-sm-9">
                                     <select class="form-select" name="status_id">
+                                        <option value=""></option>
                                         @if(count(@$all_status) > 0)
                                         @foreach(@$all_status as $key => $value)
                                             @if($value['id'] == @$status)
@@ -182,6 +193,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Notify Party</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="notify_part_id">
+                                        <option value=""></option>
                                         @if(count(@$all_notify_party) > 0)
                                         @foreach(@$all_notify_party as $key => $value)
                                             @if($value['id'] == @$notify_party)
@@ -238,6 +250,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Discharge port</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="discharge_port_id">
+                                        <option value=""></option>
                                         @if(count(@$all_discharge_port) > 0)
                                         @foreach(@$all_discharge_port as $key => $value)
                                             @if($value['id'] == @$discharge_port)
@@ -259,6 +272,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Measurement</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="measurement_id">
+                                        <option value=""></option>
                                         @if(count(@$all_measurement) > 0)
                                         @foreach(@$all_measurement as $key => $value)
                                             @if($value['id'] == @$measurement)

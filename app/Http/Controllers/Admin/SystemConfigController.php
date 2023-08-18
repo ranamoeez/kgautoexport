@@ -12,6 +12,13 @@ use App\Models\ContStatus;
 use App\Models\Shipper;
 use App\Models\Consignee;
 use App\Models\Terminal;
+use App\Models\PreCarriage;
+use App\Models\LoadingPort;
+use App\Models\DischargePort;
+use App\Models\DestinationPort;
+use App\Models\NotifyParty;
+use App\Models\Measurement;
+use App\Models\ShippingLine;
 use App\Models\Status;
 
 class SystemConfigController extends Controller
@@ -97,7 +104,17 @@ class SystemConfigController extends Controller
     public function admin_role(Request $request)
     {
         $data['type'] = "system-configuration";
-        $data['role'] = Role::all();
+        $data['page'] = '1';
+        $role = Role::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $role = $role->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $role = $role->limit(10)->get();
+        $data['role'] = $role;
         return view('admin.system-configuration.admin-role', $data);
     }
 
@@ -145,7 +162,17 @@ class SystemConfigController extends Controller
     public function group_list(Request $request)
     {
         $data['type'] = "system-configuration";
-        $data['group'] = Group::all();
+        $data['page'] = '1';
+        $group = Group::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $group = $group->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $group = $group->limit(10)->get();
+        $data['group'] = $group;
         return view('admin.system-configuration.group-list', $data);
     }
 
@@ -212,7 +239,17 @@ class SystemConfigController extends Controller
     public function container_status(Request $request)
     {
     	$data['type'] = "system-configuration";
-    	$data['status'] = ContStatus::all();
+    	$data['page'] = '1';
+        $status = ContStatus::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $status = $status->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $status = $status->limit(10)->get();
+        $data['status'] = $status;
     	return view('admin.system-configuration.container-status', $data);
     }
 
@@ -360,7 +397,17 @@ class SystemConfigController extends Controller
     public function terminal(Request $request)
     {
         $data['type'] = "system-configuration";
-        $data['terminal'] = Terminal::all();
+        $data['page'] = '1';
+        $terminal = Terminal::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $terminal = $terminal->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $terminal = $terminal->limit(10)->get();
+        $data['terminal'] = $terminal;
         return view('admin.system-configuration.terminal', $data);
     }
 
@@ -391,12 +438,344 @@ class SystemConfigController extends Controller
         return json_encode(["success"=>true, "msg"=>"Terminal deleted successfully!"]);
     }
 
+    // Pre Carriage Functions
+
+    public function pre_carriage(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $pre_carriage = PreCarriage::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $pre_carriage = $pre_carriage->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $pre_carriage = $pre_carriage->limit(10)->get();
+        $data['pre_carriage'] = $pre_carriage;
+        return view('admin.system-configuration.pre-carriage', $data);
+    }
+
+    public function add_pre_carriage(Request $request)
+    {
+        $data = $request->all();
+        PreCarriage::create($data);
+        return json_encode(["success"=>true, "msg"=>"Pre carriage added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_pre_carriage(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            PreCarriage::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Pre carriage updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = PreCarriage::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_pre_carriage($id)
+    {
+        PreCarriage::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Pre carriage deleted successfully!"]);
+    }
+
+    // Loading Port Functions
+
+    public function loading_port(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $loading_port = LoadingPort::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $loading_port = $loading_port->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $loading_port = $loading_port->limit(10)->get();
+        $data['loading_port'] = $loading_port;
+        return view('admin.system-configuration.loading-port', $data);
+    }
+
+    public function add_loading_port(Request $request)
+    {
+        $data = $request->all();
+        LoadingPort::create($data);
+        return json_encode(["success"=>true, "msg"=>"Loading port added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_loading_port(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            LoadingPort::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Loading port updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = LoadingPort::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_loading_port($id)
+    {
+        LoadingPort::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Loading port deleted successfully!"]);
+    }
+
+    // Discharge Port Functions
+
+    public function discharge_port(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $discharge_port = DischargePort::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $discharge_port = $discharge_port->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $discharge_port = $discharge_port->limit(10)->get();
+        $data['discharge_port'] = $discharge_port;
+        return view('admin.system-configuration.discharge-port', $data);
+    }
+
+    public function add_discharge_port(Request $request)
+    {
+        $data = $request->all();
+        DischargePort::create($data);
+        return json_encode(["success"=>true, "msg"=>"Discharge port added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_discharge_port(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            DischargePort::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Discharge port updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = DischargePort::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_discharge_port($id)
+    {
+        DischargePort::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Discharge port deleted successfully!"]);
+    }
+
+    // Destination Port Functions
+
+    public function destination_port(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $destination_port = DestinationPort::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $destination_port = $destination_port->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $destination_port = $destination_port->limit(10)->get();
+        $data['destination_port'] = $destination_port;
+        return view('admin.system-configuration.destination-port', $data);
+    }
+
+    public function add_destination_port(Request $request)
+    {
+        $data = $request->all();
+        DestinationPort::create($data);
+        return json_encode(["success"=>true, "msg"=>"Destination port added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_destination_port(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            DestinationPort::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Destination port updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = DestinationPort::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_destination_port($id)
+    {
+        DestinationPort::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Destination port deleted successfully!"]);
+    }
+
+    // Notify Party Functions
+
+    public function notify_party(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $notify_party = NotifyParty::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $notify_party = $notify_party->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $notify_party = $notify_party->limit(10)->get();
+        $data['notify_party'] = $notify_party;
+        return view('admin.system-configuration.notify-party', $data);
+    }
+
+    public function add_notify_party(Request $request)
+    {
+        $data = $request->all();
+        NotifyParty::create($data);
+        return json_encode(["success"=>true, "msg"=>"Notify party added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_notify_party(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            NotifyParty::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Notify party updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = NotifyParty::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_notify_party($id)
+    {
+        NotifyParty::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Notify party deleted successfully!"]);
+    }
+
+    // Measurement Functions
+
+    public function measurement(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $measurement = Measurement::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $measurement = $measurement->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $measurement = $measurement->limit(10)->get();
+        $data['measurement'] = $measurement;
+        return view('admin.system-configuration.measurement', $data);
+    }
+
+    public function add_measurement(Request $request)
+    {
+        $data = $request->all();
+        Measurement::create($data);
+        return json_encode(["success"=>true, "msg"=>"Measurement added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_measurement(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            Measurement::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Measurement updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = Measurement::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_measurement($id)
+    {
+        Measurement::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Measurement deleted successfully!"]);
+    }
+
+    // Shipping Line Functions
+
+    public function shipping_line(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $shipping_line = ShippingLine::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $shipping_line = $shipping_line->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $shipping_line = $shipping_line->limit(10)->get();
+        $data['shipping_line'] = $shipping_line;
+        return view('admin.system-configuration.shipping-line', $data);
+    }
+
+    public function add_shipping_line(Request $request)
+    {
+        $data = $request->all();
+        ShippingLine::create($data);
+        return json_encode(["success"=>true, "msg"=>"Shipping line added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_shipping_line(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            ShippingLine::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Shipping line updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = ShippingLine::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_shipping_line($id)
+    {
+        ShippingLine::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Shipping line deleted successfully!"]);
+    }
+
     // Auto Status Functions
 
     public function auto_status(Request $request)
     {
         $data['type'] = "system-configuration";
-        $data['status'] = Status::all();
+        $data['page'] = '1';
+        $status = Status::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $status = $status->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $status = $status->limit(10)->get();
+        $data['status'] = $status;
         return view('admin.system-configuration.auto-status', $data);
     }
 

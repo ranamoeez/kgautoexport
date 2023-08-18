@@ -22,20 +22,19 @@
                 <div class="col-md-9">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex align-items-center">
-                            <h3 class="fw-bold fs-5 mb-0">Vehicle Status</h3>
+                            <h3 class="fw-bold fs-5 mb-0">Shipping Line</h3>
                             <button class="btn border-0 add" type="button">
                                 <img src="{{ asset('assets/plus_green.svg') }}" alt="add" />
                             </button>
-                            <div class="modal fade new buyer" id="modal" tabindex="-1"
-                            aria-labelledby="modalLabel" aria-hidden="true">
+                            <div class="modal fade new buyer" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
                                 <div class="modal-dialog rounded-5" style="max-width: 746px; width: 746px;">
                                     <div class="modal-content p-3">
                                         <div class="modal-header border-0">
-                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Status</h1>
+                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Shipping Line</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ url('admin/system-configuration/container-status/add') }}" method="POST" class="form">
+                                            <form action="{{ url('admin/system-configuration/shipping-line/add') }}" method="POST" class="form">
                                                 @csrf
                                                 <div class="row mt-4">
 
@@ -54,7 +53,18 @@
                                                     </div>
 
                                                     <div class="col-md-6 mb-4">
-                                                        <!-- Company -->
+                                                        <div class="row">
+                                                            <label for="" class="col-md-4">SCAC Code</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group shadow-lg rounded-4">
+                                                                    <input type="text" name="scac_code" id="scac_code" 
+                                                                        class="py-2 form-control rounded-end-4" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-4">
                                                         <div class="row">
                                                             <label for="" class="col-md-4">Position</label>
                                                             <div class="col-md-8">
@@ -85,7 +95,7 @@
                                     $pre = 'page='.$prev;
                                     $nex = 'page='.$next;
                                 @endphp
-                                <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/container-status?'.$pre) }}" @endif>
+                                <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/shipping-line?'.$pre) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -93,7 +103,7 @@
                                     </svg>
                                 </a>
                                 <p class="text-fs-4 m-0">Page {{ @$page }}</p>
-                                <a class="btn" @if(count($status) < 10) href="javascript:void();" @else href="{{ url('admin/system-configuration/container-status?'.$nex) }}" @endif>
+                                <a class="btn" @if(count($shipping_line) < 10) href="javascript:void();" @else href="{{ url('admin/system-configuration/shipping-line?'.$nex) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -108,16 +118,22 @@
                             <table class="table">
                                 <thead class="text-fs-4">
                                     <th scope="col" class="fw-bold">Name</th>
+                                    <th scope="col" class="fw-bold">SCAC Code</th>
                                     <th scope="col" class="fw-bold">Position</th>
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
-                                    @if(count(@$status) > 0)
-                                    @foreach(@$status as $key => $value)
+                                    @if(count(@$shipping_line) > 0)
+                                    @foreach(@$shipping_line as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td>
                                             <p class=" text-fs-3">
                                                 {{ @$value->name }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class=" text-fs-3">
+                                                {{ @$value->scac_code }}
                                             </p>
                                         </td>
                                         <td>
@@ -131,7 +147,7 @@
                                                     <i class="fa-solid fa-edit edit" data-id="{{ @$value->id }}" style="cursor: pointer;"></i>
                                                 </p>
                                                 <p class="fs-5 text-danger">
-                                                    <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/container-status/delete', @$value->id) }}" style="cursor: pointer;"></i>
+                                                    <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/shipping-line/delete', @$value->id) }}" style="cursor: pointer;"></i>
                                                 </p>
                                             </div>
                                         </td>
@@ -224,12 +240,13 @@
 
             $(document).on("click", ".add", function () {
                 
-                $("#modalLabel").text("Add New Status");
+                $("#modalLabel").text("Add New Shipping Line");
                 $("#name").val('');
+                $("#scac_code").val('');
                 $("#position").val('');
 
                 $("#modal").modal("show");
-                $(".form").attr("action", "{{ url('admin/system-configuration/container-status/add') }}");
+                $(".form").attr("action", "{{ url('admin/system-configuration/shipping-line/add') }}");
                         
             });
 
@@ -238,17 +255,18 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('admin/system-configuration/container-status/edit') }}/"+id,
+                    url: "{{ url('admin/system-configuration/shipping-line/edit') }}/"+id,
                     success: function (res) {
                         res = JSON.parse(res);
                         console.log(res);
                         if (res.success == true) {
-                            $("#modalLabel").text("Edit Container Status");
+                            $("#modalLabel").text("Edit Shipping Line");
                             $("#name").val(res.data.name);
+                            $("#scac_code").val(res.data.scac_code);
                             $("#position").val(res.data.position);
 
                             $("#modal").modal("show");
-                            $(".form").attr("action", "{{ url('admin/system-configuration/container-status/edit') }}/"+id);
+                            $(".form").attr("action", "{{ url('admin/system-configuration/shipping-line/edit') }}/"+id);
                         }
                     }
                 });

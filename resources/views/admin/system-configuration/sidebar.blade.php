@@ -54,31 +54,31 @@
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Terminal
                 </a>
-                <a href="{{ url('admin/systemConfiguration-preCarriage.html') }}"
+                <a href="{{ url('admin/system-configuration/pre-carriage') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Pre carriage
                 </a>
-                <a href="{{ url('admin/systemConfiguration-loadingPort.html') }}"
+                <a href="{{ url('admin/system-configuration/loading-port') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Loading port
                 </a>
-                <a href="{{ url('admin/systemConfiguration-dischargePort.html') }}"
+                <a href="{{ url('admin/system-configuration/discharge-port') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Discharge port
                 </a>
-                <a href="{{ url('admin/systemConfiguration-destinationPort.html') }}"
+                <a href="{{ url('admin/system-configuration/destination-port') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Destination port
                 </a>
-                <a href="{{ url('admin/systemConfiguration-notify.html') }}"
+                <a href="{{ url('admin/system-configuration/notify-party') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Notify party
                 </a>
-                <a href="{{ url('admin/systemConfiguration-measurement.html') }}"
+                <a href="{{ url('admin/system-configuration/measurement') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Measurement
                 </a>
-                <a href="{{ url('admin/systemConfiguration-shippingLine.html') }}"
+                <a href="{{ url('admin/system-configuration/shipping-line') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Shipping line
                 </a>

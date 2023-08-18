@@ -64,6 +64,31 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="d-flex justify-content-between mt-3 align-items-center justify-content-lg-end">
+                            <div class="d-flex gap-2 align-items-center page-icon">
+                                @php
+                                    $prev = (int)$page - 1;
+                                    $next = (int)$page + 1;
+                                    $pre = 'page='.$prev;
+                                    $nex = 'page='.$next;
+                                @endphp
+                                <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/group-list?'.$pre) }}" @endif>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                    </svg>
+                                </a>
+                                <p class="text-fs-4 m-0">Page {{ @$page }}</p>
+                                <a class="btn" @if(count($group) < 10) href="javascript:void();" @else href="{{ url('admin/system-configuration/group-list?'.$nex) }}" @endif>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="mt-4">
                         <div class="table-responsive">

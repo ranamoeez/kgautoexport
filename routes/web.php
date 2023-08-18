@@ -83,6 +83,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 
 	Route::get('/system-configuration/login-history', [App\Http\Controllers\Admin\SystemConfigController::class, 'login_history'])->name('login-history');
 
+	Route::get('/system-configuration/container-status', [App\Http\Controllers\Admin\SystemConfigController::class, 'container_status'])->name('container-status');
+	Route::post('/system-configuration/container-status/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_container_status'])->name('add-container-status');
+	Route::get('/system-configuration/container-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_container_status'])->name('edit-container-status');
+	Route::post('/system-configuration/container-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_container_status'])->name('update-container-status');
+	Route::get('/system-configuration/container-status/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_container_status'])->name('delete-container-status');
+
 	Route::get('/system-configuration/shipper', [App\Http\Controllers\Admin\SystemConfigController::class, 'shipper'])->name('shipper');
 	Route::post('/system-configuration/shipper/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_shipper'])->name('add-shipper');
 	Route::get('/system-configuration/shipper/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_shipper'])->name('edit-shipper');
@@ -101,15 +107,51 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::post('/system-configuration/terminal/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_terminal'])->name('update-terminal');
 	Route::get('/system-configuration/terminal/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_terminal'])->name('delete-terminal');
 
+	Route::get('/system-configuration/pre-carriage', [App\Http\Controllers\Admin\SystemConfigController::class, 'pre_carriage'])->name('pre-carriage');
+	Route::post('/system-configuration/pre-carriage/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_pre_carriage'])->name('add-pre-carriage');
+	Route::get('/system-configuration/pre-carriage/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_pre_carriage'])->name('edit-pre-carriage');
+	Route::post('/system-configuration/pre-carriage/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_pre_carriage'])->name('update-pre-carriage');
+	Route::get('/system-configuration/pre-carriage/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_pre_carriage'])->name('delete-pre-carriage');
+
+	Route::get('/system-configuration/loading-port', [App\Http\Controllers\Admin\SystemConfigController::class, 'loading_port'])->name('loading-port');
+	Route::post('/system-configuration/loading-port/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_loading_port'])->name('add-loading-port');
+	Route::get('/system-configuration/loading-port/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_loading_port'])->name('edit-loading-port');
+	Route::post('/system-configuration/loading-port/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_loading_port'])->name('update-loading-port');
+	Route::get('/system-configuration/loading-port/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_loading_port'])->name('delete-loading-port');
+
+	Route::get('/system-configuration/discharge-port', [App\Http\Controllers\Admin\SystemConfigController::class, 'discharge_port'])->name('discharge-port');
+	Route::post('/system-configuration/discharge-port/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_discharge_port'])->name('add-discharge-port');
+	Route::get('/system-configuration/discharge-port/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_discharge_port'])->name('edit-discharge-port');
+	Route::post('/system-configuration/discharge-port/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_discharge_port'])->name('update-discharge-port');
+	Route::get('/system-configuration/discharge-port/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_discharge_port'])->name('delete-discharge-port');
+
+	Route::get('/system-configuration/destination-port', [App\Http\Controllers\Admin\SystemConfigController::class, 'destination_port'])->name('destination-port');
+	Route::post('/system-configuration/destination-port/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_destination_port'])->name('add-destination-port');
+	Route::get('/system-configuration/destination-port/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_destination_port'])->name('edit-destination-port');
+	Route::post('/system-configuration/destination-port/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_destination_port'])->name('update-destination-port');
+	Route::get('/system-configuration/destination-port/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_destination_port'])->name('delete-destination-port');
+
+	Route::get('/system-configuration/notify-party', [App\Http\Controllers\Admin\SystemConfigController::class, 'notify_party'])->name('notify-party');
+	Route::post('/system-configuration/notify-party/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_notify_party'])->name('add-notify-party');
+	Route::get('/system-configuration/notify-party/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_notify_party'])->name('edit-notify-party');
+	Route::post('/system-configuration/notify-party/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_notify_party'])->name('update-notify-party');
+	Route::get('/system-configuration/notify-party/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_notify_party'])->name('delete-notify-party');
+
+	Route::get('/system-configuration/measurement', [App\Http\Controllers\Admin\SystemConfigController::class, 'measurement'])->name('measurement');
+	Route::post('/system-configuration/measurement/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_measurement'])->name('add-measurement');
+	Route::get('/system-configuration/measurement/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_measurement'])->name('edit-measurement');
+	Route::post('/system-configuration/measurement/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_measurement'])->name('update-measurement');
+	Route::get('/system-configuration/measurement/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_measurement'])->name('delete-measurement');
+
+	Route::get('/system-configuration/shipping-line', [App\Http\Controllers\Admin\SystemConfigController::class, 'shipping_line'])->name('shipping-line');
+	Route::post('/system-configuration/shipping-line/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_shipping_line'])->name('add-shipping-line');
+	Route::get('/system-configuration/shipping-line/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_shipping_line'])->name('edit-shipping-line');
+	Route::post('/system-configuration/shipping-line/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_shipping_line'])->name('update-shipping-line');
+	Route::get('/system-configuration/shipping-line/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_shipping_line'])->name('delete-shipping-line');
+
 	Route::get('/system-configuration/auto-status', [App\Http\Controllers\Admin\SystemConfigController::class, 'auto_status'])->name('auto-status');
 	Route::post('/system-configuration/auto-status/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_auto_status'])->name('add-auto-status');
 	Route::get('/system-configuration/auto-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auto_status'])->name('edit-auto-status');
 	Route::post('/system-configuration/auto-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auto_status'])->name('update-auto-status');
 	Route::get('/system-configuration/auto-status/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_auto_status'])->name('delete-auto-status');
-
-	Route::get('/system-configuration/container-status', [App\Http\Controllers\Admin\SystemConfigController::class, 'container_status'])->name('container-status');
-	Route::post('/system-configuration/container-status/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_container_status'])->name('add-container-status');
-	Route::get('/system-configuration/container-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_container_status'])->name('edit-container-status');
-	Route::post('/system-configuration/container-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_container_status'])->name('update-container-status');
-	Route::get('/system-configuration/container-status/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_container_status'])->name('delete-container-status');
 });

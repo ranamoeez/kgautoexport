@@ -505,8 +505,63 @@
                             @endif
                         </div>
                     </div>
+
+                    @if(count(@$buyers) > 0)
+                    @foreach($buyers as $key => $value)
+                        <div class="col-md-6 card mt-3 px-0 mx-1">
+                            <div class="card-header d-flex justify-content-between pt-3">
+                                <p style="font-size: 18px;"><b>{{ @$value->user->name }}</b></p>
+                                <i class="fa-solid fa-circle-minus text-danger fs-3 delete-buyer" data-url="{{ url('admin/delete-buyer/'.$container->id.'/'.@$value->user->id) }}" style="cursor: pointer;"></i>
+                            </div>
+                            <div class="card-body pt-3">
+                                <div class="row shadow border rounded-5 w-100 mb-3 p-2 mx-1">
+                                    <div class="col text-fs-3 fw-bold text-center">VIN</div>
+                                    <div class="col text-fs-3 fw-bold text-center">Description
+                                    </div>
+                                    <div class="col text-fs-3 fw-bold text-center">Select</div>
+                                </div>
+                                @foreach($value->vehicles as $k => $v)
+                                <div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data mx-1">
+                                    <div class="col text-fs-3 text-center">{{ $v->vehicle->vin }}</div>
+                                    <div class="col text-fs-3 text-center">{{ $v->vehicle->description }}</div>
+                                    <div class="col d-flex justify-content-center align-items-center">
+                                        <i class="fa-solid fa-circle-minus text-danger fs-3 delete-buyer" data-url="{{ url('admin/delete-buyer-vehicle/'.@$container->id.'/'.@$value->user->id.'/'.@$v->vehicle->id) }}" style="cursor: pointer;"></i>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                    @endif
+
                 </div>
             </form>
+            <!-- Modal -->
+            <div class="modal fade remove" id="removeRowModal" tabindex="-1"
+                aria-labelledby="removeRowModalLabel" aria-hidden="true">
+                <div class="modal-dialog rounded-5">
+                    <div class="modal-content p-3">
+                        <div class="modal-header border-0">
+                            <h1 class="modal-title fw-bold" id="removeRowModalLabel"
+                                style="font-size: 28px">
+                                Delete this Record?</h1>
+                            <button type="button" class="btn-close"
+                                data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <button id="delete-link" class="btn btn-danger border-0 mt-4 col-md-12 rounded-3 fs-5" type="button">Ok</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-warning border-0 mt-4 col-md-12 rounded-3 fs-5" type="button"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -600,7 +655,7 @@
                                     <div class="col text-fs-3 text-center">`+value.vehicle.vin+`</div>
                                     <div class="col text-fs-3 text-center">`+value.vehicle.description+`</div>
                                     <div class="col d-flex justify-content-center align-items-center">
-                                        <input class="form-check-input vehicle_id" id="vehicle_id" name"vehicle_id" type="checkbox"
+                                        <input class="form-check-input vehicle_id" id="vehicle_id" name="vehicle_id" type="checkbox"
                                             value="`+value.vehicle.id+`">
                                     </div>
                                 </div>`;
@@ -633,6 +688,27 @@
                         }, 2000);
                     } else {
                         toastr["error"](res.msg, "Failed!");
+                    }
+                }
+            });
+        });
+
+        $(document).on("click", ".delete-buyer", function () {
+            $("#delete-link").attr("data-url", $(this).attr('data-url'));
+            $("#removeRowModal").modal("show");
+        });
+        $(document).on("click", "#delete-link", function () {
+            $.ajax({
+                type: 'GET',
+                url: $(this).attr('data-url'),
+                success: function(data){
+                    data = JSON.parse(data);
+                    if (data.success == true) {
+                        $("#removeRowModal").modal("hide");
+                        toastr["success"]("Deleted successfully!", "Completed!");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 3000);
                     }
                 }
             });

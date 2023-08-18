@@ -430,6 +430,25 @@ class HomeController extends Controller
             return json_encode($response);
         }
         $data = array();
+
+        $buyer = ContainerVehicle::with("user")->where("container_id", $id)->get();
+        $unique = [];
+        $buyers = [];
+        $c_id = [];
+        foreach ($buyer as $k => $v) {
+            $user_id = $v->user_id;
+            if (!in_array($user_id, $unique)) {
+                array_push($unique, $user_id);
+                $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $id)->get();
+                $v->vehicles = $vehicles;
+                array_push($buyers, $v);
+                array_push($c_id, $v->id);
+            } else {
+                array_push($c_id, $v->id);
+            }
+        }
+        $data['buyers'] = $buyers;
+        $data['c_id'] = $c_id;
         $data['type'] = 'containers';
         $data['action'] = url('admin/containers/edit/'.$id);
         $data['container'] = Container::with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('id', $id)->first();
@@ -542,6 +561,22 @@ class HomeController extends Controller
         $path = $container->filepath.$container->filename;
         \File::delete($path);
         $container->delete();
+        return json_encode(["success"=>true, 'action'=>'reload']);
+    }
+
+    public function delete_buyer($c_id, $u_id)
+    {
+        AssignVehicle::where('user_id', $u_id)->where('assigned_to', $c_id)->update(['assigned_to'=>'0']);
+        $buyer = ContainerVehicle::where('container_id', $c_id)->where('user_id', $u_id);
+        $buyer->delete();
+        return json_encode(["success"=>true, 'action'=>'reload']);
+    }
+
+    public function delete_buyer_vehicle($c_id, $u_id, $v_id)
+    {
+        AssignVehicle::where('user_id', $u_id)->where('vehicle_id', $v_id)->where('assigned_to', $c_id)->update(['assigned_to'=>'0']);
+        $vehicle = ContainerVehicle::where('container_id', $c_id)->where('user_id', $u_id)->where('vehicle_id', $v_id);
+        $vehicle->delete();
         return json_encode(["success"=>true, 'action'=>'reload']);
     }
 

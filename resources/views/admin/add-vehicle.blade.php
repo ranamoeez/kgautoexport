@@ -75,7 +75,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Buyer</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="buyer_id">
-                                        <option value=""></option>
+                                        <option value="1"></option>
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
                                             @if($value['id'] == @$buyer)

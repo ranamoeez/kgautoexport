@@ -123,7 +123,7 @@ class HomeController extends Controller
             $data['owner_id'] = '0';
             $vehicle = Vehicle::create($data);
             $assign = new AssignVehicle;
-            $assign->user_id = Auth::user()->id;
+            $assign->user_id = $data['buyer_id'];
             $assign->vehicle_id = $vehicle->id;
             $assign->save();
             if ($request->hasFile('images')) {
@@ -135,7 +135,7 @@ class HomeController extends Controller
                     $image = new VehicleImage;
                     $image->vehicle_id = $vehicle->id;
                     $image->filesize = $value->getSize();
-                    $image->owner_id = Auth::user()->id;
+                    $image->owner_id = $data['buyer_id'];
                     $image->title = '';
                     $image->filename = $filename;
                     $image->filepath = 'storage/app/';
@@ -196,6 +196,11 @@ class HomeController extends Controller
     {
         if($request->isMethod('post')){
             $data = $request->all();
+            $buyer = AssignVehicle::where('id', $id)->first()->user_id;
+            if ($data['buyer_id'] !== $buyer) {
+                AssignVehicle::where('id', $id)->update(["user_id" => $data['buyer_id']]);
+            }
+            $id = AssignVehicle::where('id', $id)->first()->vehicle_id;
             if ($request->hasFile('images')) {
                 $files = [];
                 foreach ($request->file('images') as $key => $value) {
@@ -205,7 +210,7 @@ class HomeController extends Controller
                     $image = new VehicleImage;
                     $image->vehicle_id = $id;
                     $image->filesize = $value->getSize();
-                    $image->owner_id = Auth::user()->id;
+                    $image->owner_id = $data['buyer_id'];
                     $image->title = '';
                     $image->filename = $filename;
                     $image->filepath = 'storage/app/';
@@ -264,8 +269,7 @@ class HomeController extends Controller
         }
         $data   = array();
         $data['type'] = 'vehicles';
-        $vehicle_id = AssignVehicle::where('id', $id)->first()->vehicle_id;
-        $data['action'] = url('admin/vehicles/edit/'.$vehicle_id);
+        $data['action'] = url('admin/vehicles/edit/'.$id);
         $data['list'] = AssignVehicle::with('vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.shipping_line')->where('id', $id)->first();
         $data['all_status'] = Status::all();
         $data['all_terminal'] = Terminal::all();

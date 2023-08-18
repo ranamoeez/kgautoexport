@@ -101,15 +101,15 @@
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Status
                 </a>
-                <a href="{{ url('admin/systemConfiguration-autoTarminal.html') }}"
+                <a href="{{ url('admin/system-configuration/terminal') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Auto Terminal
                 </a>
-                <a href="{{ url('admin/systemConfiguration-auction.html') }}"
+                <a href="{{ url('admin/system-configuration/auction') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Auction
                 </a>
-                <a href="{{ url('admin/systemConfiguration-auctionLocation.html') }}"
+                <a href="{{ url('admin/system-configuration/auction-location') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Auction location
                 </a>

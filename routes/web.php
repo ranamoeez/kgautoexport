@@ -154,4 +154,22 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/system-configuration/auto-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auto_status'])->name('edit-auto-status');
 	Route::post('/system-configuration/auto-status/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auto_status'])->name('update-auto-status');
 	Route::get('/system-configuration/auto-status/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_auto_status'])->name('delete-auto-status');
+
+	Route::get('/system-configuration/auto-terminal', [App\Http\Controllers\Admin\SystemConfigController::class, 'auto_terminal'])->name('auto-terminal');
+	Route::post('/system-configuration/auto-terminal/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_auto_terminal'])->name('add-auto-terminal');
+	Route::get('/system-configuration/auto-terminal/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auto_terminal'])->name('edit-auto-terminal');
+	Route::post('/system-configuration/auto-terminal/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auto_terminal'])->name('update-auto-terminal');
+	Route::get('/system-configuration/auto-terminal/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_auto_terminal'])->name('delete-auto-terminal');
+
+	Route::get('/system-configuration/auction', [App\Http\Controllers\Admin\SystemConfigController::class, 'auction'])->name('auction');
+	Route::post('/system-configuration/auction/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_auction'])->name('add-auction');
+	Route::get('/system-configuration/auction/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auction'])->name('edit-auction');
+	Route::post('/system-configuration/auction/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auction'])->name('update-auction');
+	Route::get('/system-configuration/auction/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_auction'])->name('delete-auction');
+
+	Route::get('/system-configuration/auction-location', [App\Http\Controllers\Admin\SystemConfigController::class, 'auction_location'])->name('auction-location');
+	Route::post('/system-configuration/auction-location/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_auction_location'])->name('add-auction-location');
+	Route::get('/system-configuration/auction-location/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auction_location'])->name('edit-auction-location');
+	Route::post('/system-configuration/auction-location/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auction_location'])->name('update-auction-location');
+	Route::get('/system-configuration/auction-location/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_auction_location'])->name('delete-auction-location');
 });

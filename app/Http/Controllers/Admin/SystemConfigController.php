@@ -20,6 +20,8 @@ use App\Models\NotifyParty;
 use App\Models\Measurement;
 use App\Models\ShippingLine;
 use App\Models\Status;
+use App\Models\Auction;
+use App\Models\AuctionLocation;
 
 class SystemConfigController extends Controller
 {
@@ -823,5 +825,98 @@ class SystemConfigController extends Controller
     {
         Status::find($id)->delete();
         return json_encode(["success"=>true, "msg"=>"Vehicle status deleted successfully!"]);
+    }
+
+    // Auction Functions
+
+    public function auction(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $auction = Auction::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $auction = $auction->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $auction = $auction->limit(10)->get();
+        $data['auction'] = $auction;
+        return view('admin.system-configuration.auction', $data);
+    }
+
+    public function add_auction(Request $request)
+    {
+        $data = $request->all();
+        Auction::create($data);
+        return json_encode(["success"=>true, "msg"=>"Auction added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_auction(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            Auction::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Auction updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = Auction::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_auction($id)
+    {
+        Auction::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Auction deleted successfully!"]);
+    }
+
+    // Auction Location Functions
+
+    public function auction_location(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $auction_location = AuctionLocation::orderBy('id', 'DESC')->with('auction');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $auction_location = $auction_location->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $auction_location = $auction_location->limit(10)->get();
+        $data['auction_location'] = $auction_location;
+        $data['auction'] = Auction::all();
+        return view('admin.system-configuration.auction-location', $data);
+    }
+
+    public function add_auction_location(Request $request)
+    {
+        $data = $request->all();
+        AuctionLocation::create($data);
+        return json_encode(["success"=>true, "msg"=>"Auction location added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_auction_location(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            AuctionLocation::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Auction location updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = AuctionLocation::with('auction')->where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_auction_location($id)
+    {
+        AuctionLocation::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Auction location deleted successfully!"]);
     }
 }

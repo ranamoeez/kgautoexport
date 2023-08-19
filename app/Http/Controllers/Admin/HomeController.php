@@ -343,8 +343,10 @@ class HomeController extends Controller
                 if (!in_array($user_id, $unique)) {
                     array_push($unique, $user_id);
                     $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value->id)->get();
-                    $v->vehicles = $vehicles;
-                    array_push($buyers, $v);
+                    if (count($vehicles) > 0) {
+                        $v->vehicles = $vehicles;
+                        array_push($buyers, $v);
+                    }
                 }
             }
             $containers[$key]->buyers = $buyers;
@@ -436,9 +438,11 @@ class HomeController extends Controller
             if (!in_array($user_id, $unique)) {
                 array_push($unique, $user_id);
                 $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $id)->get();
-                $v->vehicles = $vehicles;
-                array_push($buyers, $v);
-                array_push($c_id, $v->id);
+                if (count($vehicles) > 0) {
+                    $v->vehicles = $vehicles;
+                    array_push($buyers, $v);
+                    array_push($c_id, $v->id);
+                }
             } else {
                 array_push($c_id, $v->id);
             }
@@ -620,7 +624,7 @@ class HomeController extends Controller
             $save->user_id = $user_id;
             $save->vehicle_id = $value;
             $save->save();
-            AssignVehicle::where("vehicle_id", $vehicle_id)->where('user_id', $user_id)->update(["assigned_to"=>$container_id]);
+            AssignVehicle::where("vehicle_id", $value)->where('user_id', $user_id)->update(["assigned_to"=>$container_id]);
         }
 
         return json_encode(["success"=>true, "action" => 'reload']);

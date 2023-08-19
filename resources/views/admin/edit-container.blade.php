@@ -528,7 +528,7 @@
                                 @foreach($value->vehicles as $k => $v)
                                 <div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data mx-1">
                                     <div class="col text-fs-3 text-center">{{ $v->vehicle->vin }}</div>
-                                    <div class="col text-fs-3 text-center">{{ $v->vehicle->description }}</div>
+                                    <div class="col text-fs-3 text-center">{{ @$v->vehicle->company_name.' '.@$v->vehicle->name.' '.@$v->vehicle->modal }}</div>
                                     <div class="col d-flex justify-content-center align-items-center">
                                         <i class="fa-solid fa-circle-minus text-danger fs-3 delete-buyer" data-url="{{ url('admin/delete-buyer-vehicle/'.@$container->id.'/'.@$value->user->id.'/'.@$v->vehicle->id) }}" style="cursor: pointer;"></i>
                                     </div>
@@ -656,9 +656,16 @@
                             $(".vehicles").append(html);
                         } else {
                             $(data.vehicles).each(function (key, value) {
+                                var description = value.vehicle.company_name;
+                                if (value.vehicle.name !== null) {
+                                    description += " "+value.vehicle.name;
+                                }
+                                if (value.vehicle.modal !== null) {
+                                    description += " "+value.vehicle.modal;
+                                }
                                 var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
                                     <div class="col text-fs-3 text-center">`+value.vehicle.vin+`</div>
-                                    <div class="col text-fs-3 text-center">`+value.vehicle.description+`</div>
+                                    <div class="col text-fs-3 text-center">`+description+`</div>
                                     <div class="col d-flex justify-content-center align-items-center">
                                         <input class="form-check-input vehicle_id" id="vehicle_id" name="vehicle_id" type="checkbox"
                                             value="`+value.vehicle.id+`">

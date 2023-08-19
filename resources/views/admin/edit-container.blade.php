@@ -495,7 +495,7 @@
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
                                             <a href="{{ url($value->filepath.$value->filename) }}" download>
-                                                <i class="fas fa-download"></i>
+                                                <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
                                     </div>

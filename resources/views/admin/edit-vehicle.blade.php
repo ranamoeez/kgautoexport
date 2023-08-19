@@ -670,7 +670,7 @@
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
                                             <a href="{{ url($value->filepath.$value->filename) }}" download>
-                                                <i class="fas fa-download"></i>
+                                                <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
                                     </div>
@@ -714,9 +714,14 @@
                                         <div class="d-flex align-items-center">
                                             <i class="fa-image fa-solid fs-4"></i>
                                         </div>
-                                        <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
-                                            <i class="fas fa-trash text-danger"></i>
-                                        </button>
+                                        <div>
+                                            <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
+                                                <i class="fas fa-trash text-danger"></i>
+                                            </button>
+                                            <a href="{{ url($value->filepath.$value->filename) }}" download>
+                                                <i class="fas fa-download text-dark"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <img src="{{ url($value->filepath.$value->filename) }}" class="w-100" style="height: 160px;" alt="" />

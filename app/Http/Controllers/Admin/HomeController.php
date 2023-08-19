@@ -27,6 +27,7 @@ use App\Models\Fine;
 use App\Models\AssignVehicle;
 use App\Models\ContainerVehicle;
 use App\Models\PickupRequest;
+use App\Models\TransactionsHistory;
 use Auth;
 use Storage;
 
@@ -119,7 +120,6 @@ class HomeController extends Controller
         if($request->isMethod('post')){
             $data = $request->all();
             $this->cleanData($data);
-            $data['description'] = $data['model'].' '.$data['company'].' '.$data['name'];
             $data['owner_id'] = '0';
             $vehicle = Vehicle::create($data);
             $assign = new AssignVehicle;
@@ -253,10 +253,6 @@ class HomeController extends Controller
                 }
             }
             $this->cleanData($data);
-            $data['description'] = $data['model'].' '.$data['company'].' '.$data['name'];
-            unset($data['model']);
-            unset($data['company']);
-            unset($data['name']);
             unset($data['documents']);
             unset($data['images']);
             unset($data['trans_type']);
@@ -471,6 +467,23 @@ class HomeController extends Controller
         $container->delete();
         $response = array('success'=>true,'msg'=>'Container has been deleted.');
         echo json_encode($response); return;
+    }
+
+    public function financial_system(Request $request)
+    {
+        $data['type'] = "financial-system";
+        $data['page'] = '1';
+        $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 20;
+                $transaction_history = $transaction_history->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $transaction_history = $transaction_history->limit(20)->get();
+        $data['transaction_history'] = $transaction_history;
+        return view('admin.financial-system', $data);
     }
 
     public function pickup_history(Request $request)

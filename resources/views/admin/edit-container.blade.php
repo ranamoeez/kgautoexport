@@ -490,9 +490,14 @@
                                         <div class="d-flex align-items-center">
                                             <i class="fa-file-pdf fa-solid fs-4"></i>
                                         </div>
-                                        <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-container-documents', $value->id) }}">
-                                            <i class="fas fa-trash text-danger"></i>
-                                        </button>
+                                        <div>
+                                            <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-container-documents', $value->id) }}">
+                                                <i class="fas fa-trash text-danger"></i>
+                                            </button>
+                                            <a href="{{ url($value->filepath.$value->filename) }}" download>
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <object data="{{ url($value->filepath.$value->filename) }}" style="width: 100%; height: 100% !important;">

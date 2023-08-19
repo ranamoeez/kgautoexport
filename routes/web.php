@@ -63,6 +63,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/pickup-history', [App\Http\Controllers\Admin\HomeController::class, 'pickup_history'])->name('pickup-history');
 	Route::post('/update-pickup-data', [App\Http\Controllers\Admin\HomeController::class, 'update_pickup_data'])->name('update-pickup-data');
 	
+	Route::get('/financial-system', [App\Http\Controllers\Admin\HomeController::class, 'financial_system'])->name('financial-system');
+	
 	Route::get('/system-configuration/users', [App\Http\Controllers\Admin\SystemConfigController::class, 'users'])->name('users');
 	Route::post('/system-configuration/users/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_user'])->name('add-user');
 	Route::get('/system-configuration/users/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_user'])->name('edit-user');

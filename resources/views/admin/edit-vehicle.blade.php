@@ -97,29 +97,60 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Description</label>
                                 <div class="col-md-9">
-                                    <select class="selectjs form-select" name="company">
-                                        <option value="Mercedes" selected>Mercedes</option>
-                                        <option value="option1">Option1</option>
-                                        <option value="option2">Option2</option>
-                                        <option value="option3">Option3</option>
+                                    <select class="selectjs form-select" name="company_name">
+                                        <option value="Toyata" @if($list->vehicle->company_name == "Toyata") selected @endif>Toyata</option>
+                                        <option value="Honda" @if($list->vehicle->company_name == "Honda") selected @endif>Honda</option>
+                                        <option value="Tesla" @if($list->vehicle->company_name == "Tesla") selected @endif>Tesla</option>
+                                        <option value="Suzuki" @if($list->vehicle->company_name == "Suzuki") selected @endif>Suzuki</option>
                                     </select>
                                 </div>
                                 <div class="col-12">
                                     <div class="row mt-2">
                                         <div class="col-md-6">
                                             <select class="selectjs form-select" name="name">
-                                                <option value="C200" selected>C200</option>
-                                                <option value="option1">Option1</option>
-                                                <option value="option2">Option2</option>
-                                                <option value="option3">Option3</option>
+                                                <option value="Mercedes" @if($list->vehicle->name == "Mercedes") selected @endif>Mercedes</option>
+                                                <option value="Limo" @if($list->vehicle->name == "Limo") selected @endif>Limo</option>
+                                                <option value="Prius" @if($list->vehicle->name == "Prius") selected @endif>Prius</option>
+                                                <option value="Mark X" @if($list->vehicle->name == "Mark X") selected @endif>Mark X</option>
+                                                <option value="Corrola" @if($list->vehicle->name == "Corrola") selected @endif>Corrola</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
-                                            <select class="selectjs form-select" name="model">
-                                                <option value="2019" selected>2019</option>
-                                                <option value="option1">Option1</option>
-                                                <option value="option2">Option2</option>
-                                                <option value="option3">Option3</option>
+                                            <select class="selectjs form-select" name="modal">
+                                                <option value="2023" @if($list->vehicle->modal == "2023") selected @endif>2023</option>
+                                                <option value="2022" @if($list->vehicle->modal == "2022") selected @endif>2022</option>
+                                                <option value="2021" @if($list->vehicle->modal == "2021") selected @endif>2021</option>
+                                                <option value="2020" @if($list->vehicle->modal == "2020") selected @endif>2020</option>
+                                                <option value="2019" @if($list->vehicle->modal == "2019") selected @endif>2019</option>
+                                                <option value="2018" @if($list->vehicle->modal == "2018") selected @endif>2018</option>
+                                                <option value="2017" @if($list->vehicle->modal == "2017") selected @endif>2017</option>
+                                                <option value="2016" @if($list->vehicle->modal == "2016") selected @endif>2016</option>
+                                                <option value="2015" @if($list->vehicle->modal == "2015") selected @endif>2015</option>
+                                                <option value="2014" @if($list->vehicle->modal == "2014") selected @endif>2014</option>
+                                                <option value="2013" @if($list->vehicle->modal == "2013") selected @endif>2013</option>
+                                                <option value="2012" @if($list->vehicle->modal == "2012") selected @endif>2012</option>
+                                                <option value="2011" @if($list->vehicle->modal == "2011") selected @endif>2011</option>
+                                                <option value="2010" @if($list->vehicle->modal == "2010") selected @endif>2010</option>
+                                                <option value="2009" @if($list->vehicle->modal == "2009") selected @endif>2009</option>
+                                                <option value="2008" @if($list->vehicle->modal == "2008") selected @endif>2008</option>
+                                                <option value="2007" @if($list->vehicle->modal == "2007") selected @endif>2007</option>
+                                                <option value="2006" @if($list->vehicle->modal == "2006") selected @endif>2006</option>
+                                                <option value="2005" @if($list->vehicle->modal == "2005") selected @endif>2005</option>
+                                                <option value="2004" @if($list->vehicle->modal == "2004") selected @endif>2004</option>
+                                                <option value="2003" @if($list->vehicle->modal == "2003") selected @endif>2003</option>
+                                                <option value="2002" @if($list->vehicle->modal == "2002") selected @endif>2002</option>
+                                                <option value="2001" @if($list->vehicle->modal == "2001") selected @endif>2001</option>
+                                                <option value="2000" @if($list->vehicle->modal == "2000") selected @endif>2000</option>
+                                                <option value="1999" @if($list->vehicle->modal == "1999") selected @endif>1999</option>
+                                                <option value="1998" @if($list->vehicle->modal == "1998") selected @endif>1998</option>
+                                                <option value="1997" @if($list->vehicle->modal == "1997") selected @endif>1997</option>
+                                                <option value="1996" @if($list->vehicle->modal == "1996") selected @endif>1996</option>
+                                                <option value="1995" @if($list->vehicle->modal == "1995") selected @endif>1995</option>
+                                                <option value="1994" @if($list->vehicle->modal == "1994") selected @endif>1994</option>
+                                                <option value="1993" @if($list->vehicle->modal == "1993") selected @endif>1993</option>
+                                                <option value="1992" @if($list->vehicle->modal == "1992") selected @endif>1992</option>
+                                                <option value="1991" @if($list->vehicle->modal == "1991") selected @endif>1991</option>
+                                                <option value="1990" @if($list->vehicle->modal == "1990") selected @endif>1990</option>
                                             </select>
                                         </div>
                                     </div>
@@ -634,9 +665,14 @@
                                         <div class="d-flex align-items-center">
                                             <i class="fa-file-pdf fa-solid fs-4"></i>
                                         </div>
-                                        <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-vehicle-documents', $value->id) }}">
-                                            <i class="fas fa-trash text-danger"></i>
-                                        </button>
+                                        <div>
+                                            <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-vehicle-documents', $value->id) }}">
+                                                <i class="fas fa-trash text-danger"></i>
+                                            </button>
+                                            <a href="{{ url($value->filepath.$value->filename) }}" download>
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <object data="{{ url($value->filepath.$value->filename) }}" style="width: 100%; height: 100% !important;">

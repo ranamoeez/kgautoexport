@@ -141,7 +141,7 @@
                                 </td>
                                 <td>
                                     <p class=" text-fs-3">
-                                        {{ @$value->vehicle->delivery_date }}
+                                        {{ @$value->created_at }}
                                     </p>
                                 </td>
                                 <td>

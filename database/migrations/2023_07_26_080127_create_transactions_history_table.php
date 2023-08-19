@@ -19,6 +19,8 @@ class CreateTransactionsHistoryTable extends Migration
             $table->string('amount');
             $table->integer('vehicle_id');
             $table->string('status')->default('unpaid');
+            $table->text('user_notes')->nullable();
+            $table->text('admin_notes')->nullable();
             $table->timestamps();
         });
     }

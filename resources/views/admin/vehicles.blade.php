@@ -77,21 +77,29 @@
 
                 <div class="col-md-2">
                     <label for="destination" class="fw-semibold">Destination</label>
-                    <select id="destination" name="destination" class="selectjs form-select p-2">
-                        <option value="all" @if(@$destination == "all") selected @endif>All</option>
-                        <option value="AQABA" @if(@$destination == "AQABA") selected @endif>AQABA</option>
-                        <option value="JEBEL ALI" @if(@$destination == "JEBEL ALI") selected @endif>JEBEL ALI</option>
-                        <option value="UMM QASR" @if(@$destination == "UMM QASR") selected @endif>UMM QASR</option>
+                    <select id="destination" name="destination" class="selectjs form-select p-2 border border-gray-200 rounded-lg">
+                        <option value="all">All</option>
+                        @if(count(@$all_destination_port) > 0)
+                        @foreach(@$all_destination_port as $key => $value)
+                            @if($value->id == @$destination)
+                            <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                            @else
+                            <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                            @endif
+                        @endforeach
+                        @endif
                     </select>
                 </div>
+
                 <div class="col-md-2">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="unpaid" name="unpaid" id="unpaid" @if(@$unpaid == "unpaid") checked @endif>
-                        <label class="form-check-label" for="unpaid">Only unpaid</label>
-                    </div>
+                    <label for="pay_status" class="fw-semibold">Payment Status</label>
+                    <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
+                        <option value="all" @if(@$paystatus == "all") selected @endif>All</option>
+                        <option value="1" @if(@$pay_status == "1") selected @endif>Paid</option>
+                        <option value="0" @if(@$pay_status == "0") selected @endif>Unpaid</option>
+                    </select>
                 </div>
             </form>
-
 
             <div>
                 <div class="d-flex justify-content-between mt-3 align-items-center justify-content-lg-end">
@@ -122,9 +130,9 @@
                                 array_push($prev_params, 'destination='.$destination);
                                 array_push($next_params, 'destination='.$destination);
                             }
-                            if (!empty(@$unpaid)) {
-                                array_push($prev_params, 'unpaid='.$unpaid);
-                                array_push($next_params, 'unpaid='.$unpaid);
+                            if (!empty(@$pay_status)) {
+                                array_push($prev_params, 'pay_status='.$pay_status);
+                                array_push($next_params, 'pay_status='.$pay_status);
                             }
                             $pre = join("&", $prev_params);
                             $nex = join("&", $next_params);
@@ -227,7 +235,7 @@
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4 p-1 rounded-pill shadow">
-                                        <span class="text-fs-4 ms-1" style="font-size: 14px;">{{ @$value->vehicle->destination_manual }}</span>
+                                        <span class="text-fs-4 ms-1" style="font-size: 14px;">{{ @$value->vehicle->destination_port->name }}</span>
                                     </div>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
@@ -461,7 +469,7 @@
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
-            $(document).on("change", "#buyer, #terminal, #status, #destination, #search-veh, #unpaid", function () {
+            $(document).on("change", "#buyer, #terminal, #status, #destination, #search-veh, #pay_status", function () {
                 $("#filters-form").submit();
             });
             $(document).on("click", ".delete", function () {

@@ -20,60 +20,54 @@
                 </h4>
             </div>
 
-            <div class="row align-items-center">
+            <form method="GET" action="{{ url('admin/pickup-history') }}" class="row align-items-center" id="filters-form">
+                <input type="hidden" name="page" value="{{ @$page }}">
                 <div class="col-md-2">
-                    <label for="Buyer" class="fw-semibold">Buyer</label>
-                    <select id="Buyer" name="Buyer"
-                        class="selectjs form-select p-2 border border-gray-200 rounded-lg">
-                        <option value="All" selected>All</option>
-                        <option value="option1">Option1</option>
-                        <option value="option2">Option2</option>
-                        <option value="option3">Option3</option>
-                    </select>
-                </div>
-
-                <div class="col-md-2">
-                    <label for="Terminal" class="fw-semibold">Terminal</label>
-                    <select id="Terminal" name="Terminal" class="selectjs form-select p-2">
-                        <option value="All" selected>All</option>
-                        <option value="option1">Option1</option>
-                        <option value="option2">Option2</option>
-                        <option value="option3">Option3</option>
-                    </select>
-                </div>
-
-                <div class="col-md-2">
-                    <label for="Status" class="fw-semibold">Status</label>
-                    <select id="Status" name="Status" class="selectjs form-select p-2">
-                        <option value="All" selected>All</option>
-                        <option value="option1">Option1</option>
-                        <option value="option2">Option2</option>
-                        <option value="option3">Option3</option>
+                    <label for="buyer" class="fw-semibold">Buyer</label>
+                    <select id="buyer" name="buyer" class="selectjs form-select p-2 border border-gray-200 rounded-lg">
+                        <option value="all">All</option>
+                        @if(count(@$all_buyer) > 0)
+                        @foreach(@$all_buyer as $key => $value)
+                            @if($value->id == @$buyer)
+                            <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                            @else
+                            <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                            @endif
+                        @endforeach
+                        @endif
                     </select>
                 </div>
 
                 <div class="col-md-2">
                     <label for="search" class="fw-semibold">Search</label>
-                    <input type="text" class="form-control p-2" placeholder="search">
+                    <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-veh" placeholder="Search">
                 </div>
 
                 <div class="col-md-2">
-                    <label for="Status" class="fw-semibold">Destination</label>
-                    <select id="Status" name="Status" class="selectjs form-select p-2">
-                        <option value="All" selected>All</option>
-                        <option value="option1">Option1</option>
-                        <option value="option2">Option2</option>
-                        <option value="option3">Option3</option>
+                    <label for="destination" class="fw-semibold">Destination</label>
+                    <select id="destination" name="destination" class="selectjs form-select p-2 border border-gray-200 rounded-lg">
+                        <option value="all">All</option>
+                        @if(count(@$all_destination_port) > 0)
+                        @foreach(@$all_destination_port as $key => $value)
+                            @if($value->id == @$destination)
+                            <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                            @else
+                            <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                            @endif
+                        @endforeach
+                        @endif
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">Only unpaid</label>
-                    </div>
-                </div>
-            </div>
 
+                <div class="col-md-2">
+                    <label for="pay_status" class="fw-semibold">Payment Status</label>
+                    <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
+                        <option value="all" @if(@$paystatus == "all") selected @endif>All</option>
+                        <option value="1" @if(@$pay_status == "1") selected @endif>Paid</option>
+                        <option value="0" @if(@$pay_status == "0") selected @endif>Unpaid</option>
+                    </select>
+                </div>
+            </form>
 
             <div>
                 <div class="d-flex justify-content-between mt-3 align-items-center justify-content-lg-end">
@@ -82,8 +76,26 @@
                         @php
                             $prev = (int)$page - 1;
                             $next = (int)$page + 1;
-                            $pre = 'page='.$prev;
-                            $nex = 'page='.$next;
+                            $prev_params = ['page='.$prev];
+                            $next_params = ['page='.$next];
+                            if (!empty(@$buyer)) {
+                                array_push($prev_params, 'buyer='.$buyer);
+                                array_push($next_params, 'buyer='.$buyer);
+                            }
+                            if (!empty(@$search)) {
+                                array_push($prev_params, 'search='.$search);
+                                array_push($next_params, 'search='.$search);
+                            }
+                            if (!empty(@$destination)) {
+                                array_push($prev_params, 'destination='.$destination);
+                                array_push($next_params, 'destination='.$destination);
+                            }
+                            if (!empty(@$pay_status)) {
+                                array_push($prev_params, 'pay_status='.$pay_status);
+                                array_push($next_params, 'pay_status='.$pay_status);
+                            }
+                            $pre = join("&", $prev_params);
+                            $nex = join("&", $next_params);
                         @endphp
                         <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/pickup-history?'.$pre) }}" @endif>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -107,9 +119,9 @@
                     <table class="table">
                         <thead class="text-fs-4">
                             <th scope="col" class="fw-bold">ID</th>
-                            <th scope="col" class="fw-bold">Client</th>
+                            <th scope="col" class="fw-bold">Buyer</th>
                             <th scope="col" class="fw-bold">VIN</th>
-                            <th scope="col" class="fw-bold">Location</th>
+                            <th scope="col" class="fw-bold">Destination</th>
                             <th scope="col" class="fw-bold">Date</th>
                             <th scope="col" class="fw-bold">Payment</th>
                             <th scope="col" class="fw-bold">Balance</th>
@@ -126,7 +138,7 @@
                                 </td>
                                 <td>
                                     <p class=" text-fs-3">
-                                        {{ @$value->vehicle->client_name }}
+                                        {{ @$value->vehicle->buyer->name }}
                                     </p>
                                 </td>
                                 <td>
@@ -136,7 +148,7 @@
                                 </td>
                                 <td>
                                     <p class=" text-fs-3">
-                                        {{ @$value->vehicle->location }}
+                                        {{ @$value->vehicle->destination_port->name }}
                                     </p>
                                 </td>
                                 <td>
@@ -200,6 +212,10 @@
 
             $("select.option-select").each(function () {
                 updateBackgroundColor(this);
+            });
+
+            $(document).on("change", "#buyer, #destination, #search-veh, #pay_status", function () {
+                $("#filters-form").submit();
             });
 
             $(document).on("change", ".status", function () {

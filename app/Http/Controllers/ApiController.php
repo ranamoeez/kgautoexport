@@ -45,13 +45,13 @@ class ApiController extends Controller
             if ($check_user > 0) {
                 $user_id = User::where('api_token', $token)->first()->id;
 
-                $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->where('user_id', $user_id)->limit(100)->get();
+                $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->where('user_id', $user_id)->limit(100)->get();
 
                 if (!empty($request->Status)) {
                     $status = Status::where('name', $request->Status)->first();
                     if (!empty($status->id)) {
                         $status_id = $status->id;
-                        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->whereHas('vehicle', function ($query) use($status_id) {
+                        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->whereHas('vehicle', function ($query) use($status_id) {
                                 $query->where('status_id', $status_id);
                             })->where('user_id', $user_id)->limit(100)->get();
                     }
@@ -60,7 +60,7 @@ class ApiController extends Controller
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex > 1) {
                         $offset = ($request->PageIndex - 1) * 100;
-                        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->where('user_id', $user_id)->offset((int)$offset)->limit(100)->get();
+                        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->where('user_id', $user_id)->offset((int)$offset)->limit(100)->get();
                     }
                 }
             

@@ -174,4 +174,34 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/system-configuration/auction-location/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auction_location'])->name('edit-auction-location');
 	Route::post('/system-configuration/auction-location/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auction_location'])->name('update-auction-location');
 	Route::get('/system-configuration/auction-location/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_auction_location'])->name('delete-auction-location');
+
+	Route::get('/system-configuration/mail-templates', [App\Http\Controllers\Admin\SystemConfigController::class, 'mail_templates'])->name('mail-templates');
+	Route::post('/system-configuration/mail-templates/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_mail_templates'])->name('add-mail-templates');
+	Route::get('/system-configuration/mail-templates/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_mail_templates'])->name('edit-mail-templates');
+	Route::post('/system-configuration/mail-templates/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_mail_templates'])->name('update-mail-templates');
+	Route::get('/system-configuration/mail-templates/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_mail_templates'])->name('delete-mail-templates');
+
+	Route::get('/system-configuration/reminder-templates', [App\Http\Controllers\Admin\SystemConfigController::class, 'reminder_templates'])->name('reminder-templates');
+	Route::post('/system-configuration/reminder-templates/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_reminder_templates'])->name('add-reminder-templates');
+	Route::get('/system-configuration/reminder-templates/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_reminder_templates'])->name('edit-reminder-templates');
+	Route::post('/system-configuration/reminder-templates/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_reminder_templates'])->name('update-reminder-templates');
+	Route::get('/system-configuration/reminder-templates/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_reminder_templates'])->name('delete-reminder-templates');
+
+	Route::get('/system-configuration/vehicles-brand', [App\Http\Controllers\Admin\SystemConfigController::class, 'vehicles_brand'])->name('vehicles-brand');
+	Route::post('/system-configuration/vehicles-brand/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_vehicles_brand'])->name('add-vehicles-brand');
+	Route::get('/system-configuration/vehicles-brand/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_vehicles_brand'])->name('edit-vehicles-brand');
+	Route::post('/system-configuration/vehicles-brand/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_vehicles_brand'])->name('update-vehicles-brand');
+	Route::get('/system-configuration/vehicles-brand/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_vehicles_brand'])->name('delete-vehicles-brand');
+
+	Route::get('/system-configuration/vehicles-modal', [App\Http\Controllers\Admin\SystemConfigController::class, 'vehicles_modal'])->name('vehicles-modal');
+	Route::post('/system-configuration/vehicles-modal/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_vehicles_modal'])->name('add-vehicles-modal');
+	Route::get('/system-configuration/vehicles-modal/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_vehicles_modal'])->name('edit-vehicles-modal');
+	Route::post('/system-configuration/vehicles-modal/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_vehicles_modal'])->name('update-vehicles-modal');
+	Route::get('/system-configuration/vehicles-modal/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_vehicles_modal'])->name('delete-vehicles-modal');
+
+	Route::get('/system-configuration/user-levels', [App\Http\Controllers\Admin\SystemConfigController::class, 'user_levels'])->name('user-levels');
+	Route::post('/system-configuration/user-levels/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_user_levels'])->name('add-user-levels');
+	Route::get('/system-configuration/user-levels/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_user_levels'])->name('edit-user-levels');
+	Route::post('/system-configuration/user-levels/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_user_levels'])->name('update-user-levels');
+	Route::get('/system-configuration/user-levels/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_user_levels'])->name('delete-user-levels');
 });

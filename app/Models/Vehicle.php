@@ -47,6 +47,10 @@ class Vehicle extends Model
     	return $this->belongsTo(Terminal::class, 'terminal_id');
     }
 
+    public function destination_port(){
+        return $this->belongsTo(DestinationPort::class, 'destination_port_id');
+    }
+
     public function status(){
         return $this->belongsTo(Status::class, 'status_id');
     }

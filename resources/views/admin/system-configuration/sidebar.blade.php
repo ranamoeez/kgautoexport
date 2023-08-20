@@ -128,11 +128,11 @@
         <div class="accordion-body">
             <div class="d-flex flex-column">
 
-                <a href="{{ url('admin/systemConfiguration-mailTemplate.html') }}"
+                <a href="{{ url('admin/system-configuration/mail-templates') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Mail templates
                 </a>
-                <a href="{{ url('admin/systemConfiguration-sendToAllUser.htm') }}l"
+                <a href="{{ url('admin/system-configuration/send-users') }}l"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Send to all users
                 </a>
@@ -150,19 +150,19 @@
         aria-labelledby="headingOne" data-bs-parent="#accordionConfig">
         <div class="accordion-body">
             <div class="d-flex flex-column">
-                <a href="{{ url('admin/systemConfiguration-reminderTemplates.html') }}"
+                <a href="{{ url('admin/system-configuration/reminder-templates') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Reminder Templates
                 </a>
-                <a href="{{ url('admin/systemConfiguration-pickupHistory.html') }}"
-                    class="fw-semibold text-dark text-decoration-none fs-6">
-                    Pickup History
-                </a>
-                <a href="{{ url('admin/systemConfiguration-vehicleBrands.html') }}"
+                <a href="{{ url('admin/system-configuration/vehicles-brand') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Vehicles Brand
                 </a>
-                <a href="{{ url('admin/systemConfiguration-userLevel.html') }}"
+                <a href="{{ url('admin/system-configuration/vehicles-modal') }}"
+                    class="fw-semibold text-dark text-decoration-none fs-6">
+                    Vehicles Modal
+                </a>
+                <a href="{{ url('admin/system-configuration/user-levels') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     User Level
                 </a>

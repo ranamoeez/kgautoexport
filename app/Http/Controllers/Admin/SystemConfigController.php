@@ -22,6 +22,11 @@ use App\Models\ShippingLine;
 use App\Models\Status;
 use App\Models\Auction;
 use App\Models\AuctionLocation;
+use App\Models\MailTemplate;
+use App\Models\ReminderTemplate;
+use App\Models\VehicleModal;
+use App\Models\VehicleBrand;
+use App\Models\Level;
 
 class SystemConfigController extends Controller
 {
@@ -918,5 +923,236 @@ class SystemConfigController extends Controller
     {
         AuctionLocation::find($id)->delete();
         return json_encode(["success"=>true, "msg"=>"Auction location deleted successfully!"]);
+    }
+
+    // Mail Templates Functions
+
+    public function mail_templates(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $templates = MailTemplate::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $templates = $templates->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $templates = $templates->limit(10)->get();
+        $data['templates'] = $templates;
+        return view('admin.system-configuration.mail-templates', $data);
+    }
+
+    public function add_mail_templates(Request $request)
+    {
+        $data = $request->all();
+        MailTemplate::create($data);
+        return json_encode(["success"=>true, "msg"=>"Mail template added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_mail_templates(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            MailTemplate::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Mail template updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = MailTemplate::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_mail_templates($id)
+    {
+        MailTemplate::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Mail template deleted successfully!"]);
+    }
+
+    // Reminder Templates Functions
+
+    public function reminder_templates(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $templates = ReminderTemplate::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $templates = $templates->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $templates = $templates->limit(10)->get();
+        $data['templates'] = $templates;
+        return view('admin.system-configuration.reminder-templates', $data);
+    }
+
+    public function add_reminder_templates(Request $request)
+    {
+        $data = $request->all();
+        ReminderTemplate::create($data);
+        return json_encode(["success"=>true, "msg"=>"Reminder template added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_reminder_templates(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            ReminderTemplate::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Reminder template updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = ReminderTemplate::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_reminder_templates($id)
+    {
+        ReminderTemplate::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Reminder template deleted successfully!"]);
+    }
+
+    // Vehicles Brand Functions
+
+    public function vehicles_brand(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $brands = VehicleBrand::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $brands = $brands->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $brands = $brands->limit(10)->get();
+        $data['brands'] = $brands;
+        return view('admin.system-configuration.vehicles-brand', $data);
+    }
+
+    public function add_vehicles_brand(Request $request)
+    {
+        $data = $request->all();
+        VehicleBrand::create($data);
+        return json_encode(["success"=>true, "msg"=>"Vehicles brand added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_vehicles_brand(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            VehicleBrand::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Vehicles brand updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = VehicleBrand::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_vehicles_brand($id)
+    {
+        VehicleBrand::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Vehicles brand deleted successfully!"]);
+    }
+
+    // Vehicles Modal Functions
+
+    public function vehicles_modal(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $modals = VehicleModal::orderBy('id', 'DESC')->with('vehicles_brand');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $modals = $modals->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $modals = $modals->limit(10)->get();
+        $data['modals'] = $modals;
+        $data['brands'] = VehicleBrand::all();
+        return view('admin.system-configuration.vehicles-modal', $data);
+    }
+
+    public function add_vehicles_modal(Request $request)
+    {
+        $data = $request->all();
+        VehicleModal::create($data);
+        return json_encode(["success"=>true, "msg"=>"Vehicles modal added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_vehicles_modal(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            VehicleModal::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Vehicles modal updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = VehicleModal::with('vehicles_brand')->where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_vehicles_modal($id)
+    {
+        VehicleModal::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Vehicles modal deleted successfully!"]);
+    }
+
+    // User Levels Functions
+
+    public function user_levels(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $levels = Level::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $levels = $levels->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $levels = $levels->limit(10)->get();
+        $data['levels'] = $levels;
+        return view('admin.system-configuration.user-levels', $data);
+    }
+
+    public function add_user_levels(Request $request)
+    {
+        $data = $request->all();
+        Level::create($data);
+        return json_encode(["success"=>true, "msg"=>"User level added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_user_levels(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            Level::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"User level updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = Level::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_user_levels($id)
+    {
+        Level::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"User level deleted successfully!"]);
     }
 }

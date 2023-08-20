@@ -22,7 +22,7 @@
                 <div class="col-md-9">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex align-items-center">
-                            <h3 class="fw-bold fs-5 mb-0">Auction Location</h3>
+                            <h3 class="fw-bold fs-5 mb-0">Mail Templates</h3>
                             <button class="btn border-0 add" type="button">
                                 <img src="{{ asset('assets/plus_green.svg') }}" alt="add" />
                             </button>
@@ -30,19 +30,19 @@
                                 <div class="modal-dialog rounded-5" style="max-width: 746px; width: 746px;">
                                     <div class="modal-content p-3">
                                         <div class="modal-header border-0">
-                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Auction Location</h1>
+                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Mail Template</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ url('admin/system-configuration/auction-location/add') }}" method="POST" class="form">
+                                            <form action="{{ url('admin/system-configuration/mail-templates/add') }}" method="POST" class="form">
                                                 @csrf
                                                 <div class="row mt-4">
 
-                                                    <div class="col-md-6 mb-4">
+                                                    <div class="col-md-12 mb-4">
                                                         <!-- username -->
                                                         <div class="row">
-                                                            <label for="" class="col-md-4">Name</label>
-                                                            <div class="col-md-8">
+                                                            <label for="" class="col-md-12 mb-2">Name</label>
+                                                            <div class="col-md-12">
                                                                 <div class="input-group shadow-lg rounded-4">
                                                                     <input type="text" name="name" id="name" value=""
                                                                         class="py-2 form-control rounded-end-4"
@@ -52,37 +52,18 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-6 mb-4">
+                                                    <div class="col-md-12 mb-4">
                                                         <div class="row">
-                                                            <label for="" class="col-md-4">Position</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group shadow-lg rounded-4">
-                                                                    <input type="number" name="position" id="position" 
-                                                                        class="py-2 form-control rounded-end-4" />
+                                                            <label for="" class="col-md-12 mb-2">Content</label>
+                                                            <div class="col-md-12">
+                                                                <div class="shadow-lg rounded-4">
+                                                                    <textarea name="content" id="content" class="py-2 form-control rounded-end-4"></textarea>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 mb-4">
-                                                        <div class="row">
-                                                            <label for="" class="col-md-4">Auction</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group shadow-lg rounded-4">
-                                                                    <select class="form-select auction" name="auction_id">
-                                                                        <option value=""></option>
-                                                                        @if(count(@$auction) > 0)
-                                                                        @foreach(@$auction as $key => $value)
-                                                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
-                                                                        @endforeach
-                                                                        @endif
-                                                                    </select>
-                                                                </div>
-                                                                
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="d-flex justify-content-center mt-4">
                                                     <button class="btn btn-primary px-5" type="submit">
                                                         Save
@@ -102,7 +83,7 @@
                                     $pre = 'page='.$prev;
                                     $nex = 'page='.$next;
                                 @endphp
-                                <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/auction-location?'.$pre) }}" @endif>
+                                <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/mail-templates?'.$pre) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -110,7 +91,7 @@
                                     </svg>
                                 </a>
                                 <p class="text-fs-4 m-0">Page {{ @$page }}</p>
-                                <a class="btn" @if(count($auction_location) < 10) href="javascript:void();" @else href="{{ url('admin/system-configuration/auction-location?'.$nex) }}" @endif>
+                                <a class="btn" @if(count($templates) < 10) href="javascript:void();" @else href="{{ url('admin/system-configuration/mail-templates?'.$nex) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -125,27 +106,15 @@
                             <table class="table">
                                 <thead class="text-fs-4">
                                     <th scope="col" class="fw-bold">Name</th>
-                                    <th scope="col" class="fw-bold">Position</th>
-                                    <th scope="col" class="fw-bold">Auction</th>
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
-                                    @if(count(@$auction_location) > 0)
-                                    @foreach(@$auction_location as $key => $value)
+                                    @if(count(@$templates) > 0)
+                                    @foreach(@$templates as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td>
                                             <p class=" text-fs-3">
                                                 {{ @$value->name }}
-                                            </p>
-                                        </td>
-                                        <td>
-                                            <p class=" text-fs-3">
-                                                {{ @$value->position }}
-                                            </p>
-                                        </td>
-                                        <td>
-                                            <p class=" text-fs-3">
-                                                {{ @$value->auction->name }}
                                             </p>
                                         </td>
                                         <td>
@@ -154,7 +123,7 @@
                                                     <i class="fa-solid fa-edit edit" data-id="{{ @$value->id }}" style="cursor: pointer;"></i>
                                                 </p>
                                                 <p class="fs-5 text-danger">
-                                                    <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/auction-location/delete', @$value->id) }}" style="cursor: pointer;"></i>
+                                                    <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/mail-templates/delete', @$value->id) }}" style="cursor: pointer;"></i>
                                                 </p>
                                             </div>
                                         </td>
@@ -206,9 +175,13 @@
     <script>
         $(document).ready(() => {
             $('.selectjs').select2();
-        })
+        });
     </script>
-        <!-- Swiper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.22.1/ckeditor.js" integrity="sha512-F8fV4+wpHYl9zul08Soff9H9fCx6OMIFfgbQcy+2v2gV7PdbT0OgM1LFwujQmwlLGWWKNbOFZ13uWP+Cbe0Ngw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+        CKEDITOR.replace("content");
+    </script>
+    <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
         var input = document.querySelector("#phone");
@@ -247,13 +220,12 @@
 
             $(document).on("click", ".add", function () {
                 
-                $("#modalLabel").text("Add New Auction Location");
+                $("#modalLabel").text("Add New Mail Template");
                 $("#name").val('');
-                $("#position").val('');
-                $(".auction option[value='']").attr('selected', true);
+                CKEDITOR.instances['content'].setData('');
 
                 $("#modal").modal("show");
-                $(".form").attr("action", "{{ url('admin/system-configuration/auction-location/add') }}");
+                $(".form").attr("action", "{{ url('admin/system-configuration/mail-templates/add') }}");
                         
             });
 
@@ -262,18 +234,17 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('admin/system-configuration/auction-location/edit') }}/"+id,
+                    url: "{{ url('admin/system-configuration/mail-templates/edit') }}/"+id,
                     success: function (res) {
                         res = JSON.parse(res);
                         console.log(res);
                         if (res.success == true) {
-                            $("#modalLabel").text("Edit Auction Location");
+                            $("#modalLabel").text("Edit Mail Template");
                             $("#name").val(res.data.name);
-                            $("#position").val(res.data.position);
-                            $(".auction option[value="+res.data.auction.name+"]").attr('selected', true);
+                            CKEDITOR.instances['content'].setData(res.data.content);
 
                             $("#modal").modal("show");
-                            $(".form").attr("action", "{{ url('admin/system-configuration/auction-location/edit') }}/"+id);
+                            $(".form").attr("action", "{{ url('admin/system-configuration/mail-templates/edit') }}/"+id);
                         }
                     }
                 });

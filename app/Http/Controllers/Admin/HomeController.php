@@ -66,9 +66,9 @@ class HomeController extends Controller
         	$search = $request->search;
             $filter['search'] = $search;
         }
-        if (!empty($request->unpaid)) {
-        	$data['unpaid'] = $request->unpaid;
-            $filter['unpaid'] = '0';
+        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
+        	$data['pay_status'] = $request->pay_status;
+            $filter['pay_status'] = $request->pay_status;
         }
         if (!empty($filter)) {
             $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
@@ -95,8 +95,8 @@ class HomeController extends Controller
                         ->orWhere('notes', 'LIKE', '%'.$search.'%');
                     });
                 }
-                if (!empty($filter['unpaid'])) {
-                    $query->where('all_paid', '0');
+                if (!empty($filter['pay_status']) || $filter['pay_status'] == "0") {
+                    $query->where('all_paid', $filter['pay_status']);
                 }
             });
         }
@@ -112,6 +112,7 @@ class HomeController extends Controller
         $data['all_terminal'] = Terminal::all();
         $data['all_status'] = Status::all();
         $data['all_buyer'] = User::where('role', '2')->get();
+        $data['all_destination_port'] = DestinationPort::all();
         return view('admin.vehicles', $data);
     }
 
@@ -266,7 +267,7 @@ class HomeController extends Controller
         $data   = array();
         $data['type'] = 'vehicles';
         $data['action'] = url('admin/vehicles/edit/'.$id);
-        $data['list'] = AssignVehicle::with('vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.shipping_line')->where('id', $id)->first();
+        $data['list'] = AssignVehicle::with('vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.shipping_line')->where('id', $id)->first();
         $data['all_status'] = Status::all();
         $data['all_terminal'] = Terminal::all();
         $data['all_buyer'] = User::where('role', '2')->get();
@@ -494,7 +495,50 @@ class HomeController extends Controller
     {
         $data['type'] = "pickup-history";
         $data['page'] = '1';
-        $pickup = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle');
+        $pickup = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle', 'vehicle.destination_port', 'vehicle.buyer');
+        if (!empty($request->destination) && $request->destination !== 'all') {
+            $data['destination'] = $request->destination;
+            $destination = $request->destination;
+            $filter['destination'] = $destination;
+        }
+        if (!empty($request->buyer) && $request->buyer !== 'all') {
+            $data['buyer'] = $request->buyer;
+            $buyer = $request->buyer;
+            $filter['buyer'] = $buyer;
+        }
+        if (!empty($request->search)) {
+            $data['search'] = $request->search;
+            $search = $request->search;
+            $filter['search'] = $search;
+        }
+        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
+            $data['pay_status'] = $request->pay_status;
+            $filter['pay_status'] = $request->pay_status;
+        }
+        if (!empty($filter)) {
+            $vehicles = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle', 'vehicle.destination_port', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
+                if (!empty($filter['destination'])) {
+                    $query->where('destination_manual', $filter['destination']);
+                }
+                if (!empty($filter['buyer'])) {
+                    $query->where('buyer_id', $filter['buyer']);
+                }
+                if (!empty($filter['search'])) {
+                    $search = $filter['search'];
+                    $query->where(function ($q) use ($search) {
+                        $q->where('delivery_date', 'LIKE', '%'.$search.'%')
+                        ->orWhere('description', 'LIKE', '%'.$search.'%')
+                        ->orWhere('vin', 'LIKE', '%'.$search.'%')
+                        ->orWhere('client_name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
+                        ->orWhere('notes', 'LIKE', '%'.$search.'%');
+                    });
+                }
+                if (!empty($filter['pay_status']) || $filter['pay_status'] == "0") {
+                    $query->where('all_paid', $filter['pay_status']);
+                }
+            });
+        }
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 20;
@@ -504,6 +548,8 @@ class HomeController extends Controller
         }
         $pickup = $pickup->limit(20)->get();
         $data['list'] = $pickup;
+        $data['all_buyer'] = User::where('role', '2')->get();
+        $data['all_destination_port'] = DestinationPort::all();
         return view('admin.pickup-history', $data);
     }
 

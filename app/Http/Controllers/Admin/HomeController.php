@@ -495,6 +495,7 @@ class HomeController extends Controller
     {
         $data['type'] = "pickup-history";
         $data['page'] = '1';
+        $filter = [];
         $pickup = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle', 'vehicle.destination_port', 'vehicle.buyer');
         if (!empty($request->destination) && $request->destination !== 'all') {
             $data['destination'] = $request->destination;
@@ -511,7 +512,7 @@ class HomeController extends Controller
             $search = $request->search;
             $filter['search'] = $search;
         }
-        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
+        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == "0") {
             $data['pay_status'] = $request->pay_status;
             $filter['pay_status'] = $request->pay_status;
         }
@@ -526,15 +527,10 @@ class HomeController extends Controller
                 if (!empty($filter['search'])) {
                     $search = $filter['search'];
                     $query->where(function ($q) use ($search) {
-                        $q->where('delivery_date', 'LIKE', '%'.$search.'%')
-                        ->orWhere('description', 'LIKE', '%'.$search.'%')
-                        ->orWhere('vin', 'LIKE', '%'.$search.'%')
-                        ->orWhere('client_name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
-                        ->orWhere('notes', 'LIKE', '%'.$search.'%');
+                        $q->orWhere('vin', 'LIKE', '%'.$search.'%');
                     });
                 }
-                if (!empty($filter['pay_status']) || $filter['pay_status'] == "0") {
+                if (!empty($filter['pay_status']) || @$filter['pay_status'] == "0") {
                     $query->where('all_paid', $filter['pay_status']);
                 }
             });

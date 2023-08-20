@@ -22,7 +22,7 @@
                 <div class="col-md-9">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex align-items-center">
-                            <h3 class="fw-bold fs-5 mb-0">Measurement</h3>
+                            <h3 class="fw-bold fs-5 mb-0">Fine Type</h3>
                             <button class="btn border-0 add" type="button">
                                 <img src="{{ asset('assets/plus_green.svg') }}" alt="add" />
                             </button>
@@ -30,11 +30,11 @@
                                 <div class="modal-dialog rounded-5" style="max-width: 746px; width: 746px;">
                                     <div class="modal-content p-3">
                                         <div class="modal-header border-0">
-                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Measurement</h1>
+                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Fine Type</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ url('admin/system-configuration/measurement/add') }}" method="POST" class="form">
+                                            <form action="{{ url('admin/system-configuration/fine-type/add') }}" method="POST" class="form">
                                                 @csrf
                                                 <div class="row mt-4">
 
@@ -68,9 +68,9 @@
                                                         <div class="row">
                                                             <label for="" class="col-md-4">Selected</label>
                                                             <div class="col-md-8">
-                                                                <div class="input-group shadow-lg rounded-4">
-                                                                    <input type="number" name="selected" id="selected" 
-                                                                        class="py-2 form-control rounded-end-4" />
+                                                                <div class="rounded-4">
+                                                                    <input type="checkbox" name="selected" id="selected" 
+                                                                        value="1" class="py-2" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -95,7 +95,7 @@
                                     $pre = 'page='.$prev;
                                     $nex = 'page='.$next;
                                 @endphp
-                                <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/measurement?'.$pre) }}" @endif>
+                                <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/fine-type?'.$pre) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -103,7 +103,7 @@
                                     </svg>
                                 </a>
                                 <p class="text-fs-4 m-0">Page {{ @$page }}</p>
-                                <a class="btn" @if(count($measurement) < 10) href="javascript:void();" @else href="{{ url('admin/system-configuration/measurement?'.$nex) }}" @endif>
+                                <a class="btn" @if(count($fine_type) < 10) href="javascript:void();" @else href="{{ url('admin/system-configuration/fine-type?'.$nex) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -123,8 +123,8 @@
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
-                                    @if(count(@$measurement) > 0)
-                                    @foreach(@$measurement as $key => $value)
+                                    @if(count(@$fine_type) > 0)
+                                    @foreach(@$fine_type as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td>
                                             <p class=" text-fs-3">
@@ -147,7 +147,7 @@
                                                     <i class="fa-solid fa-edit edit" data-id="{{ @$value->id }}" style="cursor: pointer;"></i>
                                                 </p>
                                                 <p class="fs-5 text-danger">
-                                                    <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/measurement/delete', @$value->id) }}" style="cursor: pointer;"></i>
+                                                    <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/fine-type/delete', @$value->id) }}" style="cursor: pointer;"></i>
                                                 </p>
                                             </div>
                                         </td>
@@ -155,7 +155,7 @@
                                     @endforeach
                                     @else
                                     <tr>
-                                        <td colspan="3">No data found</td>
+                                        <td colspan="4">No data found</td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -240,13 +240,13 @@
 
             $(document).on("click", ".add", function () {
                 
-                $("#modalLabel").text("Add New Measurement");
+                $("#modalLabel").text("Add New Fine Type");
                 $("#name").val('');
                 $("#position").val('');
-                $("#selected").val('');
+                $("#selected").attr('checked', false);
 
                 $("#modal").modal("show");
-                $(".form").attr("action", "{{ url('admin/system-configuration/measurement/add') }}");
+                $(".form").attr("action", "{{ url('admin/system-configuration/fine-type/add') }}");
                         
             });
 
@@ -255,18 +255,22 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('admin/system-configuration/measurement/edit') }}/"+id,
+                    url: "{{ url('admin/system-configuration/fine-type/edit') }}/"+id,
                     success: function (res) {
                         res = JSON.parse(res);
                         console.log(res);
                         if (res.success == true) {
-                            $("#modalLabel").text("Edit Measurement");
+                            $("#modalLabel").text("Edit Fine Type");
                             $("#name").val(res.data.name);
                             $("#position").val(res.data.position);
-                            $("#selected").val(res.data.selected);
+                            if(res.data.selected == "1"){
+                                $("#selected").attr('checked', true);
+                            } else {
+                                $("#selected").attr('checked', false);
+                            }
 
                             $("#modal").modal("show");
-                            $(".form").attr("action", "{{ url('admin/system-configuration/measurement/edit') }}/"+id);
+                            $(".form").attr("action", "{{ url('admin/system-configuration/fine-type/edit') }}/"+id);
                         }
                     }
                 });

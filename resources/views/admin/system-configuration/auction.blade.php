@@ -68,9 +68,9 @@
                                                         <div class="row">
                                                             <label for="" class="col-md-4">Selected</label>
                                                             <div class="col-md-8">
-                                                                <div class="input-group shadow-lg rounded-4">
-                                                                    <input type="number" name="selected" id="selected" 
-                                                                        class="py-2 form-control rounded-end-4" />
+                                                                <div class="rounded-4">
+                                                                    <input type="checkbox" name="selected" id="selected" 
+                                                                        value="1" class="py-2" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -155,7 +155,7 @@
                                     @endforeach
                                     @else
                                     <tr>
-                                        <td colspan="3">No data found</td>
+                                        <td colspan="4">No data found</td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -243,7 +243,7 @@
                 $("#modalLabel").text("Add New Auction");
                 $("#name").val('');
                 $("#position").val('');
-                $("#selected").val('');
+                $("#selected").attr('checked', false);
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/auction/add') }}");
@@ -263,7 +263,11 @@
                             $("#modalLabel").text("Edit Auction");
                             $("#name").val(res.data.name);
                             $("#position").val(res.data.position);
-                            $("#selected").val(res.data.selected);
+                            if(res.data.selected == "1"){
+                                $("#selected").attr('checked', true);
+                            } else {
+                                $("#selected").attr('checked', false);
+                            }
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/auction/edit') }}/"+id);

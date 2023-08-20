@@ -162,6 +162,10 @@
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Vehicles Modal
                 </a>
+                <a href="{{ url('admin/system-configuration/fine-type') }}"
+                    class="fw-semibold text-dark text-decoration-none fs-6">
+                    Fine Types
+                </a>
                 <a href="{{ url('admin/system-configuration/user-levels') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     User Level

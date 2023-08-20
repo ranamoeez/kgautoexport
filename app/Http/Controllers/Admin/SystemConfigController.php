@@ -27,6 +27,7 @@ use App\Models\ReminderTemplate;
 use App\Models\VehicleModal;
 use App\Models\VehicleBrand;
 use App\Models\Level;
+use App\Models\FineType;
 
 class SystemConfigController extends Controller
 {
@@ -431,6 +432,9 @@ class SystemConfigController extends Controller
             $data = $request->all();
 
             unset($data['_token']);
+            if (empty(@$data['selected'])) {
+                $data['selected'] = '0';
+            }
             Terminal::where('id', $id)->update($data);
             return json_encode(["success"=>true, "msg"=>"Terminal updated successfully!", "action"=>"reload"]);
         }
@@ -477,6 +481,9 @@ class SystemConfigController extends Controller
             $data = $request->all();
 
             unset($data['_token']);
+            if (empty(@$data['selected'])) {
+                $data['selected'] = '0';
+            }
             PreCarriage::where('id', $id)->update($data);
             return json_encode(["success"=>true, "msg"=>"Pre carriage updated successfully!", "action"=>"reload"]);
         }
@@ -523,6 +530,9 @@ class SystemConfigController extends Controller
             $data = $request->all();
 
             unset($data['_token']);
+            if (empty(@$data['selected'])) {
+                $data['selected'] = '0';
+            }
             LoadingPort::where('id', $id)->update($data);
             return json_encode(["success"=>true, "msg"=>"Loading port updated successfully!", "action"=>"reload"]);
         }
@@ -661,6 +671,9 @@ class SystemConfigController extends Controller
             $data = $request->all();
 
             unset($data['_token']);
+            if (empty(@$data['selected'])) {
+                $data['selected'] = '0';
+            }
             NotifyParty::where('id', $id)->update($data);
             return json_encode(["success"=>true, "msg"=>"Notify party updated successfully!", "action"=>"reload"]);
         }
@@ -707,6 +720,9 @@ class SystemConfigController extends Controller
             $data = $request->all();
 
             unset($data['_token']);
+            if (empty(@$data['selected'])) {
+                $data['selected'] = '0';
+            }
             Measurement::where('id', $id)->update($data);
             return json_encode(["success"=>true, "msg"=>"Measurement updated successfully!", "action"=>"reload"]);
         }
@@ -864,6 +880,9 @@ class SystemConfigController extends Controller
             $data = $request->all();
 
             unset($data['_token']);
+            if (empty(@$data['selected'])) {
+                $data['selected'] = '0';
+            }
             Auction::where('id', $id)->update($data);
             return json_encode(["success"=>true, "msg"=>"Auction updated successfully!", "action"=>"reload"]);
         }
@@ -1154,5 +1173,54 @@ class SystemConfigController extends Controller
     {
         Level::find($id)->delete();
         return json_encode(["success"=>true, "msg"=>"User level deleted successfully!"]);
+    }
+
+    // Fine Type Functions
+
+    public function fine_type(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $fine_type = FineType::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $fine_type = $fine_type->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $fine_type = $fine_type->limit(10)->get();
+        $data['fine_type'] = $fine_type;
+        return view('admin.system-configuration.fine-type', $data);
+    }
+
+    public function add_fine_type(Request $request)
+    {
+        $data = $request->all();
+        FineType::create($data);
+        return json_encode(["success"=>true, "msg"=>"Fine type added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_fine_type(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            if (empty(@$data['selected'])) {
+                $data['selected'] = '0';
+            }
+            FineType::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Fine type updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = FineType::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_fine_type($id)
+    {
+        FineType::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Fine type deleted successfully!"]);
     }
 }

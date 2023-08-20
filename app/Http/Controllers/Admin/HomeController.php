@@ -28,6 +28,9 @@ use App\Models\AssignVehicle;
 use App\Models\ContainerVehicle;
 use App\Models\PickupRequest;
 use App\Models\TransactionsHistory;
+use App\Models\VehicleBrand;
+use App\Models\VehicleModal;
+use App\Models\FineType;
 use Auth;
 use Storage;
 
@@ -178,6 +181,16 @@ class HomeController extends Controller
                     $fine->save();
                 }
             }
+            if (!empty($data['expense_type'])) {
+                foreach ($data['expense_type'] as $key => $value) {
+                    $fine = new Fine;
+                    $fine->vehicle_id = $vehicle->id;
+                    $fine->type = 'draft_expense';
+                    $fine->cause = $value;
+                    $fine->amount = $data['expense_fine'][$key];
+                    $fine->save();
+                }
+            }
             $response = array('success'=>true,'msg'=>'Vehicle is added sucessfully.','action'=>'reload');
             return json_encode($response);
         }
@@ -189,6 +202,9 @@ class HomeController extends Controller
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_auction'] = Auction::all();
         $data['all_auction_location'] = AuctionLocation::all();
+        $data['all_vehicle_brand'] = VehicleBrand::all();
+        $data['all_vehicle_modal'] = VehicleModal::all();
+        $data['all_fine_type'] = FineType::all();
         $data['all_destination_port'] = DestinationPort::all();
         return view('admin.add-vehicle', $data);
     }
@@ -253,6 +269,16 @@ class HomeController extends Controller
                     $fine->save();
                 }
             }
+            if (!empty($data['expense_type'])) {
+                foreach ($data['expense_type'] as $key => $value) {
+                    $fine = new Fine;
+                    $fine->vehicle_id = $id;
+                    $fine->type = 'draft_expense';
+                    $fine->cause = $value;
+                    $fine->amount = $data['expense_fine'][$key];
+                    $fine->save();
+                }
+            }
             $this->cleanData($data);
             unset($data['documents']);
             unset($data['images']);
@@ -260,6 +286,8 @@ class HomeController extends Controller
             unset($data['trans_fine']);
             unset($data['auction_type']);
             unset($data['auction_fine']);
+            unset($data['expense_type']);
+            unset($data['expense_fine']);
             $vehicle = Vehicle::where('id', $id)->update($data);
             $response = array('success'=>true,'msg'=>'Vehicle is updated sucessfully.','action'=>'reload');
             return json_encode($response);
@@ -273,6 +301,9 @@ class HomeController extends Controller
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_auction'] = Auction::all();
         $data['all_auction_location'] = AuctionLocation::all();
+        $data['all_vehicle_brand'] = VehicleBrand::all();
+        $data['all_vehicle_modal'] = VehicleModal::all();
+        $data['all_fine_type'] = FineType::all();
         $data['all_destination_port'] = DestinationPort::all();
         return view('admin.edit-vehicle', $data);
     }
@@ -643,6 +674,12 @@ class HomeController extends Controller
     {
     	$data = AuctionLocation::where("auction_id", $id)->get();
     	return json_encode(["success"=>true, "data" => $data]);
+    }
+
+    public function get_vehicle_modal($id)
+    {
+        $data = VehicleModal::where("vehicle_brand_id", $id)->get();
+        return json_encode(["success"=>true, "data" => $data]);
     }
 
     public function get_vehicles($id)

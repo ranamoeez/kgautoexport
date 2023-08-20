@@ -75,7 +75,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Buyer</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="buyer_id">
-                                        <option value=""></option>
+                                        <option value="1"></option>
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
                                             @if($value['id'] == @$list->vehicle->buyer_id)
@@ -97,22 +97,35 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Description</label>
                                 <div class="col-md-9">
-                                    <select class="selectjs form-select" name="company_name">
-                                        <option value="Toyata" @if($list->vehicle->company_name == "Toyata") selected @endif>Toyata</option>
-                                        <option value="Honda" @if($list->vehicle->company_name == "Honda") selected @endif>Honda</option>
-                                        <option value="Tesla" @if($list->vehicle->company_name == "Tesla") selected @endif>Tesla</option>
-                                        <option value="Suzuki" @if($list->vehicle->company_name == "Suzuki") selected @endif>Suzuki</option>
+                                    <select class="selectjs form-select company_name" name="company_name" required="">
+                                        <option value="1"></option>
+                                        @if(count(@$all_vehicle_brand) > 0)
+                                        @foreach(@$all_vehicle_brand as $key => $value)
+                                            @if($value['name'] == @$list->vehicle->company_name)
+                                            <option value="{{ @$value['name'] }}" data-id="{{ @$value['id'] }}" selected>{{ @$value['name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['name'] }}" data-id="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="col-12">
                                     <div class="row mt-2">
                                         <div class="col-md-6">
                                             <select class="selectjs form-select" name="name">
-                                                <option value="Mercedes" @if($list->vehicle->name == "Mercedes") selected @endif>Mercedes</option>
-                                                <option value="Limo" @if($list->vehicle->name == "Limo") selected @endif>Limo</option>
-                                                <option value="Prius" @if($list->vehicle->name == "Prius") selected @endif>Prius</option>
-                                                <option value="Mark X" @if($list->vehicle->name == "Mark X") selected @endif>Mark X</option>
-                                                <option value="Corrola" @if($list->vehicle->name == "Corrola") selected @endif>Corrola</option>
+                                                <select class="selectjs form-select name" name="name" required="" disabled="">
+                                                <option value="1"></option>
+                                                @if(count(@$all_vehicle_modal) > 0)
+                                                @foreach(@$all_vehicle_modal as $key => $value)
+                                                    @if($value['name'] == @$list->vehicle->name)
+                                                        <option value="{{ @$value['name'] }}" selected>{{ @$value['name'] }}</option>
+                                                        @else
+                                                        <option value="{{ @$value['name'] }}">{{ @$value['name'] }}</option>
+                                                        @endif
+                                                @endforeach
+                                                @endif
+                                            </select>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -427,15 +440,16 @@
                                     <div class="row trans">
                                         <div class="col-md-7 d-flex align-items-center">
                                             <select class="form-select transtype">
-                                                <option value="All" selected>Payment 45$</option>
-                                                <option value="Late Payment">Late Payment</option>
-                                                <option value="option2">Option2</option>
-                                                <option value="option3">Option3</option>
+                                                @if(count(@$all_fine_type) > 0)
+                                                @foreach(@$all_fine_type as $key => $value)
+                                                    <option value="{{ @$value['name'] }}">{{ @$value['name'] }}</option>
+                                                @endforeach
+                                                @endif
                                             </select>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
-                                                <input type="number" class="form-control transfine" min="0" placeholder="0" />
+                                                <input type="number" class="form-control transfine" min="0" value="0" placeholder="0" />
                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
@@ -485,15 +499,16 @@
                                     <div class="row auct">
                                         <div class="col-md-7 d-flex align-items-center">
                                             <select class="form-select auctiontype">
-                                                <option value="All" selected>Payment 45$</option>
-                                                <option value="Late Payment">Late Payment</option>
-                                                <option value="option2">Option2</option>
-                                                <option value="option3">Option3</option>
+                                                @if(count(@$all_fine_type) > 0)
+                                                @foreach(@$all_fine_type as $key => $value)
+                                                    <option value="{{ @$value['name'] }}">{{ @$value['name'] }}</option>
+                                                @endforeach
+                                                @endif
                                             </select>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
-                                                <input type="number" class="form-control auctionfine" min="0" placeholder="0" />
+                                                <input type="number" class="form-control auctionfine" min="0" value="0" placeholder="0" />
                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
@@ -521,9 +536,39 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Draft expenses</label>
-                                <div class="col-sm-9">
-                                    <textarea id="numeric-textarea" name="draft_expenses" class="form-control">{{ $list->vehicle->draft_expenses }}</textarea>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Draft Expenses</label>
+                                <div class="col-md-9">
+                                    <div class="row expense">
+                                        <div class="col-md-7 d-flex align-items-center">
+                                            <input type="text" class="form-control expense_type" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control expense_fine" min="0" value="0" placeholder="0" />
+                                                <span class="input-group-text" id="basic-addon2">$</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 pt-2" style="padding-right: 0px; padding-left: 0px;">
+                                            <i class="fa-circle-plus fa-solid text-success saveexpense"></i>
+                                        </div>
+                                        @if(count(@$list->vehicle->fines) > 0)
+                                        @foreach($list->vehicle->fines as $key => $value)
+                                            @if($value->type == 'draft_expense')
+                                                <div class="col-12 mt-2">
+                                                    <span class="row align-items-center">
+                                                        <div class="col-md-6">{{ $value->cause }}</div>
+                                                        <div class="col-md-3">${{ $value->amount }}</div>
+                                                        <div class="col-md-3">
+                                                            <div class="d-flex justify-content-center items-center message-icon">
+                                                                <i class="fa-circle-minus fa-solid text-danger delete-fines" data-url="{{ url('admin/delete-vehicle-fines', $value->id) }}" style="cursor: pointer;"></i>
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group mt-4 px-2">
@@ -790,34 +835,59 @@
                     }
                 });
             });
+            $(document).on("change", ".company_name", function () {
+                var id = $(this).find("option:selected").attr('data-id');
+
+                var settings = {
+                  "url": "{{ url('admin/get-vehicle-modal') }}"+"/"+id,
+                  "method": "GET",
+                };
+
+                $.ajax(settings).done(function (response) {
+                    response = JSON.parse(response);
+                    if (response.success == true) {
+                        $(".name").html("");
+                        $(response.data).each(function (key, value) {
+                            option = "<option value="+value.name+">"+value.name+"</option>";
+                            $(".name").append(option);
+                        });
+                        $(".name").attr("disabled", false);
+                    }
+                });
+            });
             $(document).on("click", ".submit-form", function () {
                 $(".add-vehicle").submit();
             });
 
             $(document).on("submit", ".form", function (event) {
                 event.preventDefault();
-                $.ajax({
-                    type: $(this).attr("method"),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: "json",
-                    url: $(this).attr("action"),
-                    data: new FormData(this),
-                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
-                    success: function (res) {
-                        // res = JSON.parse(res);
-                        console.log(res);
-                        if (res.success == true) {
-                            toastr["success"](res.msg, "Completed!");
-                            setTimeout(function () {
-                                location.reload();
-                            }, 2000);
-                        } else {
-                            toastr["error"](res.msg, "Failed!");
+
+                if ($(".company_name option:selected").val() == "") {
+                    toastr["error"]("Description is required!", "Completed!");
+                } else {
+                    $.ajax({
+                        type: $(this).attr("method"),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        url: $(this).attr("action"),
+                        data: new FormData(this),
+                        headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                        success: function (res) {
+                            // res = JSON.parse(res);
+                            console.log(res);
+                            if (res.success == true) {
+                                toastr["success"](res.msg, "Completed!");
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 2000);
+                            } else {
+                                toastr["error"](res.msg, "Failed!");
+                            }
                         }
-                    }
-                });
+                    });
+                }
             });
 
             $(document).on("click", ".upload-images", function () {
@@ -868,6 +938,31 @@
                 </div>`;
 
                 $(".auct").append(html);
+            });
+
+            $(document).on("click", ".saveexpense", function () {
+                var type = $(".expense_type").val();
+                if (type !== "") {
+                    var fine = $(".expense_fine").val();
+
+                    var html = `<div class="col-12 mt-2">
+                        <span class="row align-items-center">
+                            <input type="hidden" name="expense_type[]" value="`+type+`">
+                            <input type="hidden" name="expense_fine[]" value="`+fine+`">
+                            <div class="col-md-6">`+type+`</div>
+                            <div class="col-md-3">$`+fine+`</div>
+                            <div class="col-md-3">
+                                <div class="d-flex justify-content-center items-center message-icon">
+                                    <i class="fa-circle-minus fa-solid text-danger delete-trans" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal"></i>
+                                </div>
+                            </div>
+                        </span>
+                    </div>`;
+
+                    $(".expense").append(html);
+                } else {
+                    toastr["error"]("Please provide reason of draft expense.", "Completed!");
+                }
             });
 
             $(document).on("click", ".delete-trans", function () {
@@ -927,30 +1022,6 @@
                     }
                 });
             });
-
-            // $(document).on("change", "#image", function () {
-            //     $("#upload-images").submit();
-            // });
-       
-            // $(document).on("submit", "#upload-images", function () {
-            //     var formData = new FormData(this);
-
-            //     $.ajax({
-            //         type: 'POST',
-            //         url: '{{ url("vehicle-images") }}',
-            //         data: formData,
-            //         sucess: function(data){
-            //             data = JSON.parse(data);
-            //             if (data.success == true) {
-            //                 var html = `<li>
-            //                     <img src="{{ url('storage/app/vehicle') }}`+data.image+`" class="w-100"
-            //                         alt="car-image" />
-            //                 </li>`;
-            //                 $(".all-images").append(html);
-            //             }
-            //         }
-            //     });
-            // });
         });
     </script>
     <script>

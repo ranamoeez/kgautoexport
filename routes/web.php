@@ -56,6 +56,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/delete-container-documents/{id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_container_documents'])->name('delete-container-documents');
 
 	Route::get('/get-auction-location/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_auction_location'])->name('get-auction-location');
+	Route::get('/get-vehicle-modal/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicle_modal'])->name('get-vehicle-modal');
 
 	Route::get('/get-vehicles/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicles'])->name('get-vehicles');
 	Route::post('/assign-vehicle', [App\Http\Controllers\Admin\HomeController::class, 'assign_vehicle'])->name('assign-vehicle');
@@ -204,4 +205,10 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/system-configuration/user-levels/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_user_levels'])->name('edit-user-levels');
 	Route::post('/system-configuration/user-levels/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_user_levels'])->name('update-user-levels');
 	Route::get('/system-configuration/user-levels/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_user_levels'])->name('delete-user-levels');
+
+	Route::get('/system-configuration/fine-type', [App\Http\Controllers\Admin\SystemConfigController::class, 'fine_type'])->name('fine-type');
+	Route::post('/system-configuration/fine-type/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_fine_type'])->name('add-fine-type');
+	Route::get('/system-configuration/fine-type/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_fine_type'])->name('edit-fine-type');
+	Route::post('/system-configuration/fine-type/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_fine_type'])->name('update-fine-type');
+	Route::get('/system-configuration/fine-type/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_fine_type'])->name('delete-fine-type');
 });

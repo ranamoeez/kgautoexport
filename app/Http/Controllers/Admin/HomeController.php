@@ -524,12 +524,12 @@ class HomeController extends Controller
         }
         $transaction_history = $transaction_history->limit(20)->get();
         $data['transaction_history'] = $transaction_history;
-        $auction_price = Vehicle::get()->sum('auction_price');
-        $towing_price = Vehicle::get()->sum('towing_price');
-        $fines = Fine::get()->sum('amount');
-        $all_data = Vehicle::with('buyer', 'buyer.user_level', 'destination_port')->get();
-        $company_fee = 0;
-        $unloading_fee = 0;
+        // $auction_price = Vehicle::all()->sum('auction_price');
+        // $towing_price = Vehicle::all()->sum('towing_price');
+        // $fines = Fine::all()->sum('amount');
+        // $all_data = Vehicle::with('buyer', 'buyer.user_level', 'destination_port')->get();
+        // $company_fee = 0;
+        // $unloading_fee = 0;
         // foreach ($all_data as $key => $value) {
         //     if (!empty(@$value->buyer->user_level->company_fee)) {
         //         $company_fee += (int)@$value->buyer->user_level->company_fee;
@@ -539,10 +539,9 @@ class HomeController extends Controller
         //     }
         // }
         // $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
-        // $data['previous'] = TransactionsHistory::where('status', 'paid')->sum('amount');
+        $data['previous'] = TransactionsHistory::where('status', 'paid')->sum('amount');
         // $data['due_payments'] = (int)$due_payments - (int)$data['previous'];
         // $data['balance'] = (int)$data['previous'] - (int)$data['due_payments'];
-        $data['previous'] = '0';
         $data['due_payments'] = '0';
         $data['balance'] = '0';
         if ($data['balance'] < 0) {

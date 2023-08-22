@@ -527,7 +527,7 @@ class HomeController extends Controller
         // $auction_price = Vehicle::all()->sum('auction_price');
         // $towing_price = Vehicle::all()->sum('towing_price');
         // $fines = Fine::all()->sum('amount');
-        $all_data = Vehicle::with('buyer', 'buyer.user_level', 'destination_port')->get();
+        // $all_data = Vehicle::with('buyer', 'buyer.user_level', 'destination_port')->get();
         // $company_fee = 0;
         // $unloading_fee = 0;
         // foreach ($all_data as $key => $value) {

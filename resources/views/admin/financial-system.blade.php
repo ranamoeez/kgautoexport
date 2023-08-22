@@ -15,7 +15,7 @@
                 </h4>
             </div>
 
-            <form method="GET" action="{{ url('admin/pickup-history') }}" class="row align-items-center" id="filters-form">
+            <form method="GET" action="{{ url('admin/financial-system') }}" class="row align-items-center" id="filters-form">
                 <div class="row mt-3">
                     <div class="col-md-6">
                         <div class="mt-4">
@@ -39,7 +39,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">VIN Number</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="Enter Vehicle VIN" />
+                                    <input type="text" class="form-control" name="vin" placeholder="Enter Vehicle VIN" />
                                 </div>
                             </div>
                         </div>
@@ -49,13 +49,13 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">From</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control" />
+                                    <input type="date" class="form-control" name="from" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">To</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control" />
+                                    <input type="date" class="form-control" name="to" />
                                 </div>
                             </div>
                         </div>

@@ -133,7 +133,7 @@
                                                             <label for="" class="col-md-4">Email</label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
-                                                                    <div class="input-group-text  rounded-start-4">
+                                                                    <div class="input-group-text rounded-start-4">
                                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                             viewBox="0 0 24 24" stroke-width="1.5"
                                                                             stroke="#194AF9" class="w-6 h-6">
@@ -161,12 +161,26 @@
                                                             </label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
-                                                                    <div class="input-group-text rounded-start-4">
-                                                                        <input type="number" name="phone" id="user-phone"
-                                                                            class="py-2 form-control rounded-end-4 border-0"
-                                                                            placeholder="Enter Phone Number" />
-                                                                    </div>
+                                                                    <input type="number" name="phone" id="user-phone" class="py-2 form-control rounded-end-4 border-0" placeholder="Enter Phone Number" />
                                                                 </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12 mb-4">
+                                                        <div class="row">
+                                                            <label for="" class="col-md-2">User Level</label>
+                                                            <div class="col-md-10">
+                                                                <div class="input-group shadow-lg rounded-4">
+                                                                    <select class="form-select level" name="level_id">
+                                                                        @if(count(@$level) > 0)
+                                                                        @foreach(@$level as $key => $value)
+                                                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                                                        @endforeach
+                                                                        @endif
+                                                                    </select>
+                                                                </div>
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -258,9 +272,9 @@
                                 <thead class="text-fs-4">
                                     <th scope="col" class="fw-bold">Username</th>
                                     <th scope="col" class="fw-bold">Email</th>
-                                    <th scope="col" class="fw-bold">Name</th>
                                     <th scope="col" class="fw-bold">Company</th>
                                     <th scope="col" class="fw-bold">Phone</th>
+                                    <th scope="col" class="fw-bold">Level</th>
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
@@ -279,17 +293,17 @@
                                         </td>
                                         <td>
                                             <span class=" text-fs-3">
-                                                {{ @$value->surname }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class=" text-fs-3">
                                                 {{ @$value->company }}
                                             </span>
                                         </td>
                                         <td>
                                             <span class=" text-fs-3">
                                                 {{ @$value->phone }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class=" text-fs-3">
+                                                {{ @$value->user_level->name }}
                                             </span>
                                         </td>
                                         <td>
@@ -305,8 +319,10 @@
                                     </tr>
                                     @endforeach
                                     @else
-                                    <tr>
-                                        <td colspan="6">No data found</td>
+                                    <tr id="row" class="align-middle overflow-hidden shadow mb-2">
+                                        <td class="text-center" colspan="6">
+                                            <p>No record found</p>
+                                        </td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -619,6 +635,7 @@
                 $("#user-company").val('');
                 $("#country option[value='']").attr("selected", true);
                 $("#user-phone").val('');
+                $(".level option[value='']").attr("selected", true);
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/users/add') }}");
@@ -642,6 +659,7 @@
                             $("#user-company").val(res.data.company);
                             $("#country option[value="+res.data.country+"]").attr("selected", true);
                             $("#user-phone").val(res.data.phone);
+                            $(".level option[value="+res.data.level_id+"]").attr("selected", true);
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/users/edit') }}/"+id);

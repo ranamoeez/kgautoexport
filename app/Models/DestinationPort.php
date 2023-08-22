@@ -13,6 +13,6 @@ class DestinationPort extends Model
 
     protected $table = "destination_port";
     protected $fillable = [
-        'name', 'position'
+        'name', 'position', 'unloading_fee'
     ];
 }

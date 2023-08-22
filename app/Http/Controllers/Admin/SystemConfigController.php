@@ -37,7 +37,7 @@ class SystemConfigController extends Controller
     {
     	$data['type'] = "system-configuration";
         $data['page'] = '1';
-    	$users = User::where('role', '!=', '1');
+    	$users = User::with('user_level')->where('role', '!=', '1');
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;
@@ -47,6 +47,7 @@ class SystemConfigController extends Controller
         }
         $users = $users->limit(10)->get();
         $data['users'] = $users;
+        $data['level'] = Level::all();
     	return view('admin.system-configuration.users', $data);
     }
 

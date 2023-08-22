@@ -49,10 +49,10 @@
                         <option value="all">All</option>
                         @if(count(@$all_destination_port) > 0)
                         @foreach(@$all_destination_port as $key => $value)
-                            @if($value->id == @$destination)
-                            <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                            @if($value['id'] == @$destination)
+                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
                             @else
-                            <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
                             @endif
                         @endforeach
                         @endif
@@ -177,6 +177,12 @@
                                 </td>
                             </tr>
                             @endforeach
+                            @else
+                            <tr id="row" class="align-middle overflow-hidden shadow mb-2">
+                                <td class="text-center" colspan="8">
+                                    <p>No record found</p>
+                                </td>
+                            </tr>
                             @endif
                         </tbody>
                     </table>

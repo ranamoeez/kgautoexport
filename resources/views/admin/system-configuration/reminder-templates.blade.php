@@ -130,8 +130,10 @@
                                     </tr>
                                     @endforeach
                                     @else
-                                    <tr>
-                                        <td colspan="2">No data found</td>
+                                    <tr id="row" class="align-middle overflow-hidden shadow mb-2">
+                                        <td class="text-center" colspan="2">
+                                            <p>No record found</p>
+                                        </td>
                                     </tr>
                                     @endif
                                 </tbody>

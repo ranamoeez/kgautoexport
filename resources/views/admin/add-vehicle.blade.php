@@ -523,7 +523,7 @@
                             </div>
                             <div class="form-group mt-4">
                                 <button data-bs-toggle="modal" data-bs-target="#sendReminderModal" type='button'
-                                    class="btn btn-primary col-md-6 float-end border border-1  fs-5">
+                                    class="btn btn-primary col-md-6 float-end border border-1  fs-5" disabled="">
                                     Reminder
                                 </button>
 
@@ -819,7 +819,7 @@
                         <input type="hidden" name="trans_type[]" value="`+type+`">
                         <input type="hidden" name="trans_fine[]" value="`+fine+`">
                         <div class="col-md-6">`+type+`</div>
-                        <div class="col-md-3">$`+fine+`</div>
+                        <div class="col-md-3">`+fine+` $</div>
                         <div class="col-md-3">
                             <div class="d-flex justify-content-center items-center message-icon">
                                 <i class="fa-circle-minus fa-solid text-danger delete-trans" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal"></i>
@@ -840,7 +840,7 @@
                         <input type="hidden" name="auction_type[]" value="`+type+`">
                         <input type="hidden" name="auction_fine[]" value="`+fine+`">
                         <div class="col-md-6">`+type+`</div>
-                        <div class="col-md-3">$`+fine+`</div>
+                        <div class="col-md-3">`+fine+` $</div>
                         <div class="col-md-3">
                             <div class="d-flex justify-content-center items-center message-icon">
                                 <i class="fa-circle-minus fa-solid text-danger delete-trans" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal"></i>
@@ -862,7 +862,7 @@
                             <input type="hidden" name="expense_type[]" value="`+type+`">
                             <input type="hidden" name="expense_fine[]" value="`+fine+`">
                             <div class="col-md-6">`+type+`</div>
-                            <div class="col-md-3">$`+fine+`</div>
+                            <div class="col-md-3">`+fine+` $</div>
                             <div class="col-md-3">
                                 <div class="d-flex justify-content-center items-center message-icon">
                                     <i class="fa-circle-minus fa-solid text-danger delete-trans" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal"></i>

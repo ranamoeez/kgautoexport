@@ -258,7 +258,7 @@
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <span>{{ @$value->vehicle->paid_price }}</span>
+                                        <span style="font-size: 16px;">{{ (!empty(@$value->vehicle->auction_price)) ? @$value->vehicle->auction_price : '0.00' }} $</span>
                                         <select class="form-select option-select text-white payment_status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
                                             <option value="1" data-color="info" @if(@$value->vehicle->all_paid == "1") selected @endif>Paid</option>
                                             <option value="0" data-color="danger" @if(@$value->vehicle->all_paid == "0") selected @endif>Unpaid</option>
@@ -302,7 +302,7 @@
                             @endforeach
                             @else
                             <tr id="row" class="align-middle overflow-hidden shadow mb-2">
-                                <td class="text-center" colspan="15">
+                                <td class="text-center" colspan="14">
                                     <p>No record found</p>
                                 </td>
                             </tr>

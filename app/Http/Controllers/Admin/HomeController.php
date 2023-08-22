@@ -31,6 +31,8 @@ use App\Models\TransactionsHistory;
 use App\Models\VehicleBrand;
 use App\Models\VehicleModal;
 use App\Models\FineType;
+use App\Models\ReminderTemplate;
+use App\Models\ReminderHistory;
 use Auth;
 use Storage;
 
@@ -82,7 +84,7 @@ class HomeController extends Controller
                     $query->where('status_id', $filter['status']);
                 }
                 if (!empty($filter['destination'])) {
-                    $query->where('destination_manual', $filter['destination']);
+                    $query->where('destination_port_id', $filter['destination']);
                 }
                 if (!empty($filter['buyer'])) {
                     $query->where('buyer_id', $filter['buyer']);
@@ -98,7 +100,7 @@ class HomeController extends Controller
                         ->orWhere('notes', 'LIKE', '%'.$search.'%');
                     });
                 }
-                if (!empty($filter['pay_status']) || $filter['pay_status'] == "0") {
+                if (!empty($filter['pay_status']) || @$filter['pay_status'] == "0") {
                     $query->where('all_paid', $filter['pay_status']);
                 }
             });
@@ -305,6 +307,9 @@ class HomeController extends Controller
         $data['all_vehicle_modal'] = VehicleModal::all();
         $data['all_fine_type'] = FineType::all();
         $data['all_destination_port'] = DestinationPort::all();
+        $data['templates'] = ReminderTemplate::all();
+        $vid = AssignVehicle::where('id', $id)->first()->vehicle_id;
+        $data['history'] = ReminderHistory::where('vehicle_id', $vid)->get();
         return view('admin.edit-vehicle', $data);
     }
 
@@ -361,9 +366,9 @@ class HomeController extends Controller
         	$data['toDate'] = $request->toDate;
         	$containers = $containers->where('arrival', '<=', $request->toDate);
         }
-        if (!empty($request->unpaid)) {
-        	$data['unpaid'] = $request->unpaid;
-        	$containers = $containers->where('all_paid', '0');
+        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == '0') {
+        	$data['pay_status'] = $request->pay_status;
+        	$containers = $containers->where('all_paid', $request->pay_status);
         }
         $containers = $containers->limit(20)->get();
         foreach ($containers as $key => $value) {
@@ -519,6 +524,28 @@ class HomeController extends Controller
         }
         $transaction_history = $transaction_history->limit(20)->get();
         $data['transaction_history'] = $transaction_history;
+        $auction_price = Vehicle::all()->sum('auction_price');
+        $towing_price = Vehicle::all()->sum('towing_price');
+        $fines = Fine::all()->sum('amount');
+        $all_data = Vehicle::with('buyer', 'buyer.user_level', 'destination_port')->get();
+        $company_fee = 0;
+        $unloading_fee = 0;
+        foreach ($all_data as $key => $value) {
+            if (!empty(@$value->buyer->user_level->company_fee)) {
+                $company_fee += (int)@$value->buyer->user_level->company_fee;
+            }
+            if (!empty(@$value->destination_port->unloading_fee)) {
+                $unloading_fee += (int)@$value->destination_port->unloading_fee;
+            }
+        }
+        $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+        $data['previous'] = TransactionsHistory::where('status', 'paid')->sum('amount');
+        $data['due_payments'] = (int)$due_payments - (int)$data['previous'];
+        $data['balance'] = (int)$data['previous'] - (int)$data['due_payments'];
+        if ($data['balance'] < 0) {
+            $data['balance'] = 0;
+        }
+        $data['all_buyer'] = User::where('role', '2')->get();
         return view('admin.financial-system', $data);
     }
 
@@ -548,9 +575,9 @@ class HomeController extends Controller
             $filter['pay_status'] = $request->pay_status;
         }
         if (!empty($filter)) {
-            $vehicles = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle', 'vehicle.destination_port', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
+            $pickup = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle', 'vehicle.destination_port', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
                 if (!empty($filter['destination'])) {
-                    $query->where('destination_manual', $filter['destination']);
+                    $query->where('destination_port_id', $filter['destination']);
                 }
                 if (!empty($filter['buyer'])) {
                     $query->where('buyer_id', $filter['buyer']);
@@ -558,13 +585,17 @@ class HomeController extends Controller
                 if (!empty($filter['search'])) {
                     $search = $filter['search'];
                     $query->where(function ($q) use ($search) {
-                        $q->orWhere('vin', 'LIKE', '%'.$search.'%');
+                        $q->orWhere('vin', 'LIKE', '%'.$search.'%')
+                        ->orWhere('destination_manual', 'LIKE', '%'.$search.'%');
                     });
                 }
                 if (!empty($filter['pay_status']) || @$filter['pay_status'] == "0") {
                     $query->where('all_paid', $filter['pay_status']);
                 }
             });
+            if (!empty($filter['search'])) {
+                $pickup = $pickup->orWhere('created_at', 'LIKE', '%'.$filter['search'].'%');
+            }
         }
         if (!empty($request->page)) {
             if ($request->page > 1) {

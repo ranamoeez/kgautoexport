@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransactionsHistoryTable extends Migration
+class CreateReminderHistoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateTransactionsHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('transactions_history', function (Blueprint $table) {
+        Schema::create('reminder_history', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->string('amount');
             $table->integer('vehicle_id');
-            $table->string('status')->default('unpaid');
+            $table->integer('buyer_id');
+            $table->integer('template_id');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateTransactionsHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions_history');
+        Schema::dropIfExists('reminder_history');
     }
 }

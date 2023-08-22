@@ -62,6 +62,17 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-md-6 mb-4">
+                                                        <div class="row">
+                                                            <label for="" class="col-md-4">Company Fee</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group shadow-lg rounded-4">
+                                                                    <input type="number" name="company_fee" id="company_fee" class="py-2 form-control rounded-end-4" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-4">
                                                     <button class="btn btn-primary px-5" type="submit">
@@ -105,6 +116,7 @@
                             <table class="table">
                                 <thead class="text-fs-4">
                                     <th scope="col" class="fw-bold">Name</th>
+                                    <th scope="col" class="fw-bold">Company Fee</th>
                                     <th scope="col" class="fw-bold">Due Payment Limit</th>
                                     <th scope="col"></th>
                                 </thead>
@@ -115,6 +127,11 @@
                                         <td>
                                             <p class=" text-fs-3">
                                                 {{ @$value->name }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class=" text-fs-3">
+                                                {{ @$value->company_fee }} $
                                             </p>
                                         </td>
                                         <td>
@@ -135,8 +152,10 @@
                                     </tr>
                                     @endforeach
                                     @else
-                                    <tr>
-                                        <td colspan="3">No data found</td>
+                                    <tr id="row" class="align-middle overflow-hidden shadow mb-2">
+                                        <td class="text-center" colspan="3">
+                                            <p>No record found</p>
+                                        </td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -224,6 +243,7 @@
                 $("#modalLabel").text("Add New User Level");
                 $("#name").val('');
                 $("#due_amount_limit").val('');
+                $("#company_fee").val('');
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/user-levels/add') }}");
@@ -243,6 +263,7 @@
                             $("#modalLabel").text("Edit User Level");
                             $("#name").val(res.data.name);
                             $("#due_payment_limit").val(res.data.due_payment_limit);
+                            $("#company_fee").val(res.data.company_fee);
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/user-levels/edit') }}/"+id);

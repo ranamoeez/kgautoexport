@@ -67,11 +67,16 @@
                             <span class="mx-2">To</span>
                             <input type="date" class="form-control mx-2" name="toDate" value="{{ @$toDate }}" id="toDate" style="width: 150px;">
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="unpaid" name="unpaid" id="unpaid" @if(@$unpaid == "unpaid") checked @endif>
-                            <label class="form-check-label" for="unpaid">Only unpaid</label>
-                        </div>
                     </div>
+                </div>
+
+                <div class="offset-md-1 col-md-2">
+                    <label for="pay_status" class="fw-semibold">Payment Status</label>
+                    <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
+                        <option value="all" @if(@$paystatus == "all") selected @endif>All</option>
+                        <option value="1" @if(@$pay_status == "1") selected @endif>Paid</option>
+                        <option value="0" @if(@$pay_status == "0") selected @endif>Unpaid</option>
+                    </select>
                 </div>
             </form>
 
@@ -105,9 +110,9 @@
                                 array_push($prev_params, 'fromDate='.$fromDate);
                                 array_push($next_params, 'fromDate='.$fromDate);
                             }
-                            if (!empty(@$unpaid)) {
-                                array_push($prev_params, 'unpaid='.$unpaid);
-                                array_push($next_params, 'unpaid='.$unpaid);
+                            if (!empty(@$pay_status)) {
+                                array_push($prev_params, 'pay_status='.$pay_status);
+                                array_push($next_params, 'pay_status='.$pay_status);
                             }
                             $pre = join("&", $prev_params);
                             $nex = join("&", $next_params);
@@ -298,7 +303,7 @@
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
-            $(document).on("change", "#port, #status, #search-cont, #fromDate, #toDate, #unpaid", function () {
+            $(document).on("change", "#port, #status, #search-cont, #fromDate, #toDate, #pay_status", function () {
                 $("#filters-form").submit();
             });
             $(document).on("click", ".delete", function () {

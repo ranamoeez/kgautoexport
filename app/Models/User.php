@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use App\Models\Level;
 
 class User extends Authenticatable
 {
@@ -18,8 +19,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'AppPassword', 'main_user_id', 'role', 'surname', 'phone', 'address', 'company', 'fax', 'country', 'api_token'
+        'name', 'email', 'password', 'AppPassword', 'main_user_id', 'level_id', 'role', 'surname', 'phone', 'address', 'company', 'fax', 'country', 'api_token'
     ];
+
+    public function user_level(){
+        return $this->belongsTo(Level::class, 'level_id');
+    }
 
     /**
      * The attributes that should be hidden for arrays.

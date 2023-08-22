@@ -462,7 +462,7 @@
                                                 <div class="col-12 mt-2">
                                                     <span class="row align-items-center">
                                                         <div class="col-md-6">{{ $value->cause }}</div>
-                                                        <div class="col-md-3">${{ $value->amount }}</div>
+                                                        <div class="col-md-3">{{ $value->amount }} $</div>
                                                         <div class="col-md-3">
                                                             <div class="d-flex justify-content-center items-center message-icon">
                                                                 <i class="fa-circle-minus fa-solid text-danger delete-fines" data-url="{{ url('admin/delete-vehicle-fines', $value->id) }}" style="cursor: pointer;"></i>
@@ -521,7 +521,7 @@
                                                 <div class="col-12 mt-2">
                                                     <span class="row align-items-center">
                                                         <div class="col-md-6">{{ $value->cause }}</div>
-                                                        <div class="col-md-3">${{ $value->amount }}</div>
+                                                        <div class="col-md-3">{{ $value->amount }} $</div>
                                                         <div class="col-md-3">
                                                             <div class="d-flex justify-content-center items-center message-icon">
                                                                 <i class="fa-circle-minus fa-solid text-danger delete-fines" data-url="{{ url('admin/delete-vehicle-fines', $value->id) }}" style="cursor: pointer;"></i>
@@ -557,7 +557,7 @@
                                                 <div class="col-12 mt-2">
                                                     <span class="row align-items-center">
                                                         <div class="col-md-6">{{ $value->cause }}</div>
-                                                        <div class="col-md-3">${{ $value->amount }}</div>
+                                                        <div class="col-md-3">{{ $value->amount }} $</div>
                                                         <div class="col-md-3">
                                                             <div class="d-flex justify-content-center items-center message-icon">
                                                                 <i class="fa-circle-minus fa-solid text-danger delete-fines" data-url="{{ url('admin/delete-vehicle-fines', $value->id) }}" style="cursor: pointer;"></i>
@@ -637,12 +637,12 @@
                                                     <label for="choose form"
                                                         class="col-md-4 fs-5 fw-bold">Choose Form</label>
                                                     <div class="col-md-8">
-                                                        <select class="form-select"
-                                                            aria-label="Default select example">
-                                                            <option selected>Choose option</option>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
+                                                        <select class="form-select template" data-id="{{ @$list->vehicle->id }}" aria-label="Default select example">
+                                                            @if(count(@$templates) > 0)
+                                                            @foreach(@$templates as $k => $v)
+                                                                <option value="{{ @$v['id'] }}">{{ @$v['name'] }}</option>
+                                                            @endforeach
+                                                            @endif
                                                         </select>
                                                     </div>
                                                 </div>
@@ -651,27 +651,30 @@
                                                     reminder</a>
 
                                                 <div class="p-3">
-                                                    <div class="row shadow border rounded-5 w-100 mb-3">
+                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-1">
                                                         <p class="col text-fs-3 fw-bold text-center">History</p>
                                                         <p class="col text-fs-3 fw-bold text-center">Most Recent
                                                         </p>
                                                     </div>
-                                                    <div class="row shadow border rounded-5 w-100 mb-3">
+                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-1">
                                                         <p class="col text-fs-3 fw-bold text-center">ID</p>
                                                         <p class="col text-fs-3 fw-bold text-center">Form</p>
                                                         <p class="col text-fs-3 fw-bold text-center">Date Send
                                                         </p>
                                                     </div>
-                                                    <div class="row shadow border rounded-5 w-100 mb-3">
-                                                        <p class="col text-fs-3 text-center">55427687</p>
-                                                        <p class="col text-fs-3 text-center">Form No.1</p>
-                                                        <p class="col text-fs-3 text-center">23, 3 ,2023</p>
+                                                    @if(count(@$history) > 0)
+                                                    @foreach(@$history as $k => $v)
+                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-1">
+                                                        <p class="col text-fs-3 text-center">{{ @$v->id }}</p>
+                                                        <p class="col text-fs-3 text-center">{{ @$v->template->name }}</p>
+                                                        <p class="col text-fs-3 text-center">{{ @$v->created_at }}</p>
                                                     </div>
-                                                    <div class="row shadow border rounded-5 w-100 mb-3">
-                                                        <p class="col text-fs-3 text-center">65784248</p>
-                                                        <p class="col text-fs-3 text-center">Form No.1</p>
-                                                        <p class="col text-fs-3 text-center">23, 3 ,2023</p>
+                                                    @endforeach
+                                                    @else
+                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-1">
+                                                        <p class="text-fs-3 text-center">No data found</p>
                                                     </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

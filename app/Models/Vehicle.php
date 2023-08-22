@@ -8,6 +8,7 @@ use App\Models\VehicleImage;
 use App\Models\VehicleDocuments;
 use App\Models\Auction;
 use App\Models\AuctionLocation;
+use App\Models\DestinationPort;
 use App\Models\Terminal;
 use App\Models\Status;
 use App\Models\User;

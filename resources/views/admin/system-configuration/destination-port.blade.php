@@ -63,6 +63,18 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-md-6 mb-4">
+                                                        <div class="row">
+                                                            <label for="" class="col-md-4">Unloading Fee</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group shadow-lg rounded-4">
+                                                                    <input type="number" name="unloading_fee" id="unloading_fee" 
+                                                                        class="py-2 form-control rounded-end-4" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-4">
                                                     <button class="btn btn-primary px-5" type="submit">
@@ -107,6 +119,7 @@
                                 <thead class="text-fs-4">
                                     <th scope="col" class="fw-bold">Name</th>
                                     <th scope="col" class="fw-bold">Position</th>
+                                    <th scope="col" class="fw-bold">Unloading Fee</th>
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
@@ -124,6 +137,11 @@
                                             </p>
                                         </td>
                                         <td>
+                                            <p class=" text-fs-3">
+                                                {{ @$value->unloading_fee }} $
+                                            </p>
+                                        </td>
+                                        <td>
                                             <div class="d-flex align-items-center float-end">
                                                 <p class="fs-5 text-primary me-3">
                                                     <i class="fa-solid fa-edit edit" data-id="{{ @$value->id }}" style="cursor: pointer;"></i>
@@ -136,8 +154,10 @@
                                     </tr>
                                     @endforeach
                                     @else
-                                    <tr>
-                                        <td colspan="3">No data found</td>
+                                    <tr id="row" class="align-middle overflow-hidden shadow mb-2">
+                                        <td class="text-center" colspan="4">
+                                            <p>No record found</p>
+                                        </td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -225,6 +245,7 @@
                 $("#modalLabel").text("Add New Destination Port");
                 $("#name").val('');
                 $("#position").val('');
+                $("#unloading_fee").val('');
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/destination-port/add') }}");
@@ -244,6 +265,7 @@
                             $("#modalLabel").text("Edit Destination Port");
                             $("#name").val(res.data.name);
                             $("#position").val(res.data.position);
+                            $("#unloading_fee").val(res.data.unloading_fee);
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/destination-port/edit') }}/"+id);

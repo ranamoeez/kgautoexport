@@ -15,23 +15,29 @@
                 </h4>
             </div>
 
-            <form action="">
+            <form method="GET" action="{{ url('admin/pickup-history') }}" class="row align-items-center" id="filters-form">
                 <div class="row mt-3">
                     <div class="col-md-6">
                         <div class="mt-4">
                             <div class="row mb-4">
-                                <label for="" class="col-md-3 col-form-label fw-semibold">User name</label>
+                                <label for="buyer" class="col-md-3 col-form-label fw-semibold">Buyer</label>
                                 <div class="col-md-9">
-                                    <select class="selectjs form-select">
-                                        <option value="All" selected>All</option>
-                                        <option value="option1">Option1</option>
-                                        <option value="option2">Option2</option>
-                                        <option value="option3">Option3</option>
+                                    <select class="selectjs form-select" id="buyer" name="buyer">
+                                        <option value="all" selected>All</option>
+                                        @if(count(@$all_buyer) > 0)
+                                        @foreach(@$all_buyer as $key => $value)
+                                            @if($value->id == @$buyer)
+                                            <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                                            @else
+                                            <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">VIN number</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">VIN Number</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" placeholder="Enter Vehicle VIN" />
                                 </div>
@@ -65,7 +71,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle text-fs-5">Due payments</h2>
-                                    <p class="card-text fw-bold mt-2"><span>23,000</span> $</p>
+                                    <p class="card-text fw-bold mt-2"><span>{{ @$due_payments }}</span> $</p>
                                 </div>
                             </div>
                         </div>
@@ -75,7 +81,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle text-fs-5">Previous payments</h2>
-                                    <p class="card-text fw-bold mt-2"><span>33,000</span> $</p>
+                                    <p class="card-text fw-bold mt-2"><span>{{ @$previous }}</span> $</p>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +91,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle text-fs-5">Balance</h2>
-                                    <p class="card-text fw-bold mt-2"><span>123,000</span> $</p>
+                                    <p class="card-text fw-bold mt-2"><span>{{ @$balance }}</span> $</p>
                                 </div>
                             </div>
                         </div>

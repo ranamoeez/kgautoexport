@@ -22,10 +22,6 @@ class User extends Authenticatable
         'name', 'email', 'password', 'AppPassword', 'main_user_id', 'level_id', 'role', 'surname', 'phone', 'address', 'company', 'fax', 'country', 'api_token'
     ];
 
-    public function user_level(){
-        return $this->belongsTo(Level::class, 'level_id');
-    }
-
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -43,4 +39,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function user_level(){
+        return $this->belongsTo(Level::class, 'level_id');
+    }
 }

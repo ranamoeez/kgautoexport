@@ -39,7 +39,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">VIN Number</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="vin" placeholder="Enter Vehicle VIN" />
+                                    <input type="text" class="form-control" name="vin" id="vin" value="{{ @$vin }}" placeholder="Enter Vehicle VIN" />
                                 </div>
                             </div>
                         </div>
@@ -49,13 +49,13 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">From</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control" name="from" />
+                                    <input type="date" class="form-control" name="from" value="{{ @$from }}" id="from" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">To</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control" name="to" />
+                                    <input type="date" class="form-control" name="to" value="{{ @$to }}" id="to" />
                                 </div>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
                                     </button>
 
                                     <!-- Modal -->
-                                    <div class="modal fade  " id="addPaymentModal" tabindex="-1"
+                                    <div class="modal fade" id="addPaymentModal" tabindex="-1"
                                         aria-labelledby="addPaymentModalLabel" aria-hidden="true">
                                         <div class="modal-dialog rounded-5">
                                             <div class="modal-content p-3">
@@ -119,44 +119,45 @@
                                                     <h1 class="modal-title fw-bold" id="addPaymentModalLabel"
                                                         style="font-size: 28px">
                                                         Submit Payment</h1>
-                                                    <button type="button" class="btn-close"
-                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div class="row mt-4">
-                                                        <label for="username"
-                                                            class="col-md-4 fs-5 fw-bold">Username</label>
-                                                        <div class="col-md-8">
-                                                            <select class="form-select" name="buyer" aria-label="Default select example">
-                                                                @if(count(@$all_buyer) > 0)
-                                                                @foreach(@$all_buyer as $key => $value)
-                                                                    @if($value->id == @$buyer)
-                                                                    <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
-                                                                    @else
-                                                                    <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                                        <div class="row mt-4">
+                                                            <label for="username" class="col-md-4 fs-5 fw-bold">Buyer</label>
+                                                            <div class="col-md-8">
+                                                                <select class="form-select p-2 border border-gray-200 rounded-lg buyer" name="user_id" aria-label="Default select example">
+                                                                    <option value=""></option>
+                                                                    @if(count(@$all_buyer) > 0)
+                                                                    @foreach(@$all_buyer as $key => $value)
+                                                                        @if($value->id == @$buyer)
+                                                                        <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                                                                        @else
+                                                                        <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                                                                        @endif
+                                                                    @endforeach
                                                                     @endif
-                                                                @endforeach
-                                                                @endif
-                                                            </select>
+                                                                </select>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row mt-4">
-                                                        <label for="vin-number"
-                                                            class="col-md-4 fs-5 fw-bold">VIN Number</label>
-                                                        <div class="col-md-8">
-                                                            <input type="text" name="vin" class="form-control shadow-lg" />
+                                                        <div class="row mt-4">
+                                                            <label for="vin-number" class="col-md-4 fs-5 fw-bold">VIN Number</label>
+                                                            <div class="col-md-8">
+                                                                <select class="form-select p-2 border border-gray-200 rounded-lg vin" name="vehicle_id" aria-label="Default select example" disabled="">
+                                                                    <option value=""></option>
+                                                                </select>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <a href="#"
-                                                        class="btn w-auto btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5">Check</a>
+                                                        {{-- <a href="javascript:void;" class="btn w-auto btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5">Check</a> --}}
 
-                                                    <div class="row mt-4">
-                                                        <label for="amount" class="col-md-4 fs-5 fw-bold">Amount
-                                                            to Pay</label>
-                                                        <div class="col-md-8">
-                                                            <input type="text" name="amount" id="pay_amount" class="form-control shadow-lg" />
+                                                        <div class="row mt-4">
+                                                            <label for="amount" class="col-md-4 fs-5 fw-bold">Amount
+                                                                to Pay</label>
+                                                            <div class="col-md-8">
+                                                                <input type="text" name="amount" id="pay_amount" class="form-control shadow-lg" />
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    </form>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="d-flex mt-4">
@@ -200,11 +201,8 @@
                                                         </div>
                                                     </div>
 
-
-
                                                 </div>
-                                                <a href="#"
-                                                    class="btn w-auto btn-primary border-0 mt-4 col-md-6 rounded-3 fs-6">Submit</a>
+                                                <button type="button" class="btn w-auto btn-primary border-0 mt-4 col-md-6 rounded-3 fs-6 save">Submit</button>
                                             </div>
                                         </div>
                                     </div>
@@ -376,8 +374,10 @@
                             </tr>
                             @endforeach
                             @else
-                            <tr>
-                                <td colspan="6">No data found</td>
+                            <tr id="row" class="align-middle overflow-hidden shadow mb-2">
+                                <td class="text-center" colspan="6">
+                                    <p>No record found</p>
+                                </td>
                             </tr>
                             @endif
                         </tbody>
@@ -414,6 +414,43 @@
 
             $("select.option-select").each(function () {
                 updateBackgroundColor(this);
+            });
+
+            $(document).on("click", ".save", function () {
+                $(".form").submit();
+            });
+
+            $(document).on("submit", ".form", function (event) {
+                event.preventDefault();
+
+                if ($(".buyer option:selected").val() == "") {
+                    toastr["error"]("Buyer is required!", "Completed!");
+                } else if ($("#pay_amount").val() == "") {
+                    toastr["error"]("Amount to pay is required!", "Completed!");
+                } else {
+                    $.ajax({
+                        type: $(this).attr("method"),
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        url: $(this).attr("action"),
+                        data: new FormData(this),
+                        headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                        success: function (res) {
+                            // res = JSON.parse(res);
+                            console.log(res);
+                            if (res.success == true) {
+                                toastr["success"](res.msg, "Completed!");
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 2000);
+                            } else {
+                                toastr["error"](res.msg, "Failed!");
+                            }
+                        }
+                    });
+                }
             });
 
             $(document).on("change", "#pay_amount", function () {
@@ -458,12 +495,37 @@
                     }
                 });
             });
+
+            $(document).on("change", ".buyer", function () {
+                var id = $(this).find("option:selected").val();
+
+                var settings = {
+                  "url": "{{ url('admin/get-vehicle-vin') }}"+"/"+id,
+                  "method": "GET",
+                };
+
+                $.ajax(settings).done(function (response) {
+                    response = JSON.parse(response);
+                    if (response.success == true) {
+                        $(".vin").html("");
+                        $(response.data.data).each(function (key, value) {
+                            option = "<option value="+value.id+">"+value.vin+"</option>";
+                            $(".vin").append(option);
+                        });
+                        $("#before_dp").text(response.data.due_payments);
+                        $("#before_bal").text(response.data.balance);
+                        $("#after_dp").text(response.data.due_payments);
+                        $("#after_bal").text(response.data.balance);
+                        $(".vin").attr("disabled", false);
+                    }
+                });
+            });
         });
     </script>
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
-            $(document).on("change", "#buyer, #terminal, #status, #destination, #search-veh, #unpaid", function () {
+            $(document).on("change", "#buyer, #vin, #from, #to", function () {
                 $("#filters-form").submit();
             });
         });

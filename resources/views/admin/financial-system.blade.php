@@ -420,14 +420,19 @@
                 var value = $(this).val();
                 var before_bal = $("#before_bal").text();
                 var before_dp = $("#before_dp").text();
-                var after_dp = parseInt(before_dp) - parseInt(value);
-                var after_bal = 0;
-                if (after_dp < 0) {
-                    after_bal = after_dp - (2 * after_dp);
-                    after_dp = 0;
+                if (value !== "") {
+                    var after_dp = parseInt(before_dp) - parseInt(value);
+                    var after_bal = 0;
+                    if (after_dp < 0) {
+                        after_bal = after_dp - (2 * after_dp);
+                        after_dp = 0;
+                    }
+                    $("#after_bal").text(after_bal);
+                    $("#after_dp").text(after_dp);
+                } else {
+                    $("#before_bal").text(after_bal);
+                    $("#before_dp").text(after_dp);
                 }
-                $("#after_bal").text(after_bal);
-                $("#after_dp").text(after_dp);
             });
 
             $(document).on("change", ".status", function () {

@@ -529,7 +529,7 @@ class HomeController extends Controller
         $fines = \DB::table('fines')->sum('amount');
         $company_fee = 0;
         $unloading_fee = 0;
-        $all_data = new Vehicle;
+        $all_data = new TransactionsHistory;
         $all_data = $all_data->get();
         foreach ($all_data as $key => $value) {
             if (!empty(@$value->buyer->user_level->company_fee)) {

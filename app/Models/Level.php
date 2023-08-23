@@ -13,6 +13,6 @@ class Level extends Model
 
     protected $table = "levels";
     protected $fillable = [
-        'name', 'due_payment_limit'
+        'name', 'company_fee', 'due_payment_limit'
     ];
 }

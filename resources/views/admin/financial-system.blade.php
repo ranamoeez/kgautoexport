@@ -420,7 +420,7 @@
                 var value = $(this).val();
                 var before_bal = $("#before_bal").text();
                 var before_dp = $("#before_dp").text();
-                if (value !== "") {
+                if (value !== '') {
                     var after_dp = parseInt(before_dp) - parseInt(value);
                     var after_bal = 0;
                     if (after_dp < 0) {
@@ -430,8 +430,8 @@
                     $("#after_bal").text(after_bal);
                     $("#after_dp").text(after_dp);
                 } else {
-                    $("#before_bal").text(after_bal);
-                    $("#before_dp").text(after_dp);
+                    $("#after_bal").text(before_bal);
+                    $("#after_dp").text(before_dp);
                 }
             });
 

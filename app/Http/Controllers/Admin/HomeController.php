@@ -512,7 +512,7 @@ class HomeController extends Controller
 
     public function financial_system(Request $request)
     {
-        $all_data = Vehicle::with('destination_port', 'buyer', 'buyer.user_level')->all();
+        $all_data = Vehicle::with('destination_port', 'buyer', 'buyer.user_level')->where("id", '!=', '0')->get();
         $data['type'] = "financial-system";
         $data['page'] = '1';
         $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer');

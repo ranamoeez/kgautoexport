@@ -527,9 +527,10 @@ class HomeController extends Controller
         $auction_price = \DB::table('vehicles')->sum('auction_price');
         $towing_price = \DB::table('vehicles')->sum('towing_price');
         $fines = \DB::table('fines')->sum('amount');
-        $all_data = Vehicle::all();
         $company_fee = 0;
         $unloading_fee = 0;
+        $all_data = new Vehicle;
+        $all_data = $all_data->get();
         foreach ($all_data as $key => $value) {
             if (!empty(@$value->buyer->user_level->company_fee)) {
                 $company_fee += (int)@$value->buyer->user_level->company_fee;

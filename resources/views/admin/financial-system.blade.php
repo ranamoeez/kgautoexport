@@ -127,20 +127,24 @@
                                                         <label for="username"
                                                             class="col-md-4 fs-5 fw-bold">Username</label>
                                                         <div class="col-md-8">
-                                                            <select class="form-select"
-                                                                aria-label="Default select example">
-                                                                <option selected>Choose option</option>
-                                                                <option value="1">One</option>
-                                                                <option value="2">Two</option>
-                                                                <option value="3">Three</option>
+                                                            <select class="form-select" name="buyer" aria-label="Default select example">
+                                                                @if(count(@$all_buyer) > 0)
+                                                                @foreach(@$all_buyer as $key => $value)
+                                                                    @if($value->id == @$buyer)
+                                                                    <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                                                                    @else
+                                                                    <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                                                                    @endif
+                                                                @endforeach
+                                                                @endif
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="row mt-4">
                                                         <label for="vin-number"
-                                                            class="col-md-4 fs-5 fw-bold">VIN number</label>
+                                                            class="col-md-4 fs-5 fw-bold">VIN Number</label>
                                                         <div class="col-md-8">
-                                                            <input type="text" class="form-control shadow-lg" />
+                                                            <input type="text" name="vin" class="form-control shadow-lg" />
                                                         </div>
                                                     </div>
                                                     <a href="#"
@@ -150,20 +154,19 @@
                                                         <label for="amount" class="col-md-4 fs-5 fw-bold">Amount
                                                             to Pay</label>
                                                         <div class="col-md-8">
-                                                            <input type="text" class="form-control shadow-lg" />
+                                                            <input type="text" name="amount" id="pay_amount" class="form-control shadow-lg" />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="d-flex mt-4">
-                                                        <label for="username"
-                                                            class="col-md-4 fs-5 fw-bold">Account Status</label>
+                                                        <label for="username" class="col-md-4 fs-5 fw-bold">Account Status</label>
                                                         <div class="col-md-6 m-2">
                                                             <div
                                                                 class="card bg-primary p-2 border-0 align-self-center">
                                                                 <h2 class="card-subtitle fs-5">Balance</h2>
                                                                 <p class="card-text fw-bold fs-6 mt-2">
-                                                                    <span>23,000</span> $</p>
+                                                                    <span id="before_bal">{{ @$balance }}</span> $</p>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6 m-2">
@@ -171,7 +174,7 @@
                                                                 class="card bg-primary p-2 border-0 align-self-center">
                                                                 <h2 class="card-subtitle fs-6">Due payments</h2>
                                                                 <p class="card-text fw-bold fs-6 mt-2">
-                                                                    <span>23,000</span> $</p>
+                                                                    <span id="before_dp">{{ @$due_payments }}</span> $</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -184,7 +187,7 @@
                                                                 class="card bg-primary p-2 border-0 align-self-center">
                                                                 <h2 class="card-subtitle fs-5">Balance</h2>
                                                                 <p class="card-text fw-bold fs-6 mt-2">
-                                                                    <span>23,000</span> $</p>
+                                                                    <span id="after_bal">{{ @$balance }}</span> $</p>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6 m-2">
@@ -192,7 +195,7 @@
                                                                 class="card bg-primary p-2 border-0 align-self-center">
                                                                 <h2 class="card-subtitle fs-6">Due payments</h2>
                                                                 <p class="card-text fw-bold fs-6 mt-2">
-                                                                    <span>23,000</span> $</p>
+                                                                    <span id="after_dp">{{ @$due_payments }}</span> $</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -244,8 +247,9 @@
                 <div class="table-responsive">
                     <table class="table">
                         <thead class="text-fs-4">
-                            <th scope="col" class="fw-bold">Buyer</th>
                             <th scope="col" class="fw-bold">Transaction ID</th>
+                            <th scope="col" class="fw-bold">Buyer</th>
+                            <th scope="col" class="fw-bold">VIN</th>
                             <th scope="col" class="fw-bold">Date</th>
                             <th scope="col" class="fw-bold">Status</th>
                             <th scope="col" class="fw-bold">Transaction amount</th>
@@ -257,12 +261,17 @@
                             <tr class="align-middle overflow-hidden shadow mb-2">
                                 <td>
                                     <span class="fw-bold text-fs-3">
+                                        {{ @$value->id }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-fs-3">
                                         {{ @$value->vehicle->buyer->name }}
                                     </span>
                                 </td>
                                 <td>
                                     <span class="fw-bold text-fs-3">
-                                        {{ @$value->id }}
+                                        {{ @$value->vehicle->vin }}
                                     </span>
                                 </td>
                                 <td>
@@ -405,6 +414,20 @@
 
             $("select.option-select").each(function () {
                 updateBackgroundColor(this);
+            });
+
+            $(document).on("change", "#pay_amount", function () {
+                var value = $(this).val();
+                var before_bal = $("#before_bal").text();
+                var before_dp = $("#before_dp").text();
+                var after_dp = parseInt(before_dp) - parseInt(value);
+                var after_bal = 0;
+                if (after_dp < 0) {
+                    after_bal = after_dp - (2 * after_dp);
+                    after_dp = 0;
+                }
+                $("#after_bal").text(after_bal);
+                $("#after_dp").text(after_dp);
             });
 
             $(document).on("change", ".status", function () {

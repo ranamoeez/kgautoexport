@@ -527,7 +527,7 @@ class HomeController extends Controller
         $auction_price = \DB::table('vehicles')->sum('auction_price');
         $towing_price = \DB::table('vehicles')->sum('towing_price');
         $fines = \DB::table('fines')->sum('amount');
-        $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port")->limit(10000)->get();
+        $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port")->limit(100000)->get();
         $company_fee = 0;
         $unloading_fee = 0;
         foreach ($all_data as $key => $value) {

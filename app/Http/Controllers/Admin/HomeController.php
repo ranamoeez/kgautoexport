@@ -512,6 +512,7 @@ class HomeController extends Controller
 
     public function financial_system(Request $request)
     {
+        $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port")->get();
         $data['type'] = "financial-system";
         $data['page'] = '1';
         $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer');
@@ -529,8 +530,6 @@ class HomeController extends Controller
         $fines = \DB::table('fines')->sum('amount');
         $company_fee = 0;
         $unloading_fee = 0;
-        $all_data = new TransactionsHistory;
-        $all_data = $all_data->get();
         foreach ($all_data as $key => $value) {
             if (!empty(@$value->buyer->user_level->company_fee)) {
                 $company_fee += (int)@$value->buyer->user_level->company_fee;

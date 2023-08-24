@@ -678,7 +678,7 @@ class HomeController extends Controller
         }
         $pickup = $pickup->limit(20)->get();
         foreach ($pickup as $key => $val) {
-            $buyer_id = $val->user_id;
+            $buyer_id = $val->user->id;
 
             $previous = TransactionsHistory::where("user_id", $buyer_id)->sum('amount');
             $auction_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('auction_price');

@@ -525,16 +525,6 @@ class HomeController extends Controller
             $vin = $request->vin;
             $filter['vin'] = $vin;
         }
-        if (!empty($request->from)) {
-            $data['from'] = $request->from;
-            $from = $request->from;
-            $filter['from'] = $from;
-        }
-        if (!empty($request->to)) {
-            $data['to'] = $request->to;
-            $to = $request->to;
-            $filter['to'] = $to;
-        }
         $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer');
         if (!empty($filter)) {
             $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
@@ -544,7 +534,18 @@ class HomeController extends Controller
                 if (!empty($filter['buyer'])) {
                     $query->where('buyer_id', $filter['buyer']);
                 }
-            });;
+            });
+        }
+        if (!empty($request->from) && !empty($request->to)) {
+            $data['from'] = $request->from;
+            $data['to'] = $request->to;
+            $transaction_history = $transaction_history->where('created_at', '<=', $request->to)->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->from)) {
+            $data['from'] = $request->from;
+            $transaction_history = $transaction_history->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->to)) {
+            $data['to'] = $request->to;
+            $transaction_history = $transaction_history->where('created_at', '<=', $request->to);
         }
         if (!empty($request->page)) {
             if ($request->page > 1) {
@@ -781,6 +782,26 @@ class HomeController extends Controller
     public function get_vehicle_modal($id)
     {
         $data = VehicleModal::where("vehicle_brand_id", $id)->get();
+        return json_encode(["success"=>true, "data" => $data]);
+    }
+
+    public function get_vehicle_detail($id)
+    {
+        $vehicle = Vehicle::with('buyer', 'buyer.user_level', 'fines', 'destination_port')->where("id", $id)->first();
+        $data['auction_price'] = Vehicle::where("id", $id)->sum('auction_price');
+        $data['towing_price'] = Vehicle::where("id", $id)->sum('towing_price');
+        $data['fines'] = $vehicle->fines;
+        $data['total_auction_fines'] = Fine::where('vehicle_id', $id)->where('type', 'auction')->sum('amount');
+        $data['total_trans_fines'] = Fine::where('vehicle_id', $id)->where('type', 'transaction')->sum('amount');
+        $data['total_draft_expenses'] = Fine::where('vehicle_id', $id)->where('type', 'draft_expense')->sum('amount');
+        $data['company_fee'] = @$vehicle->buyer->user_level->company_fee;
+        if (empty($data['company_fee'])) {
+            $data['company_fee'] = '0';
+        }
+        $data['unloading_fee'] = @$vehicle->destination_port->unloading_fee;
+        if (empty($data['unloading_fee'])) {
+            $data['unloading_fee'] = '0';
+        }
         return json_encode(["success"=>true, "data" => $data]);
     }
 

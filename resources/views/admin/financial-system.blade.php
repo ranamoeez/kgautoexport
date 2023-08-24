@@ -245,6 +245,7 @@
                 <div class="table-responsive">
                     <table class="table">
                         <thead class="text-fs-4">
+                            <th scope="col"></th>
                             <th scope="col" class="fw-bold">Transaction ID</th>
                             <th scope="col" class="fw-bold">Buyer</th>
                             <th scope="col" class="fw-bold">VIN</th>
@@ -257,6 +258,11 @@
                             @if(count(@$transaction_history) > 0)
                             @foreach(@$transaction_history as $key => $value)
                             <tr class="align-middle overflow-hidden shadow mb-2">
+                                <td>
+                                    <button class="btn border-0 open" data-id="{{ @$value->vehicle->id }}">
+                                        <i class="fa fa-eye text-success"></i>
+                                    </button>
+                                </td>
                                 <td>
                                     <span class="fw-bold text-fs-3">
                                         {{ @$value->id }}
@@ -302,7 +308,7 @@
                                         </button>
 
                                         <!-- Modal -->
-                                        <div class="modal fade  " id="commentModal" tabindex="-1"
+                                        <div class="modal fade" id="commentModal" tabindex="-1"
                                             aria-labelledby="commentModalLabel" aria-hidden="true">
                                             <div class="modal-dialog rounded-5">
                                                 <div class="modal-content p-3">
@@ -384,6 +390,59 @@
                     </table>
                 </div>
             </div>
+            <!-- Modal -->
+            <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+                <div class="modal-dialog rounded-5">
+                    <div class="modal-content p-3">
+                        <div class="modal-header border-0">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <div class="d-flex justify-content-around">
+                                <p><b>Auction Price </b></p>
+                                <p>------------</p>
+                                <p><b><span class="auction_price">0</span> $</b></p>
+                            </div>
+                            <div class="d-flex justify-content-around">
+                                <p><b>Towing Price </b></p>
+                                <p>------------</p>
+                                <p><b><span class="towing_price">0</span> $</b></p>
+                            </div>
+                            <div class="d-flex justify-content-around">
+                                <p><b>Company Fee </b></p>
+                                <p>------------</p>
+                                <p><b><span class="company_fee">0</span> $</b></p>
+                            </div>
+                            <div class="d-flex justify-content-around">
+                                <p><b>Unloading Fee </b></p>
+                                <p>------------</p>
+                                <p><b><span class="unloading_fee">0</span> $</b></p>
+                            </div>
+                            <div class="d-flex justify-content-around">
+                                <p><b>Auction Fines </b></p>
+                                <p>------------</p>
+                                <p><b><span class="total_auction_fines">0</span> $</b></p>
+                            </div>
+                            <div class="row auction_fines pt-2 mb-2" style="border: 1px solid #aaa; border-radius: 10px;">
+                            </div>
+                            <div class="d-flex justify-content-around">
+                                <p><b>Trans. Fines </b></p>
+                                <p>------------</p>
+                                <p><b><span class="total_trans_fines">0</span> $</b></p>
+                            </div>
+                            <div class="row trans_fines pt-2 mb-2" style="border: 1px solid #aaa; border-radius: 10px;">
+                            </div>
+                            <div class="d-flex justify-content-around">
+                                <p><b>Draft Expenses </b></p>
+                                <p>------------</p>
+                                <p><b><span class="total_draft_expenses">0</span> $</b></p>
+                            </div>
+                            <div class="row draft_expenses pt-2 mb-2" style="border: 1px solid #aaa; border-radius: 10px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -414,6 +473,71 @@
 
             $("select.option-select").each(function () {
                 updateBackgroundColor(this);
+            });
+
+            $(document).on("click", ".open", function () {
+                var id = $(this).attr("data-id");
+
+                var settings = {
+                  "url": "{{ url('admin/get-vehicle-detail') }}"+"/"+id,
+                  "method": "GET",
+                };
+
+                $.ajax(settings).done(function (response) {
+                    response = JSON.parse(response);
+                    if (response.success == true) {
+                        $(".auction_price").text(response.data.auction_price);
+                        $(".towing_price").text(response.data.towing_price);
+                        $(".total_auction_fines").text(response.data.total_auction_fines);
+                        $(".total_trans_fines").text(response.data.total_trans_fines);
+                        $(".total_draft_expenses").text(response.data.total_draft_expenses);
+                        $(".company_fee").text(response.data.company_fee);
+                        $(".unloading_fee").text(response.data.unloading_fee);
+                        $(".auction_fines").html("");
+                        $(".trans_fines").html("");
+                        $(".draft_expenses").html("");
+                        $(response.data.fines).each(function (key, value) {
+                            var date = value.created_at.split('T');
+                            date = date[0] + " " + date[1].replace(".000000Z", ""); 
+                            if (value.type == "auction") {
+                                var auction_fines = `<div class="offset-md-1 col-md-3">
+                                    <p>`+value.cause+`</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p><b>`+value.amount+` $</b></p>
+                                </div>
+                                <div class="col-md-5">
+                                    <p>`+date+`</p>
+                                </div>`;
+                                $(".auction_fines").append(auction_fines);
+                            } else if (value.type == "transaction") {
+                                var trans_fines = `<div class="offset-md-1 col-md-3">
+                                    <p>`+value.cause+`</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p><b>`+value.amount+` $</b></p>
+                                </div>
+                                <div class="col-md-5">
+                                    <p>`+date+`</p>
+                                </div>`;
+                                $(".trans_fines").append(trans_fines);
+                            } else if (value.type == "draft_expense") {
+                                var draft_expenses = `<div class="offset-md-1 col-md-3">
+                                    <p>`+value.cause+`</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p><b>`+value.amount+` $</b></p>
+                                </div>
+                                <div class="col-md-5">
+                                    <p>`+date+`</p>
+                                </div>`;
+                                $(".draft_expenses").append(draft_expenses);
+                            }
+                        });
+
+                        $("#detailModal").modal("show");
+                    }
+                });
             });
 
             $(document).on("click", ".save", function () {

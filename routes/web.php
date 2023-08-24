@@ -58,6 +58,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/get-auction-location/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_auction_location'])->name('get-auction-location');
 	Route::get('/get-vehicle-modal/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicle_modal'])->name('get-vehicle-modal');
 	Route::get('/get-vehicle-vin/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicle_vin'])->name('get-vehicle-vin');
+	Route::get('/get-vehicle-detail/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicle_detail'])->name('get-vehicle-detail');
 
 	Route::get('/get-vehicles/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicles'])->name('get-vehicles');
 	Route::post('/assign-vehicle', [App\Http\Controllers\Admin\HomeController::class, 'assign_vehicle'])->name('assign-vehicle');

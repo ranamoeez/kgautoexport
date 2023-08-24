@@ -677,6 +677,39 @@ class HomeController extends Controller
             $data['page'] = $request->page;
         }
         $pickup = $pickup->limit(20)->get();
+        foreach ($pickup as $key => $val) {
+            $buyer_id = $val->user_id;
+
+            $previous = TransactionsHistory::where("user_id", $buyer_id)->sum('amount');
+            $auction_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('auction_price');
+            $towing_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('towing_price');
+            $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $buyer_id)->limit(20000)->get();
+            $fines = 0;
+            $company_fee = 0;
+            $unloading_fee = 0;
+            foreach ($all_data as $k => $value) {
+                if (!empty(@$value->fines)) {
+                    foreach (@$value->fines as $ke => $v) {
+                        $fines += (int)$v->amount;
+                    }
+                }
+                if (!empty(@$value->buyer->user_level)) {
+                    $company_fee += (int)@$value->buyer->user_level->company_fee;
+                }
+                if (!empty(@$value->destination_port)) {
+                    $unloading_fee += (int)@$value->destination_port->unloading_fee;
+                }
+            }
+            $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+            $all_due_payments = (int)$due_payments - (int)$previous;
+            $all_balance = 0;
+            if ($all_due_payments < 0) {
+                $all_balance = (int)$all_due_payments - (2 * (int)$all_due_payments);
+                $all_due_payments = 0;
+            }
+            $pickup[$key]->due_payments = $all_due_payments;
+            $pickup[$key]->balance = $all_balance;
+        }
         $data['list'] = $pickup;
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();

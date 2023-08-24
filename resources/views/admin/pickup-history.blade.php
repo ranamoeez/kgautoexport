@@ -157,13 +157,13 @@
                                     </p>
                                 </td>
                                 <td>
-                                    <p class=" text-fs-3">
-                                        
+                                    <p class="text-fs-3">
+                                        {{ @$value->due_payments }} $
                                     </p>
                                 </td>
                                 <td>
-                                    <p class=" text-fs-3">
-                                        
+                                    <p class="text-fs-3">
+                                        {{ @$value->balance }} $
                                     </p>
                                 </td>
                                 <td>

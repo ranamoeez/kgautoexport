@@ -105,13 +105,12 @@
                         <div class="d-flex justify-content-end">
                             <div class="mt-6 px-14">
                                 <div class="financial-btn">
-                                    <button data-bs-toggle="modal" data-bs-target="#addPaymentModal"
-                                        class="btn btn-primary border border-1 fs-6">
+                                    <button type="button" id="payment-modal" class="btn btn-primary border border-1 fs-6">
                                         Add Payment
                                     </button>
 
                                     <!-- Modal -->
-                                    <div class="modal fade" id="addPaymentModal" tabindex="-1"
+                                    <div class="modal fade" id="addPaymentModal"
                                         aria-labelledby="addPaymentModalLabel" aria-hidden="true">
                                         <div class="modal-dialog rounded-5">
                                             <div class="modal-content p-3">
@@ -126,8 +125,8 @@
                                                         <div class="row mt-4">
                                                             <label for="username" class="col-md-4 fs-5 fw-bold">Buyer</label>
                                                             <div class="col-md-8">
-                                                                <select class="form-select p-2 border border-gray-200 rounded-lg buyer" name="user_id" aria-label="Default select example">
-                                                                    <option value=""></option>
+                                                                <select class="select2js form-select p-2 border border-gray-200 rounded-lg buyer" name="user_id" aria-label="Default select example">
+                                                                    <option value="">All</option>
                                                                     @if(count(@$all_buyer) > 0)
                                                                     @foreach(@$all_buyer as $key => $value)
                                                                         @if($value->id == @$buyer)
@@ -143,8 +142,8 @@
                                                         <div class="row mt-4">
                                                             <label for="vin-number" class="col-md-4 fs-5 fw-bold">VIN Number</label>
                                                             <div class="col-md-8">
-                                                                <select class="form-select p-2 border border-gray-200 rounded-lg vin" name="vehicle_id" aria-label="Default select example" disabled="">
-                                                                    <option value=""></option>
+                                                                <select class="select2js form-select p-2 border border-gray-200 rounded-lg vin" name="vehicle_id" aria-label="Default select example" disabled="">
+                                                                    <option value="all">All</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -540,6 +539,16 @@
                 });
             });
 
+            $(document).on("click", "#payment-modal", function () {
+                $('.select2js').select2({
+                    dropdownParent: $('#addPaymentModal')
+                });
+                $("#addPaymentModal").modal('show');
+                $("#addPaymentModal .select2.select2-container").css("width", "100%");
+                $("#addPaymentModal .select2-selection").css("height", "40px");
+                $("#addPaymentModal .select2-selection__arrow").css("display", "none");
+            });
+
             $(document).on("click", ".save", function () {
                 $(".form").submit();
             });
@@ -632,6 +641,7 @@
                     response = JSON.parse(response);
                     if (response.success == true) {
                         $(".vin").html("");
+                        $(".vin").append("<option value='all'>All</option>");
                         $(response.data.data).each(function (key, value) {
                             option = "<option value="+value.id+">"+value.vin+"</option>";
                             $(".vin").append(option);

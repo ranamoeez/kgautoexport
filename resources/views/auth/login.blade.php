@@ -43,18 +43,18 @@
                     </div>
                     <h2 class="fw-bold mb-4">Log in</h2>
                     <!-- login information -->
-                    <form method="POST" action="{{ route('login') }}" class="w-100">
+                    <form method="POST" action="{{ url('post-login') }}" class="w-100">
                         @csrf
                         <!-- username -->
                         <div class="form-group">
-                            <label for="email" class="text-fs-5">{{ __('Email Address') }}</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required autofocus />
+                            <label for="username" class="text-fs-5">User Name</label>
+                            <input type="text" class="form-control @if(\Session::has('error')) is-invalid @endif" id="username" name="username" value="{{ old('username') }}" required autofocus />
 
-                            @error('email')
+                            @if(\Session::has('error'))
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
+                                    <strong>{{ \Session::get('error') }}</strong>
                                 </span>
-                            @enderror
+                            @endif
                         </div>
                         <!-- Password -->
                         <div class="form-group mt-4">

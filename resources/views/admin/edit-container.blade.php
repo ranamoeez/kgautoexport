@@ -381,9 +381,9 @@
                                 <div class="d-flex flex-row shadow-lg border border-0">
                                     <input type="text" name="notes_document" value="{{ $container->notes_document }}" class="form-control text-fs-3 p-3 m-0"
                                         placeholder="Input" />
-                                    <button class="btn btn-sm btn-primary float-end comment-btn fs-6 border-0" type="button">
+                                    {{-- <button class="btn btn-sm btn-primary float-end comment-btn fs-6 border-0" type="button">
                                         Save
-                                    </button>
+                                    </button> --}}
                                 </div>
                             </div>
                         </div>
@@ -447,15 +447,16 @@
                                 <a href="{{ url('admin/containers') }}" class="btn btn-primary mb-2 border-0">
                                     Cancel
                                 </a>
-                                <button class="btn btn-primary mb-2 border-0" type="button">
+                                {{-- <button class="btn btn-primary mb-2 border-0" type="button">
                                     Send release request
-                                </button>
-                                <button class="btn btn-primary mb-2 border-0" type="button">
+                                </button> --}}
+                                <br>
+                                <a href="{{ asset('assets/loading-order.pdf') }}" class="btn btn-primary mb-2 border-0" download="loading-order.pdf">
                                     Loading Order
-                                </button>
-                                <button class="btn btn-primary mb-2 border-0" type="button">
+                                </a>
+                                <a href="{{ asset('assets/letter.pdf') }}" class="btn btn-primary mb-2 border-0" download="letter.pdf">
                                     Letter ()
-                                </button>
+                                </a>
                                 <button class="btn btn-primary mb-2 border-0" type="button">
                                     Send to buyer
                                 </button>

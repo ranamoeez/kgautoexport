@@ -113,8 +113,7 @@
                                 <div class="col-12">
                                     <div class="row mt-2">
                                         <div class="col-md-6">
-                                            <select class="selectjs form-select" name="name">
-                                                <select class="selectjs form-select name" name="name" required="" disabled="">
+                                            <select class="selectjs form-select name" name="name" required="" disabled="">
                                                 <option value="1"></option>
                                                 @if(count(@$all_vehicle_modal) > 0)
                                                 @foreach(@$all_vehicle_modal as $key => $value)
@@ -125,7 +124,6 @@
                                                         @endif
                                                 @endforeach
                                                 @endif
-                                            </select>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -304,18 +302,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction buyer</label>
                                 <div class="col-sm-9">
-                                    <select class="selectjs form-select" name="auction_buyer">
-                                        <option value=""></option>
-                                        @if(count(@$all_buyer) > 0)
-                                        @foreach(@$all_buyer as $key => $value)
-                                            @if($value['id'] == @$list->vehicle->auction_buyer)
-                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
-                                            @else
-                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
-                                            @endif
-                                        @endforeach
-                                        @endif
-                                    </select>
+                                    <input type="text" class="form-control" name="auction_buyer" value="{{ $list->vehicle->auction_buyer }}" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
@@ -440,8 +427,8 @@
                                     <div class="row trans">
                                         <div class="col-md-7 d-flex align-items-center">
                                             <select class="form-select transtype">
-                                                @if(count(@$all_fine_type) > 0)
-                                                @foreach(@$all_fine_type as $key => $value)
+                                                @if(count(@$all_trans_fine_type) > 0)
+                                                @foreach(@$all_trans_fine_type as $key => $value)
                                                     <option value="{{ @$value['name'] }}">{{ @$value['name'] }}</option>
                                                 @endforeach
                                                 @endif
@@ -449,7 +436,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
-                                                <input type="number" class="form-control transfine" min="0" value="0" placeholder="0" />
+                                                <input type="number" class="form-control transfine" min="0" placeholder="0" />
                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
@@ -508,7 +495,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
-                                                <input type="number" class="form-control auctionfine" min="0" value="0" placeholder="0" />
+                                                <input type="number" class="form-control auctionfine" min="0" placeholder="0" />
                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
@@ -544,7 +531,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
-                                                <input type="number" class="form-control expense_fine" min="0" value="0" placeholder="0" />
+                                                <input type="number" class="form-control expense_fine" min="0" placeholder="0" />
                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>

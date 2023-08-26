@@ -47,7 +47,7 @@
                                             @if($value['id'] == @$status)
                                             <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
                                             @else
-                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            <option value="{{ @$value['id'] }}" @if(@$value['name'] == "New" && empty(@$status)) selected @endif>{{ @$value['name'] }}</option>
                                             @endif
                                         @endforeach
                                         @endif
@@ -295,18 +295,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction buyer</label>
                                 <div class="col-sm-9">
-                                    <select class="selectjs form-select" name="auction_buyer">
-                                        <option value=""></option>
-                                        @if(count(@$all_buyer) > 0)
-                                        @foreach(@$all_buyer as $key => $value)
-                                            @if($value['id'] == @$auction_buyer)
-                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
-                                            @else
-                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
-                                            @endif
-                                        @endforeach
-                                        @endif
-                                    </select>
+                                    <input type="text" class="form-control" name="auction_buyer" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
@@ -319,7 +308,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="purchase_date" class="form-control" />
+                                    <input type="date" name="purchase_date" id="purchase_date" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
@@ -431,8 +420,8 @@
                                     <div class="row trans">
                                         <div class="col-md-7 d-flex align-items-center">
                                             <select class="form-select transtype">
-                                                @if(count(@$all_fine_type) > 0)
-                                                @foreach(@$all_fine_type as $key => $value)
+                                                @if(count(@$all_trans_fine_type) > 0)
+                                                @foreach(@$all_trans_fine_type as $key => $value)
                                                     <option value="{{ @$value['name'] }}">{{ @$value['name'] }}</option>
                                                 @endforeach
                                                 @endif
@@ -440,7 +429,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
-                                                <input type="number" class="form-control transfine" min="0" value="0" placeholder="0" />
+                                                <input type="number" class="form-control transfine" min="0" placeholder="0" />
                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
@@ -482,7 +471,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
-                                                <input type="number" class="form-control auctionfine" min="0" value="0" placeholder="0" />
+                                                <input type="number" class="form-control auctionfine" min="0" placeholder="0" />
                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
@@ -501,7 +490,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
-                                                <input type="number" class="form-control expense_fine" min="0" value="0" placeholder="0" />
+                                                <input type="number" class="form-control expense_fine" min="0" placeholder="0" />
                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>

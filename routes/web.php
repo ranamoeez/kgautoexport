@@ -22,7 +22,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
-// Route::post('vehicle-images', [ HomeController::class, 'vehicles_images' ])->name('vehicle-images');
+Route::get('/register', function () {
+	return redirect(url('/'));
+});
+
+Route::post('/post-login', [App\Http\Controllers\HomeController::class, 'post_login'])->name('post-login');
 
 Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('user-home');
@@ -214,4 +218,10 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/system-configuration/fine-type/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_fine_type'])->name('edit-fine-type');
 	Route::post('/system-configuration/fine-type/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_fine_type'])->name('update-fine-type');
 	Route::get('/system-configuration/fine-type/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_fine_type'])->name('delete-fine-type');
+
+	Route::get('/system-configuration/trans-fine-type', [App\Http\Controllers\Admin\SystemConfigController::class, 'trans_fine_type'])->name('trans-fine-type');
+	Route::post('/system-configuration/trans-fine-type/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_trans_fine_type'])->name('add-trans-fine-type');
+	Route::get('/system-configuration/trans-fine-type/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_trans_fine_type'])->name('edit-trans-fine-type');
+	Route::post('/system-configuration/trans-fine-type/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_trans_fine_type'])->name('update-trans-fine-type');
+	Route::get('/system-configuration/trans-fine-type/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_trans_fine_type'])->name('delete-trans-fine-type');
 });

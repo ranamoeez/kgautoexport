@@ -31,6 +31,7 @@ use App\Models\TransactionsHistory;
 use App\Models\VehicleBrand;
 use App\Models\VehicleModal;
 use App\Models\FineType;
+use App\Models\TransFineType;
 use App\Models\ReminderTemplate;
 use App\Models\ReminderHistory;
 use Auth;
@@ -93,7 +94,9 @@ class HomeController extends Controller
                     $search = $filter['search'];
                     $query->where(function ($q) use ($search) {
                         $q->where('delivery_date', 'LIKE', '%'.$search.'%')
-                        ->orWhere('description', 'LIKE', '%'.$search.'%')
+                        ->orWhere('company_name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('modal', 'LIKE', '%'.$search.'%')
                         ->orWhere('vin', 'LIKE', '%'.$search.'%')
                         ->orWhere('client_name', 'LIKE', '%'.$search.'%')
                         ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
@@ -127,6 +130,9 @@ class HomeController extends Controller
             $data = $request->all();
             $this->cleanData($data);
             $data['owner_id'] = '0';
+            if (empty($data['purchase_date'])) {
+                $data['purchase_date'] = date('Y-m-d');
+            }
             $vehicle = Vehicle::create($data);
             $assign = new AssignVehicle;
             $assign->user_id = $data['buyer_id'];
@@ -207,6 +213,7 @@ class HomeController extends Controller
         $data['all_vehicle_brand'] = VehicleBrand::all();
         $data['all_vehicle_modal'] = VehicleModal::all();
         $data['all_fine_type'] = FineType::all();
+        $data['all_trans_fine_type'] = TransFineType::all();
         $data['all_destination_port'] = DestinationPort::all();
         return view('admin.add-vehicle', $data);
     }
@@ -306,6 +313,7 @@ class HomeController extends Controller
         $data['all_vehicle_brand'] = VehicleBrand::all();
         $data['all_vehicle_modal'] = VehicleModal::all();
         $data['all_fine_type'] = FineType::all();
+        $data['all_trans_fine_type'] = TransFineType::all();
         $data['all_destination_port'] = DestinationPort::all();
         $data['templates'] = ReminderTemplate::all();
         $vid = AssignVehicle::where('id', $id)->first()->vehicle_id;
@@ -727,9 +735,6 @@ class HomeController extends Controller
     	}
     	if (!empty($request->keys)) {
     		$data["keys"] = $request->keys;
-    	}
-    	if (!empty($request->payment_status) || $request->payment_status == '0') {
-    		$data["all_paid"] = $request->payment_status;
     	}
     	Vehicle::where('id', $request->id)->update($data);
     	return json_encode(["success"=>true, 'action'=>'reload']);

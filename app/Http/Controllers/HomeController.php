@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\UserLoginLog;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -13,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -25,5 +27,26 @@ class HomeController extends Controller
     {
         $data['type'] = "homepage";
         return view('user.index', $data);
+    }
+
+    public function post_login(Request $request)
+    {
+        if(Auth::attempt(['name' => $request->username, 'password' => $request->password])){ 
+            $user = Auth::user();
+            $success['user'] = $user;
+
+            $log = new UserLoginLog;
+            $log->user_id = $user->id;
+            $log->datetime = date("Y-m-d H:i:s");
+            $log->save();
+   
+            if ($user->role == '1') {
+                return redirect(url('/admin'));
+            }
+            return redirect(url('/user'));
+        } 
+        else{ 
+            return redirect(url('/'))->with(['error' => 'These credentials do not match our records.']);
+        } 
     }
 }

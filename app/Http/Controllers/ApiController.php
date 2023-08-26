@@ -11,6 +11,7 @@ use App\Models\PickupRequest;
 use App\Models\TransactionsHistory;
 use App\Models\Status;
 use App\Models\AssignVehicle;
+use App\Models\UserLoginLog;
 use Validator;
 use Storage;
 
@@ -26,6 +27,11 @@ class ApiController extends Controller
                 $success['token'] = $user->createToken('MyApp')->accessToken;
             }
             $success['user'] = $user;
+
+            $log = new UserLoginLog;
+            $log->user_id = $user->id;
+            $log->datetime = date("Y-m-d H:i:s");
+            $log->save();
 
             User::where('id', Auth::user()->id)->update(['api_token' => $success['token']]);
    

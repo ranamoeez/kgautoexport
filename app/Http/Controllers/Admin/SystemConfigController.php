@@ -28,6 +28,7 @@ use App\Models\VehicleModal;
 use App\Models\VehicleBrand;
 use App\Models\Level;
 use App\Models\FineType;
+use App\Models\TransFineType;
 
 class SystemConfigController extends Controller
 {
@@ -54,10 +55,13 @@ class SystemConfigController extends Controller
     public function add_user(Request $request)
     {
         $data = $request->all();
-        $check_email = User::where("email", $data['email'])->count();
-        if ($check_email == 0) {
+        $check_username = User::where("name", $data['name'])->count();
+        if ($check_username == 0) {
             if ($data['password'] == $data['cpassword']) {
                 $data['password'] = \Hash::make($data['password']);
+                if (!empty($data['phone'])) {
+                    $data['phone'] = $data['dial_code']." ".$data['phone'];
+                }
                 User::create($data);
 
                 return json_encode(["success"=>true, "msg"=>"User added successfully!", "action"=>"reload"]);
@@ -65,7 +69,7 @@ class SystemConfigController extends Controller
                 return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
             }
         } else {
-            return json_encode(["success"=>false, "msg"=>"Email already taken!"]);
+            return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
         }
     }
 
@@ -73,13 +77,17 @@ class SystemConfigController extends Controller
     {
         if($request->isMethod('post')){
             $data = $request->all();
-            $check_email = User::where("email", $data['email'])->where('id', '!=', $id)->count();
-            if ($check_email == 0) {
+            $check_username = User::where("name", $data['name'])->where('id', '!=', $id)->count();
+            if ($check_username == 0) {
                 if (!empty($data['password'])) {
                     if ($data['password'] == $data['cpassword']) {
                         $data['password'] = \Hash::make($data['password']);
+                        if (!empty($data['phone'])) {
+                            $data['phone'] = $data['dial_code']." ".$data['phone'];
+                        }
                         unset($data['_token']);
                         unset($data['cpassword']);
+                        unset($data['dial_code']);
                         User::where('id', $id)->update($data);
 
                         return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
@@ -94,7 +102,7 @@ class SystemConfigController extends Controller
                     return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
                 }
             } else {
-                return json_encode(["success"=>false, "msg"=>"Email already taken!"]);
+                return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
             }
         }
 
@@ -1223,5 +1231,54 @@ class SystemConfigController extends Controller
     {
         FineType::find($id)->delete();
         return json_encode(["success"=>true, "msg"=>"Fine type deleted successfully!"]);
+    }
+
+    // Trans Fine Type Functions
+
+    public function trans_fine_type(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $trans_fine_type = TransFineType::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $trans_fine_type = $trans_fine_type->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $trans_fine_type = $trans_fine_type->limit(10)->get();
+        $data['trans_fine_type'] = $trans_fine_type;
+        return view('admin.system-configuration.trans-fine-type', $data);
+    }
+
+    public function add_trans_fine_type(Request $request)
+    {
+        $data = $request->all();
+        TransFineType::create($data);
+        return json_encode(["success"=>true, "msg"=>"Trans. fine type added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_trans_fine_type(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            if (empty(@$data['selected'])) {
+                $data['selected'] = '0';
+            }
+            TransFineType::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Trans. fine type updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = TransFineType::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_trans_fine_type($id)
+    {
+        TransFineType::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Trans. fine type deleted successfully!"]);
     }
 }

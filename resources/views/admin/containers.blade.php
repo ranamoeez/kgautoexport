@@ -168,7 +168,7 @@
                                     <ul class="p-0 text-fs-3">
                                         @if(count(@$value->buyers) > 0)
                                         @foreach(@$value->buyers as $k => $v)
-                                        <span class="fw-bold">Buyer : {{ @$v->user->name }}</span>
+                                        <span class="fw-bold">Buyer : {{ @$v->user->surname }}</span>
                                         @foreach($v->vehicles as $ke => $val)
                                         <li class="list-unstyled">
                                             » <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;">{{ @$val->vehicle->company_name.' '.@$val->vehicle->name.' '.@$val->vehicle->modal }}</a>

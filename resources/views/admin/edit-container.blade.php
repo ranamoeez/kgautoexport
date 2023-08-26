@@ -415,7 +415,7 @@
                                                             <option value="0" selected>Select Buyer</option>
                                                             @if(count(@$all_buyer) > 0)
                                                             @foreach(@$all_buyer as $key => $value)
-                                                                <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                                                <option value="{{ @$value['id'] }}">{{ @$value['surname'] }}</option>
                                                             @endforeach
                                                             @endif
                                                         </select>

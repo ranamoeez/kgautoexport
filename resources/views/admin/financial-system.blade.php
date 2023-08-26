@@ -27,9 +27,9 @@
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
                                             @if($value->id == @$buyer)
-                                            <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                                            <option value="{{ @$value->id }}" selected>{{ $value->surname }}</option>
                                             @else
-                                            <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                                            <option value="{{ @$value->id }}">{{ @$value->surname }}</option>
                                             @endif
                                         @endforeach
                                         @endif
@@ -130,9 +130,9 @@
                                                                     @if(count(@$all_buyer) > 0)
                                                                     @foreach(@$all_buyer as $key => $value)
                                                                         @if($value->id == @$buyer)
-                                                                        <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                                                                        <option value="{{ @$value->id }}" selected>{{ $value->surname }}</option>
                                                                         @else
-                                                                        <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                                                                        <option value="{{ @$value->id }}">{{ @$value->surname }}</option>
                                                                         @endif
                                                                     @endforeach
                                                                     @endif
@@ -269,7 +269,7 @@
                                 </td>
                                 <td>
                                     <span class="fw-bold text-fs-3">
-                                        {{ @$value->vehicle->buyer->name }}
+                                        {{ @$value->vehicle->buyer->surname }}
                                     </span>
                                 </td>
                                 <td>

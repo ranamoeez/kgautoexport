@@ -29,9 +29,9 @@
                         @if(count(@$all_buyer) > 0)
                         @foreach(@$all_buyer as $key => $value)
                             @if($value->id == @$buyer)
-                            <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                            <option value="{{ @$value->id }}" selected>{{ $value->surname }}</option>
                             @else
-                            <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                            <option value="{{ @$value->id }}">{{ @$value->surname }}</option>
                             @endif
                         @endforeach
                         @endif
@@ -225,7 +225,7 @@
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ @$value->vehicle->buyer->name }}
+                                        {{ @$value->vehicle->buyer->surname }}
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>

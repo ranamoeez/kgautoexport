@@ -157,11 +157,13 @@
                                                                     <span class="col align-self-center">
                                                                         Phone
                                                                     </span>
+
                                                                 </div>
                                                             </label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
-                                                                    <input type="number" name="phone" id="user-phone" class="py-2 form-control rounded-end-4 border-0" placeholder="Enter Phone Number" />
+                                                                    <input type="hidden" name="dial_code" id="dial_code" value="">
+                                                                    <input name="phone" type="text" id="user-phone" class="py-2 form-control rounded-end-4 border-0" placeholder="Enter Number" required />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -366,6 +368,9 @@
     <script>
         function countriesDropdown(container) {
             var countries = {
+                IRQ: "Iraq",
+                JOR: "Jordan",
+                UAE: "United Arab Emirates",
                 AFG: "Afghanistan",
                 ALB: "Albania",
                 ALG: "Algeria",
@@ -454,14 +459,12 @@
                 IND: "India",
                 IRI: "Iran",
                 IRL: "Ireland",
-                IRQ: "Iraq",
                 ISL: "Iceland",
                 ISR: "Israel",
                 ISV: "Virgin Islands",
                 ITA: "Italy",
                 IVB: "British Virgin Islands",
                 JAM: "Jamaica",
-                JOR: "Jordan",
                 JPN: "Japan",
                 KAZ: "Kazakhstan",
                 KEN: "Kenya",
@@ -559,7 +562,6 @@
                 TUN: "Tunisia",
                 TUR: "Turkey",
                 TUV: "Tuvalu",
-                UAE: "United Arab Emirates",
                 UGA: "Uganda",
                 UKR: "Ukraine",
                 URU: "Uruguay",
@@ -598,6 +600,12 @@
             excludeCountries: ["in", "il"],
             preferredCountries: ["ru", "jp", "pk", "no"]
         });
+        var input1 = document.querySelector("#user-phone");
+        window.intlTelInput(input1, {
+            separateDialCode: true,
+            excludeCountries: ["in", "il"],
+            preferredCountries: ["jo", "iq"]
+        });
 
         $(document).ready(function () {
             $(document).on("submit", ".form", function (event) {
@@ -624,6 +632,10 @@
                         }
                     }
                 });
+            });
+
+            $(document).on("click", ".iti__country", function () {
+                $("#dial_code").val($(".iti__selected-dial-code").last().text().trim());
             });
 
             $(document).on("click", ".add", function () {
@@ -658,7 +670,10 @@
                             $("#user-surname").val(res.data.surname);
                             $("#user-company").val(res.data.company);
                             $("#country option[value="+res.data.country+"]").attr("selected", true);
-                            $("#user-phone").val(res.data.phone);
+                            var phone = res.data.phone.split(" ");
+                            $("#user-phone").val(phone[1]);
+                            $(".iti__selected-dial-code").text(phone[0]);
+                            $("#dial_code").text(phone[0]);
                             $(".level option[value="+res.data.level_id+"]").attr("selected", true);
 
                             $("#modal").modal("show");

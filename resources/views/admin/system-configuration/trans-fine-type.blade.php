@@ -22,7 +22,7 @@
                 <div class="col-md-9">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex align-items-center">
-                            <h3 class="fw-bold fs-5 mb-0">Auction Fine Type</h3>
+                            <h3 class="fw-bold fs-5 mb-0">Trans. Fine Type</h3>
                             <button class="btn border-0 add" type="button">
                                 <img src="{{ asset('assets/plus_green.svg') }}" alt="add" />
                             </button>
@@ -34,7 +34,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ url('admin/system-configuration/fine-type/add') }}" method="POST" class="form">
+                                            <form action="{{ url('admin/system-configuration/trans-fine-type/add') }}" method="POST" class="form">
                                                 @csrf
                                                 <div class="row mt-4">
 
@@ -95,7 +95,7 @@
                                     $pre = 'page='.$prev;
                                     $nex = 'page='.$next;
                                 @endphp
-                                <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/fine-type?'.$pre) }}" @endif>
+                                <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/trans-fine-type?'.$pre) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -103,7 +103,7 @@
                                     </svg>
                                 </a>
                                 <p class="text-fs-4 m-0">Page {{ @$page }}</p>
-                                <a class="btn" @if(count($fine_type) < 10) href="javascript:void();" @else href="{{ url('admin/system-configuration/fine-type?'.$nex) }}" @endif>
+                                <a class="btn" @if(count($trans_fine_type) < 10) href="javascript:void();" @else href="{{ url('admin/system-configuration/trans-fine-type?'.$nex) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -123,8 +123,8 @@
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
-                                    @if(count(@$fine_type) > 0)
-                                    @foreach(@$fine_type as $key => $value)
+                                    @if(count(@$trans_fine_type) > 0)
+                                    @foreach(@$trans_fine_type as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td>
                                             <p class=" text-fs-3">
@@ -147,7 +147,7 @@
                                                     <i class="fa-solid fa-edit edit" data-id="{{ @$value->id }}" style="cursor: pointer;"></i>
                                                 </p>
                                                 <p class="fs-5 text-danger">
-                                                    <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/fine-type/delete', @$value->id) }}" style="cursor: pointer;"></i>
+                                                    <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/trans-fine-type/delete', @$value->id) }}" style="cursor: pointer;"></i>
                                                 </p>
                                             </div>
                                         </td>
@@ -248,7 +248,7 @@
                 $("#selected").attr('checked', false);
 
                 $("#modal").modal("show");
-                $(".form").attr("action", "{{ url('admin/system-configuration/fine-type/add') }}");
+                $(".form").attr("action", "{{ url('admin/system-configuration/trans-fine-type/add') }}");
                         
             });
 
@@ -257,7 +257,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('admin/system-configuration/fine-type/edit') }}/"+id,
+                    url: "{{ url('admin/system-configuration/trans-fine-type/edit') }}/"+id,
                     success: function (res) {
                         res = JSON.parse(res);
                         console.log(res);
@@ -272,7 +272,7 @@
                             }
 
                             $("#modal").modal("show");
-                            $(".form").attr("action", "{{ url('admin/system-configuration/fine-type/edit') }}/"+id);
+                            $(".form").attr("action", "{{ url('admin/system-configuration/trans-fine-type/edit') }}/"+id);
                         }
                     }
                 });

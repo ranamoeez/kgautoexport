@@ -164,7 +164,11 @@
                 </a>
                 <a href="{{ url('admin/system-configuration/fine-type') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
-                    Fine Types
+                    Auction Fine Type
+                </a>
+                <a href="{{ url('admin/system-configuration/trans-fine-type') }}"
+                    class="fw-semibold text-dark text-decoration-none fs-6">
+                    Trans. Fine Type
                 </a>
                 <a href="{{ url('admin/system-configuration/user-levels') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">

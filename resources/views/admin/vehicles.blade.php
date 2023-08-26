@@ -258,11 +258,7 @@
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <span style="font-size: 16px;">{{ (!empty(@$value->vehicle->auction_price)) ? @$value->vehicle->auction_price : '0.00' }} $</span>
-                                        <select class="form-select option-select text-white payment_status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
-                                            <option value="1" data-color="info" @if(@$value->vehicle->all_paid == "1") selected @endif>Paid</option>
-                                            <option value="0" data-color="danger" @if(@$value->vehicle->all_paid == "0") selected @endif>Unpaid</option>
-                                        </select>
+                                        <span style="font-size: 16px;">{{ (!empty(@$value->vehicle->auction_price)) ? @$value->vehicle->auction_price : '0.00' }}$</span>
                                     </div>
                                 </td>
 
@@ -420,30 +416,6 @@
             $(document).on("change", ".keys", function () {
                 var form = new FormData();
                 form.append("keys", $(this).find("option:selected").val());
-                form.append("id", $(this).attr("data-id"));
-
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ url("admin/update-vehicle-data") }}',
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: form,
-                    success: function(data){
-                        data = JSON.parse(data);
-                        if (data.success == true) {
-                            toastr["success"]("Vehicle data updated successfully!", "Completed!");
-                        }
-                    }
-                });
-            });
-
-            $(document).on("change", ".payment_status", function () {
-                var form = new FormData();
-                form.append("payment_status", $(this).find("option:selected").val());
                 form.append("id", $(this).attr("data-id"));
 
                 $.ajax({

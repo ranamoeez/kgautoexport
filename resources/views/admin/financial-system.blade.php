@@ -629,11 +629,18 @@
                             $("#auc_price").parent().css("display", "none");
                         } else {
                             if (response.data.transaction_history.length > 0) {
+                                var flag = 0;
                                 $(response.data.transaction_history).each(function (key, value) {
                                     if (value.type == "auction_price") {
-                                        $("#auc_price").parent().css("display", "none");
+                                        flag = 1;
                                     }
                                 });
+                                if (flag == 1) {
+                                    $("#auc_price").parent().css("display", "none");
+                                } else {
+                                    $("#auc_price").parent().css("display", "block");
+                                    $("#auc_price").val(response.data.auction_price);
+                                }
                             } else {
                                 $("#auc_price").parent().css("display", "block");
                                 $("#auc_price").val(response.data.auction_price);
@@ -644,11 +651,18 @@
                             $("#tow_price").parent().css("display", "none");
                         } else {
                             if (response.data.transaction_history.length > 0) {
+                                var flag = 0;
                                 $(response.data.transaction_history).each(function (key, value) {
                                     if (value.type == "towing_price") {
-                                        $("#tow_price").parent().css("display", "none");
+                                        flag = 1;
                                     }
                                 });
+                                if (flag == 1) {
+                                    $("#tow_price").parent().css("display", "none");
+                                } else {
+                                    $("#tow_price").parent().css("display", "block");
+                                    $("#tow_price").val(response.data.towing_price);
+                                }
                             } else {
                                 $("#tow_price").parent().css("display", "block");
                                 $("#tow_price").val(response.data.towing_price);
@@ -659,11 +673,18 @@
                             $("#auc_fine_price").parent().css("display", "none");
                         } else {
                             if (response.data.transaction_history.length > 0) {
+                                var flag = 0;
                                 $(response.data.transaction_history).each(function (key, value) {
                                     if (value.type == "auction_fines") {
-                                        $("#auc_fine_price").parent().css("display", "none");
+                                        flag = 1;
                                     }
                                 });
+                                if (flag == 1) {
+                                    $("#auc_fine_price").parent().css("display", "none");
+                                } else {
+                                    $("#auc_fine_price").parent().css("display", "block");
+                                    $("#auc_fine_price").val(response.data.total_auction_fines);
+                                }
                             } else {
                                 $("#auc_fine_price").parent().css("display", "block");
                                 $("#auc_fine_price").val(response.data.total_auction_fines);
@@ -674,11 +695,18 @@
                             $("#trans_price").parent().css("display", "none");
                         } else {
                             if (response.data.transaction_history.length > 0) {
+                                var flag = 0;
                                 $(response.data.transaction_history).each(function (key, value) {
                                     if (value.type == "trans_fines") {
-                                        $("#trans_price").parent().css("display", "none");
+                                        flag = 1;
                                     }
                                 });
+                                if (flag == 1) {
+                                    $("#trans_price").parent().css("display", "none");
+                                } else {
+                                    $("#trans_price").parent().css("display", "block");
+                                    $("#trans_price").val(response.data.total_trans_fines);
+                                }
                             } else {
                                 $("#trans_price").parent().css("display", "block");
                                 $("#trans_price").val(response.data.total_trans_fines);
@@ -689,11 +717,18 @@
                             $("#draft_price").parent().css("display", "none");
                         } else {
                             if (response.data.transaction_history.length > 0) {
+                                var flag = 0;
                                 $(response.data.transaction_history).each(function (key, value) {
                                     if (value.type == "draft_expenses") {
-                                        $("#draft_price").parent().css("display", "none"); 
+                                        flag = 1;
                                     }
                                 });
+                                if (flag == 1) {
+                                    $("#draft_price").parent().css("display", "none");
+                                } else {
+                                    $("#draft_price").parent().css("display", "block");
+                                    $("#draft_price").val(response.data.total_draft_expenses);
+                                }
                             } else {
                                 $("#draft_price").parent().css("display", "block");
                                 $("#draft_price").val(response.data.total_draft_expenses);
@@ -704,11 +739,18 @@
                             $("#comp_price").parent().css("display", "none");
                         } else {
                             if (response.data.transaction_history.length > 0) {
+                                var flag = 0;
                                 $(response.data.transaction_history).each(function (key, value) {
                                     if (value.type == "company_fee") {
-                                        $("#comp_price").parent().css("display", "none");
+                                        flag = 1;
                                     }
                                 });
+                                if (flag == 1) {
+                                    $("#comp_price").parent().css("display", "none");
+                                } else {
+                                    $("#comp_price").parent().css("display", "block");
+                                    $("#comp_price").val(response.data.company_fee);
+                                }
                             } else {
                                 $("#comp_price").parent().css("display", "block");
                                 $("#comp_price").val(response.data.company_fee);
@@ -719,11 +761,18 @@
                             $("#unload_price").parent().css("display", "none");
                         } else {
                             if (response.data.transaction_history.length > 0) {
+                                var flag = 0;
                                 $(response.data.transaction_history).each(function (key, value) {
                                     if (value.type == "unloading_fee") {
-                                        $("#unload_price").parent().css("display", "none");  
+                                        flag = 1;
                                     }
                                 });
+                                if (flag == 1) {
+                                    $("#unload_price").parent().css("display", "none");
+                                } else {
+                                    $("#unload_price").parent().css("display", "block");
+                                    $("#unload_price").val(response.data.unloading_fee);
+                                }
                             } else {
                                 $("#unload_price").parent().css("display", "block");
                                 $("#unload_price").val(response.data.unloading_fee);

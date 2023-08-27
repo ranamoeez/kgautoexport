@@ -17,7 +17,7 @@
 
             <form method="GET" action="{{ url('admin/financial-system') }}" class="row align-items-center" id="filters-form">
                 <div class="row mt-3">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="mt-4">
                             <div class="row mb-4">
                                 <label for="buyer" class="col-md-3 col-form-label fw-semibold">Buyer</label>
@@ -37,25 +37,40 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">VIN Number</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">From</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="vin" id="vin" value="{{ @$vin }}" placeholder="Enter Vehicle VIN" />
+                                    <input type="date" class="form-control" name="from" value="{{ @$from }}" id="from" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="mt-4">
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">From</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">VIN Number</label>
                                 <div class="col-sm-9">
-                                    <input type="date" class="form-control" name="from" value="{{ @$from }}" id="from" />
+                                    <input type="text" class="form-control" name="vin" id="vin" value="{{ @$vin }}" placeholder="Enter Vehicle VIN" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">To</label>
                                 <div class="col-sm-9">
                                     <input type="date" class="form-control" name="to" value="{{ @$to }}" id="to" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mt-4">
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Status</label>
+                                <div class="col-sm-9">
+                                    <select id="status" name="status" class="selectjs form-select p-2">
+                                        <option value="all" @if(@$status == "all") selected @endif>All</option>
+                                        <option value="paid" @if(@$status == "paid") selected @endif>Paid</option>
+                                        <option value="unpaid" @if(@$status == "unpaid") selected @endif>Unpaid</option>
+                                        <option value="partly paid" @if(@$status == "partly paid") selected @endif>Partly Paid</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -122,11 +137,13 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                                        <input type="hidden" name="type" value="all">
+                                                        <input type="hidden" name="status" value="paid">
                                                         <div class="row mt-4">
                                                             <label for="username" class="col-md-4 fs-5 fw-bold">Buyer</label>
                                                             <div class="col-md-8">
                                                                 <select class="select2js form-select p-2 border border-gray-200 rounded-lg buyer" name="user_id" aria-label="Default select example">
-                                                                    <option value="">All</option>
+                                                                    <option value="0">All</option>
                                                                     @if(count(@$all_buyer) > 0)
                                                                     @foreach(@$all_buyer as $key => $value)
                                                                         @if($value->id == @$buyer)
@@ -143,7 +160,7 @@
                                                             <label for="vin-number" class="col-md-4 fs-5 fw-bold">VIN Number</label>
                                                             <div class="col-md-8">
                                                                 <select class="select2js form-select p-2 border border-gray-200 rounded-lg vin" name="vehicle_id" aria-label="Default select example" disabled="">
-                                                                    <option value="all">All</option>
+                                                                    <option value="0">All</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -220,8 +237,30 @@
                         @php
                             $prev = (int)$page - 1;
                             $next = (int)$page + 1;
-                            $pre = 'page='.$prev;
-                            $nex = 'page='.$next;
+                            $prev_params = ['page='.$prev];
+                            $next_params = ['page='.$next];
+                            if (!empty(@$buyer)) {
+                                array_push($prev_params, 'buyer='.$buyer);
+                                array_push($next_params, 'buyer='.$buyer);
+                            }
+                            if (!empty(@$from)) {
+                                array_push($prev_params, 'from='.$from);
+                                array_push($next_params, 'from='.$from);
+                            }
+                            if (!empty(@$vin)) {
+                                array_push($prev_params, 'vin='.$vin);
+                                array_push($next_params, 'vin='.$vin);
+                            }
+                            if (!empty(@$to)) {
+                                array_push($prev_params, 'to='.$to);
+                                array_push($next_params, 'to='.$to);
+                            }
+                            if (!empty(@$status)) {
+                                array_push($prev_params, 'status='.$status);
+                                array_push($next_params, 'status='.$status);
+                            }
+                            $pre = join("&", $prev_params);
+                            $nex = join("&", $next_params);
                         @endphp
                         <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/financial-system?'.$pre) }}" @endif>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -249,8 +288,8 @@
                             <th scope="col" class="fw-bold">Buyer</th>
                             <th scope="col" class="fw-bold">VIN</th>
                             <th scope="col" class="fw-bold">Date</th>
-                            <th scope="col" class="fw-bold">Status</th>
                             <th scope="col" class="fw-bold">Transaction amount</th>
+                            <th scope="col" class="fw-bold">Status</th>
                             <th scope="col"></th>
                         </thead>
                         <tbody>
@@ -258,8 +297,8 @@
                             @foreach(@$transaction_history as $key => $value)
                             <tr class="align-middle overflow-hidden shadow mb-2">
                                 <td>
-                                    <button class="btn border-0 open" data-id="{{ @$value->vehicle->id }}">
-                                        <i class="fa fa-eye text-success"></i>
+                                    <button class="btn border-0 open" data-id="{{ @$value->vehicle->id }}" data-user-id="{{ @$value->vehicle->buyer_id }}">
+                                        <i class="fa fa-edit text-success"></i>
                                     </button>
                                 </td>
                                 <td>
@@ -284,15 +323,15 @@
                                 </td>
 
                                 <td>
-                                    <button class="@if(@$value->status == "paid") btn btn-success @else btn btn-danger @endif rounded-1 text-white text-fs-3 border border-0">
-                                        {{ ucfirst(@$value->status) }}
-                                    </button>
-                                </td>
-
-                                <td>
                                     <span class="fw-bold text-fs-3 text-center">
                                         {{ @$value->amount }} $
                                     </span>
+                                </td>
+
+                                <td>
+                                    <button class="@if(@$value->status == "paid") btn btn-success @elseif(@$value->status == "partly paid") btn btn-warning @else btn btn-danger @endif rounded-1 text-white text-fs-3 border border-0">
+                                        {{ ucfirst(@$value->status) }}
+                                    </button>
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-center items-center message-icon">
@@ -365,8 +404,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="card-body">
-                                                            <input type="text"
-                                                                class="form-control text-fs-5 rounded pb-4" />
+                                                            <input type="text" class="form-control text-fs-5 rounded pb-4" />
                                                         </div>
                                                         <a href="#" data-bs-dismiss="modal"
                                                             class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>
@@ -397,44 +435,142 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center">
-                            <div class="d-flex justify-content-around">
-                                <p><b>Auction Price </b></p>
-                                <p>------------</p>
-                                <p><b><span class="auction_price">0</span> $</b></p>
+                            <div class="row">
+                                <div class="offset-md-2 col-md-3">
+                                    <p><b>Auction Price</b></p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p><b><span class="auction_price">0</span> $</b></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="auction_price">
+                                        <input type="hidden" name="amount" id="auc_price" value="0">
+                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                        <input type="hidden" name="status" value="partly paid">
+                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-around">
-                                <p><b>Towing Price </b></p>
-                                <p>------------</p>
-                                <p><b><span class="towing_price">0</span> $</b></p>
+                            <div class="row">
+                                <div class="offset-md-2 col-md-3">
+                                    <p><b>Towing Price</b></p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p><b><span class="towing_price">0</span> $</b></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="towing_price">
+                                        <input type="hidden" name="amount" id="tow_price" value="0">
+                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                        <input type="hidden" name="status" value="partly paid">
+                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-around">
-                                <p><b>Company Fee </b></p>
-                                <p>------------</p>
-                                <p><b><span class="company_fee">0</span> $</b></p>
+                            <div class="row">
+                                <div class="offset-md-2 col-md-3">
+                                    <p><b>Company Fee</b></p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p><b><span class="company_fee">0</span> $</b></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="company_fee">
+                                        <input type="hidden" name="amount" id="comp_price" value="0">
+                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                        <input type="hidden" name="status" value="partly paid">
+                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-around">
-                                <p><b>Unloading Fee </b></p>
-                                <p>------------</p>
-                                <p><b><span class="unloading_fee">0</span> $</b></p>
+                            <div class="row">
+                                <div class="offset-md-2 col-md-3">
+                                    <p><b>Unloading Fee</b></p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p><b><span class="unloading_fee">0</span> $</b></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="unloading_fee">
+                                        <input type="hidden" name="amount" id="unload_price" value="0">
+                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                        <input type="hidden" name="status" value="partly paid">
+                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-around">
-                                <p><b>Auction Fines </b></p>
-                                <p>------------</p>
-                                <p><b><span class="total_auction_fines">0</span> $</b></p>
+                            <div class="row">
+                                <div class="offset-md-2 col-md-3">
+                                    <p><b>Auction Fines</b></p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p><b><span class="total_auction_fines">0</span> $</b></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="auction_fines">
+                                        <input type="hidden" name="amount" id="auc_fine_price" value="0">
+                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                        <input type="hidden" name="status" value="partly paid">
+                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
+                                    </form>
+                                </div>
                             </div>
                             <div class="row auction_fines pt-2 mb-2" style="border: 1px solid #aaa; border-radius: 10px;">
                             </div>
-                            <div class="d-flex justify-content-around">
-                                <p><b>Trans. Fines </b></p>
-                                <p>------------</p>
-                                <p><b><span class="total_trans_fines">0</span> $</b></p>
+                            <div class="row">
+                                <div class="offset-md-2 col-md-3">
+                                    <p><b>Trans. Fines</b></p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p><b><span class="total_trans_fines">0</span> $</b></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="trans_fines">
+                                        <input type="hidden" name="amount" id="trans_price" value="0">
+                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                        <input type="hidden" name="status" value="partly paid">
+                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
+                                    </form>
+                                </div>
                             </div>
                             <div class="row trans_fines pt-2 mb-2" style="border: 1px solid #aaa; border-radius: 10px;">
                             </div>
-                            <div class="d-flex justify-content-around">
-                                <p><b>Draft Expenses </b></p>
-                                <p>------------</p>
-                                <p><b><span class="total_draft_expenses">0</span> $</b></p>
+                            <div class="row">
+                                <div class="offset-md-2 col-md-3">
+                                    <p><b>Draft Expenses</b></p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p><b><span class="total_draft_expenses">0</span> $</b></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="draft_expenses">
+                                        <input type="hidden" name="amount" id="draft_price" value="0">
+                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                        <input type="hidden" name="status" value="partly paid">
+                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
+                                    </form>
+                                </div>
                             </div>
                             <div class="row draft_expenses pt-2 mb-2" style="border: 1px solid #aaa; border-radius: 10px;">
                             </div>
@@ -476,6 +612,9 @@
 
             $(document).on("click", ".open", function () {
                 var id = $(this).attr("data-id");
+                var buyer_id = $(this).attr("data-user-id");
+                $(".vehicle_id").val(id);
+                $(".buyer_id").val(buyer_id);
 
                 var settings = {
                   "url": "{{ url('admin/get-vehicle-detail') }}"+"/"+id,
@@ -486,12 +625,110 @@
                     response = JSON.parse(response);
                     if (response.success == true) {
                         $(".auction_price").text(response.data.auction_price);
+                        if (response.data.auction_price == "0.00") {
+                            $("#auc_price").parent().css("display", "none");
+                        } else {
+                            if (response.data.transaction_history.length > 0) {
+                                $(response.data.transaction_history).each(function (key, value) {
+                                    if (value.type == "auction_price") {
+                                        $("#auc_price").parent().css("display", "none");
+                                    }
+                                });
+                            } else {
+                                $("#auc_price").parent().css("display", "block");
+                                $("#auc_price").val(response.data.auction_price);
+                            }
+                        }
                         $(".towing_price").text(response.data.towing_price);
+                        if (response.data.towing_price == "0") {
+                            $("#tow_price").parent().css("display", "none");
+                        } else {
+                            if (response.data.transaction_history.length > 0) {
+                                $(response.data.transaction_history).each(function (key, value) {
+                                    if (value.type == "towing_price") {
+                                        $("#tow_price").parent().css("display", "none");
+                                    }
+                                });
+                            } else {
+                                $("#tow_price").parent().css("display", "block");
+                                $("#tow_price").val(response.data.towing_price);
+                            }
+                        }
                         $(".total_auction_fines").text(response.data.total_auction_fines);
+                        if (response.data.total_auction_fines == "0") {
+                            $("#auc_fine_price").parent().css("display", "none");
+                        } else {
+                            if (response.data.transaction_history.length > 0) {
+                                $(response.data.transaction_history).each(function (key, value) {
+                                    if (value.type == "auction_fines") {
+                                        $("#auc_fine_price").parent().css("display", "none");
+                                    }
+                                });
+                            } else {
+                                $("#auc_fine_price").parent().css("display", "block");
+                                $("#auc_fine_price").val(response.data.total_auction_fines);
+                            }
+                        }
                         $(".total_trans_fines").text(response.data.total_trans_fines);
+                        if (response.data.total_trans_fines == "0") {
+                            $("#trans_price").parent().css("display", "none");
+                        } else {
+                            if (response.data.transaction_history.length > 0) {
+                                $(response.data.transaction_history).each(function (key, value) {
+                                    if (value.type == "trans_fines") {
+                                        $("#trans_price").parent().css("display", "none");
+                                    }
+                                });
+                            } else {
+                                $("#trans_price").parent().css("display", "block");
+                                $("#trans_price").val(response.data.total_trans_fines);
+                            }
+                        }
                         $(".total_draft_expenses").text(response.data.total_draft_expenses);
+                        if (response.data.total_draft_expenses == "0") {
+                            $("#draft_price").parent().css("display", "none");
+                        } else {
+                            if (response.data.transaction_history.length > 0) {
+                                $(response.data.transaction_history).each(function (key, value) {
+                                    if (value.type == "draft_expenses") {
+                                        $("#draft_price").parent().css("display", "none"); 
+                                    }
+                                });
+                            } else {
+                                $("#draft_price").parent().css("display", "block");
+                                $("#draft_price").val(response.data.total_draft_expenses);
+                            }
+                        }
                         $(".company_fee").text(response.data.company_fee);
+                        if (response.data.company_fee == "0") {
+                            $("#comp_price").parent().css("display", "none");
+                        } else {
+                            if (response.data.transaction_history.length > 0) {
+                                $(response.data.transaction_history).each(function (key, value) {
+                                    if (value.type == "company_fee") {
+                                        $("#comp_price").parent().css("display", "none");
+                                    }
+                                });
+                            } else {
+                                $("#comp_price").parent().css("display", "block");
+                                $("#comp_price").val(response.data.company_fee);
+                            }
+                        }
                         $(".unloading_fee").text(response.data.unloading_fee);
+                        if (response.data.unloading_fee == "0") {
+                            $("#unload_price").parent().css("display", "none");
+                        } else {
+                            if (response.data.transaction_history.length > 0) {
+                                $(response.data.transaction_history).each(function (key, value) {
+                                    if (value.type == "unloading_fee") {
+                                        $("#unload_price").parent().css("display", "none");  
+                                    }
+                                });
+                            } else {
+                                $("#unload_price").parent().css("display", "block");
+                                $("#unload_price").val(response.data.unloading_fee);
+                            }
+                        }
                         $(".auction_fines").html("");
                         $(".trans_fines").html("");
                         $(".draft_expenses").html("");
@@ -499,35 +736,35 @@
                             var date = value.created_at.split('T');
                             date = date[0] + " " + date[1].replace(".000000Z", ""); 
                             if (value.type == "auction") {
-                                var auction_fines = `<div class="offset-md-1 col-md-3">
+                                var auction_fines = `<div class="offset-md-2 col-md-3">
                                     <p>`+value.cause+`</p>
                                 </div>
                                 <div class="col-md-2">
                                     <p><b>`+value.amount+` $</b></p>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <p>`+date+`</p>
                                 </div>`;
                                 $(".auction_fines").append(auction_fines);
                             } else if (value.type == "transaction") {
-                                var trans_fines = `<div class="offset-md-1 col-md-3">
+                                var trans_fines = `<div class="offset-md-2 col-md-3">
                                     <p>`+value.cause+`</p>
                                 </div>
                                 <div class="col-md-2">
                                     <p><b>`+value.amount+` $</b></p>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <p>`+date+`</p>
                                 </div>`;
                                 $(".trans_fines").append(trans_fines);
                             } else if (value.type == "draft_expense") {
-                                var draft_expenses = `<div class="offset-md-1 col-md-3">
+                                var draft_expenses = `<div class="offset-md-2 col-md-3">
                                     <p>`+value.cause+`</p>
                                 </div>
                                 <div class="col-md-2">
                                     <p><b>`+value.amount+` $</b></p>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <p>`+date+`</p>
                                 </div>`;
                                 $(".draft_expenses").append(draft_expenses);
@@ -641,7 +878,7 @@
                     response = JSON.parse(response);
                     if (response.success == true) {
                         $(".vin").html("");
-                        $(".vin").append("<option value='all'>All</option>");
+                        $(".vin").append("<option value='0'>All</option>");
                         $(response.data.data).each(function (key, value) {
                             option = "<option value="+value.id+">"+value.vin+"</option>";
                             $(".vin").append(option);
@@ -654,12 +891,32 @@
                     }
                 });
             });
+
+            $(document).on("change", ".vin", function () {
+                var id = $(this).find("option:selected").val();
+                var buyer_id = $(".buyer").find("option:selected").val();
+
+                var settings = {
+                  "url": "{{ url('admin/get-vehicle-financial') }}"+"/"+id+"/"+buyer_id,
+                  "method": "GET",
+                };
+
+                $.ajax(settings).done(function (response) {
+                    response = JSON.parse(response);
+                    if (response.success == true) {
+                        $("#before_dp").text(response.data.due_payments);
+                        $("#before_bal").text(response.data.balance);
+                        $("#after_dp").text(response.data.due_payments);
+                        $("#after_bal").text(response.data.balance);
+                    }
+                });
+            });
         });
     </script>
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
-            $(document).on("change", "#buyer, #vin, #from, #to", function () {
+            $(document).on("change", "#buyer, #vin, #from, #to, #status", function () {
                 $("#filters-form").submit();
             });
         });

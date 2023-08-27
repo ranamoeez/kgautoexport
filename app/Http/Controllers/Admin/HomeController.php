@@ -533,6 +533,11 @@ class HomeController extends Controller
             $vin = $request->vin;
             $filter['vin'] = $vin;
         }
+        if (!empty($request->status) && $request->status !== 'all') {
+            $data['status'] = $request->status;
+            $status = $request->status;
+            $filter['status'] = $status;
+        }
         $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer');
         if (!empty($filter)) {
             $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
@@ -541,6 +546,9 @@ class HomeController extends Controller
                 }
                 if (!empty($filter['buyer'])) {
                     $query->where('buyer_id', $filter['buyer']);
+                }
+                if (!empty($filter['status'])) {
+                    $query->where('status', $filter['status']);
                 }
             });
         }
@@ -650,9 +658,9 @@ class HomeController extends Controller
             $search = $request->search;
             $filter['search'] = $search;
         }
-        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == "0") {
-            $data['pay_status'] = $request->pay_status;
-            $filter['pay_status'] = $request->pay_status;
+        if (!empty($request->status) && $request->status !== 'all') {
+            $data['status'] = $request->status;
+            $filter['status'] = $request->status;
         }
         if (!empty($filter)) {
             $pickup = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle', 'vehicle.destination_port', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
@@ -669,8 +677,8 @@ class HomeController extends Controller
                         ->orWhere('destination_manual', 'LIKE', '%'.$search.'%');
                     });
                 }
-                if (!empty($filter['pay_status']) || @$filter['pay_status'] == "0") {
-                    $query->where('all_paid', $filter['pay_status']);
+                if (!empty($filter['status'])) {
+                    $query->where('status', $filter['status']);
                 }
             });
             if (!empty($filter['search'])) {
@@ -833,6 +841,7 @@ class HomeController extends Controller
         $data['total_trans_fines'] = Fine::where('vehicle_id', $id)->where('type', 'transaction')->sum('amount');
         $data['total_draft_expenses'] = Fine::where('vehicle_id', $id)->where('type', 'draft_expense')->sum('amount');
         $data['company_fee'] = @$vehicle->buyer->user_level->company_fee;
+        $data['transaction_history'] = TransactionsHistory::where("vehicle_id", $id)->get();
         if (empty($data['company_fee'])) {
             $data['company_fee'] = '0';
         }
@@ -851,6 +860,52 @@ class HomeController extends Controller
         $auction_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('auction_price');
         $towing_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('towing_price');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $id)->limit(20000)->get();
+        if ($id == "0") {
+            $previous = TransactionsHistory::all()->sum('amount');
+            $auction_price = \DB::table('vehicles')->sum('auction_price');
+            $towing_price = \DB::table('vehicles')->sum('towing_price');
+            $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->offset(35000)->limit(20000)->get();
+            $data['data'] = Vehicle::limit(20000)->offset(35000)->get();
+        }
+        $fines = 0;
+        $company_fee = 0;
+        $unloading_fee = 0;
+        foreach ($all_data as $key => $value) {
+            if (!empty(@$value->fines)) {
+                foreach (@$value->fines as $k => $val) {
+                    $fines += (int)$val->amount;
+                }
+            }
+            if (!empty(@$value->buyer->user_level)) {
+                $company_fee += (int)@$value->buyer->user_level->company_fee;
+            }
+            if (!empty(@$value->destination_port)) {
+                $unloading_fee += (int)@$value->destination_port->unloading_fee;
+            }
+        }
+        $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+        $data['previous'] = $previous;
+        $data['due_payments'] = (int)$due_payments - (int)$previous;
+        $data['balance'] = 0;
+        if ($data['due_payments'] < 0) {
+            $data['balance'] = (int)$data['due_payments'] - (2 * (int)$data['due_payments']);
+            $data['due_payments'] = 0;
+        }
+        return json_encode(["success"=>true, "data" => $data]);
+    }
+
+    public function get_vehicle_financial($id, $buyer_id)
+    {
+        $previous = TransactionsHistory::where("user_id", $buyer_id)->where("vehicle_id", $id)->sum('amount');
+        $auction_price = \DB::table('vehicles')->where('id', $id)->sum('auction_price');
+        $towing_price = \DB::table('vehicles')->where('id', $id)->sum('towing_price');
+        $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('id', $id)->get();
+        if ($id == "0") {
+            $previous = TransactionsHistory::where("user_id", $buyer_id)->sum('amount');
+            $auction_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('auction_price');
+            $towing_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('towing_price');
+            $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $buyer_id)->limit(20000)->get();
+        }
         $fines = 0;
         $company_fee = 0;
         $unloading_fee = 0;

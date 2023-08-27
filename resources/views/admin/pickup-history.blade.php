@@ -60,11 +60,12 @@
                 </div>
 
                 <div class="col-md-2">
-                    <label for="pay_status" class="fw-semibold">Payment Status</label>
-                    <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
-                        <option value="all" @if(@$paystatus == "all") selected @endif>All</option>
-                        <option value="1" @if(@$pay_status == "1") selected @endif>Paid</option>
-                        <option value="0" @if(@$pay_status == "0") selected @endif>Unpaid</option>
+                    <label for="status" class="fw-semibold">Status</label>
+                    <select id="status" name="status" class="selectjs form-select p-2">
+                        <option value="all" @if(@$status == "all") selected @endif>All</option>
+                        <option value="waiting" @if(@$status == "waiting") selected @endif>Waiting</option>
+                        <option value="approved" @if(@$status == "approved") selected @endif>Approved</option>
+                        <option value="rejected" @if(@$status == "rejected") selected @endif>Rejected</option>
                     </select>
                 </div>
             </form>
@@ -90,9 +91,9 @@
                                 array_push($prev_params, 'destination='.$destination);
                                 array_push($next_params, 'destination='.$destination);
                             }
-                            if (!empty(@$pay_status)) {
-                                array_push($prev_params, 'pay_status='.$pay_status);
-                                array_push($next_params, 'pay_status='.$pay_status);
+                            if (!empty(@$status)) {
+                                array_push($prev_params, 'status='.$status);
+                                array_push($next_params, 'status='.$status);
                             }
                             $pre = join("&", $prev_params);
                             $nex = join("&", $next_params);

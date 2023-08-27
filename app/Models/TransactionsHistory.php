@@ -14,7 +14,7 @@ class TransactionsHistory extends Model
 
     protected $table = "transactions_history";
     protected $fillable = [
-        'user_id', 'amount', 'vehicle_id', 'status'
+        'user_id', 'amount', 'vehicle_id', 'type', 'status'
     ];
 
     public function vehicle(){

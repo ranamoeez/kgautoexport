@@ -443,7 +443,7 @@
                                     <p><b><span class="auction_price">0</span> $</b></p>
                                 </div>
                                 <div class="col-md-4">
-                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
                                         @csrf
                                         <input type="hidden" name="type" value="auction_price">
                                         <input type="hidden" name="amount" id="auc_price" value="0">
@@ -462,7 +462,7 @@
                                     <p><b><span class="towing_price">0</span> $</b></p>
                                 </div>
                                 <div class="col-md-4">
-                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
                                         @csrf
                                         <input type="hidden" name="type" value="towing_price">
                                         <input type="hidden" name="amount" id="tow_price" value="0">
@@ -481,7 +481,7 @@
                                     <p><b><span class="company_fee">0</span> $</b></p>
                                 </div>
                                 <div class="col-md-4">
-                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
                                         @csrf
                                         <input type="hidden" name="type" value="company_fee">
                                         <input type="hidden" name="amount" id="comp_price" value="0">
@@ -500,7 +500,7 @@
                                     <p><b><span class="unloading_fee">0</span> $</b></p>
                                 </div>
                                 <div class="col-md-4">
-                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
                                         @csrf
                                         <input type="hidden" name="type" value="unloading_fee">
                                         <input type="hidden" name="amount" id="unload_price" value="0">
@@ -519,7 +519,7 @@
                                     <p><b><span class="total_auction_fines">0</span> $</b></p>
                                 </div>
                                 <div class="col-md-4">
-                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
                                         @csrf
                                         <input type="hidden" name="type" value="auction_fines">
                                         <input type="hidden" name="amount" id="auc_fine_price" value="0">
@@ -540,7 +540,7 @@
                                     <p><b><span class="total_trans_fines">0</span> $</b></p>
                                 </div>
                                 <div class="col-md-4">
-                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
                                         @csrf
                                         <input type="hidden" name="type" value="trans_fines">
                                         <input type="hidden" name="amount" id="trans_price" value="0">
@@ -561,7 +561,7 @@
                                     <p><b><span class="total_draft_expenses">0</span> $</b></p>
                                 </div>
                                 <div class="col-md-4">
-                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
                                         @csrf
                                         <input type="hidden" name="type" value="draft_expenses">
                                         <input type="hidden" name="amount" id="draft_price" value="0">
@@ -870,6 +870,33 @@
                         }
                     });
                 }
+            });
+
+            $(document).on("submit", ".pay-form", function (event) {
+                event.preventDefault();
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                    success: function (res) {
+                        // res = JSON.parse(res);
+                        console.log(res);
+                        if (res.success == true) {
+                            toastr["success"](res.msg, "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            toastr["error"](res.msg, "Failed!");
+                        }
+                    }
+                });
             });
 
             $(document).on("change", "#pay_amount", function () {

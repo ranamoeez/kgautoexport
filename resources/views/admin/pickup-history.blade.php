@@ -126,6 +126,7 @@
                             <th scope="col" class="fw-bold">Date</th>
                             <th scope="col" class="fw-bold">Payment</th>
                             <th scope="col" class="fw-bold">Balance</th>
+                            <th scope="col" class="fw-bold">Updated By</th>
                             <th scope="col" class="fw-bold">Status</th>
                         </thead>
                         <tbody>
@@ -165,6 +166,11 @@
                                 <td>
                                     <p class="text-fs-3">
                                         {{ @$value->balance }} $
+                                    </p>
+                                </td>
+                                <td>
+                                    <p class="text-fs-3">
+                                        {{ @$value->admin->surname }}
                                     </p>
                                 </td>
                                 <td>
@@ -244,6 +250,9 @@
                         data = JSON.parse(data);
                         if (data.success == true) {
                             toastr["success"]("Pickup history updated successfully!", "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
                         }
                     }
                 });

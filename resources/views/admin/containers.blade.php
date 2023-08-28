@@ -152,15 +152,15 @@
                             @foreach($list as $key => $value)
                             <tr class="align-middle overflow-hidden shadow mb-2">
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
                                         Booking : {{ $value->booking_no }}
                                     </a>
                                     <br>
-                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
                                         Container : {{ $value->container_no }}
                                     </a>
                                     <br>
-                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
                                         REF : {{ $value->export_reference }}
                                     </a>
                                 </td>
@@ -171,7 +171,7 @@
                                         <span class="fw-bold">Buyer : {{ @$v->user->surname }}</span>
                                         @foreach($v->vehicles as $ke => $val)
                                         <li class="list-unstyled">
-                                            » <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;">{{ @$val->vehicle->company_name.' '.@$val->vehicle->name.' '.@$val->vehicle->modal }}</a>
+                                            » <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;">{{ @$val->vehicle->company_name.' '.@$val->vehicle->name.' '.@$val->vehicle->modal }}</a>
                                         </li>
                                         @endforeach
                                         @endforeach
@@ -179,16 +179,16 @@
                                     </ul>
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->shipping_line->name }}
                                     </a>
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         Departure : {{ $value->departure }}
                                     </a>
                                     <br>
-                                    <a href="{{ url('admin/containers/edit', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         Arrival : {{ $value->arrival }}
                                     </a>
                                 </td>

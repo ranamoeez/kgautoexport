@@ -11,10 +11,12 @@
                     class="fw-semibold text-dark text-decoration-none">
                     Users
                 </a>
-                <a href="{{ url('admin/system-configuration/admin-role') }}"
+                @if(\Auth::user()->id == '1')
+                <a href="{{ url('admin/system-configuration/admins') }}"
                     class="fw-semibold text-dark text-decoration-none">
-                    Admin
+                    Admins
                 </a>
+                @endif
                 <a href="{{ url('admin/system-configuration/group-list') }}"
                     class="fw-semibold text-dark text-decoration-none">
                     List of groups

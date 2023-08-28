@@ -663,7 +663,7 @@ class HomeController extends Controller
             $filter['status'] = $request->status;
         }
         if (!empty($filter)) {
-            $pickup = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle', 'vehicle.destination_port', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
+            $pickup = PickupRequest::orderBy('id', 'DESC')->with('user', 'admin', 'vehicle', 'vehicle.destination_port', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
                 if (!empty($filter['destination'])) {
                     $query->where('destination_port_id', $filter['destination']);
                 }
@@ -765,6 +765,11 @@ class HomeController extends Controller
     {
         $data = [];
         $data["status"] = $request->status;
+        if ($data["status"] !== "waiting") {
+            $data['approved_by'] = \Auth::user()->id;
+        } else {
+            $data['approved_by'] = NULL;
+        }
         PickupRequest::where('id', $request->id)->update($data);
         return json_encode(["success"=>true, 'action'=>'reload']);
     }

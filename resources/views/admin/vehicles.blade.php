@@ -209,27 +209,27 @@
                                         class="rounded-4 table-thumbnail-image" />
                                 </td> --}}
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("1.2", json_decode(\Auth::user()->access))) href="{{ url('admin/vehicles/edit', @$value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->delivery_date }}
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("1.2", json_decode(\Auth::user()->access))) href="{{ url('admin/vehicles/edit', @$value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->company_name.' '.@$value->vehicle->name.' '.@$value->vehicle->modal }}
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("1.2", json_decode(\Auth::user()->access))) href="{{ url('admin/vehicles/edit', @$value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->vin }}
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("1.2", json_decode(\Auth::user()->access))) href="{{ url('admin/vehicles/edit', @$value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->buyer->surname }}
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("1.2", json_decode(\Auth::user()->access))) href="{{ url('admin/vehicles/edit', @$value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->client_name }}
                                     </a>
                                 </td>
@@ -278,7 +278,7 @@
                                     </div>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("1.2", json_decode(\Auth::user()->access))) href="{{ url('admin/vehicles/edit', @$value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
                                         {{ @$value->vehicle->terminal->name }}
                                     </a>
                                 </td>

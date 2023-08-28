@@ -15,11 +15,15 @@ class PickupRequest extends Model
 
     protected $table = "pickup_requests";
     protected $fillable = [
-        'user_id', 'vehicle_id', 'comments', 'file', 'status'
+        'user_id', 'vehicle_id', 'comments', 'file', 'approved_by', 'status'
     ];
 
     public function user(){
     	return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function admin(){
+        return $this->belongsTo(User::class, 'approved_by');
     }
 
     public function vehicle(){

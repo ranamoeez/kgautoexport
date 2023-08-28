@@ -116,6 +116,96 @@ class SystemConfigController extends Controller
     	return json_encode(["success"=>true, "msg"=>"User deleted successfully!"]);
     }
 
+    // Admins Functions
+
+    public function admins(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $admins = User::where('role', '1');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $admins = $admins->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $admins = $admins->limit(10)->get();
+        $data['admins'] = $admins;
+        return view('admin.system-configuration.admins', $data);
+    }
+
+    public function add_admin(Request $request)
+    {
+        $data = $request->all();
+        $check_username = User::where("name", $data['name'])->count();
+        if ($check_username == 0) {
+            if ($data['password'] == $data['cpassword']) {
+                $data['password'] = \Hash::make($data['password']);
+                if (!empty($data['phone'])) {
+                    $data['phone'] = $data['dial_code']." ".$data['phone'];
+                }
+                $data['role'] = "1";
+                if (!empty($data['access'])) {
+                    $data['access'] = json_encode($data['access']);   
+                }
+                User::create($data);
+
+                return json_encode(["success"=>true, "msg"=>"Admin added successfully!", "action"=>"reload"]);
+            } else {
+                return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+            }
+        } else {
+            return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
+        }
+    }
+
+    public function edit_admin(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+            $check_username = User::where("name", $data['name'])->where('id', '!=', $id)->count();
+            if ($check_username == 0) {
+                if (!empty($data['password'])) {
+                    if ($data['password'] == $data['cpassword']) {
+                        $data['password'] = \Hash::make($data['password']);
+                        if (!empty($data['phone'])) {
+                            $data['phone'] = $data['dial_code']." ".$data['phone'];
+                        }
+                        unset($data['_token']);
+                        unset($data['cpassword']);
+                        unset($data['dial_code']);
+                        if (!empty($data['access'])) {
+                            $data['access'] = json_encode($data['access']);   
+                        }
+                        User::where('id', $id)->update($data);
+
+                        return json_encode(["success"=>true, "msg"=>"Admin updated successfully!", "action"=>"reload"]);
+                    } else {
+                        return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+                    }
+                } else {
+                    unset($data['_token']);
+                    unset($data['cpassword']);
+                    User::where('id', $id)->update($data);
+
+                    return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
+                }
+            } else {
+                return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
+            }
+        }
+
+        $data = User::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_admin($id)
+    {
+        User::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Admin deleted successfully!"]);
+    }
+
     // Admin Role Functions
 
     public function admin_role(Request $request)

@@ -512,7 +512,7 @@
                         if (res.success == true) {
                             toastr["success"](res.msg, "Completed!");
                             setTimeout(function () {
-                                location.reload();
+                                window.location.href = res.url;
                             }, 2000);
                         } else {
                             toastr["error"](res.msg, "Failed!");

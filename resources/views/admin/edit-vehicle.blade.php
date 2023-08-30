@@ -230,19 +230,19 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio9" type="radio" name="fuel_type" class="form-check-input"
-                                            @if($list->vehicle->fuel_type == '1') checked @endif value="1" />
+                                            @if($list->vehicle->fuel_type == 'hybrid') checked @endif value="hybrid" />
                                         <label for="radio9" class="form-check-label">Hybrid</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio10" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == '2') checked @endif class="form-check-input" value="2" />
+                                        <input id="radio10" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'electric car') checked @endif class="form-check-input" value="electric car" />
                                         <label for="radio10" class="form-check-label">Electric Car</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio11" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == '3') checked @endif class="form-check-input" value="3" />
+                                        <input id="radio11" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'gas car') checked @endif class="form-check-input" value="gas car" />
                                         <label for="radio11" class="form-check-label">Gas Car</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio12" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == '4') checked @endif class="form-check-input" value="4" />
+                                        <input id="radio12" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'other') checked @endif class="form-check-input" value="other" />
                                         <label for="radio12" class="form-check-label">Other</label>
                                     </div>
                                 </div>
@@ -365,7 +365,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pay date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="pdate" value="{{ $list->vehicle->pdate }}" class="form-control" />
+                                    <input type="date" name="pdate" value="{{ str_replace(" 00:00:00", "", $list->vehicle->pdate) }}" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">

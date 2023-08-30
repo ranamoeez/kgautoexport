@@ -120,6 +120,7 @@
                     <table class="table">
                         <thead class="text-fs-4">
                             <th scope="col" class="fw-bold">ID</th>
+                            <th scope="col" class="fw-bold">Image</th>
                             <th scope="col" class="fw-bold">Buyer</th>
                             <th scope="col" class="fw-bold">VIN</th>
                             <th scope="col" class="fw-bold">Destination</th>
@@ -134,9 +135,18 @@
                             @foreach(@$list as $key => $value)
                             <tr class="align-middle overflow-hidden shadow mb-2">
                                 <td>
-                                    <p class=" text-fs-3">
+                                    <p class="text-fs-3">
                                         {{ @$value->id }}
                                     </p>
+                                </td>
+                                <td>
+                                    @if(!empty(@$value->file))
+                                        <img src="{{ url('storage/app/'.@$value->file) }}" style="width: 100px; height: 100px;">
+                                    @else
+                                    <p class="text-fs-3">
+                                        N / A
+                                    </p>
+                                    @endif
                                 </td>
                                 <td>
                                     <p class=" text-fs-3">

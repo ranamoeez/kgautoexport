@@ -223,19 +223,19 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio9" type="radio" name="fuel_type" class="form-check-input"
-                                            checked value="1" />
+                                            checked value="hybrid" />
                                         <label for="radio9" class="form-check-label">Hybrid</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio10" type="radio" name="fuel_type" class="form-check-input" value="2" />
+                                        <input id="radio10" type="radio" name="fuel_type" class="form-check-input" value="electric car" />
                                         <label for="radio10" class="form-check-label">Electric Car</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio11" type="radio" name="fuel_type" class="form-check-input" value="3" />
+                                        <input id="radio11" type="radio" name="fuel_type" class="form-check-input" value="gas car" />
                                         <label for="radio11" class="form-check-label">Gas Car</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio12" type="radio" name="fuel_type" class="form-check-input" value="4" />
+                                        <input id="radio12" type="radio" name="fuel_type" class="form-check-input" value="other" />
                                         <label for="radio12" class="form-check-label">Other</label>
                                     </div>
                                 </div>

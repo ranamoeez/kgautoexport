@@ -428,7 +428,7 @@ class HomeController extends Controller
                     $image->save();
                 }
             }
-            $response = array('success'=>true,'msg'=>'Container is added sucessfully.','action'=>'reload');
+            $response = array('success'=>true,'msg'=>'Container is added sucessfully.','action'=>'reload','url'=>url('/admin/containers/edit', $container->id));
             return json_encode($response);
         }
         $data   = array();

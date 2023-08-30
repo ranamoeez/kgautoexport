@@ -566,12 +566,12 @@ class HomeController extends Controller
         $previous = $transaction_history->sum('amount');
         if (!empty($request->page)) {
             if ($request->page > 1) {
-                $offset = ($request->page - 1) * 20;
+                $offset = ($request->page - 1) * 10;
                 $transaction_history = $transaction_history->offset((int)$offset);
             }
             $data['page'] = $request->page;
         }
-        $transaction_history = $transaction_history->limit(20)->get();
+        $transaction_history = $transaction_history->limit(10)->get();
         $data['transaction_history'] = $transaction_history;
         $auction_price = \DB::table('vehicles');
         if (!empty($filter['vin'])) {

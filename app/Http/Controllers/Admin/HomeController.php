@@ -563,6 +563,7 @@ class HomeController extends Controller
             $data['to'] = $request->to;
             $transaction_history = $transaction_history->where('created_at', '<=', $request->to);
         }
+        $previous = $transaction_history->sum('amount');
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 20;
@@ -570,7 +571,6 @@ class HomeController extends Controller
             }
             $data['page'] = $request->page;
         }
-        $previous = $transaction_history->sum('amount');
         $transaction_history = $transaction_history->limit(20)->get();
         $data['transaction_history'] = $transaction_history;
         $auction_price = \DB::table('vehicles');

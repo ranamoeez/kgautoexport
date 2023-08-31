@@ -410,7 +410,13 @@ class HomeController extends Controller
             $data['owner_id'] = Auth::user()->id;
             $data['request_type'] = '2';
             $data['date_created'] = time();
-            $data['search_body'] = "Booked K&G Auto Export Inc MSC REBOU AL SHARQ USED CARS TR.LLC HOUSTON TX JEBEL ALI,UAE JEBEL ALI,UAE EBKG05951642 00/00/0000 07/02/2023 00/00/0000 GA- 45'HC 00/00/0000 06/16/2023 SAME AS CONSIGNEE telex";
+            if (!empty($data['container_no'])) {
+                $check = Container::where("container_no", $data['container_no'])->count();
+                if ($check > 0) {
+                    $response = array('success'=>false,'msg'=>'Container number already exists!','action'=>'reload');
+                    return json_encode($response);
+                }
+            }
             $container = Container::create($data);
             if ($request->hasFile('documents')) {
                 $files = [];

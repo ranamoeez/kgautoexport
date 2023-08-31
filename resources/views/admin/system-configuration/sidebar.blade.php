@@ -17,6 +17,10 @@
                     Admins
                 </a>
                 @endif
+                <a href="{{ url('admin/system-configuration/operators') }}"
+                    class="fw-semibold text-dark text-decoration-none">
+                    Operators
+                </a>
                 <a href="{{ url('admin/system-configuration/group-list') }}"
                     class="fw-semibold text-dark text-decoration-none">
                     List of groups

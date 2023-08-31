@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Vehicle;
+use App\Models\VehicleImage;
 use App\Models\Container;
 use App\Models\PickupRequest;
 use App\Models\TransactionsHistory;
 use App\Models\Status;
 use App\Models\AssignVehicle;
 use App\Models\UserLoginLog;
+use App\Models\ContainerVehicle;
 use Validator;
 use Storage;
 
@@ -394,6 +396,73 @@ class ApiController extends Controller
             } else {
                 return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
             }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
+    public function send_vehicle_images(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $input = $request->all();
+           
+            $validator = Validator::make($input, [
+                'container_number' => 'required',
+                'images' => 'required'
+            ]);
+       
+            if($validator->fails()){
+                return $this->sendError('Validation Error.', $validator->errors());       
+            }
+       
+            $container = Container::where("container_no", $input['container_number'])->first();
+
+            if (!empty($container)) {
+                $all_vehicles = ContainerVehicle::where('container_id', $container->id)->whereHas('vehicle')->get();
+                if ($request->hasFile('images')) {
+                    foreach ($all_vehicles as $k => $v) {
+                        $vehicle_id = $v->vehicle_id;
+                        $buyer_id = $v->user_id;
+                        if (is_array($request->file('images'))) {
+                            foreach ($request->file('images') as $key => $value) {
+                                $file = $value;
+                                $filename = Storage::putFile('vehicle/images/'.$vehicle_id, $file);
+                                
+                                $image = new VehicleImage;
+                                $image->vehicle_id = $vehicle_id;
+                                $image->filesize = $value->getSize();
+                                $image->owner_id = $buyer_id;
+                                $image->title = '';
+                                $image->filename = $filename;
+                                $image->filepath = 'storage/app/';
+                                $image->type = 'unloading';
+                                $image->save();
+                            }
+                        } else {
+                            $file = $request->file('images');
+                            $filename = Storage::putFile('vehicle/images/'.$vehicle_id, $file);
+                            
+                            $image = new VehicleImage;
+                            $image->vehicle_id = $vehicle_id;
+                            $image->filesize = $file->getSize();
+                            $image->owner_id = $buyer_id;
+                            $image->title = '';
+                            $image->filename = $filename;
+                            $image->filepath = 'storage/app/';
+                            $image->type = 'unloading';
+                            $image->save();
+                        }
+                    }
+                }
+            } else {
+                return $this->sendError('Not Found.', ['error'=>'Container not found.']);
+            }
+
+            $success['id'] =  $input['container_number'];
+       
+            return $this->sendResponse($success, 'Images sended successfully.');
         } else {
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         }

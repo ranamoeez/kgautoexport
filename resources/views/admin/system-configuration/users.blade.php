@@ -640,7 +640,7 @@
 
             $(document).on("click", ".add", function () {
                 
-                $("#modalLabel").text("Add new User");
+                $("#modalLabel").text("Add New User");
                 $("#user-username").val('');
                 $("#user-email").val('');
                 $("#user-surname").val('');

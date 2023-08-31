@@ -22,7 +22,7 @@
                 <div class="col-md-9">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex align-items-center">
-                            <h3 class="fw-bold fs-5 mb-0">Admins</h3>
+                            <h3 class="fw-bold fs-5 mb-0">Operators</h3>
                             <button class="btn border-0 add" type="button">
                                 <img src="{{ asset('assets/plus_green.svg') }}" alt="add" />
                             </button>
@@ -31,11 +31,11 @@
                                 <div class="modal-dialog rounded-5" style="max-width: 746px; width: 746px;">
                                     <div class="modal-content p-3">
                                         <div class="modal-header border-0">
-                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Admin</h1>
+                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Operator</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ url('admin/system-configuration/admins/add') }}" method="POST" class="form">
+                                            <form action="{{ url('admin/system-configuration/operators/add') }}" method="POST" class="form">
                                                 @csrf
                                                 <div class="row mt-4">
 
@@ -212,65 +212,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <div class="col-md-12 mb-4" id="access">
-                                                        <div class="row">
-                                                            <label for="" class="col-md-12">Access Levels</label>
-                                                            <div class="col-md-12 mt-3">
-                                                                <div class="row">
-                                                                    <label for="" class="offset-md-2 col-md-3">Vehicles</label>
-                                                                    <div class="col-md-7">
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="list-vehicle" value="1" />
-                                                                        <label for="list-vehicle">List</label><br>
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="add-vehicle" value="1.1" />
-                                                                        <label for="add-vehicle">Add</label><br>
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="edit-vehicle" value="1.2" />
-                                                                        <label for="edit-vehicle">Edit</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 mt-3">
-                                                                <div class="row">
-                                                                    <label for="" class="offset-md-2 col-md-3">Containers</label>
-                                                                    <div class="col-md-7">
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="list-container" value="2" />
-                                                                        <label for="list-container">List</label><br>
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="add-container" value="2.1" />
-                                                                        <label for="add-container">Add</label><br>
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="edit-container" value="2.2" />
-                                                                        <label for="edit-container">Edit</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 mt-3">
-                                                                <div class="row">
-                                                                    <label for="" class="offset-md-2 col-md-3">Financial System</label>
-                                                                    <div class="col-md-7">
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="list-financial" value="3" />
-                                                                        <label for="list-financial">List</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 mt-3">
-                                                                <div class="row">
-                                                                    <label for="" class="offset-md-2 col-md-3">Pickup History</label>
-                                                                    <div class="col-md-7">
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="list-pickup" value="4" />
-                                                                        <label for="list-pickup">List</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 mt-3">
-                                                                <div class="row">
-                                                                    <label for="" class="offset-md-2 col-md-3">System Configurations</label>
-                                                                    <div class="col-md-7">
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="list-config" value="5" />
-                                                                        <label for="list-config">List</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-4">
                                                     <button class="btn btn-primary px-5" type="submit">
@@ -291,7 +232,7 @@
                                     $pre = 'page='.$prev;
                                     $nex = 'page='.$next;
                                 @endphp
-                                <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/admins?'.$pre) }}" @endif>
+                                <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/operators?'.$pre) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -299,7 +240,7 @@
                                     </svg>
                                 </a>
                                 <p class="text-fs-4 m-0">Page {{ @$page }}</p>
-                                <a class="btn" @if(count($admins) < 10) href="javascript:void();" @else href="{{ url('admin/system-configuration/admins?'.$nex) }}" @endif>
+                                <a class="btn" @if(count($operators) < 10) href="javascript:void();" @else href="{{ url('admin/system-configuration/operators?'.$nex) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -320,8 +261,8 @@
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
-                                    @if(count($admins) > 0)
-                                    @foreach($admins as $key => $value)
+                                    @if(count($operators) > 0)
+                                    @foreach($operators as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td>
                                             <span class=" text-fs-3">
@@ -346,13 +287,11 @@
                                         <td>
                                             <div class="d-flex align-items-center float-end">
                                                 <span class="fs-5 text-primary me-3">
-                                                    <i class="fa-solid fa-edit edit" data-id="{{ @$value->id }}" data-access='{{ @$value->access }}' style="cursor: pointer;"></i>
+                                                    <i class="fa-solid fa-edit edit" data-id="{{ @$value->id }}" style="cursor: pointer;"></i>
                                                 </span>
-                                                @if(@$value->id !== 1)
-                                                    <span class="fs-5 text-danger">
-                                                        <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/admins/delete', @$value->id) }}" style="cursor: pointer;"></i>
-                                                    </span>
-                                                @endif
+                                                <span class="fs-5 text-danger">
+                                                    <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/operators/delete', @$value->id) }}" style="cursor: pointer;"></i>
+                                                </span>
                                             </div>
                                         </td>
                                     </tr>
@@ -677,35 +616,31 @@
 
             $(document).on("click", ".add", function () {
                 
-                $("#modalLabel").text("Add New Admin");
+                $("#modalLabel").text("Add New Operator");
                 $("#user-username").val('');
                 $("#user-email").val('');
                 $("#user-surname").val('');
                 $("#user-company").val('');
                 $("#country option[value='']").attr("selected", true);
                 $("#user-phone").val('');
-                $(".access").attr("checked", false);
+                $(".level option[value='']").attr("selected", true);
 
                 $("#modal").modal("show");
-                $(".form").attr("action", "{{ url('admin/system-configuration/admins/add') }}");
+                $(".form").attr("action", "{{ url('admin/system-configuration/operators/add') }}");
                         
             });
 
             $(document).on("click", ".edit", function () {
                 var id = $(this).attr("data-id");
-                var access = $(this).attr("data-access");
-                if (access !== "all") {
-                    access = JSON.parse(access);
-                }
 
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('admin/system-configuration/admins/edit') }}/"+id,
+                    url: "{{ url('admin/system-configuration/operators/edit') }}/"+id,
                     success: function (res) {
                         res = JSON.parse(res);
                         console.log(res);
                         if (res.success == true) {
-                            $("#modalLabel").text("Edit Admin");
+                            $("#modalLabel").text("Edit Operator");
                             $("#user-username").val(res.data.name);
                             $("#user-email").val(res.data.email);
                             $("#user-surname").val(res.data.surname);
@@ -717,21 +652,10 @@
                                 $(".iti__selected-dial-code").text(phone[0]);
                                 $("#dial_code").text(phone[0]);
                             }
-                            if (access == "all") {
-                                $("#access").css("display", "none");
-                            } else {
-                                $("#access").css("display", "block");
-                                $(access).each(function (key, value) {
-                                    $('.access').each(function (k, v) {
-                                        if (v.value == value) {
-                                            $(v).attr("checked", true);
-                                        }
-                                    });
-                                });       
-                            }
+                            $(".level option[value="+res.data.level_id+"]").attr("selected", true);
 
                             $("#modal").modal("show");
-                            $(".form").attr("action", "{{ url('admin/system-configuration/admins/edit') }}/"+id);
+                            $(".form").attr("action", "{{ url('admin/system-configuration/operators/edit') }}/"+id);
                         }
                     }
                 });

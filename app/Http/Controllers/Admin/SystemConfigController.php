@@ -206,6 +206,96 @@ class SystemConfigController extends Controller
         return json_encode(["success"=>true, "msg"=>"Admin deleted successfully!"]);
     }
 
+    // Operators Functions
+
+    public function operators(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $operators = User::where('role', '4');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $operators = $operators->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $operators = $operators->limit(10)->get();
+        $data['operators'] = $operators;
+        return view('admin.system-configuration.operators', $data);
+    }
+
+    public function add_operator(Request $request)
+    {
+        $data = $request->all();
+        $check_username = User::where("name", $data['name'])->count();
+        if ($check_username == 0) {
+            if ($data['password'] == $data['cpassword']) {
+                $data['password'] = \Hash::make($data['password']);
+                if (!empty($data['phone'])) {
+                    $data['phone'] = $data['dial_code']." ".$data['phone'];
+                }
+                $data['role'] = "4";
+                if (!empty($data['access'])) {
+                    $data['access'] = json_encode($data['access']);   
+                }
+                User::create($data);
+
+                return json_encode(["success"=>true, "msg"=>"Operators added successfully!", "action"=>"reload"]);
+            } else {
+                return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+            }
+        } else {
+            return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
+        }
+    }
+
+    public function edit_operator(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+            $check_username = User::where("name", $data['name'])->where('id', '!=', $id)->count();
+            if ($check_username == 0) {
+                if (!empty($data['password'])) {
+                    if ($data['password'] == $data['cpassword']) {
+                        $data['password'] = \Hash::make($data['password']);
+                        if (!empty($data['phone'])) {
+                            $data['phone'] = $data['dial_code']." ".$data['phone'];
+                        }
+                        unset($data['_token']);
+                        unset($data['cpassword']);
+                        unset($data['dial_code']);
+                        if (!empty($data['access'])) {
+                            $data['access'] = json_encode($data['access']);   
+                        }
+                        User::where('id', $id)->update($data);
+
+                        return json_encode(["success"=>true, "msg"=>"Operators updated successfully!", "action"=>"reload"]);
+                    } else {
+                        return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+                    }
+                } else {
+                    unset($data['_token']);
+                    unset($data['cpassword']);
+                    User::where('id', $id)->update($data);
+
+                    return json_encode(["success"=>true, "msg"=>"Operators updated successfully!", "action"=>"reload"]);
+                }
+            } else {
+                return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
+            }
+        }
+
+        $data = User::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_operator($id)
+    {
+        User::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Operators deleted successfully!"]);
+    }
+
     // Admin Role Functions
 
     public function admin_role(Request $request)

@@ -86,6 +86,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::post('/system-configuration/admins/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_admin'])->name('update-admin');
 	Route::get('/system-configuration/admins/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_admin'])->name('delete-admin');
 
+	Route::get('/system-configuration/operators', [App\Http\Controllers\Admin\SystemConfigController::class, 'operators'])->name('operators');
+	Route::post('/system-configuration/operators/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_operator'])->name('add-operator');
+	Route::get('/system-configuration/operators/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_operator'])->name('edit-operator');
+	Route::post('/system-configuration/operators/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_operator'])->name('update-operator');
+	Route::get('/system-configuration/operators/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_operator'])->name('delete-operator');
+
 	Route::get('/system-configuration/admin-role', [App\Http\Controllers\Admin\SystemConfigController::class, 'admin_role'])->name('admin-role');
 	Route::post('/system-configuration/admin-role/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_admin_role'])->name('add-admin-role');
 	Route::get('/system-configuration/admin-role/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_admin_role'])->name('edit-admin-role');

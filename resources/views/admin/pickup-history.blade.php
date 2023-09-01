@@ -127,8 +127,10 @@
                             <th scope="col" class="fw-bold">Date</th>
                             <th scope="col" class="fw-bold">Payment</th>
                             <th scope="col" class="fw-bold">Balance</th>
+                            @if(empty($auth_user->admin_level->access) || @in_array("6.2", json_decode($auth_user->admin_level->access)))
                             <th scope="col" class="fw-bold">Updated By</th>
                             <th scope="col" class="fw-bold">Status</th>
+                            @endif
                         </thead>
                         <tbody>
                             @if(count(@$list) > 0)
@@ -178,6 +180,7 @@
                                         {{ @$value->balance }} $
                                     </p>
                                 </td>
+                                @if(empty($auth_user->admin_level->access) || @in_array("6.2", json_decode($auth_user->admin_level->access)))
                                 <td>
                                     <p class="text-fs-3">
                                         {{ @$value->admin->surname }}
@@ -192,6 +195,7 @@
                                         </select>
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                             @else

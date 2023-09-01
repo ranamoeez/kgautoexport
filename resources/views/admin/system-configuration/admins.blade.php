@@ -169,6 +169,24 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="col-md-12 mb-4">
+                                                        <div class="row">
+                                                            <label for="" class="col-md-2">Admin Level</label>
+                                                            <div class="col-md-10">
+                                                                <div class="input-group shadow-lg rounded-4">
+                                                                    <select class="form-select level" name="admin_level_id">
+                                                                        @if(count(@$level) > 0)
+                                                                        @foreach(@$level as $key => $value)
+                                                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                                                        @endforeach
+                                                                        @endif
+                                                                    </select>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-md-6 mb-4">
                                                         <!-- Password -->
                                                         <div class="row">
@@ -208,65 +226,6 @@
                                                                     <input type="password" name="cpassword"
                                                                         class="py-2 form-control rounded-end-4"
                                                                         placeholder="Confirm Password" required />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-12 mb-4" id="access">
-                                                        <div class="row">
-                                                            <label for="" class="col-md-12">Access Levels</label>
-                                                            <div class="col-md-12 mt-3">
-                                                                <div class="row">
-                                                                    <label for="" class="offset-md-2 col-md-3">Vehicles</label>
-                                                                    <div class="col-md-7">
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="list-vehicle" value="1" />
-                                                                        <label for="list-vehicle">List</label><br>
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="add-vehicle" value="1.1" />
-                                                                        <label for="add-vehicle">Add</label><br>
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="edit-vehicle" value="1.2" />
-                                                                        <label for="edit-vehicle">Edit</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 mt-3">
-                                                                <div class="row">
-                                                                    <label for="" class="offset-md-2 col-md-3">Containers</label>
-                                                                    <div class="col-md-7">
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="list-container" value="2" />
-                                                                        <label for="list-container">List</label><br>
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="add-container" value="2.1" />
-                                                                        <label for="add-container">Add</label><br>
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="edit-container" value="2.2" />
-                                                                        <label for="edit-container">Edit</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 mt-3">
-                                                                <div class="row">
-                                                                    <label for="" class="offset-md-2 col-md-3">Financial System</label>
-                                                                    <div class="col-md-7">
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="list-financial" value="3" />
-                                                                        <label for="list-financial">List</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 mt-3">
-                                                                <div class="row">
-                                                                    <label for="" class="offset-md-2 col-md-3">Pickup History</label>
-                                                                    <div class="col-md-7">
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="list-pickup" value="4" />
-                                                                        <label for="list-pickup">List</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 mt-3">
-                                                                <div class="row">
-                                                                    <label for="" class="offset-md-2 col-md-3">System Configurations</label>
-                                                                    <div class="col-md-7">
-                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access" id="list-config" value="5" />
-                                                                        <label for="list-config">List</label>
-                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -317,6 +276,7 @@
                                     <th scope="col" class="fw-bold">Email</th>
                                     <th scope="col" class="fw-bold">Company</th>
                                     <th scope="col" class="fw-bold">Phone</th>
+                                    <th scope="col" class="fw-bold">Level</th>
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
@@ -344,9 +304,14 @@
                                             </span>
                                         </td>
                                         <td>
+                                            <span class=" text-fs-3">
+                                                {{ @$value->admin_level->name }}
+                                            </span>
+                                        </td>
+                                        <td>
                                             <div class="d-flex align-items-center float-end">
                                                 <span class="fs-5 text-primary me-3">
-                                                    <i class="fa-solid fa-edit edit" data-id="{{ @$value->id }}" data-access='{{ @$value->access }}' style="cursor: pointer;"></i>
+                                                    <i class="fa-solid fa-edit edit" data-id="{{ @$value->id }}" style="cursor: pointer;"></i>
                                                 </span>
                                                 @if(@$value->id !== 1)
                                                     <span class="fs-5 text-danger">
@@ -684,7 +649,7 @@
                 $("#user-company").val('');
                 $("#country option[value='']").attr("selected", true);
                 $("#user-phone").val('');
-                $(".access").attr("checked", false);
+                $(".level option[value='']").attr("selected", true);
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/admins/add') }}");
@@ -693,10 +658,6 @@
 
             $(document).on("click", ".edit", function () {
                 var id = $(this).attr("data-id");
-                var access = $(this).attr("data-access");
-                if (access !== "all") {
-                    access = JSON.parse(access);
-                }
 
                 $.ajax({
                     type: "GET",
@@ -717,18 +678,7 @@
                                 $(".iti__selected-dial-code").text(phone[0]);
                                 $("#dial_code").text(phone[0]);
                             }
-                            if (access == "all") {
-                                $("#access").css("display", "none");
-                            } else {
-                                $("#access").css("display", "block");
-                                $(access).each(function (key, value) {
-                                    $('.access').each(function (k, v) {
-                                        if (v.value == value) {
-                                            $(v).attr("checked", true);
-                                        }
-                                    });
-                                });       
-                            }
+                            $(".level option[value="+res.data.admin_level_id+"]").attr("selected", true);
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/admins/edit') }}/"+id);

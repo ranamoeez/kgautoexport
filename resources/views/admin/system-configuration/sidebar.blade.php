@@ -178,8 +178,14 @@
                 </a>
                 <a href="{{ url('admin/system-configuration/user-levels') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
-                    User Level
+                    User Levels
                 </a>
+                @if(\Auth::user()->id == '1')
+                <a href="{{ url('admin/system-configuration/admin-levels') }}"
+                    class="fw-semibold text-dark text-decoration-none fs-6">
+                    Admin Levels
+                </a>
+                @endif
             </div>
         </div>
     </div>

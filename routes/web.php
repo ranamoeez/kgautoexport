@@ -226,6 +226,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::post('/system-configuration/user-levels/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_user_levels'])->name('update-user-levels');
 	Route::get('/system-configuration/user-levels/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_user_levels'])->name('delete-user-levels');
 
+	Route::get('/system-configuration/admin-levels', [App\Http\Controllers\Admin\SystemConfigController::class, 'admin_levels'])->name('admin-levels');
+	Route::post('/system-configuration/admin-levels/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_admin_levels'])->name('add-admin-levels');
+	Route::get('/system-configuration/admin-levels/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_admin_levels'])->name('edit-admin-levels');
+	Route::post('/system-configuration/admin-levels/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_admin_levels'])->name('update-admin-levels');
+	Route::get('/system-configuration/admin-levels/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_admin_levels'])->name('delete-admin-levels');
+
 	Route::get('/system-configuration/fine-type', [App\Http\Controllers\Admin\SystemConfigController::class, 'fine_type'])->name('fine-type');
 	Route::post('/system-configuration/fine-type/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_fine_type'])->name('add-fine-type');
 	Route::get('/system-configuration/fine-type/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_fine_type'])->name('edit-fine-type');

@@ -121,6 +121,7 @@ class HomeController extends Controller
         $data['all_status'] = Status::all();
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();
+        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.vehicles', $data);
     }
 
@@ -215,6 +216,7 @@ class HomeController extends Controller
         $data['all_fine_type'] = FineType::all();
         $data['all_trans_fine_type'] = TransFineType::all();
         $data['all_destination_port'] = DestinationPort::all();
+        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.add-vehicle', $data);
     }
 
@@ -318,6 +320,7 @@ class HomeController extends Controller
         $data['templates'] = ReminderTemplate::all();
         $vid = AssignVehicle::where('id', $id)->first()->vehicle_id;
         $data['history'] = ReminderHistory::where('vehicle_id', $vid)->get();
+        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.edit-vehicle', $data);
     }
 
@@ -399,6 +402,7 @@ class HomeController extends Controller
         $data['list'] = $containers;
         $data['all_port'] = LoadingPort::all();
         $data['all_status'] = ContStatus::all();
+        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.containers', $data);
     }
 
@@ -449,6 +453,7 @@ class HomeController extends Controller
         $data['all_notify_party'] = NotifyParty::all();
         $data['all_measurement'] = Measurement::all();
         $data['all_discharge_port'] = DischargePort::all();
+        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.add-container', $data);
     }
 
@@ -513,6 +518,7 @@ class HomeController extends Controller
         $data['all_notify_party'] = NotifyParty::all();
         $data['all_measurement'] = Measurement::all();
         $data['all_discharge_port'] = DischargePort::all();
+        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.edit-container', $data);
     }
 
@@ -632,6 +638,7 @@ class HomeController extends Controller
             $data['due_payments'] = 0;
         }
         $data['all_buyer'] = User::where('role', '2')->get();
+        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.financial-system', $data);
     }
 
@@ -735,6 +742,7 @@ class HomeController extends Controller
         $data['list'] = $pickup;
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();
+        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.pickup-history', $data);
     }
 

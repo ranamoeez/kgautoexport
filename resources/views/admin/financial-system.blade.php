@@ -120,9 +120,11 @@
                         <div class="d-flex justify-content-end">
                             <div class="mt-6 px-14">
                                 <div class="financial-btn">
+                                    @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
                                     <button type="button" id="payment-modal" class="btn btn-primary border border-1 fs-6">
                                         Add Payment
                                     </button>
+                                    @endif
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="addPaymentModal"
@@ -283,24 +285,30 @@
                 <div class="table-responsive">
                     <table class="table">
                         <thead class="text-fs-4">
+                            @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
                             <th scope="col"></th>
+                            @endif
                             <th scope="col" class="fw-bold">Transaction ID</th>
                             <th scope="col" class="fw-bold">Buyer</th>
                             <th scope="col" class="fw-bold">VIN</th>
                             <th scope="col" class="fw-bold">Date</th>
                             <th scope="col" class="fw-bold">Transaction amount</th>
                             <th scope="col" class="fw-bold">Status</th>
+                            @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
                             <th scope="col"></th>
+                            @endif
                         </thead>
                         <tbody>
                             @if(count(@$transaction_history) > 0)
                             @foreach(@$transaction_history as $key => $value)
                             <tr class="align-middle overflow-hidden shadow mb-2">
+                                @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
                                 <td>
                                     <button class="btn border-0 open" data-id="{{ @$value->vehicle->id }}" data-user-id="{{ @$value->vehicle->buyer_id }}">
                                         <i class="fa fa-edit text-success"></i>
                                     </button>
                                 </td>
+                                @endif
                                 <td>
                                     <span class="fw-bold text-fs-3">
                                         {{ @$value->id }}
@@ -333,6 +341,7 @@
                                         {{ ucfirst(@$value->status) }}
                                     </button>
                                 </td>
+                                @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
                                 <td>
                                     <div class="d-flex justify-content-center items-center message-icon">
                                         <button class="btn border-0" data-bs-toggle="modal"
@@ -414,6 +423,7 @@
                                         </div>
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                             @else

@@ -302,7 +302,7 @@ class ApiController extends Controller
                     return $this->sendError('Validation Error.', $validator->errors());       
                 }
 
-                $vehicle = Vehicle::where('id', $input['vehicle_id'])->first();
+                $vehicle = Vehicle::with('destination_port')->where('id', $input['vehicle_id'])->first();
 
                 if (!empty($vehicle)) {
                     \Mail::to($input['email'])->send(new \App\Mail\SendVehicle($vehicle));

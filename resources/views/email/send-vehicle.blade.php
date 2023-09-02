@@ -33,19 +33,19 @@
       <thead>
         <tr style="font-size: 14px;">
           <td style="padding: 15px; background-color: #b3c0df; text-align: center; font-size: 16px; border-bottom: 2px solid #ffffff;">VIN</td>
-          <td style="padding: 15px; background-color: #c6d0e9; text-align: left; border-bottom: 2px solid #ffffff;">DELIVERY DATE</td>
-          <td style="padding: 15px; background-color: #b3c0df; text-align: left; border-bottom: 2px solid #ffffff;">DESCRIPTION</td>
-          <td style="padding: 15px; background-color: #c6d0e9; text-align: left; border-bottom: 2px solid #ffffff;">CLIENT NAME</td>
+          <td style="padding: 15px; background-color: #c6d0e9; text-align: center; border-bottom: 2px solid #ffffff;">DELIVERY DATE</td>
+          <td style="padding: 15px; background-color: #b3c0df; text-align: center; border-bottom: 2px solid #ffffff;">DESCRIPTION</td>
+          <td style="padding: 15px; background-color: #c6d0e9; text-align: center; border-bottom: 2px solid #ffffff;">CLIENT NAME</td>
           <td style="padding: 15px; background-color: #b3c0df; text-align: center; border-bottom: 2px solid #ffffff;">DESTINATION</td>
         </tr>
       </thead>
       <tbody>
         <tr style="font-size: 14px;">
           <td style="padding: 15px; background-color: #b3c0df; text-align: center; font-size: 16px;">{{ $data->vin }}</td>
-          <td style="padding: 15px; background-color: #c6d0e9; text-align: left;">{{ $data->delivery_date }}</td>
-          <td style="padding: 15px; background-color: #b3c0df; text-align: center;">{{ $data->description }}</td>
+          <td style="padding: 15px; background-color: #c6d0e9; text-align: center;">{{ $data->delivery_date }}</td>
+          <td style="padding: 15px; background-color: #b3c0df; text-align: center;">{{ $data->company_name.' '.$data->name.' '.$data->modal }}</td>
           <td style="padding: 15px; background-color: #c6d0e9; text-align: center;">{{ $data->client_name }}</td>
-          <td style="padding: 15px; background-color: #b3c0df; text-align: center;">{{ $data->destination_manual }}</td>
+          <td style="padding: 15px; background-color: #b3c0df; text-align: center;">{{ $data->destination_port->name }}</td>
         </tr>
       </tbody>
     </table>

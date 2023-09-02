@@ -3,7 +3,7 @@
     <thead style="background-color: #4c6b9b;">
       <tr>
         <td style="text-align: left; padding: 20px;">
-          <img src="http://kgautoexport.tishfeer.com/public/assets/symble_logo.png" style="height: 70px;">
+          <img src="http://kgautoexport.co/public/assets/symble_logo.png" style="height: 70px;">
         </td>
         <td style="text-align: right; color:#000000; font-family: Halvetica, sans-serif; padding: 20px;">
           <h2 style="font-size:14px;margin:0px;">K&G Auto Export</h2>

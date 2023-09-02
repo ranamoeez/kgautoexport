@@ -138,7 +138,7 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form class="form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                                    <form class="form" method="POST" action="{{ url('admin/add-balance') }}">
                                                         <input type="hidden" name="type" value="all">
                                                         <input type="hidden" name="status" value="paid">
                                                         <div class="row mt-4">
@@ -158,21 +158,21 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="row mt-4">
+                                                        {{-- <div class="row mt-4">
                                                             <label for="vin-number" class="col-md-4 fs-5 fw-bold">VIN Number</label>
                                                             <div class="col-md-8">
                                                                 <select class="select2js form-select p-2 border border-gray-200 rounded-lg vin" name="vehicle_id" aria-label="Default select example" disabled="">
                                                                     <option value="0">All</option>
                                                                 </select>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                         {{-- <a href="javascript:void;" class="btn w-auto btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5">Check</a> --}}
 
                                                         <div class="row mt-4">
                                                             <label for="amount" class="col-md-4 fs-5 fw-bold">Amount
                                                                 to Pay</label>
                                                             <div class="col-md-8">
-                                                                <input type="text" name="amount" id="pay_amount" class="form-control shadow-lg" />
+                                                                <input type="text" name="amount" id="pay_amount" class="form-control shadow-lg" disabled="" />
                                                             </div>
                                                         </div>
                                                     </form>
@@ -304,7 +304,7 @@
                             <tr class="align-middle overflow-hidden shadow mb-2">
                                 @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
                                 <td>
-                                    <button class="btn border-0 open" data-id="{{ @$value->vehicle->id }}" data-user-id="{{ @$value->vehicle->buyer_id }}">
+                                    <button class="btn border-0 open" data-id="{{ @$value->vehicle_id }}" data-user-id="{{ @$value->user_id }}">
                                         <i class="fa fa-edit text-success"></i>
                                     </button>
                                 </td>
@@ -955,6 +955,12 @@
             $(document).on("change", ".buyer", function () {
                 var id = $(this).find("option:selected").val();
 
+                if (id !== "0") {
+                    $("#pay_amount").attr("disabled", false);
+                } else {
+                    $("#pay_amount").attr("disabled", true);
+                }
+
                 var settings = {
                   "url": "{{ url('admin/get-vehicle-vin') }}"+"/"+id,
                   "method": "GET",
@@ -963,17 +969,17 @@
                 $.ajax(settings).done(function (response) {
                     response = JSON.parse(response);
                     if (response.success == true) {
-                        $(".vin").html("");
-                        $(".vin").append("<option value='0'>All</option>");
-                        $(response.data.data).each(function (key, value) {
-                            option = "<option value="+value.id+">"+value.vin+"</option>";
-                            $(".vin").append(option);
-                        });
+                        // $(".vin").html("");
+                        // $(".vin").append("<option value='0'>All</option>");
+                        // $(response.data.data).each(function (key, value) {
+                        //     option = "<option value="+value.id+">"+value.vin+"</option>";
+                        //     $(".vin").append(option);
+                        // });
                         $("#before_dp").text(response.data.due_payments);
                         $("#before_bal").text(response.data.balance);
                         $("#after_dp").text(response.data.due_payments);
                         $("#after_bal").text(response.data.balance);
-                        $(".vin").attr("disabled", false);
+                        // $(".vin").attr("disabled", false);
                     }
                 });
             });

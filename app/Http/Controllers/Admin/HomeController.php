@@ -139,6 +139,13 @@ class HomeController extends Controller
             $assign->user_id = $data['buyer_id'];
             $assign->vehicle_id = $vehicle->id;
             $assign->save();
+            $transaction_history = new TransactionsHistory;
+            $transaction_history->user_id = $data['buyer_id'];
+            $transaction_history->amount = '0';
+            $transaction_history->vehicle_id = $vehicle->id;
+            $transaction_history->type = 'init';
+            $transaction_history->status = 'unpaid';
+            $transaction_history->save();
             if ($request->hasFile('images')) {
                 $files = [];
                 foreach ($request->file('images') as $key => $value) {
@@ -608,6 +615,15 @@ class HomeController extends Controller
         if (!empty(@$filter['buyer'])) {
             $all_data = $all_data->where('buyer_id', $filter['buyer']);
         }
+        $balance = new User;
+        if (!empty($filter['vin'])) {
+            $v = Vehicle::where("vin", $filter['vin'])->first();
+            $balance = $balance->where('id', $v);
+        }
+        if (!empty(@$filter['buyer'])) {
+            $balance = $balance->where('id', $filter['buyer']);
+        }
+        $balance = $balance->sum('balance');
         if (empty($filter)) {
             $all_data = $all_data->offset(35000)->limit(20000)->get();
         } else {
@@ -632,9 +648,8 @@ class HomeController extends Controller
         $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
         $data['previous'] = $previous;
         $data['due_payments'] = (int)$due_payments - (int)$previous;
-        $data['balance'] = 0;
+        $data['balance'] = $balance;
         if ($data['due_payments'] < 0) {
-            $data['balance'] = (int)$data['due_payments'] - (2 * (int)$data['due_payments']);
             $data['due_payments'] = 0;
         }
         $data['all_buyer'] = User::where('role', '2')->get();
@@ -645,9 +660,30 @@ class HomeController extends Controller
     public function transaction_history(Request $request)
     {
         $data = $request->all();
+        $user = User::where("id", $data['user_id'])->first();
+        if (!empty($user)) {
+            if ($user->balance !== 0) {
+                $pre_balance = $user->balance;
+                $balance = (int)$pre_balance - (int)$data['amount'];
+                User::where("id", $data['user_id'])->update(["balance" => $balance]);
+            } else {
+                return json_encode(["success"=>false, 'msg'=>'Buyer have low balance!']);
+            }
+        }
         TransactionsHistory::create($data);
 
-        return json_encode(["success"=>true, 'msg'=>'Payment is added successfully!', 'action'=>'reload']);
+        return json_encode(["success"=>true, 'msg'=>'Transaction is added successfully!', 'action'=>'reload']);
+    }
+
+    public function add_balance(Request $request)
+    {
+        $user_id = $request->user_id;
+        $amount = (int)$request->amount;
+        $pre_amount = User::where("id", $user_id)->first();
+        $balance = $amount + (int)$pre_amount->balance;
+        User::where("id", $user_id)->update(['balance' => $balance]);
+
+        return json_encode(["success"=>true, 'msg'=>'Balance is added successfully!', 'action'=>'reload']);
     }
 
     public function pickup_history(Request $request)
@@ -713,6 +749,7 @@ class HomeController extends Controller
             $auction_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('auction_price');
             $towing_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('towing_price');
             $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $buyer_id)->limit(20000)->get();
+            $balance = User::where('id', $buyer_id)->sum('balance');
             $fines = 0;
             $company_fee = 0;
             $unloading_fee = 0;
@@ -731,13 +768,11 @@ class HomeController extends Controller
             }
             $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
             $all_due_payments = (int)$due_payments - (int)$previous;
-            $all_balance = 0;
             if ($all_due_payments < 0) {
-                $all_balance = (int)$all_due_payments - (2 * (int)$all_due_payments);
                 $all_due_payments = 0;
             }
             $pickup[$key]->due_payments = $all_due_payments;
-            $pickup[$key]->balance = $all_balance;
+            $pickup[$key]->balance = $balance;
         }
         $data['list'] = $pickup;
         $data['all_buyer'] = User::where('role', '2')->get();
@@ -879,11 +914,13 @@ class HomeController extends Controller
         $auction_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('auction_price');
         $towing_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('towing_price');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $id)->limit(20000)->get();
+        $balance = User::where('id', $id)->sum('balance');
         if ($id == "0") {
             $previous = TransactionsHistory::all()->sum('amount');
             $auction_price = \DB::table('vehicles')->sum('auction_price');
             $towing_price = \DB::table('vehicles')->sum('towing_price');
             $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->offset(35000)->limit(20000)->get();
+            $balance = User::all()->sum('balance');
             $data['data'] = Vehicle::limit(20000)->offset(35000)->get();
         }
         $fines = 0;
@@ -905,9 +942,8 @@ class HomeController extends Controller
         $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
         $data['previous'] = $previous;
         $data['due_payments'] = (int)$due_payments - (int)$previous;
-        $data['balance'] = 0;
+        $data['balance'] = $balance;
         if ($data['due_payments'] < 0) {
-            $data['balance'] = (int)$data['due_payments'] - (2 * (int)$data['due_payments']);
             $data['due_payments'] = 0;
         }
         return json_encode(["success"=>true, "data" => $data]);
@@ -919,11 +955,13 @@ class HomeController extends Controller
         $auction_price = \DB::table('vehicles')->where('id', $id)->sum('auction_price');
         $towing_price = \DB::table('vehicles')->where('id', $id)->sum('towing_price');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('id', $id)->get();
+        $balance = User::where('id', $buyer_id)->sum('balance');
         if ($id == "0") {
             $previous = TransactionsHistory::where("user_id", $buyer_id)->sum('amount');
             $auction_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('auction_price');
             $towing_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('towing_price');
             $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $buyer_id)->limit(20000)->get();
+            $balance = User::all()->sum('balance');
         }
         $fines = 0;
         $company_fee = 0;
@@ -944,9 +982,8 @@ class HomeController extends Controller
         $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
         $data['previous'] = $previous;
         $data['due_payments'] = (int)$due_payments - (int)$previous;
-        $data['balance'] = 0;
+        $data['balance'] = $balance;
         if ($data['due_payments'] < 0) {
-            $data['balance'] = (int)$data['due_payments'] - (2 * (int)$data['due_payments']);
             $data['due_payments'] = 0;
         }
         return json_encode(["success"=>true, "data" => $data]);

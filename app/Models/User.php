@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Models\Level;
 use App\Models\AdminLevel;
+use App\Models\OperatorLevel;
 
 class User extends Authenticatable
 {
@@ -20,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'AppPassword', 'main_user_id', 'level_id', 'admin_level_id', 'balance', 'role', 'surname', 'phone', 'address', 'company', 'fax', 'country', 'api_token'
+        'name', 'email', 'password', 'AppPassword', 'main_user_id', 'level_id', 'admin_level_id', 'operator_level_id', 'balance', 'role', 'surname', 'phone', 'address', 'company', 'fax', 'country', 'api_token'
     ];
 
     /**
@@ -47,5 +48,9 @@ class User extends Authenticatable
 
     public function admin_level(){
         return $this->belongsTo(AdminLevel::class, 'admin_level_id');
+    }
+
+    public function operator_level(){
+        return $this->belongsTo(OperatorLevel::class, 'operator_level_id');
     }
 }

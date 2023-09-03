@@ -63,6 +63,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/get-vehicle-modal/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicle_modal'])->name('get-vehicle-modal');
 	Route::get('/get-vehicle-vin/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicle_vin'])->name('get-vehicle-vin');
 	Route::get('/get-vehicle-detail/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicle_detail'])->name('get-vehicle-detail');
+	Route::get('/get-vehicle-notes/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicle_notes'])->name('get-vehicle-notes');
 	Route::get('/get-vehicle-financial/{id}/{buyer_id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicle_financial'])->name('get-vehicle-financial');
 
 	Route::get('/get-vehicles/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicles'])->name('get-vehicles');
@@ -73,6 +74,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	
 	Route::get('/financial-system', [App\Http\Controllers\Admin\HomeController::class, 'financial_system'])->name('financial-system');
 	Route::post('/add-balance', [App\Http\Controllers\Admin\HomeController::class, 'add_balance'])->name('add-balance');
+	Route::post('/add-comment', [App\Http\Controllers\Admin\HomeController::class, 'add_comment'])->name('add-comment');
 	Route::post('/transaction-history', [App\Http\Controllers\Admin\HomeController::class, 'transaction_history'])->name('transaction-history');
 	
 	Route::get('/system-configuration/users', [App\Http\Controllers\Admin\SystemConfigController::class, 'users'])->name('users');
@@ -232,6 +234,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/system-configuration/admin-levels/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_admin_levels'])->name('edit-admin-levels');
 	Route::post('/system-configuration/admin-levels/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_admin_levels'])->name('update-admin-levels');
 	Route::get('/system-configuration/admin-levels/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_admin_levels'])->name('delete-admin-levels');
+
+	Route::get('/system-configuration/operator-levels', [App\Http\Controllers\Admin\SystemConfigController::class, 'operator_levels'])->name('operator-levels');
+	Route::post('/system-configuration/operator-levels/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_operator_levels'])->name('add-operator-levels');
+	Route::get('/system-configuration/operator-levels/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_operator_levels'])->name('edit-operator-levels');
+	Route::post('/system-configuration/operator-levels/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_operator_levels'])->name('update-operator-levels');
+	Route::get('/system-configuration/operator-levels/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_operator_levels'])->name('delete-operator-levels');
 
 	Route::get('/system-configuration/fine-type', [App\Http\Controllers\Admin\SystemConfigController::class, 'fine_type'])->name('fine-type');
 	Route::post('/system-configuration/fine-type/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_fine_type'])->name('add-fine-type');

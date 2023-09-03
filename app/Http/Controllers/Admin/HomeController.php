@@ -686,6 +686,17 @@ class HomeController extends Controller
         return json_encode(["success"=>true, 'msg'=>'Balance is added successfully!', 'action'=>'reload']);
     }
 
+    public function add_comment(Request $request)
+    {
+        $user_notes = $request->user_notes;
+        $admin_notes = $request->admin_notes;
+        $vehicle_id = $request->vehicle_id;
+
+        Vehicle::where("id", $vehicle_id)->update(["notes" => $admin_notes, "notes_user" => $user_notes]);
+
+        return json_encode(["success"=>true, 'msg'=>'Comment is updated successfully!', 'action'=>'reload']);
+    }
+
     public function pickup_history(Request $request)
     {
         $data['type'] = "pickup-history";
@@ -903,6 +914,14 @@ class HomeController extends Controller
         if (empty($data['unloading_fee'])) {
             $data['unloading_fee'] = '0';
         }
+        return json_encode(["success"=>true, "data" => $data]);
+    }
+
+    public function get_vehicle_notes($id)
+    {
+        $vehicle = Vehicle::where("id", $id)->first();
+        $data['admin_notes'] = $vehicle->notes;
+        $data['user_notes'] = $vehicle->notes_user;
         return json_encode(["success"=>true, "data" => $data]);
     }
 

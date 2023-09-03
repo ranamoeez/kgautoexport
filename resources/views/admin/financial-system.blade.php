@@ -344,8 +344,7 @@
                                 @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
                                 <td>
                                     <div class="d-flex justify-content-center items-center message-icon">
-                                        <button class="btn border-0" data-bs-toggle="modal"
-                                            data-bs-target="#commentModal">
+                                        <button class="btn border-0 comment_modal" data-id="{{ @$value->vehicle_id }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                 class="w-6 h-6">
@@ -353,74 +352,6 @@
                                                     d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
                                             </svg>
                                         </button>
-
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="commentModal" tabindex="-1"
-                                            aria-labelledby="commentModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog rounded-5">
-                                                <div class="modal-content p-3">
-                                                    <div class="modal-header border-0">
-                                                        <h1 class="modal-title fw-bold" id="commentModalLabel"
-                                                            style="font-size: 28px">
-                                                            Add Comment</h1>
-                                                        <button type="button" class="btn-close"
-                                                            data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="row mt-4">
-                                                            <label for="password"
-                                                                class="col-md-4 fs-5 fw-bold">Admin Comment
-                                                            </label>
-                                                            <div class="col-md-8">
-                                                                <input type="text" class="form-control text-fs-4 rounded pb-4" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mt-4">
-                                                            <label for="password"
-                                                                class="col-md-4 fs-5 fw-bold">User Comment
-                                                            </label>
-                                                            <div class="col-md-8">
-                                                                <div class="d-flex flex-column align-items-end">
-                                                                    <input type="text" class="form-control text-fs-4 rounded pb-4" disabled />
-                                                                    <button
-                                                                        class="btn btn-sm btn-primary mt-3 comment-btn fs-6 border-0"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#fullNoteModel">
-                                                                        Update Comment
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <a href="#"
-                                                            class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5 w-auto"
-                                                            data-bs-dismiss="modal">Close</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="fullNoteModel" tabindex="-1"
-                                            aria-labelledby="fullNoteModelLabel" aria-hidden="true">
-                                            <div class="modal-dialog rounded-5">
-                                                <div class="modal-content p-3">
-                                                    <div class="modal-header border-0">
-                                                        <h1 class="modal-title fw-bold" id="fullNoteModelLabel"
-                                                            style="font-size: 28px">
-                                                            Note</h1>
-                                                        <button type="button" class="btn-close"
-                                                            data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="card-body">
-                                                            <input type="text" class="form-control text-fs-5 rounded pb-4" />
-                                                        </div>
-                                                        <a href="#" data-bs-dismiss="modal"
-                                                            class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </td>
                                 @endif
@@ -435,6 +366,45 @@
                             @endif
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="commentModal" tabindex="-1"
+                aria-labelledby="commentModalLabel" aria-hidden="true">
+                <div class="modal-dialog rounded-5">
+                    <div class="modal-content p-3">
+                        <div class="modal-header border-0">
+                            <h1 class="modal-title fw-bold" id="commentModalLabel"
+                                style="font-size: 28px">
+                                Add Comment</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="pay-form" method="POST" action="{{ url('admin/add-comment') }}">
+                                <input type="hidden" name="vehicle_id" id="add_com_vehicle" value="0">
+                                <div class="row mt-4">
+                                    <label for="admin_notes" class="col-md-4 fs-5 fw-bold">Admin Comment
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="admin_notes" id="admin_notes" class="form-control text-fs-4 rounded pb-4" required />
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <label for="user_notes" class="col-md-4 fs-5 fw-bold">User Comment
+                                    </label>
+                                    <div class="col-md-8">
+                                        <div class="d-flex flex-column align-items-end">
+                                            <input type="text" name="user_notes" id="user_notes" class="form-control text-fs-4 rounded pb-4" required />
+                                            <button class="btn btn-sm btn-primary mt-3 comment-btn fs-6 border-0">
+                                                Update Comment
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="javascript:void;" class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5 w-auto" data-bs-dismiss="modal">Close</a>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Modal -->
@@ -618,6 +588,26 @@
 
             $("select.option-select").each(function () {
                 updateBackgroundColor(this);
+            });
+
+            $(document).on("click", ".comment_modal", function () {
+                var id = $(this).attr("data-id");
+                $("#add_com_vehicle").val(id);
+
+                var settings = {
+                  "url": "{{ url('admin/get-vehicle-notes') }}"+"/"+id,
+                  "method": "GET",
+                };
+
+                $.ajax(settings).done(function (response) {
+                    response = JSON.parse(response);
+                    if (response.success == true) {
+                        $("#admin_notes").val(response.data.admin_notes);
+                        $("#user_notes").val(response.data.user_notes);
+                    }
+                });
+
+                $("#commentModal").modal("show");
             });
 
             $(document).on("click", ".open", function () {

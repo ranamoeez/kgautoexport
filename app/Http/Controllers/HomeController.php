@@ -42,8 +42,10 @@ class HomeController extends Controller
    
             if ($user->role == '1') {
                 return redirect(url('/admin'));
+            } else if ($user->role == '2') {
+                return redirect(url('/user'));
             }
-            return redirect(url('/user'));
+            return redirect(url('/'))->with(['error' => 'These credentials do not match our records.']);
         } 
         else{ 
             return redirect(url('/'))->with(['error' => 'These credentials do not match our records.']);

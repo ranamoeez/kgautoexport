@@ -185,6 +185,10 @@
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Admin Levels
                 </a>
+                <a href="{{ url('admin/system-configuration/operator-levels') }}"
+                    class="fw-semibold text-dark text-decoration-none fs-6">
+                    Operator Levels
+                </a>
                 @endif
             </div>
         </div>

@@ -28,6 +28,7 @@ use App\Models\VehicleModal;
 use App\Models\VehicleBrand;
 use App\Models\Level;
 use App\Models\AdminLevel;
+use App\Models\OperatorLevel;
 use App\Models\FineType;
 use App\Models\TransFineType;
 use Auth;
@@ -40,7 +41,7 @@ class SystemConfigController extends Controller
     {
     	$data['type'] = "system-configuration";
         $data['page'] = '1';
-    	$users = User::with('user_level')->where('role', '!=', '1');
+    	$users = User::with('user_level')->where('role', '2');
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;
@@ -211,7 +212,7 @@ class SystemConfigController extends Controller
     {
         $data['type'] = "system-configuration";
         $data['page'] = '1';
-        $operators = User::where('role', '4');
+        $operators = User::with('operator_level')->where('role', '4');
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;
@@ -221,6 +222,7 @@ class SystemConfigController extends Controller
         }
         $operators = $operators->limit(10)->get();
         $data['operators'] = $operators;
+        $data['level'] = OperatorLevel::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.operators', $data);
     }
@@ -1537,5 +1539,52 @@ class SystemConfigController extends Controller
     {
         AdminLevel::find($id)->delete();
         return json_encode(["success"=>true, "msg"=>"Admin level deleted successfully!"]);
+    }
+
+    // Operator Levels Functions
+
+    public function operator_levels(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $levels = OperatorLevel::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $levels = $levels->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $levels = $levels->limit(10)->get();
+        $data['levels'] = $levels;
+        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        return view('admin.system-configuration.operator-levels', $data);
+    }
+
+    public function add_operator_levels(Request $request)
+    {
+        $data = $request->all();
+        OperatorLevel::create($data);
+        return json_encode(["success"=>true, "msg"=>"Operator level added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_operator_levels(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            OperatorLevel::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Operator level updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = OperatorLevel::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_operator_levels($id)
+    {
+        OperatorLevel::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Operator level deleted successfully!"]);
     }
 }

@@ -35,7 +35,7 @@ class ApiController extends Controller
             $log->datetime = date("Y-m-d H:i:s");
             $log->save();
 
-            User::where('id', Auth::user()->id)->update(['api_token' => $success['token']]);
+            User::with("user_level", "operator_level")->where('id', Auth::user()->id)->update(['api_token' => $success['token']]);
    
             return $this->sendResponse($success, 'User login successfully.');
         } 

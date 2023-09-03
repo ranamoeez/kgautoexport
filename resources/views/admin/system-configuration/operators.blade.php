@@ -169,6 +169,24 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="col-md-12 mb-4">
+                                                        <div class="row">
+                                                            <label for="" class="col-md-2">Operator Level</label>
+                                                            <div class="col-md-10">
+                                                                <div class="input-group shadow-lg rounded-4">
+                                                                    <select class="form-select level" name="operator_level_id">
+                                                                        @if(count(@$level) > 0)
+                                                                        @foreach(@$level as $key => $value)
+                                                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                                                        @endforeach
+                                                                        @endif
+                                                                    </select>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-md-6 mb-4">
                                                         <!-- Password -->
                                                         <div class="row">
@@ -258,6 +276,7 @@
                                     <th scope="col" class="fw-bold">Email</th>
                                     <th scope="col" class="fw-bold">Company</th>
                                     <th scope="col" class="fw-bold">Phone</th>
+                                    <th scope="col" class="fw-bold">Level</th>
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
@@ -282,6 +301,11 @@
                                         <td>
                                             <span class=" text-fs-3">
                                                 {{ @$value->phone }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class=" text-fs-3">
+                                                {{ @$value->operator_level->name }}
                                             </span>
                                         </td>
                                         <td>
@@ -623,7 +647,7 @@
                 $("#user-company").val('');
                 $("#country option[value='']").attr("selected", true);
                 $("#user-phone").val('');
-                $(".level option[value='']").attr("selected", true);
+                $(".level").children().first().attr("selected", true);
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/operators/add') }}");
@@ -652,7 +676,7 @@
                                 $(".iti__selected-dial-code").text(phone[0]);
                                 $("#dial_code").text(phone[0]);
                             }
-                            $(".level option[value="+res.data.level_id+"]").attr("selected", true);
+                            $(".level option[value="+res.data.operator_level_id+"]").attr("selected", true);
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/operators/edit') }}/"+id);

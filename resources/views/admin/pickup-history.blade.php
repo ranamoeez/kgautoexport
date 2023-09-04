@@ -143,7 +143,7 @@
                                 </td>
                                 <td>
                                     @if(!empty(@$value->file))
-                                        <img src="{{ url('storage/app/'.@$value->file) }}" style="width: 100px; height: 100px;">
+                                        <img src="{{ url('storage/app/'.@$value->file) }}" style="width: 100px; height: 100px;" class="rounded-4">
                                     @else
                                     <p class="text-fs-3">
                                         N / A

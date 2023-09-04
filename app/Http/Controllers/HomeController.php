@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\UserLoginLog;
+use App\Models\AssignVehicle;
 use Auth;
 
 class HomeController extends Controller
@@ -26,6 +27,8 @@ class HomeController extends Controller
     public function index()
     {
         $data['type'] = "homepage";
+        $data['total_vehicles'] = AssignVehicle::where('user_id', \Auth::user()->id)->count();
+        $data['latest'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', \Auth::user()->id)->orderBy("id", "DESC")->limit(3)->get();
         return view('user.index', $data);
     }
 

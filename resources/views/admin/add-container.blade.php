@@ -21,7 +21,7 @@
                 <div class="d-flex justify-content-end">
                     <div class="mt-6 px-14">
                         <div class="financial-btn">
-                            <button class="btn btn-primary border border-1 fs-5">
+                            <button class="btn btn-primary border border-1 fs-5" disabled>
                                 Quick book
                             </button>
                         </div>

@@ -1017,6 +1017,18 @@ class HomeController extends Controller
         return json_encode(["success"=>true, "vehicles" => $data]);
     }
 
+    public function send_to_buyer($id)
+    {
+        $vehicle = Vehicle::with('buyer')->where('id', $id)->first();
+
+        if (!empty(@$vehicle->buyer_id)) {
+            \Mail::to(@$vehicle->buyer->email)->send(new \App\Mail\SendVehicle($vehicle));
+        } else {
+            return json_encode(["success"=>false, "msg" => "Please assign this vehicle to any buyer!"]);
+        }
+        return json_encode(["success"=>true, "msg" => "Sended to buyer successfully!"]);
+    }
+
     public function assign_vehicle(Request $request)
     {
         $vehicle_id = explode(",", $request->vehicle_id);

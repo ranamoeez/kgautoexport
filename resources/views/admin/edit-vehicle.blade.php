@@ -21,7 +21,7 @@
                 <div class="d-flex justify-content-between">
                     <div class="financial-btn">
                         @if(empty($auth_user->admin_level->access) || @in_array("1.40", json_decode($auth_user->admin_level->access)))
-                        <button class="btn btn-primary border border-1 fs-5">
+                        <button class="btn btn-primary border border-1 fs-5" id="send-buyer">
                             Send to Buyer
                         </button>
                         @endif
@@ -81,7 +81,7 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Buyer</label>
                                 <div class="col-md-9">
-                                    <select class="selectjs form-select" name="buyer_id">
+                                    <select class="selectjs form-select buyer" name="buyer_id">
                                         <option value="1"></option>
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
@@ -837,7 +837,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <img src="{{ url($value->filepath.$value->filename) }}" class="w-100" style="height: 160px;" alt="" />
+                                        <img src="{{ url($value->filepath.$value->filename) }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -1036,6 +1036,21 @@
 
             $(document).on("click", ".delete-trans", function () {
                 $(this).parent().parent().parent().parent().remove();
+            });
+
+            $(document).on("click", "#send-buyer", function () {
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url("admin/send-to-buyer", @$list->vehicle_id) }}',
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"](data.msg, "Completed!");
+                        } else {
+                            toastr["error"](data.msg, "Failed!");
+                        }
+                    }
+                });
             });
 
             $(document).on("click", ".delete-fines", function () {

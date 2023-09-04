@@ -35,7 +35,7 @@ class ApiController extends Controller
             $log->datetime = date("Y-m-d H:i:s");
             $log->save();
 
-            User::with("user_level", "operator_level")->where('id', Auth::user()->id)->update(['api_token' => $success['token']]);
+            User::with("user_level", "operator_level")->where('id', Auth::user()->id)->update(['api_token' => $success['token'], 'fcm_token' => $request->fcm_token]);
    
             return $this->sendResponse($success, 'User login successfully.');
         } 
@@ -513,7 +513,7 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                User::where('id', $id)->update(['api_token' => '']);
+                User::where('id', $id)->update(['api_token' => '', 'fcm_token' => '']);
             
                 return $this->sendResponse('[]', 'User sign out successfully.');
             } else {

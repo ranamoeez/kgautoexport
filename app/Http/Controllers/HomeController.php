@@ -51,4 +51,42 @@ class HomeController extends Controller
             return redirect(url('/'))->with(['error' => 'These credentials do not match our records.']);
         } 
     }
+
+    public function send_noti()
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>'{
+                "notification": {
+                    "title": "Vehicle Request",
+                    "body": "Add new Vehicle",
+                    "image": "http://kgautoexport.co/public/assets/logo.png"
+                },
+                "priority": "high",
+                "to": "dQazdkQAQ-KPh7KqZSW7tR:APA91bFpYhKPKTFnvFchshF4qOp19KdIS5aVyesIeZm6pvG_bGtz94vBYb-Jus0JyML7A6MB04h8uVKjYyn0NtKltGcG5NnDZfFniOYZPHgnrhcHSpA2Xr4oPH933vrkHTwbbIT6AsgK",
+                "data": {
+                    "message":"Add new Vehicle",
+                    "type":"vehicle_request"
+                }
+            }',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Authorization: key=AAAAntu-774:APA91bHqe9UJ3pzJp3dtm7Tpqlmh0F7UwpzVK_An3JFA61khikFm9EwBOl4j9cPC7lzVxwr7dY6LL-SH2xA1DfpCzplQpBYmMIBLXkg7CTKwoXptjutN_Yo4UPA9kwDxRwiwI2tDiNZu'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        echo $response;
+    }
 }

@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'AppPassword', 'main_user_id', 'level_id', 'admin_level_id', 'operator_level_id', 'balance', 'role', 'surname', 'phone', 'address', 'company', 'fax', 'country', 'api_token'
+        'name', 'email', 'password', 'AppPassword', 'main_user_id', 'level_id', 'admin_level_id', 'operator_level_id', 'balance', 'role', 'surname', 'phone', 'address', 'company', 'fax', 'country', 'api_token', 'fcm_token'
     ];
 
     /**
@@ -30,7 +30,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'AppPassword', 'role', 'api_token', 'remember_token',
+        'password', 'AppPassword', 'api_token', 'remember_token', 'fcm_token'
     ];
 
     /**

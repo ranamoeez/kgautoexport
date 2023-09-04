@@ -28,14 +28,14 @@ class ApiController extends Controller
             } else {
                 $success['token'] = $user->createToken('MyApp')->accessToken;
             }
-            $success['user'] = $user;
+            $success['user'] = User::with("user_level", "operator_level")->where('id', Auth::user()->id)->first();
 
             $log = new UserLoginLog;
             $log->user_id = $user->id;
             $log->datetime = date("Y-m-d H:i:s");
             $log->save();
 
-            User::with("user_level", "operator_level")->where('id', Auth::user()->id)->update(['api_token' => $success['token'], 'fcm_token' => $request->fcm_token]);
+            User::where('id', Auth::user()->id)->update(['api_token' => $success['token'], 'fcm_token' => $request->fcm_token]);
    
             return $this->sendResponse($success, 'User login successfully.');
         } 

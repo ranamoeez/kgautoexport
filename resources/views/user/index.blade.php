@@ -142,9 +142,7 @@
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="items-center justify-center font-semibold flex-col">
-                                        <?xml version="1.0" encoding="iso-8859-1"?>
-                                        <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-                                        <?xml version="1.0" ?><svg height="20px" version="1.1"
+                                        <svg height="20px" version="1.1"
                                             viewBox="0 0 20 20" width="20px" xmlns="http://www.w3.org/2000/svg"
                                             xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
                                             xmlns:xlink="http://www.w3.org/1999/xlink">

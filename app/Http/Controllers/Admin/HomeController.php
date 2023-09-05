@@ -62,11 +62,6 @@ class HomeController extends Controller
             $destination = $request->destination;
             $filter['destination'] = $destination;
         }
-        if (!empty($request->buyer) && $request->buyer !== 'all') {
-        	$data['buyer'] = $request->buyer;
-            $buyer = $request->buyer;
-            $filter['buyer'] = $buyer;
-        }
         if (!empty($request->search)) {
         	$data['search'] = $request->search;
         	$search = $request->search;
@@ -87,9 +82,6 @@ class HomeController extends Controller
                 if (!empty($filter['destination'])) {
                     $query->where('destination_port_id', $filter['destination']);
                 }
-                if (!empty($filter['buyer'])) {
-                    $query->where('buyer_id', $filter['buyer']);
-                }
                 if (!empty($filter['search'])) {
                     $search = $filter['search'];
                     $query->where(function ($q) use ($search) {
@@ -107,6 +99,9 @@ class HomeController extends Controller
                     $query->where('all_paid', $filter['pay_status']);
                 }
             });
+        }
+        if (!empty($request->buyer) && $request->buyer !== 'all') {
+            $vehicles = $vehicles->where('user_id', $request->buyer);
         }
         if (!empty($request->page)) {
             if ($request->page > 1) {
@@ -130,7 +125,13 @@ class HomeController extends Controller
         if($request->isMethod('post')){
             $data = $request->all();
             $this->cleanData($data);
-            $data['owner_id'] = '0';
+            $data['owner_id'] = \Auth::user()->id;
+            if (\Auth::user()->id == "1") {
+                $role = "super_admin";
+            } else {
+                $role = "admin";
+            }
+            $data['assigned_by'] = $role;
             if (empty($data['purchase_date'])) {
                 $data['purchase_date'] = date('Y-m-d');
             }
@@ -234,6 +235,13 @@ class HomeController extends Controller
             $buyer = AssignVehicle::where('id', $id)->first()->user_id;
             if ($data['buyer_id'] !== $buyer) {
                 AssignVehicle::where('id', $id)->update(["user_id" => $data['buyer_id']]);
+                $vehicle_id = AssignVehicle::where('id', $id)->first()->vehicle_id;
+                if (\Auth::user()->id == "1") {
+                    $role = "super_admin";
+                } else {
+                    $role = "admin";
+                }
+                Vehicle::where('id', $vehicle_id)->update(["assigned_by" => $role]);
             }
             $id = AssignVehicle::where('id', $id)->first()->vehicle_id;
             if ($request->hasFile('images')) {
@@ -1024,9 +1032,49 @@ class HomeController extends Controller
         if (!empty(@$vehicle->buyer_id)) {
             \Mail::to(@$vehicle->buyer->email)->send(new \App\Mail\SendVehicle($vehicle));
         } else {
-            return json_encode(["success"=>false, "msg" => "Please assign this vehicle to any buyer!"]);
+            return json_encode(["success"=>false, "msg" => "Please assign any buyer to this vehicle!"]);
         }
         return json_encode(["success"=>true, "msg" => "Sended to buyer successfully!"]);
+    }
+
+    public function send_reminder(Request $request)
+    {
+        $vehicle_id = $request->vehicle_id;
+        $buyer_id = $request->buyer_id;
+        $template_id = $request->template_id;
+
+        $vehicle = Vehicle::with('buyer')->where('id', $vehicle_id)->first();
+        $template = ReminderTemplate::where("id", $template_id)->first();
+
+        $template_name = explode("{vin}", $template->name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->vin.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+
+        $template_content = explode("{vin}", $template->content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->vin.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+
+        $template->name = $template_name;
+        $template->content = $template_content;
+
+        if (!empty(@$vehicle->buyer_id)) {
+            $reminder_history = new ReminderHistory;
+            $reminder_history->vehicle_id = $vehicle_id;
+            $reminder_history->buyer_id = $buyer_id;
+            $reminder_history->template_id = $template_id;
+            $reminder_history->save();
+
+            \Mail::to(@$vehicle->buyer->email)->send(new \App\Mail\SendReminder($template));
+        } else {
+            return json_encode(["success"=>false, "msg" => "Please assign any buyer to this vehicle!"]);
+        }
+        return json_encode(["success"=>true, "msg" => "Reminder sent successfully!"]);
     }
 
     public function assign_vehicle(Request $request)

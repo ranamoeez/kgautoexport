@@ -31,6 +31,8 @@ Route::get('/send-noti', [App\Http\Controllers\HomeController::class, 'send_noti
 
 Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('user-home');
+
+	Route::get('/vehicles', [App\Http\Controllers\HomeController::class, 'vehicles'])->name('user-vehicles');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function(){
@@ -78,6 +80,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::post('/add-balance', [App\Http\Controllers\Admin\HomeController::class, 'add_balance'])->name('add-balance');
 	Route::post('/add-comment', [App\Http\Controllers\Admin\HomeController::class, 'add_comment'])->name('add-comment');
 	Route::post('/transaction-history', [App\Http\Controllers\Admin\HomeController::class, 'transaction_history'])->name('transaction-history');
+	Route::post('/send-reminder', [App\Http\Controllers\Admin\HomeController::class, 'send_reminder'])->name('send-reminder');
 	
 	Route::get('/system-configuration/users', [App\Http\Controllers\Admin\SystemConfigController::class, 'users'])->name('users');
 	Route::post('/system-configuration/users/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_user'])->name('add-user');

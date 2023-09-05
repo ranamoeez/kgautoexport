@@ -680,67 +680,6 @@
                                     class="btn btn-primary col-md-6 float-end border border-1  fs-5">
                                     Reminder
                                 </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="sendReminderModal" tabindex="-1"
-                                    aria-labelledby="sendReminderModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog rounded-5">
-                                        <div class="modal-content p-3">
-                                            <div class="modal-header border-0">
-                                                <h1 class="modal-title fw-bold" id="sendReminderModalLabel"
-                                                    style="font-size: 28px">
-                                                    Send Reminder</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="row mt-4">
-                                                    <label for="choose form"
-                                                        class="col-md-4 fs-5 fw-bold">Choose Form</label>
-                                                    <div class="col-md-8">
-                                                        <select class="form-select template" data-id="{{ @$list->vehicle->id }}" aria-label="Default select example">
-                                                            @if(count(@$templates) > 0)
-                                                            @foreach(@$templates as $k => $v)
-                                                                <option value="{{ @$v['id'] }}">{{ @$v['name'] }}</option>
-                                                            @endforeach
-                                                            @endif
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <a href="#"
-                                                    class="btn w-auto btn-primary border-0 mt-4 col-md-12 rounded-3 fs-6">Send
-                                                    reminder</a>
-
-                                                <div class="p-3">
-                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-1">
-                                                        <p class="col text-fs-3 fw-bold text-center">History</p>
-                                                        <p class="col text-fs-3 fw-bold text-center">Most Recent
-                                                        </p>
-                                                    </div>
-                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-1">
-                                                        <p class="col text-fs-3 fw-bold text-center">ID</p>
-                                                        <p class="col text-fs-3 fw-bold text-center">Form</p>
-                                                        <p class="col text-fs-3 fw-bold text-center">Date Send
-                                                        </p>
-                                                    </div>
-                                                    @if(count(@$history) > 0)
-                                                    @foreach(@$history as $k => $v)
-                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-1">
-                                                        <p class="col text-fs-3 text-center">{{ @$v->id }}</p>
-                                                        <p class="col text-fs-3 text-center">{{ @$v->template->name }}</p>
-                                                        <p class="col text-fs-3 text-center">{{ @$v->created_at }}</p>
-                                                    </div>
-                                                    @endforeach
-                                                    @else
-                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-1">
-                                                        <p class="text-fs-3 text-center">No data found</p>
-                                                    </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             @endif
                         </div>
@@ -868,6 +807,67 @@
                     </div>
                 </div>
             </form>
+            <!-- Modal -->
+            <div class="modal fade" id="sendReminderModal" tabindex="-1"
+                aria-labelledby="sendReminderModalLabel" aria-hidden="true">
+                <div class="modal-dialog rounded-5">
+                    <div class="modal-content p-3">
+                        <div class="modal-header border-0">
+                            <h1 class="modal-title fw-bold" id="sendReminderModalLabel"
+                                style="font-size: 28px">
+                                Send Reminder</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="send-form" method="POST" action="{{ url('admin/send-reminder') }}">
+                                <input type="hidden" name="vehicle_id" value="{{ @$list->vehicle->id }}">
+                                <input type="hidden" name="buyer_id" value="{{ @$list->vehicle->buyer_id }}">
+                                <div class="row mt-4">
+                                    <label for="choose form" class="col-md-4 fs-5 fw-bold">Choose Form</label>
+                                    <div class="col-md-8">
+                                        <select class="form-select template" name="template_id" aria-label="Default select example">
+                                            @if(count(@$templates) > 0)
+                                            @foreach(@$templates as $k => $v)
+                                                <option value="{{ @$v['id'] }}">{{ @$v['name'] }}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <button class="btn w-auto btn-primary border-0 mt-4 col-md-12 rounded-3 fs-6">Send reminder</button>
+                            </form>
+
+                            <div class="p-3">
+                                <div class="row shadow border rounded-5 w-100 mb-3 p-1">
+                                    <p class="col text-fs-3 fw-bold text-center">History</p>
+                                    <p class="col text-fs-3 fw-bold text-center">Most Recent
+                                    </p>
+                                </div>
+                                <div class="row shadow border rounded-5 w-100 mb-3 p-1">
+                                    <p class="col text-fs-3 fw-bold text-center">ID</p>
+                                    <p class="col text-fs-3 fw-bold text-center">Form</p>
+                                    <p class="col text-fs-3 fw-bold text-center">Date Send
+                                    </p>
+                                </div>
+                                @if(count(@$history) > 0)
+                                @foreach(@$history as $k => $v)
+                                <div class="row shadow border rounded-5 w-100 mb-3 p-1">
+                                    <p class="col text-fs-3 text-center">{{ @$v->id }}</p>
+                                    <p class="col text-fs-3 text-center">{{ @$v->template->name }}</p>
+                                    <p class="col text-fs-3 text-center">{{ @$v->created_at }}</p>
+                                </div>
+                                @endforeach
+                                @else
+                                <div class="row shadow border rounded-5 w-100 mb-3 p-1">
+                                    <p class="text-fs-3 text-center">No data found</p>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -926,6 +926,33 @@
             });
             $(document).on("click", ".submit-form", function () {
                 $(".add-vehicle").submit();
+            });
+
+            $(document).on("submit", ".send-form", function (event) {
+                event.preventDefault();
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                    success: function (res) {
+                        // res = JSON.parse(res);
+                        console.log(res);
+                        if (res.success == true) {
+                            toastr["success"](res.msg, "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            toastr["error"](res.msg, "Failed!");
+                        }
+                    }
+                });
             });
 
             $(document).on("submit", ".form", function (event) {

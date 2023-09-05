@@ -32,6 +32,18 @@ class HomeController extends Controller
         return view('user.index', $data);
     }
 
+    public function vehicles()
+    {
+        $data['type'] = "vehicles";
+        $data['super_admin'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {
+            $q->where("assigned_by", "super_admin");
+        })->where('user_id', \Auth::user()->id)->orderBy("id", "DESC")->get();
+        $data['admin'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {
+            $q->where("assigned_by", "admin");
+        })->where('user_id', \Auth::user()->id)->orderBy("id", "DESC")->get();
+        return view('user.vehicles', $data);
+    }
+
     public function post_login(Request $request)
     {
         if(Auth::attempt(['name' => $request->username, 'password' => $request->password])){ 
@@ -70,15 +82,15 @@ class HomeController extends Controller
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS =>'{
                 "notification": {
-                    "title": "Vehicle Request",
-                    "body": "Add new Vehicle",
+                    "title": "K&G Auto Export",
+                    "body": "New vehicle is added!",
                     "image": "http://kgautoexport.co/public/assets/logo.png"
                 },
                 "priority": "high",
-                "to": "dQazdkQAQ-KPh7KqZSW7tR:APA91bFpYhKPKTFnvFchshF4qOp19KdIS5aVyesIeZm6pvG_bGtz94vBYb-Jus0JyML7A6MB04h8uVKjYyn0NtKltGcG5NnDZfFniOYZPHgnrhcHSpA2Xr4oPH933vrkHTwbbIT6AsgK",
+                "to": "d8XrExhrQZ6diKzm6Zg3bL:APA91bGwLhyqes2pu7tAH_2jxavx0jTfKnUH0EfQP5tWdI--kZ_uLVCIVU3EMHCdWnjwPqYc7STJZg5bwgOuONqUAbr1DGH2uIpC-xpKZus1GvmOMx6tlMfIgqQ30AYlILluyh9KUc0a",
                 "data": {
-                    "message":"Add new Vehicle",
-                    "type":"vehicle_request"
+                    "message": "New vehicle is added!",
+                    "type": "add_vehicle"
                 }
             }',
             CURLOPT_HTTPHEADER => array(

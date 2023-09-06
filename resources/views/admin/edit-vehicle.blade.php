@@ -78,6 +78,7 @@
                             </div>
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.3", json_decode($auth_user->admin_level->access)))
+                            @if(@$list->vehicle->buyer_id !== "1")
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Buyer</label>
                                 <div class="col-md-9">
@@ -95,6 +96,7 @@
                                     </select>
                                 </div>
                             </div>
+                            @endif
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.4", json_decode($auth_user->admin_level->access)))
                             <div class="row mb-4">

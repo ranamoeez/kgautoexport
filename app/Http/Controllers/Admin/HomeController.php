@@ -136,6 +136,12 @@ class HomeController extends Controller
                 $data['purchase_date'] = date('Y-m-d');
             }
             $vehicle = Vehicle::create($data);
+            if ($data['buyer_id'] !== "1") {
+                $fcm_token = User::where("id", $data['buyer_id'])->first()->fcm_token;
+                if (!empty($fcm_token)) {
+                    $this->send_noti($fcm_token, "add-vehicle");
+                }
+            }
             $assign = new AssignVehicle;
             $assign->user_id = $data['buyer_id'];
             $assign->vehicle_id = $vehicle->id;
@@ -242,6 +248,10 @@ class HomeController extends Controller
                     $role = "admin";
                 }
                 Vehicle::where('id', $vehicle_id)->update(["assigned_by" => $role]);
+                if ($data['buyer_id'] !== "1") {
+                    $fcm_token = User::where("id", $data['buyer_id'])->first()->fcm_token;
+                    $this->send_noti($fcm_token, "add-vehicle");
+                }
             }
             $id = AssignVehicle::where('id', $id)->first()->vehicle_id;
             if ($request->hasFile('images')) {
@@ -805,6 +815,13 @@ class HomeController extends Controller
     	$data = [];
     	if (!empty($request->status)) {
     		$data["status_id"] = $request->status;
+            $vehicle = Vehicle::where('id', $request->id)->first();
+            if ($vehicle->buyer_id !== "1") {
+                $fcm_token = User::where("id", $vehicle->buyer_id)->first()->fcm_token;
+                if (!empty($fcm_token)) {
+                    $this->send_noti($fcm_token, "status_changed");
+                }
+            }
     	}
     	if (!empty($request->title)) {
     		$data["title"] = $request->title;
@@ -1261,9 +1278,77 @@ class HomeController extends Controller
             $save->vehicle_id = $value;
             $save->save();
             AssignVehicle::where("vehicle_id", $value)->where('user_id', $user_id)->update(["assigned_to"=>$container_id]);
+
+            if ($user_id !== "1") {
+                $fcm_token = User::where("id", $user_id)->first()->fcm_token;
+                if (!empty($fcm_token)) {
+                    $this->send_noti($fcm_token, "added-to-container");
+                }
+            }
         }
 
         return json_encode(["success"=>true, "action" => 'reload']);
+    }
+
+    public function send_noti($fcm_token, $type)
+    {
+        $request_body = (object)[];
+        if ($type == "add-vehicle") {
+            $notification = (object)[];
+            $notification->title = "K&G Auto Export";
+            $notification->body = "New vehicle is added!";
+            $notification->image = "http://kgautoexport.co/public/assets/logo.png";
+
+            $data = (object)[];
+            $data->message = "New vehicle is added!";
+            $data->type = "add-vehicle";
+        } else if ($type == "added-to-container") {
+            $notification = (object)[];
+            $notification->title = "K&G Auto Export";
+            $notification->body = "Vehicle is added to the container!";
+            $notification->image = "http://kgautoexport.co/public/assets/logo.png";
+
+            $data = (object)[];
+            $data->message = "Vehicle status is changed";
+            $data->type = "added-to-container";
+        } else if ($type == "status-changed") {
+            $notification = (object)[];
+            $notification->title = "K&G Auto Export";
+            $notification->body = "Vehicle status is changed!";
+            $notification->image = "http://kgautoexport.co/public/assets/logo.png";
+
+            $data = (object)[];
+            $data->message = "Vehicle status is changed";
+            $data->type = "status-changed";
+        }
+        $request_body->notification = $notification;
+        $request_body->priority = "high";
+        $request_body->to = $fcm_token;
+        $request_body->data = $data;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode($request_body),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Authorization: key=AAAAntu-774:APA91bHqe9UJ3pzJp3dtm7Tpqlmh0F7UwpzVK_An3JFA61khikFm9EwBOl4j9cPC7lzVxwr7dY6LL-SH2xA1DfpCzplQpBYmMIBLXkg7CTKwoXptjutN_Yo4UPA9kwDxRwiwI2tDiNZu'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        
+        return $response;
     }
 
     public function cleanData(&$data) {

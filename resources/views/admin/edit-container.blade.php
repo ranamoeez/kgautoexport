@@ -457,7 +457,7 @@
                                 <a href="{{ asset('assets/letter.pdf') }}" class="btn btn-primary mb-2 border-0" download="letter.pdf">
                                     Letter ()
                                 </a>
-                                <button class="btn btn-primary mb-2 border-0" type="button">
+                                <button class="btn btn-primary mb-2 border-0" type="button" id="send-buyer">
                                     Send to buyer
                                 </button>
                             </div>
@@ -602,6 +602,21 @@
                     if (data.success == true) {
                         $("#addNewBuyerModal").modal('hide');
                         toastr["success"]("Container document deleted successfully!", "Completed!");
+                    }
+                }
+            });
+        });
+
+        $(document).on("click", "#send-buyer", function () {
+            $.ajax({
+                type: 'GET',
+                url: '{{ url("admin/send-to-cont-buyer", @$container->id) }}',
+                success: function(data){
+                    data = JSON.parse(data);
+                    if (data.success == true) {
+                        toastr["success"](data.msg, "Completed!");
+                    } else {
+                        toastr["error"](data.msg, "Failed!");
                     }
                 }
             });

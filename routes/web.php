@@ -72,6 +72,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/get-vehicles/{id}', [App\Http\Controllers\Admin\HomeController::class, 'get_vehicles'])->name('get-vehicles');
 	Route::post('/assign-vehicle', [App\Http\Controllers\Admin\HomeController::class, 'assign_vehicle'])->name('assign-vehicle');
 	Route::get('/send-to-buyer/{id}', [App\Http\Controllers\Admin\HomeController::class, 'send_to_buyer'])->name('send-to-buyer');
+	Route::get('/send-to-cont-buyer/{id}', [App\Http\Controllers\Admin\HomeController::class, 'send_to_cont_buyer'])->name('send-to-cont-buyer');
 
 	Route::get('/pickup-history', [App\Http\Controllers\Admin\HomeController::class, 'pickup_history'])->name('pickup-history');
 	Route::post('/update-pickup-data', [App\Http\Controllers\Admin\HomeController::class, 'update_pickup_data'])->name('update-pickup-data');

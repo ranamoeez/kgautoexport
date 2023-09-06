@@ -1037,6 +1037,21 @@ class HomeController extends Controller
         return json_encode(["success"=>true, "msg" => "Sended to buyer successfully!"]);
     }
 
+    public function send_to_cont_buyer($id)
+    {
+        $vehicle = ContainerVehicle::with('user', 'vehicle', 'vehicle.buyer')->where('container_id', $id)->get();
+
+        if (count($vehicle) > 0) {
+            foreach ($vehicle as $key => $value) {
+                \Mail::to(@$value->user->email)->send(new \App\Mail\SendVehicle($value->vehicle));
+            }
+        } else {
+            return json_encode(["success"=>false, "msg" => "Please add any buyer to this container!"]);
+        }
+            
+        return json_encode(["success"=>true, "msg" => "Sended to buyers successfully!"]);
+    }
+
     public function send_reminder(Request $request)
     {
         $vehicle_id = $request->vehicle_id;

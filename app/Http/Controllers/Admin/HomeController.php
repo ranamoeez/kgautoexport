@@ -1043,7 +1043,7 @@ class HomeController extends Controller
         $buyer_id = $request->buyer_id;
         $template_id = $request->template_id;
 
-        $vehicle = Vehicle::with('buyer')->where('id', $vehicle_id)->first();
+        $vehicle = Vehicle::with('destination_port', 'buyer')->where('id', $vehicle_id)->first();
         $template = ReminderTemplate::where("id", $template_id)->first();
 
         $template_name = explode("{vin}", $template->name);
@@ -1052,10 +1052,166 @@ class HomeController extends Controller
         } else {
             $template_name = $template->name;
         }
+        $template_name = explode("{destination_port}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->destination_port->name.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{description}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->company_name." ".$vehicle->name." ".$vehicle->modal.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{lotnumber}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->lotnumber.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{buyer}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->buyer->surname.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{auction_price}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->auction_price.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{towing_price}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->towing_price.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{delivery_date}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->delivery_date.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{purchase_date}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->purchase_date.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{pay_date}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->pay_date.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{due_date}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->due_date.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{weight}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->weight.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{pickup_date}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->pickup_date.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
+        $template_name = explode("{assigned_by}", $template_name);
+        if (!empty($template_name[1]) || $template_name[1] == "") {
+            $template_name = $template_name[0].$vehicle->assigned_by.$template_name[1];
+        } else {
+            $template_name = $template->name;
+        }
 
         $template_content = explode("{vin}", $template->content);
         if (!empty($template_content[1]) || $template_content[1] == "") {
             $template_content = $template_content[0].$vehicle->vin.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{destination_port}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->destination_port->name.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{description}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->company_name." ".$vehicle->name." ".$vehicle->modal.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{lotnumber}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->lotnumber.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{buyer}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->buyer->surname.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{auction_price}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->auction_price.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{towing_price}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->towing_price.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{delivery_date}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->delivery_date.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{purchase_date}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->purchase_date.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{pay_date}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->pay_date.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{due_date}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->due_date.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{weight}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->weight.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{pickup_date}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->pickup_date.$template_content[1];
+        } else {
+            $template_content = $template->content;
+        }
+        $template_content = explode("{assigned_by}", $template_content);
+        if (!empty($template_content[1]) || $template_content[1] == "") {
+            $template_content = $template_content[0].$vehicle->assigned_by.$template_content[1];
         } else {
             $template_content = $template->content;
         }

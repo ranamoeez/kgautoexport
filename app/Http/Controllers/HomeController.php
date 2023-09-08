@@ -167,10 +167,9 @@ class HomeController extends Controller
                     ]);
 
                     $result = $dataService->Add($customer);
-                    dd($result);
 
-                    $customer_id = $result[0]->Id;
-                    $customer_name = $result[0]->DisplayName;
+                    $customer_id = $result->Id;
+                    $customer_name = $result->DisplayName;
 
                     $invoiceToCreate = Invoice::create([
                         "Line" => $line,

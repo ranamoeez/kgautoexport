@@ -120,7 +120,7 @@ class HomeController extends Controller
                     $amount = 100;
 
                     $veh_data = [
-                        "Description" => $v->vehicle->company_name.' '.$v->vehicle->name.' '.$v->vehicle->modal,
+                        "Description" => @$v->vehicle->company_name.' '.@$v->vehicle->name.' '.@$v->vehicle->modal,
                         "Amount" => $amount,
                         "DetailType" => "SalesItemLineDetail",
                         "SalesItemLineDetail" => [
@@ -167,6 +167,7 @@ class HomeController extends Controller
                     ]);
 
                     $result = $dataService->Add($customer);
+                    dd($result);
 
                     $customer_id = $result[0]->Id;
                     $customer_name = $result[0]->DisplayName;

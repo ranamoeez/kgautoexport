@@ -27,7 +27,6 @@ Route::get('/register', function () {
 });
 
 Route::post('/post-login', [App\Http\Controllers\HomeController::class, 'post_login'])->name('post-login');
-Route::get('/send-noti', [App\Http\Controllers\HomeController::class, 'send_noti'])->name('send-noti');
 
 Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('user-home');
@@ -73,6 +72,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::post('/assign-vehicle', [App\Http\Controllers\Admin\HomeController::class, 'assign_vehicle'])->name('assign-vehicle');
 	Route::get('/send-to-buyer/{id}', [App\Http\Controllers\Admin\HomeController::class, 'send_to_buyer'])->name('send-to-buyer');
 	Route::get('/send-to-cont-buyer/{id}', [App\Http\Controllers\Admin\HomeController::class, 'send_to_cont_buyer'])->name('send-to-cont-buyer');
+	Route::get('/create-invoice/{id}', [App\Http\Controllers\HomeController::class, 'create_invoice'])->name('create-invoice');
 
 	Route::get('/pickup-history', [App\Http\Controllers\Admin\HomeController::class, 'pickup_history'])->name('pickup-history');
 	Route::post('/update-pickup-data', [App\Http\Controllers\Admin\HomeController::class, 'update_pickup_data'])->name('update-pickup-data');

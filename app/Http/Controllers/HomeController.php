@@ -5,7 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\UserLoginLog;
 use App\Models\AssignVehicle;
+use App\Models\ContainerVehicle;
 use Auth;
+use QuickBooksOnline\API\DataService\DataService;
+use QuickBooksOnline\API\Data\IPPCustomer;
+use QuickBooksOnline\API\Facades\Customer;
+use QuickBooksOnline\API\Facades\Invoice;
 
 class HomeController extends Controller
 {
@@ -67,41 +72,125 @@ class HomeController extends Controller
         } 
     }
 
-    public function send_noti()
+    public function create_invoice(Request $request, $id)
     {
-        $curl = curl_init();
+        $container = ContainerVehicle::with('user', 'vehicle')->where("container_id", $id)->get();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>'{
-                "notification": {
-                    "title": "K&G Auto Export",
-                    "body": "New vehicle is added!",
-                    "image": "http://kgautoexport.co/public/assets/logo.png"
-                },
-                "priority": "high",
-                "to": "d8XrExhrQZ6diKzm6Zg3bL:APA91bGwLhyqes2pu7tAH_2jxavx0jTfKnUH0EfQP5tWdI--kZ_uLVCIVU3EMHCdWnjwPqYc7STJZg5bwgOuONqUAbr1DGH2uIpC-xpKZus1GvmOMx6tlMfIgqQ30AYlILluyh9KUc0a",
-                "data": {
-                    "message": "New vehicle is added!",
-                    "type": "add_vehicle"
+        if (!empty($container) && count($container) > 0) {
+            $dataService = DataService::Configure([
+                'auth_mode' => 'oauth2',
+                'ClientID' => env('QUICKBOOKS_CLIENT_ID'),
+                'ClientSecret' => env('QUICKBOOKS_CLIENT_SECRET'),
+                'RedirectURI' => env('QUICKBOOKS_REDIRECT_URI'),
+                'accessTokenKey' => env('QUICKBOOKS_ACCESS_TOKEN'),
+                'refreshTokenKey' => env('QUICKBOOKS_REFRESH_TOKEN'),
+                'QBORealmID' => env('QUICKBOOKS_REALM_ID'),
+                'baseUrl' => env('QUICKBOOKS_BASE_URL')
+            ]);
+
+            $OAuth2LoginHelper = $dataService->getOAuth2LoginHelper();
+            $accessTokenObj = $OAuth2LoginHelper->refreshAccessTokenWithRefreshToken(env('QUICKBOOKS_REFRESH_TOKEN'));
+            $accessTokenValue = $accessTokenObj->getAccessToken();
+            $refreshTokenValue = $accessTokenObj->getRefreshToken();
+
+            $dataService = DataService::Configure([
+                'auth_mode' => 'oauth2',
+                'ClientID' => env('QUICKBOOKS_CLIENT_ID'),
+                'ClientSecret' => env('QUICKBOOKS_CLIENT_SECRET'),
+                'RedirectURI' => env('QUICKBOOKS_REDIRECT_URI'),
+                'accessTokenKey' => $accessTokenValue,
+                'refreshTokenKey' => $refreshTokenValue,
+                'QBORealmID' => env('QUICKBOOKS_REALM_ID'),
+                'baseUrl' => env('QUICKBOOKS_BASE_URL')
+            ]);
+
+            $total_users = [];
+            foreach ($container as $key => $value) {
+                array_push($total_users, $value->user_id);
+            }
+
+            $total_users = array_unique($total_users);
+
+            foreach ($total_users as $key => $value) {
+
+                $all_vehicle = ContainerVehicle::with('user', 'vehicle')->where("container_id", $id)->where("user_id", $value)->get();
+
+                $line = [];
+                foreach ($all_vehicle as $k => $v) {
+                    $amount = 100;
+
+                    $veh_data = [
+                        "Description" => $v->vehicle->company_name.' '.$v->vehicle->name.' '.$v->vehicle->modal,
+                        "Amount" => $amount,
+                        "DetailType" => "SalesItemLineDetail",
+                        "SalesItemLineDetail" => [
+                            "ItemRef" => [
+                                "value" => $key + 1,
+                                "name" => "Product"
+                            ]
+                        ]
+                    ];
+                    array_push($line, $veh_data);
                 }
-            }',
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/json',
-                'Authorization: key=AAAAntu-774:APA91bHqe9UJ3pzJp3dtm7Tpqlmh0F7UwpzVK_An3JFA61khikFm9EwBOl4j9cPC7lzVxwr7dY6LL-SH2xA1DfpCzplQpBYmMIBLXkg7CTKwoXptjutN_Yo4UPA9kwDxRwiwI2tDiNZu'
-            ),
-        ));
 
-        $response = curl_exec($curl);
+                $query = "SELECT * FROM Customer WHERE DisplayName = '".$all_vehicle[0]->user->name."'";
+                $customer = $dataService->Query($query);
 
-        curl_close($curl);
-        echo $response;
+                if (!empty($customer) && count($customer) > 0) {
+                    $customer = $customer[0];
+
+                    $customer_id = $customer->Id;
+                    $customer_name = $customer->DisplayName;
+
+                    $invoiceToCreate = Invoice::create([
+                        "Line" => $line,
+                        "CustomerRef" => [
+                            "value" => $customer_id,
+                            "name" => $customer_name
+                        ]
+                    ]);
+                } else {
+                    $customer = Customer::create([
+                        "GivenName" => $all_vehicle[0]->user->name,
+                        "DisplayName" =>  $all_vehicle[0]->user->name,
+                        "PrimaryEmailAddr" => [
+                            "Address" => $all_vehicle[0]->user->email
+                        ],
+                        "BillAddr" => [
+                            "Line1" => "123 Main Street",
+                            "City" => "Mountain View",
+                            "Country" => "USA",
+                        ],
+                        "PrimaryPhone" => [
+                            "FreeFormNumber" => '+923007731712'
+                        ]
+                    ]);
+
+                    $result = $dataService->Add($customer);
+
+                    $customer_id = $result[0]->Id;
+                    $customer_name = $result[0]->DisplayName;
+
+                    $invoiceToCreate = Invoice::create([
+                        "Line" => $line,
+                        "CustomerRef" => [
+                            "value" => $customer_id,
+                            "name" => $customer_name
+                        ]
+                    ]);
+
+                }
+                $resultObj = $dataService->Add($invoiceToCreate);
+
+            }
+
+            if (!empty($resultObj->DocNumber) && !empty($resultObj->Id)) {
+                return json_encode(["flag" => true, "msg" => "Invoice created successfully!"]);
+            } else {
+                return json_encode(["flag" => false, "msg" => "Something went wrong. Invoice creation failed!"]);
+            }
+        } else {
+            return json_encode(["flag" => false, "msg" => "Please add any buyer to this container first!"]);
+        }
     }
 }

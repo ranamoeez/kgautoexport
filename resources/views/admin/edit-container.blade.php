@@ -21,7 +21,7 @@
                 <div class="d-flex justify-content-end">
                     <div class="mt-6 px-14">
                         <div class="financial-btn">
-                            <button class="btn btn-primary border border-1 fs-5">
+                            <button class="btn btn-primary border border-1 fs-5 quickbook" type="button" data-url="{{ url('admin/create-invoice', $container->id) }}">
                                 Quick book
                             </button>
                         </div>
@@ -589,6 +589,23 @@
 
         $(document).on("click", ".upload-documents", function () {
             $("#documents").click();
+        });
+
+        $(document).on("click", ".quickbook", function () {
+            var url = $(this).attr('data-url');
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(data){
+                    data = JSON.parse(data);
+                    if (data.flag == true) {
+                        toastr["success"](data.msg, "Completed!");
+                    } else {
+                        toastr["error"](data.msg, "Failed!");
+                    }
+                }
+            });
         });
 
         $(document).on("click", ".delete-documents", function () {

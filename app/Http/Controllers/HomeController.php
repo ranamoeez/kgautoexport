@@ -89,7 +89,7 @@ class HomeController extends Controller
             ]);
 
             $OAuth2LoginHelper = $dataService->getOAuth2LoginHelper();
-            $accessTokenObj = $OAuth2LoginHelper->refreshAccessTokenWithRefreshToken(env('QUICKBOOKS_REFRESH_TOKEN'));
+            $accessTokenObj = $OAuth2LoginHelper->refreshAccessTokenWithRefreshToken("AB11702846192BRYtVwIIcdCnLBIB8s2C5TOzQz0zTmMYd1IEN");
             $accessTokenValue = $accessTokenObj->getAccessToken();
             $refreshTokenValue = $accessTokenObj->getRefreshToken();
 

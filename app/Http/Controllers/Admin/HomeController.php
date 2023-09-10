@@ -1088,174 +1088,92 @@ class HomeController extends Controller
         $vehicle = Vehicle::with('destination_port', 'buyer')->where('id', $vehicle_id)->first();
         $template = ReminderTemplate::where("id", $template_id)->first();
 
-        $template_name = explode("{vin}", $template->name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->vin.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        $template_name = $template->name;
+        if (str_contains($template_name, "{vin}")) { 
+            $template_name = str_replace("{vin}", @$vehicle->vin, $template_name);
         }
-        $template_name = explode("{destination_port}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->destination_port->name.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{destination_port}")) { 
+            $template_name = str_replace("{destination_port}", @$vehicle->destination_port->name, $template_name);
         }
-        $template_name = explode("{description}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{description}")) { 
+            $template_name = str_replace("{description}", @$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal, $template_name);
         }
-        $template_name = explode("{lotnumber}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->lotnumber.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{lotnumber}")) { 
+            $template_name = str_replace("{lotnumber}", @$vehicle->lotnumber, $template_name);
         }
-        $template_name = explode("{buyer}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->buyer->surname.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{buyer}")) { 
+            $template_name = str_replace("{buyer}", @$vehicle->buyer->surname, $template_name);
         }
-        $template_name = explode("{auction_price}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->auction_price.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{auction_price}")) { 
+            $template_name = str_replace("{auction_price}", @$vehicle->auction_price, $template_name);
         }
-        $template_name = explode("{towing_price}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->towing_price.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{towing_price}")) { 
+            $template_name = str_replace("{towing_price}", @$vehicle->towing_price, $template_name);
         }
-        $template_name = explode("{delivery_date}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->delivery_date.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{delivery_date}")) { 
+            $template_name = str_replace("{delivery_date}", @$vehicle->delivery_date, $template_name);
         }
-        $template_name = explode("{purchase_date}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->purchase_date.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{purchase_date}")) { 
+            $template_name = str_replace("{purchase_date}", @$vehicle->purchase_date, $template_name);
         }
-        $template_name = explode("{pay_date}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->pay_date.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{pay_date}")) { 
+            $template_name = str_replace("{pay_date}", @$vehicle->pay_date, $template_name);
         }
-        $template_name = explode("{due_date}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->due_date.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{due_date}")) { 
+            $template_name = str_replace("{due_date}", @$vehicle->due_date, $template_name);
         }
-        $template_name = explode("{weight}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->weight.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{weight}")) { 
+            $template_name = str_replace("{weight}", @$vehicle->weight, $template_name);
         }
-        $template_name = explode("{pickup_date}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->pickup_date.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{pickup_date}")) { 
+            $template_name = str_replace("{pickup_date}", @$vehicle->pickup_date, $template_name);
         }
-        $template_name = explode("{assigned_by}", $template_name);
-        if (!empty(@$template_name[1]) || @$template_name[1] == "") {
-            $template_name = @$template_name[0].@$vehicle->assigned_by.@$template_name[1];
-        } else {
-            $template_name = $template->name;
+        if (str_contains($template_name, "{assigned_by}")) { 
+            $template_name = str_replace("{assigned_by}", @$vehicle->assigned_by, $template_name);
         }
 
-        $template_content = explode("{vin}", $template->content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->vin.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        $template_content = $template->content;
+        if (str_contains($template_content, "{vin}")) { 
+            $template_content = str_replace("{vin}", @$vehicle->vin, $template_content);
         }
-        $template_content = explode("{destination_port}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->destination_port->name.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{destination_port}")) { 
+            $template_content = str_replace("{destination_port}", @$vehicle->destination_port->name, $template_content);
         }
-        $template_content = explode("{description}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{description}")) { 
+            $template_content = str_replace("{description}", @$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal, $template_content);
         }
-        $template_content = explode("{lotnumber}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->lotnumber.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{lotnumber}")) { 
+            $template_content = str_replace("{lotnumber}", @$vehicle->lotnumber, $template_content);
         }
-        $template_content = explode("{buyer}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->buyer->surname.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{buyer}")) { 
+            $template_content = str_replace("{buyer}", @$vehicle->buyer->surname, $template_content);
         }
-        $template_content = explode("{auction_price}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->auction_price.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{auction_price}")) { 
+            $template_content = str_replace("{auction_price}", @$vehicle->auction_price, $template_content);
         }
-        $template_content = explode("{towing_price}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->towing_price.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{towing_price}")) { 
+            $template_content = str_replace("{towing_price}", @$vehicle->towing_price, $template_content);
         }
-        $template_content = explode("{delivery_date}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->delivery_date.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{delivery_date}")) { 
+            $template_content = str_replace("{delivery_date}", @$vehicle->delivery_date, $template_content);
         }
-        $template_content = explode("{purchase_date}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->purchase_date.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{purchase_date}")) { 
+            $template_content = str_replace("{purchase_date}", @$vehicle->purchase_date, $template_content);
         }
-        $template_content = explode("{pay_date}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->pay_date.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{pay_date}")) { 
+            $template_content = str_replace("{pay_date}", @$vehicle->pay_date, $template_content);
         }
-        $template_content = explode("{due_date}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->due_date.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{due_date}")) { 
+            $template_content = str_replace("{due_date}", @$vehicle->due_date, $template_content);
         }
-        $template_content = explode("{weight}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->weight.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{weight}")) { 
+            $template_content = str_replace("{weight}", @$vehicle->weight, $template_content);
         }
-        $template_content = explode("{pickup_date}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->pickup_date.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{pickup_date}")) { 
+            $template_content = str_replace("{pickup_date}", @$vehicle->pickup_date, $template_content);
         }
-        $template_content = explode("{assigned_by}", $template_content);
-        if (!empty(@$template_content[1]) || @$template_content[1] == "") {
-            $template_content = @$template_content[0].@$vehicle->assigned_by.@$template_content[1];
-        } else {
-            $template_content = $template->content;
+        if (str_contains($template_content, "{assigned_by}")) { 
+            $template_content = str_replace("{assigned_by}", @$vehicle->assigned_by, $template_content);
         }
 
         $template->name = $template_name;

@@ -39,9 +39,96 @@
             color: black;
         }
     </style>
+    <style type="text/css">
+        .center-body {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999999;
+            height: 100%;
+            background-color: white;
+            opacity: 0.5;
+            display: none;
+        }
+        .loader-circle-9 {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: transparent;
+            border: 3px solid #023e8abd;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 70px;
+            font-family: sans-serif;
+            font-size: 12px;
+            color: #023e8a;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(0, 0, 0, .5);
+        }
+        .loader-circle-9:before {
+            content: '';
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top: 3px solid #023e8a;
+            border-right: 3px solid #023e8a;
+            border-radius: 50%;
+            animation: animateC 2s linear infinite;
+        }
+        .loader-circle-9 span {
+            display: block;
+            position: absolute;
+            top: calc(50% - 2px);
+            left: 50%;
+            width: 50%;
+            height: 4px;
+            background: transparent;
+            transform-origin: left;
+            animation: animate 2s linear infinite;
+        }
+        .loader-circle-9 span:before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #023e8a;
+            top: -6px;
+            right: -8px;
+            box-shadow: 0 0 20px #023e8a;
+        }
+        @keyframes animateC {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes animate {
+            0% {
+                transform: rotate(45deg);
+            }
+            100% {
+                transform: rotate(405deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <div class="center-body">
+        <div class="loader-circle-9">Working
+            <span></span>
+        </div>
+    </div>
     <div id="app">
         <div class="">
             @include('components.admin-sidebar')

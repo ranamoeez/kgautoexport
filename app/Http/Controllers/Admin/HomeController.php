@@ -680,7 +680,7 @@ class HomeController extends Controller
         $data = $request->all();
         $user = User::where("id", $data['user_id'])->first();
         if (!empty($user)) {
-            if ($user->balance !== 0) {
+            if ($user->balance !== 0 && $data['amount'] <= $user->balance) {
                 $pre_balance = $user->balance;
                 $balance = (int)$pre_balance - (int)$data['amount'];
                 User::where("id", $data['user_id'])->update(["balance" => $balance]);
@@ -856,6 +856,16 @@ class HomeController extends Controller
             $data['approved_by'] = NULL;
         }
         PickupRequest::where('id', $request->id)->update($data);
+
+        $pickup = PickupRequest::where('id', $request->id)->first();
+
+        if ($pickup->user_id !== "1") {
+            $fcm_token = User::where("id", $pickup->user_id)->first()->fcm_token;
+            if (!empty($fcm_token)) {
+                $this->send_noti($fcm_token, "pickup-status-changed");
+            }
+        }
+
         return json_encode(["success"=>true, 'action'=>'reload']);
     }
 
@@ -1320,6 +1330,15 @@ class HomeController extends Controller
             $data = (object)[];
             $data->message = "Vehicle status is changed";
             $data->type = "status-changed";
+        } else if ($type == "pickup-status-changed") {
+            $notification = (object)[];
+            $notification->title = "K&G Auto Export";
+            $notification->body = "Pickup request status is updated!";
+            $notification->image = "http://kgautoexport.co/public/assets/logo.png";
+
+            $data = (object)[];
+            $data->message = "Pickup request status is updated";
+            $data->type = "pickup-status-changed";
         }
         $request_body->notification = $notification;
         $request_body->priority = "high";

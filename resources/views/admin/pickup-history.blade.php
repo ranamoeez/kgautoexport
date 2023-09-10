@@ -10,6 +10,91 @@
         a:hover {
             color: #023e8a !important;
         }
+        #myImg {
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #myImg:hover {opacity: 0.7;}
+
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+        }
+
+        /* Modal Content (image) */
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        /* Caption of Modal Image */
+        #caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            height: 150px;
+        }
+
+        /* Add Animation */
+        .modal-content, #caption {  
+            -webkit-animation-name: zoom;
+            -webkit-animation-duration: 0.6s;
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+
+        @-webkit-keyframes zoom {
+            from {-webkit-transform:scale(0)} 
+            to {-webkit-transform:scale(1)}
+        }
+
+        @keyframes zoom {
+            from {transform:scale(0)} 
+            to {transform:scale(1)}
+        }
+
+        /* The Close Button */
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* 100% Image Width on Smaller Screens */
+        @media only screen and (max-width: 700px){
+            .modal-content {
+                width: 100%;
+            }
+        }
     </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
@@ -121,6 +206,7 @@
                         <thead class="text-fs-4">
                             <th scope="col" class="fw-bold">ID</th>
                             <th scope="col" class="fw-bold">Image</th>
+                            <th scope="col" class="fw-bold">Picker Name</th>
                             <th scope="col" class="fw-bold">Buyer</th>
                             <th scope="col" class="fw-bold">VIN</th>
                             <th scope="col" class="fw-bold">Destination</th>
@@ -143,12 +229,17 @@
                                 </td>
                                 <td>
                                     @if(!empty(@$value->file))
-                                        <img src="{{ url('storage/app/'.@$value->file) }}" style="width: 100px; height: 100px;" class="rounded-4">
+                                        <img src="{{ url('storage/app/'.@$value->file) }}" style="width: 100px; height: 100px; cursor: pointer;" class="rounded-4 myImg">
                                     @else
                                     <p class="text-fs-3">
                                         N / A
                                     </p>
                                     @endif
+                                </td>
+                                <td>
+                                    <p class=" text-fs-3">
+                                        {{ @$value->picker_name }}
+                                    </p>
                                 </td>
                                 <td>
                                     <p class=" text-fs-3">
@@ -209,6 +300,10 @@
                     </table>
                 </div>
             </div>
+            <div id="myModal" class="modal">
+                <span class="close">&times;</span>
+                <img class="modal-content" id="img01">
+            </div>
         </div>
     </div>
 
@@ -225,6 +320,22 @@
     <script>
         // Function to update the background color (selected option)
         $(document).ready(function () {
+            // Get the modal
+            var modal = document.getElementById("myModal");
+
+            $(".myImg").click(function () {
+                $("#myModal").css("display", "block");
+                $("#img01").attr("src", $(this).attr("src"));
+            });
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() { 
+                modal.style.display = "none";
+            }
+
             function updateBackgroundColor(selectElement) {
                 const selectedOption = selectElement.options[selectElement.selectedIndex];
                 const color = selectedOption.dataset.color;

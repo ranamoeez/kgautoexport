@@ -592,6 +592,7 @@
         });
 
         $(document).on("click", ".quickbook", function () {
+            $('.center-body').css('display', 'block');
             var url = $(this).attr('data-url');
 
             $.ajax({
@@ -604,6 +605,7 @@
                     } else {
                         toastr["error"](data.msg, "Failed!");
                     }
+                    $('.center-body').css('display', 'none');
                 }
             });
         });

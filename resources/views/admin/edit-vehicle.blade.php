@@ -931,6 +931,7 @@
             });
 
             $(document).on("submit", ".send-form", function (event) {
+                $('.center-body').css('display', 'block');
                 event.preventDefault();
 
                 $.ajax({
@@ -953,6 +954,7 @@
                         } else {
                             toastr["error"](res.msg, "Failed!");
                         }
+                        $('.center-body').css('display', 'none');
                     }
                 });
             });

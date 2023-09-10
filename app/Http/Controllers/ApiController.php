@@ -347,6 +347,7 @@ class ApiController extends Controller
                     }
                     $pickup_request->user_id = $id;
                     $pickup_request->vehicle_id = $input['vehicle_id'];
+                    $pickup_request->picker_name = @$input['picker_name'];
                     $pickup_request->comments = $input['comments'];
                     $pickup_request->save();
                 } else {

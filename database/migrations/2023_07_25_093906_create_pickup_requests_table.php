@@ -17,6 +17,7 @@ class CreatePickupRequestsTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('vehicle_id');
+            $table->string('picker_name')->nullable();
             $table->string('comments')->nullable();
             $table->string('file')->nullable();
             $table->string('status')->default('waiting');

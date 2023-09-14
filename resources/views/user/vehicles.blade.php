@@ -56,7 +56,7 @@
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
-                                    @if(!empty(@$admin) > 0)
+                                    @if(count(@$admin) > 0)
                                     @foreach(@$admin as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td @if(@$value->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
@@ -320,7 +320,7 @@
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
-                                    @if(!empty(@$super_admin) > 0)
+                                    @if(count(@$super_admin) > 0)
                                     @foreach(@$super_admin as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td @if(@$value->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>

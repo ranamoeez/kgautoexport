@@ -75,7 +75,7 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ url('admin/system-configuration/users/add') }}" method="POST" class="form">
+                        <form action="{{ url('user/users/add') }}" method="POST" class="form">
                             @csrf
                             <div class="row mt-4">
 
@@ -201,24 +201,6 @@
                                                     <input name="phone" type="text" id="phone" class="py-2 form-control rounded-end-4 border-0" placeholder="Enter Number" required />
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 mb-4">
-                                    <div class="row">
-                                        <label for="" class="col-md-2">User Level</label>
-                                        <div class="col-md-10">
-                                            <div class="input-group shadow-lg rounded-4">
-                                                <select class="form-select level" name="level_id">
-                                                    @if(count(@$user_levels) > 0)
-                                                    @foreach(@$user_levels as $key => $value)
-                                                        <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
-                                                    @endforeach
-                                                    @endif
-                                                </select>
-                                            </div>
-                                            
                                         </div>
                                     </div>
                                 </div>

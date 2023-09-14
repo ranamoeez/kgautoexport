@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\UserLoginLog;
 use App\Models\AssignVehicle;
 use App\Models\ContainerVehicle;
+use App\Models\Level;
 use Auth;
 use QuickBooksOnline\API\DataService\DataService;
 use QuickBooksOnline\API\Data\IPPCustomer;
@@ -34,6 +35,7 @@ class HomeController extends Controller
         $data['type'] = "homepage";
         $data['total_vehicles'] = AssignVehicle::where('user_id', \Auth::user()->id)->count();
         $data['latest'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', \Auth::user()->id)->orderBy("id", "DESC")->limit(3)->get();
+        $data['user_levels'] = Level::all();
         return view('user.index', $data);
     }
 
@@ -47,6 +49,24 @@ class HomeController extends Controller
             $q->where("assigned_by", "admin");
         })->where('user_id', \Auth::user()->id)->orderBy("id", "DESC")->get();
         return view('user.vehicles', $data);
+    }
+
+    public function containers()
+    {
+        $data['type'] = "containers";
+        return view('user.containers', $data);
+    }
+
+    public function container_detail()
+    {
+        $data['type'] = "containers";
+        return view('user.container-detail', $data);
+    }
+
+    public function financial()
+    {
+        $data['type'] = "financial";
+        return view('user.financial', $data);
     }
 
     public function post_login(Request $request)

@@ -44,6 +44,10 @@ class HomeController extends Controller
 
     public function vehicles(Request $request)
     {
+        if (\Auth::user()->role !== "1") {
+            return redirect(url("user"));
+        }
+
         $data['type'] = "vehicles";
         $data['page'] = '1';
         $filter = [];
@@ -125,6 +129,10 @@ class HomeController extends Controller
 
     public function add_vehicle(Request $request)
     {
+        if (\Auth::user()->role !== "1") {
+            return redirect(url("user"));
+        }
+
         if($request->isMethod('post')){
             $data = $request->all();
             $this->cleanData($data);
@@ -240,6 +248,10 @@ class HomeController extends Controller
 
     public function edit_vehicle(Request $request, $id)
     {
+        if (\Auth::user()->role !== "1") {
+            return redirect(url("user"));
+        }
+
         if($request->isMethod('post')){
             $data = $request->all();
             $buyer = AssignVehicle::where('id', $id)->first()->user_id;
@@ -367,6 +379,10 @@ class HomeController extends Controller
 
     public function containers(Request $request)
     {
+        if (\Auth::user()->role !== "1") {
+            return redirect(url("user"));
+        }
+
         $data['type'] = "containers";
         $data['page'] = '1';
         $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement');
@@ -439,6 +455,10 @@ class HomeController extends Controller
 
     public function add_container(Request $request)
     {
+        if (\Auth::user()->role !== "1") {
+            return redirect(url("user"));
+        }
+
         if($request->isMethod('post')){
             $data = $request->all();
             $this->cleanData($data);
@@ -491,6 +511,10 @@ class HomeController extends Controller
 
     public function edit_container(Request $request, $id)
     {
+        if (\Auth::user()->role !== "1") {
+            return redirect(url("user"));
+        }
+
         if($request->isMethod('post')){
             $data = $request->all();
             if ($request->hasFile('documents')) {
@@ -565,6 +589,10 @@ class HomeController extends Controller
 
     public function financial_system(Request $request)
     {
+        if (\Auth::user()->role !== "1") {
+            return redirect(url("user"));
+        }
+
         $data['type'] = "financial-system";
         $data['page'] = '1';
         $filter = [];
@@ -725,6 +753,10 @@ class HomeController extends Controller
 
     public function pickup_history(Request $request)
     {
+        if (\Auth::user()->role !== "1") {
+            return redirect(url("user"));
+        }
+        
         $data['type'] = "pickup-history";
         $data['page'] = '1';
         $filter = [];

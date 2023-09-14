@@ -44,7 +44,7 @@
             @include('components.user-sidebar')
         </div>
         <main class="">
-            @include('components.navbar')
+            @include('components.user-navbar')
             @yield('content')
         </main>
     </div>

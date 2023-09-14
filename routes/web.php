@@ -32,6 +32,9 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('user-home');
 
 	Route::get('/vehicles', [App\Http\Controllers\HomeController::class, 'vehicles'])->name('user-vehicles');
+	Route::get('/containers', [App\Http\Controllers\HomeController::class, 'containers'])->name('user-containers');
+	Route::get('/containers/1', [App\Http\Controllers\HomeController::class, 'container_detail'])->name('user-container-detail');
+	Route::get('/financial', [App\Http\Controllers\HomeController::class, 'financial'])->name('user-financial');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function(){

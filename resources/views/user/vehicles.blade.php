@@ -675,36 +675,23 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // chart js
-        var xValues = ["Due", "Limit"];
-        var yValues = [3050, 5000];
-        var barColors = ["#F9D46C", "#F3F3F3"];
-
-        new Chart("myChart", {
-            type: "doughnut",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues,
-                },],
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: "due",
-                },
-            },
-        });
-    </script>
-    <script>
+        // Function to update the background color (selected option)
         $(document).ready(function () {
-            $('.select2-selection--single').removeClass('select2-selection--single');
-        });
-    </script>
-    <script>
-        $(".alert").show().delay(5000).queue(function (n) {
-            $(this).hide(); n();
+            function updateBackgroundColor(selectElement) {
+                const selectedOption = selectElement.options[selectElement.selectedIndex];
+                const color = selectedOption.dataset.color;
+                $(selectElement).removeClass("bg-danger bg-success");
+                $(selectElement).addClass(`bg-${color}`);
+                $(selectedOption).addClass("text-white");
+            }
+
+            $("select.option-select").on("change", function () {
+                updateBackgroundColor(this);
+            });
+
+            $("select.option-select").each(function () {
+                updateBackgroundColor(this);
+            });
         });
     </script>
     <script>

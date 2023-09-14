@@ -101,6 +101,7 @@ class HomeController extends Controller
             });
         }
         if (!empty($request->buyer) && $request->buyer !== 'all') {
+            $data['buyer'] = $request->buyer;
             $vehicles = $vehicles->where('user_id', $request->buyer);
         }
         if (!empty($request->page)) {

@@ -644,9 +644,9 @@ class HomeController extends Controller
         }
         $balance = $balance->sum('balance');
         if (empty($filter)) {
-            $all_data = $all_data->offset(35000)->limit(20000)->get();
+            $all_data = $all_data->get();
         } else {
-            $all_data = $all_data->limit(20000)->get();
+            $all_data = $all_data->get();
         }
         $fines = 0;
         $company_fee = 0;
@@ -778,7 +778,7 @@ class HomeController extends Controller
             $previous = TransactionsHistory::where("user_id", $buyer_id)->sum('amount');
             $auction_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('auction_price');
             $towing_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('towing_price');
-            $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $buyer_id)->limit(20000)->get();
+            $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $buyer_id)->get();
             $balance = User::where('id', $buyer_id)->sum('balance');
             $fines = 0;
             $company_fee = 0;
@@ -968,15 +968,15 @@ class HomeController extends Controller
         $previous = TransactionsHistory::where("user_id", $id)->sum('amount');
         $auction_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('auction_price');
         $towing_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('towing_price');
-        $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $id)->limit(20000)->get();
+        $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $id)->get();
         $balance = User::where('id', $id)->sum('balance');
         if ($id == "0") {
             $previous = TransactionsHistory::all()->sum('amount');
             $auction_price = \DB::table('vehicles')->sum('auction_price');
             $towing_price = \DB::table('vehicles')->sum('towing_price');
-            $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->offset(35000)->limit(20000)->get();
+            $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->get();
             $balance = User::all()->sum('balance');
-            $data['data'] = Vehicle::limit(20000)->offset(35000)->get();
+            $data['data'] = Vehicle::all();
         }
         $fines = 0;
         $company_fee = 0;
@@ -1015,7 +1015,7 @@ class HomeController extends Controller
             $previous = TransactionsHistory::where("user_id", $buyer_id)->sum('amount');
             $auction_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('auction_price');
             $towing_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('towing_price');
-            $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $buyer_id)->limit(20000)->get();
+            $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $buyer_id)->get();
             $balance = User::all()->sum('balance');
         }
         $fines = 0;

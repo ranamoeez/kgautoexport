@@ -203,7 +203,7 @@
                                                                     </div>
                                                                     <input type="password" name="password"
                                                                         class="py-2 form-control rounded-end-4"
-                                                                        placeholder="Password" required />
+                                                                        placeholder="Password" id="upass" required />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -225,7 +225,7 @@
                                                                     </div>
                                                                     <input type="password" name="cpassword"
                                                                         class="py-2 form-control rounded-end-4"
-                                                                        placeholder="Confirm Password" required />
+                                                                        placeholder="Confirm Password" id="ucpass" required />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -598,7 +598,7 @@
         window.intlTelInput(input, {
             separateDialCode: true,
             excludeCountries: ["in", "il"],
-            preferredCountries: ["ru", "jp", "pk", "no"]
+            preferredCountries: ["jo", "iq"]
         });
         var input1 = document.querySelector("#user-phone");
         window.intlTelInput(input1, {
@@ -643,11 +643,14 @@
                 $("#modalLabel").text("Add New User");
                 $("#user-username").val('');
                 $("#user-email").val('');
+                $("#user-phone").val('');
                 $("#user-surname").val('');
                 $("#user-company").val('');
                 $("#country option[value='']").attr("selected", true);
                 $("#user-phone").val('');
                 $(".level option[value='']").attr("selected", true);
+                $("#upass").attr("required", true);
+                $("#ucpass").attr("required", true);
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/users/add') }}");
@@ -670,13 +673,18 @@
                             $("#user-surname").val(res.data.surname);
                             $("#user-company").val(res.data.company);
                             $("#country option[value="+res.data.country+"]").attr("selected", true);
+                            console.log(res.data.phone);
                             if (res.data.phone !== "" && res.data.phone !== null) {
                                 var phone = res.data.phone.split(" ");
                                 $("#user-phone").val(phone[1]);
                                 $(".iti__selected-dial-code").text(phone[0]);
                                 $("#dial_code").text(phone[0]);
+                            } else {
+                                $("#user-phone").val("");
                             }
                             $(".level option[value="+res.data.level_id+"]").attr("selected", true);
+                            $("#upass").attr("required", false);
+                            $("#ucpass").attr("required", false);
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/users/edit') }}/"+id);

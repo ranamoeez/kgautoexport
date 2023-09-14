@@ -394,7 +394,7 @@
                                     </label>
                                     <div class="col-md-8">
                                         <div class="d-flex flex-column align-items-end">
-                                            <input type="text" name="user_notes" id="user_notes" class="form-control text-fs-4 rounded pb-4" required />
+                                            <input type="text" id="user_notes" class="form-control text-fs-4 rounded pb-4" disabled />
                                             <button class="btn btn-sm btn-primary mt-3 comment-btn fs-6 border-0">
                                                 Update Comment
                                             </button>

@@ -75,9 +75,8 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ url('user/create') }}" method="POST">
-                            <input type="hidden" name="_token"
-                                value="2hG9Onhipd8gQW4CzEzxhVefjZEvTRg2u0ecrBLT">
+                        <form action="{{ url('admin/system-configuration/users/add') }}" method="POST" class="form">
+                            @csrf
                             <div class="row mt-4">
 
                                 <div class="col-md-6 mb-4">
@@ -94,9 +93,7 @@
                                                             d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
                                                     </svg>
                                                 </div>
-                                                <input type="text" name="username" value=""
-                                                    class="py-2 form-control rounded-end-4"
-                                                    placeholder="John Sabestin" required />
+                                                <input type="text" name="name" value="" class="py-2 form-control rounded-end-4" placeholder="John Sabestin" required />
                                             </div>
                                         </div>
                                     </div>
@@ -116,9 +113,7 @@
                                                             d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
                                                     </svg>
                                                 </div>
-                                                <input type="text" name="company"
-                                                    class="py-2 form-control rounded-end-4"
-                                                    placeholder="Hn Sabestin" required />
+                                                <input type="text" name="company" class="py-2 form-control rounded-end-4" placeholder="Hn Sabestin" required />
                                             </div>
                                         </div>
                                     </div>
@@ -138,9 +133,7 @@
                                                             d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                                                     </svg>
                                                 </div>
-                                                <input type="text" name="name"
-                                                    class="py-2 form-control rounded-end-4"
-                                                    placeholder="Amazon" required />
+                                                <input type="text" name="surname" class="py-2 form-control rounded-end-4" placeholder="Amazon" required />
                                             </div>
                                         </div>
                                     </div>
@@ -184,9 +177,7 @@
                                                             d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                                                     </svg>
                                                 </div>
-                                                <input type="text" name="email"
-                                                    class="py-2 form-control rounded-end-4"
-                                                    placeholder="abc123@gmail.com" required />
+                                                <input type="text" name="email" class="py-2 form-control rounded-end-4" placeholder="abc123@gmail.com" required />
                                             </div>
                                         </div>
                                     </div>
@@ -206,12 +197,28 @@
                                         <div class="col-md-8">
                                             <div class="input-group shadow-lg rounded-4">
                                                 <div class="input-group-text  rounded-start-4">
-
-                                                    <input name="phone" type="text" id="phone"
-                                                        class="py-2 form-control rounded-end-4 border-0"
-                                                        placeholder="Enter Number" required />
+                                                    <input type="hidden" name="dial_code" id="top_dial_code" value="">
+                                                    <input name="phone" type="text" id="phone" class="py-2 form-control rounded-end-4 border-0" placeholder="Enter Number" required />
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mb-4">
+                                    <div class="row">
+                                        <label for="" class="col-md-2">User Level</label>
+                                        <div class="col-md-10">
+                                            <div class="input-group shadow-lg rounded-4">
+                                                <select class="form-select level" name="level_id">
+                                                    @if(count(@$user_levels) > 0)
+                                                    @foreach(@$user_levels as $key => $value)
+                                                        <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -230,9 +237,7 @@
                                                             d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                                                     </svg>
                                                 </div>
-                                                <input type="password" name="password"
-                                                    class="py-2 form-control rounded-end-4"
-                                                    placeholder="Password" required />
+                                                <input type="password" name="password" class="py-2 form-control rounded-end-4" placeholder="Password" required />
                                             </div>
                                         </div>
                                     </div>
@@ -252,9 +257,7 @@
                                                             d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                                                     </svg>
                                                 </div>
-                                                <input type="password" name="cpassword"
-                                                    class="py-2 form-control rounded-end-4"
-                                                    placeholder="Password" required />
+                                                <input type="password" name="cpassword" class="py-2 form-control rounded-end-4" placeholder="Password" required />
                                             </div>
                                         </div>
                                     </div>
@@ -286,6 +289,9 @@
                             */
                             function countriesDropdown(container) {
                                 var countries = {
+                                    IRQ: "Iraq",
+                                    JOR: "Jordan",
+                                    UAE: "United Arab Emirates",
                                     AFG: "Afghanistan",
                                     ALB: "Albania",
                                     ALG: "Algeria",
@@ -374,14 +380,12 @@
                                     IND: "India",
                                     IRI: "Iran",
                                     IRL: "Ireland",
-                                    IRQ: "Iraq",
                                     ISL: "Iceland",
                                     ISR: "Israel",
                                     ISV: "Virgin Islands",
                                     ITA: "Italy",
                                     IVB: "British Virgin Islands",
                                     JAM: "Jamaica",
-                                    JOR: "Jordan",
                                     JPN: "Japan",
                                     KAZ: "Kazakhstan",
                                     KEN: "Kenya",
@@ -479,7 +483,6 @@
                                     TUN: "Tunisia",
                                     TUR: "Turkey",
                                     TUV: "Tuvalu",
-                                    UAE: "United Arab Emirates",
                                     UGA: "Uganda",
                                     UKR: "Ukraine",
                                     URU: "Uruguay",
@@ -504,14 +507,7 @@
                             }
                             countriesDropdown("countries");
 
-
-
-
-
-
-
                             pincodeDropdown("pincode");
-
 
                             $("#myForm").validate({
                                 errorLabelContainer: "#messageBox",

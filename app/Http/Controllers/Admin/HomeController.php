@@ -34,6 +34,7 @@ use App\Models\FineType;
 use App\Models\TransFineType;
 use App\Models\ReminderTemplate;
 use App\Models\ReminderHistory;
+use App\Models\Level;
 use Auth;
 use Storage;
 
@@ -113,6 +114,7 @@ class HomeController extends Controller
         }
         $vehicles = $vehicles->limit(20)->get();
         $data['list'] = $vehicles;
+        $data['user_levels'] = Level::all();
         $data['all_terminal'] = Terminal::all();
         $data['all_status'] = Status::all();
         $data['all_buyer'] = User::where('role', '2')->get();
@@ -221,6 +223,7 @@ class HomeController extends Controller
         $data   = array();
         $data['type'] = 'add-vehicle';
         $data['action'] = url('admin/vehicles/add');
+        $data['user_levels'] = Level::all();
         $data['all_status'] = Status::all();
         $data['all_terminal'] = Terminal::all();
         $data['all_buyer'] = User::where('role', '2')->get();
@@ -332,6 +335,7 @@ class HomeController extends Controller
         $data   = array();
         $data['type'] = 'vehicles';
         $data['action'] = url('admin/vehicles/edit/'.$id);
+        $data['user_levels'] = Level::all();
         $data['list'] = AssignVehicle::with('vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.shipping_line')->where('id', $id)->first();
         $data['all_status'] = Status::all();
         $data['all_terminal'] = Terminal::all();
@@ -426,6 +430,7 @@ class HomeController extends Controller
             $containers[$key]->buyers = $buyers;
         }
         $data['list'] = $containers;
+        $data['user_levels'] = Level::all();
         $data['all_port'] = LoadingPort::all();
         $data['all_status'] = ContStatus::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
@@ -470,6 +475,7 @@ class HomeController extends Controller
         $data   = array();
         $data['type'] = 'add-container';
         $data['action'] = url('admin/containers/add');
+        $data['user_levels'] = Level::all();
         $data['all_shipper'] = Shipper::all();
         $data['all_shipping_line'] = ShippingLine::all();
         $data['all_loading_port'] = LoadingPort::all();
@@ -533,6 +539,7 @@ class HomeController extends Controller
         $data['c_id'] = $c_id;
         $data['type'] = 'containers';
         $data['action'] = url('admin/containers/edit/'.$id);
+        $data['user_levels'] = Level::all();
         $data['container'] = Container::with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('id', $id)->first();
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_shipper'] = Shipper::all();
@@ -671,6 +678,7 @@ class HomeController extends Controller
         if ($data['due_payments'] < 0) {
             $data['due_payments'] = 0;
         }
+        $data['user_levels'] = Level::all();
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.financial-system', $data);
@@ -707,11 +715,10 @@ class HomeController extends Controller
 
     public function add_comment(Request $request)
     {
-        $user_notes = $request->user_notes;
         $admin_notes = $request->admin_notes;
         $vehicle_id = $request->vehicle_id;
 
-        Vehicle::where("id", $vehicle_id)->update(["notes" => $admin_notes, "notes_user" => $user_notes]);
+        Vehicle::where("id", $vehicle_id)->update(["notes" => $admin_notes]);
 
         return json_encode(["success"=>true, 'msg'=>'Comment is updated successfully!', 'action'=>'reload']);
     }
@@ -805,6 +812,7 @@ class HomeController extends Controller
             $pickup[$key]->balance = $balance;
         }
         $data['list'] = $pickup;
+        $data['user_levels'] = Level::all();
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();

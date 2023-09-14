@@ -52,6 +52,7 @@ class SystemConfigController extends Controller
         $users = $users->limit(10)->get();
         $data['users'] = $users;
         $data['level'] = Level::all();
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
     	return view('admin.system-configuration.users', $data);
     }
@@ -99,8 +100,13 @@ class SystemConfigController extends Controller
                         return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
                     }
                 } else {
+                    if (!empty($data['phone'])) {
+                        $data['phone'] = $data['dial_code']." ".$data['phone'];
+                    }
+                    $data['password'] = User::where('id', $id)->first()->password;
                     unset($data['_token']);
                     unset($data['cpassword']);
+                    unset($data['dial_code']);
                     User::where('id', $id)->update($data);
 
                     return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
@@ -137,6 +143,7 @@ class SystemConfigController extends Controller
         $admins = $admins->limit(10)->get();
         $data['admins'] = $admins;
         $data['level'] = AdminLevel::all();
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.admins', $data);
     }
@@ -223,6 +230,7 @@ class SystemConfigController extends Controller
         $operators = $operators->limit(10)->get();
         $data['operators'] = $operators;
         $data['level'] = OperatorLevel::all();
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.operators', $data);
     }
@@ -314,6 +322,7 @@ class SystemConfigController extends Controller
         }
         $role = $role->limit(10)->get();
         $data['role'] = $role;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.admin-role', $data);
     }
@@ -373,6 +382,7 @@ class SystemConfigController extends Controller
         }
         $group = $group->limit(10)->get();
         $data['group'] = $group;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.group-list', $data);
     }
@@ -432,6 +442,7 @@ class SystemConfigController extends Controller
         }
         $history = $history->limit(10)->get();
         $data['history'] = $history;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.login-history', $data);
     }
@@ -452,6 +463,7 @@ class SystemConfigController extends Controller
         }
         $status = $status->limit(10)->get();
         $data['status'] = $status;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
     	return view('admin.system-configuration.container-status', $data);
     }
@@ -518,6 +530,7 @@ class SystemConfigController extends Controller
         }
         $shipper = $shipper->limit(10)->get();
         $data['shipper'] = $shipper;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.shipper', $data);
     }
@@ -566,6 +579,7 @@ class SystemConfigController extends Controller
         $consignee = $consignee->limit(10)->get();
         $data['consignee'] = $consignee;
         $data['shipper'] = Shipper::all();
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.consignee', $data);
     }
@@ -613,6 +627,7 @@ class SystemConfigController extends Controller
         }
         $terminal = $terminal->limit(10)->get();
         $data['terminal'] = $terminal;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.terminal', $data);
     }
@@ -663,6 +678,7 @@ class SystemConfigController extends Controller
         }
         $pre_carriage = $pre_carriage->limit(10)->get();
         $data['pre_carriage'] = $pre_carriage;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.pre-carriage', $data);
     }
@@ -713,6 +729,7 @@ class SystemConfigController extends Controller
         }
         $loading_port = $loading_port->limit(10)->get();
         $data['loading_port'] = $loading_port;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.loading-port', $data);
     }
@@ -763,6 +780,7 @@ class SystemConfigController extends Controller
         }
         $discharge_port = $discharge_port->limit(10)->get();
         $data['discharge_port'] = $discharge_port;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.discharge-port', $data);
     }
@@ -810,6 +828,7 @@ class SystemConfigController extends Controller
         }
         $destination_port = $destination_port->limit(10)->get();
         $data['destination_port'] = $destination_port;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.destination-port', $data);
     }
@@ -857,6 +876,7 @@ class SystemConfigController extends Controller
         }
         $notify_party = $notify_party->limit(10)->get();
         $data['notify_party'] = $notify_party;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.notify-party', $data);
     }
@@ -907,6 +927,7 @@ class SystemConfigController extends Controller
         }
         $measurement = $measurement->limit(10)->get();
         $data['measurement'] = $measurement;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.measurement', $data);
     }
@@ -957,6 +978,7 @@ class SystemConfigController extends Controller
         }
         $shipping_line = $shipping_line->limit(10)->get();
         $data['shipping_line'] = $shipping_line;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.shipping-line', $data);
     }
@@ -1004,6 +1026,7 @@ class SystemConfigController extends Controller
         }
         $status = $status->limit(10)->get();
         $data['status'] = $status;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.auto-status', $data);
     }
@@ -1070,6 +1093,7 @@ class SystemConfigController extends Controller
         }
         $auction = $auction->limit(10)->get();
         $data['auction'] = $auction;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.auction', $data);
     }
@@ -1121,6 +1145,7 @@ class SystemConfigController extends Controller
         $auction_location = $auction_location->limit(10)->get();
         $data['auction_location'] = $auction_location;
         $data['auction'] = Auction::all();
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.auction-location', $data);
     }
@@ -1168,6 +1193,7 @@ class SystemConfigController extends Controller
         }
         $templates = $templates->limit(10)->get();
         $data['templates'] = $templates;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.mail-templates', $data);
     }
@@ -1215,6 +1241,7 @@ class SystemConfigController extends Controller
         }
         $templates = $templates->limit(10)->get();
         $data['templates'] = $templates;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.reminder-templates', $data);
     }
@@ -1262,6 +1289,7 @@ class SystemConfigController extends Controller
         }
         $brands = $brands->limit(10)->get();
         $data['brands'] = $brands;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.vehicles-brand', $data);
     }
@@ -1310,6 +1338,7 @@ class SystemConfigController extends Controller
         $modals = $modals->limit(10)->get();
         $data['modals'] = $modals;
         $data['brands'] = VehicleBrand::all();
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.vehicles-modal', $data);
     }
@@ -1357,6 +1386,7 @@ class SystemConfigController extends Controller
         }
         $levels = $levels->limit(10)->get();
         $data['levels'] = $levels;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.user-levels', $data);
     }
@@ -1404,6 +1434,7 @@ class SystemConfigController extends Controller
         }
         $fine_type = $fine_type->limit(10)->get();
         $data['fine_type'] = $fine_type;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.fine-type', $data);
     }
@@ -1454,6 +1485,7 @@ class SystemConfigController extends Controller
         }
         $trans_fine_type = $trans_fine_type->limit(10)->get();
         $data['trans_fine_type'] = $trans_fine_type;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.trans-fine-type', $data);
     }
@@ -1504,6 +1536,7 @@ class SystemConfigController extends Controller
         }
         $levels = $levels->limit(10)->get();
         $data['levels'] = $levels;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.admin-levels', $data);
     }
@@ -1557,6 +1590,7 @@ class SystemConfigController extends Controller
         }
         $levels = $levels->limit(10)->get();
         $data['levels'] = $levels;
+        $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.operator-levels', $data);
     }

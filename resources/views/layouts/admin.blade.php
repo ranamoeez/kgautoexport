@@ -141,7 +141,7 @@
 </body>
     <script type="text/javascript">
         $(document).ready(function () {
-            $(document).on("submit", ".form", function (event) {
+            $(document).on("submit", ".user-form", function (event) {
                 event.preventDefault();
                 $.ajax({
                     type: $(this).attr("method"),

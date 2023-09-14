@@ -201,7 +201,7 @@
                                                                                 d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                                                                         </svg>
                                                                     </div>
-                                                                    <input type="password" name="password"
+                                                                    <input type="password" name="password" id="upass" 
                                                                         class="py-2 form-control rounded-end-4"
                                                                         placeholder="Password" required />
                                                                 </div>
@@ -223,7 +223,7 @@
                                                                                 d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                                                                         </svg>
                                                                     </div>
-                                                                    <input type="password" name="cpassword"
+                                                                    <input type="password" name="cpassword" id="ucpass" 
                                                                         class="py-2 form-control rounded-end-4"
                                                                         placeholder="Confirm Password" required />
                                                                 </div>
@@ -650,6 +650,8 @@
                 $("#country option[value='']").attr("selected", true);
                 $("#user-phone").val('');
                 $(".level option[value='']").attr("selected", true);
+                $("#upass").attr("required", true);
+                $("#ucpass").attr("required", true);
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/admins/add') }}");
@@ -679,6 +681,8 @@
                                 $("#dial_code").text(phone[0]);
                             }
                             $(".level option[value="+res.data.admin_level_id+"]").attr("selected", true);
+                            $("#upass").attr("required", false);
+                            $("#ucpass").attr("required", false);
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/admins/edit') }}/"+id);

@@ -75,7 +75,7 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ url('admin/system-configuration/users/add') }}" method="POST" class="form">
+                        <form action="{{ url('admin/system-configuration/users/add') }}" method="POST" class="user-form">
                             @csrf
                             <div class="row mt-4">
 

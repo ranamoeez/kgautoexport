@@ -469,6 +469,33 @@ class ApiController extends Controller
         }
     }
 
+    public function operator_containers(Request $request, $id)
+    {
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('api_token', $token)->count();
+            if ($check_user > 0) {
+           
+                $operator = User::where('id', $id)->first();
+
+                if (!empty($operator)) {
+                    $containers = Container::with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $operator->destination_id)->get();
+                } else {
+                    return $this->sendError('Not Found.', ['error'=>'Operator not found.']);
+                }
+
+                $success['containers'] =  $containers;
+           
+                return $this->sendResponse($success, 'Containers retrieved successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
     public function add_user_to_vehicle(Request $request)
     {
         $token = $request->bearerToken();

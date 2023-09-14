@@ -187,6 +187,24 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="col-md-12 mb-4">
+                                                        <div class="row">
+                                                            <label for="" class="col-md-2">Select Destination</label>
+                                                            <div class="col-md-10">
+                                                                <div class="input-group shadow-lg rounded-4">
+                                                                    <select class="form-select destination" name="destination_id">
+                                                                        @if(count(@$destination) > 0)
+                                                                        @foreach(@$destination as $key => $value)
+                                                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                                                        @endforeach
+                                                                        @endif
+                                                                    </select>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-md-6 mb-4">
                                                         <!-- Password -->
                                                         <div class="row">
@@ -201,7 +219,7 @@
                                                                                 d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                                                                         </svg>
                                                                     </div>
-                                                                    <input type="password" name="password"
+                                                                    <input type="password" name="password" id="upass" 
                                                                         class="py-2 form-control rounded-end-4"
                                                                         placeholder="Password" required />
                                                                 </div>
@@ -223,7 +241,7 @@
                                                                                 d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                                                                         </svg>
                                                                     </div>
-                                                                    <input type="password" name="cpassword"
+                                                                    <input type="password" name="cpassword" id="ucpass" 
                                                                         class="py-2 form-control rounded-end-4"
                                                                         placeholder="Confirm Password" required />
                                                                 </div>
@@ -276,6 +294,7 @@
                                     <th scope="col" class="fw-bold">Email</th>
                                     <th scope="col" class="fw-bold">Company</th>
                                     <th scope="col" class="fw-bold">Phone</th>
+                                    <th scope="col" class="fw-bold">Destination</th>
                                     <th scope="col" class="fw-bold">Level</th>
                                     <th scope="col"></th>
                                 </thead>
@@ -301,6 +320,11 @@
                                         <td>
                                             <span class=" text-fs-3">
                                                 {{ @$value->phone }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class=" text-fs-3">
+                                                {{ @$value->destination->name }}
                                             </span>
                                         </td>
                                         <td>
@@ -648,6 +672,9 @@
                 $("#country option[value='']").attr("selected", true);
                 $("#user-phone").val('');
                 $(".level").children().first().attr("selected", true);
+                $(".destination").children().first().attr("selected", true);
+                $("#upass").attr("required", true);
+                $("#ucpass").attr("required", true);
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/operators/add') }}");
@@ -677,6 +704,9 @@
                                 $("#dial_code").text(phone[0]);
                             }
                             $(".level option[value="+res.data.operator_level_id+"]").attr("selected", true);
+                            $(".destination option[value="+res.data.destination_id+"]").attr("selected", true);
+                            $("#upass").attr("required", false);
+                            $("#ucpass").attr("required", false);
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/operators/edit') }}/"+id);

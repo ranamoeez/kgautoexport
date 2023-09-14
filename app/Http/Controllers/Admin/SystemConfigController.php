@@ -192,8 +192,13 @@ class SystemConfigController extends Controller
                         return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
                     }
                 } else {
+                    if (!empty($data['phone'])) {
+                        $data['phone'] = $data['dial_code']." ".$data['phone'];
+                    }
+                    $data['password'] = User::where('id', $id)->first()->password;
                     unset($data['_token']);
                     unset($data['cpassword']);
+                    unset($data['dial_code']);
                     User::where('id', $id)->update($data);
 
                     return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
@@ -230,6 +235,7 @@ class SystemConfigController extends Controller
         $operators = $operators->limit(10)->get();
         $data['operators'] = $operators;
         $data['level'] = OperatorLevel::all();
+        $data['destination'] = DestinationPort::all();
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.operators', $data);
@@ -285,8 +291,13 @@ class SystemConfigController extends Controller
                         return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
                     }
                 } else {
+                    if (!empty($data['phone'])) {
+                        $data['phone'] = $data['dial_code']." ".$data['phone'];
+                    }
+                    $data['password'] = User::where('id', $id)->first()->password;
                     unset($data['_token']);
                     unset($data['cpassword']);
+                    unset($data['dial_code']);
                     User::where('id', $id)->update($data);
 
                     return json_encode(["success"=>true, "msg"=>"Operators updated successfully!", "action"=>"reload"]);

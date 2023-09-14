@@ -28,6 +28,7 @@ Route::post('send-vehicle', [ApiController::class, 'send_vehicle']);
 Route::post('send-pickup-request/{id}', [ApiController::class, 'send_pickup_request']);
 Route::post('send-notes', [ApiController::class, 'send_notes']);
 Route::post('send-vehicle-images', [ApiController::class, 'send_vehicle_images']);
+Route::get('operator-containers/{id}', [ApiController::class, 'operator_containers']);
 Route::post('add-user-to-vehicle', [ApiController::class, 'add_user_to_vehicle']);
 Route::get('logout/{id}', [ApiController::class, 'logout']);
 

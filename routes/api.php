@@ -30,6 +30,7 @@ Route::post('send-notes', [ApiController::class, 'send_notes']);
 Route::post('send-vehicle-images', [ApiController::class, 'send_vehicle_images']);
 Route::get('operator-containers/{id}', [ApiController::class, 'operator_containers']);
 Route::post('add-user-to-vehicle', [ApiController::class, 'add_user_to_vehicle']);
+Route::post('update-pickup-request', [ApiController::class, 'update_pickup_request']);
 Route::get('logout/{id}', [ApiController::class, 'logout']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

@@ -90,14 +90,20 @@ class ApiController extends Controller
             if ($check_user > 0) {
                 $user_id = User::where('api_token', $token)->first()->id;
 
-                $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('owner_id', $user_id)->limit(100)->get();
+                $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
+                    $q->where("user_id", $user_id);
+                })->limit(100)->get();
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex == 1) {
-                        $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('owner_id', $user_id)->limit(100)->get();
+                        $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
+                            $q->where("user_id", $user_id);
+                        })->limit(100)->get();
                     } else {
                         $offset = ($request->PageIndex - 1) * 100;
-                        $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('owner_id', $user_id)->limit(100)->offset((int)$offset)->get();
+                        $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
+                            $q->where("user_id", $user_id);
+                        })->limit(100)->offset((int)$offset)->get();
                     }
                 }
 
@@ -250,7 +256,31 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                $pickup_requests = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle')->where('user_id', $id)->get();
+                $pickup_requests = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle');
+
+                if (!empty($request->client)) {
+                    $client = $request->client;
+                    $pickup_requests = $pickup_requests->whereHas('user', function ($q) use($client)
+                    {
+                        $q->where("surname", $client);
+                    });
+                }
+                if (!empty($request->start_date)) {
+                    $pickup_requests = $pickup_requests->where("created_at", ">", $request->start_date);
+                }
+                if (!empty($request->end_date)) {
+                    $pickup_requests = $pickup_requests->where("created_at", "<", $request->end_date);
+                }
+                if (!empty($request->status)) {
+                    $pickup_requests = $pickup_requests->where("status", $request->status);
+                }
+
+                $pickup_requests = $pickup_requests->where('user_id', $id)->get();
+
+                foreach ($pickup_requests as $key => $value) {
+                    $transaction = TransactionsHistory::orderBy('id', 'DESC')->where("vehicle_id", $value->vehicle_id)->first();
+                    $pickup_requests[$key]['payment_status'] = @$transaction->status;
+                }
             
                 return $this->sendResponse($pickup_requests, 'Pickup requests retrieved successfully.');
             } else {
@@ -526,6 +556,44 @@ class ApiController extends Controller
                 }
            
                 return $this->sendResponse($vehicle, 'User added to vehicle successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
+    public function update_pickup_request(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('api_token', $token)->count();
+            if ($check_user > 0) {
+                $input = $request->all();
+                $user_id = User::where('api_token', $token)->first()->id;
+           
+                $validator = Validator::make($input, [
+                    'status' => 'required',
+                    'pickup_request_id' => 'required'
+                ]);
+           
+                if($validator->fails()){
+                    return $this->sendError('Validation Error.', $validator->errors());       
+                }
+           
+                $request = PickupRequest::where('id', $input['pickup_request_id'])->first();
+
+                if (!empty($request)) {
+                    PickupRequest::where('id', $input['pickup_request_id'])->update(['status' => $input['status'], 'approved_by' => $user_id]);
+                } else {
+                    return $this->sendError('Not Found.', ['error'=>'Pickup request not found.']);
+                }
+
+                $pickup_request = PickupRequest::where('id', $input['pickup_request_id'])->first();
+           
+                return $this->sendResponse($pickup_request, 'Vehicle updated successfully.');
             } else {
                 return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
             }

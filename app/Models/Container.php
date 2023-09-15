@@ -31,6 +31,10 @@ class Container extends Model
     	return $this->hasMany(ContainerImage::class, 'container_id');
     }
 
+    public function container_vehicle(){
+        return $this->hasMany(ContainerVehicle::class, 'container_id');
+    }
+
     public function status(){
     	return $this->belongsTo(ContStatus::class, 'status_id');
     }

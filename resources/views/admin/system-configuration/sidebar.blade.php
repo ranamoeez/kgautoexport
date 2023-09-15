@@ -138,7 +138,7 @@
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Mail templates
                 </a>
-                <a href="{{ url('admin/system-configuration/send-users') }}l"
+                <a href="{{ url('admin/system-configuration/send-to-all-users') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Send to all users
                 </a>

@@ -1139,6 +1139,9 @@ class HomeController extends Controller
         if (str_contains($template_name, "{description}")) { 
             $template_name = str_replace("{description}", @$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal, $template_name);
         }
+        if (str_contains($template_name, "{vehicle_name}")) { 
+            $template_name = str_replace("{vehicle_name}", @$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal, $template_name);
+        }
         if (str_contains($template_name, "{lotnumber}")) { 
             $template_name = str_replace("{lotnumber}", @$vehicle->lotnumber, $template_name);
         }
@@ -1182,6 +1185,9 @@ class HomeController extends Controller
         }
         if (str_contains($template_content, "{description}")) { 
             $template_content = str_replace("{description}", @$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal, $template_content);
+        }
+        if (str_contains($template_content, "{vehicle_name}")) { 
+            $template_content = str_replace("{vehicle_name}", @$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal, $template_content);
         }
         if (str_contains($template_content, "{lotnumber}")) { 
             $template_content = str_replace("{lotnumber}", @$vehicle->lotnumber, $template_content);

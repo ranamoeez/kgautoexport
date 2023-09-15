@@ -214,6 +214,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::post('/system-configuration/mail-templates/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_mail_templates'])->name('update-mail-templates');
 	Route::get('/system-configuration/mail-templates/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_mail_templates'])->name('delete-mail-templates');
 
+	Route::get('/system-configuration/send-to-all-users', [App\Http\Controllers\Admin\SystemConfigController::class, 'send_to_all_users'])->name('send-to-all-users');
+	Route::post('/system-configuration/send-to-all-users/send', [App\Http\Controllers\Admin\SystemConfigController::class, 'send_to_all_users_send'])->name('send-to-all-users-send');
+
 	Route::get('/system-configuration/reminder-templates', [App\Http\Controllers\Admin\SystemConfigController::class, 'reminder_templates'])->name('reminder-templates');
 	Route::post('/system-configuration/reminder-templates/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_reminder_templates'])->name('add-reminder-templates');
 	Route::get('/system-configuration/reminder-templates/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_reminder_templates'])->name('edit-reminder-templates');

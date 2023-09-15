@@ -1236,6 +1236,35 @@ class SystemConfigController extends Controller
         return json_encode(["success"=>true, "msg"=>"Mail template deleted successfully!"]);
     }
 
+    // Send to all Users Functions
+
+    public function send_to_all_users(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['user_levels'] = Level::all();
+        $data['templates'] = MailTemplate::all();
+        return view('admin.system-configuration.send-to-all-users', $data);
+    }
+
+    public function send_to_all_users_send(Request $request)
+    {
+        $data = $request->all();
+
+        $users = User::where("role", "2")->get();
+        foreach ($users as $key => $value) {
+            if (!empty($value->email)) {
+
+                $template = (object)[];
+                $template->name = $data['name'];
+                $template->content = $data['content'];
+
+                \Mail::to(@$value->email)->send(new \App\Mail\SendReminder($template));
+            }
+        }
+
+        return json_encode(["success"=>true, "msg"=>"Mails sended successfully!", "action"=>"reload"]);
+    }
+
     // Reminder Templates Functions
 
     public function reminder_templates(Request $request)

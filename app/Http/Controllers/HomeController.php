@@ -122,11 +122,11 @@ class HomeController extends Controller
         $user_id = Auth::user()->id;
         $admin = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
             $q->where("user_id", $user_id);
-            $q->where("added_by", "1");
+            $q->where("added_by", "!=", "1");
         });
         $super_admin = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
             $q->where("user_id", $user_id);
-            $q->where("added_by", "!=", "1");
+            $q->where("added_by", "1");
         });
         if (!empty($request->port) && $request->port !== 'all') {
             $data['port'] = $request->port;

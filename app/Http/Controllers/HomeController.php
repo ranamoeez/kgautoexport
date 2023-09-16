@@ -7,7 +7,15 @@ use App\Models\UserLoginLog;
 use App\Models\AssignVehicle;
 use App\Models\ContainerVehicle;
 use App\Models\Level;
+use App\Models\User;
+use App\Models\TransactionsHistory;
+use App\Models\Vehicle;
+use App\Models\PickupRequest;
+use App\Models\Container;
+use App\Models\LoadingPort;
+use App\Models\ContStatus;
 use Auth;
+use Storage;
 use QuickBooksOnline\API\DataService\DataService;
 use QuickBooksOnline\API\Data\IPPCustomer;
 use QuickBooksOnline\API\Facades\Customer;
@@ -33,10 +41,66 @@ class HomeController extends Controller
     public function index()
     {
         $data['type'] = "homepage";
-        $data['total_vehicles'] = AssignVehicle::where('user_id', \Auth::user()->id)->count();
-        $data['latest'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', \Auth::user()->id)->orderBy("id", "DESC")->limit(3)->get();
+        $data['total_vehicles'] = AssignVehicle::where('user_id', Auth::user()->id)->count();
+        $data['shipped_vehicles'] = AssignVehicle::whereHas("vehicle", function ($q) {
+            $q->where("status_id", "10");
+        })->where('user_id', Auth::user()->id)->count();
+        $data['delivered_vehicles'] = AssignVehicle::whereHas("vehicle", function ($q) {
+            $q->where("status_id", "11");
+        })->where('user_id', Auth::user()->id)->count();
+        $data['latest'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->limit(3)->get();
+        $data['user'] = User::with("user_level")->where("id", Auth::user()->id)->first();
+
+        $previous = TransactionsHistory::where("user_id", Auth::user()->id)->sum('amount');
+        $auction_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('auction_price');
+        $towing_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('towing_price');
+        $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', Auth::user()->id)->get();
+        $fines = 0;
+        $company_fee = 0;
+        $unloading_fee = 0;
+        foreach ($all_data as $k => $value) {
+            if (!empty(@$value->fines)) {
+                foreach (@$value->fines as $ke => $v) {
+                    $fines += (int)$v->amount;
+                }
+            }
+            if (!empty(@$value->buyer->user_level)) {
+                $company_fee += (int)@$value->buyer->user_level->company_fee;
+            }
+            if (!empty(@$value->destination_port)) {
+                $unloading_fee += (int)@$value->destination_port->unloading_fee;
+            }
+        }
+        $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+        $all_due_payments = (int)$due_payments - (int)$previous;
+        if ($all_due_payments < 0) {
+            $all_due_payments = 0;
+        }
+        $data['spend'] = $all_due_payments;
+
+        $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->get();
         $data['user_levels'] = Level::all();
         return view('user.index', $data);
+    }
+
+    public function add_pickup_request(Request $request)
+    {
+        $data = $request->all();
+
+        if (empty($data['vehicle_id'])) {
+            return json_encode(["success" => false, "msg" => "Please select any vehicle first!"]);
+        }
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = Storage::putFile("pickup-request", $file);
+            $data['file'] = $filename;
+        }
+
+        $data['user_id'] = Auth::user()->id;
+        PickupRequest::create($data);
+
+        return json_encode(["success" => true, "msg" => "Pickup request added successfully!"]);
     }
 
     public function vehicles()
@@ -44,28 +108,174 @@ class HomeController extends Controller
         $data['type'] = "vehicles";
         $data['super_admin'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {
             $q->where("assigned_by", "super_admin");
-        })->where('user_id', \Auth::user()->id)->orderBy("id", "DESC")->get();
+        })->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->get();
         $data['admin'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {
             $q->where("assigned_by", "admin");
-        })->where('user_id', \Auth::user()->id)->orderBy("id", "DESC")->get();
+        })->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->get();
         return view('user.vehicles', $data);
     }
 
-    public function containers()
+    public function containers(Request $request)
     {
         $data['type'] = "containers";
+
+        $user_id = Auth::user()->id;
+        $admin = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
+            $q->where("user_id", $user_id);
+            $q->where("added_by", "1");
+        });
+        $super_admin = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
+            $q->where("user_id", $user_id);
+            $q->where("added_by", "!=", "1");
+        });
+        if (!empty($request->port) && $request->port !== 'all') {
+            $data['port'] = $request->port;
+            $admin = $admin->where('loading_port_id', $request->port);
+            $super_admin = $super_admin->where('loading_port_id', $request->port);
+        }
+        if (!empty($request->status) && $request->status !== 'all') {
+            $data['status'] = $request->status;
+            $admin = $admin->where('status_id', $request->status);
+            $super_admin = $super_admin->where('status_id', $request->status);
+        }
+        if (!empty($request->search)) {
+            $data['search'] = $request->search;
+            $search = $request->search;
+            $admin = $admin->where(function ($query) use ($search) {
+                $query->where('booking_no', 'LIKE', '%'.$search.'%')
+                    ->orWhere('container_no', 'LIKE', '%'.$search.'%')
+                    ->orWhere('departure', 'LIKE', '%'.$search.'%')
+                    ->orWhere('arrival', 'LIKE', '%'.$search.'%');
+            });
+            $super_admin = $super_admin->where(function ($query) use ($search) {
+                $query->where('booking_no', 'LIKE', '%'.$search.'%')
+                    ->orWhere('container_no', 'LIKE', '%'.$search.'%')
+                    ->orWhere('departure', 'LIKE', '%'.$search.'%')
+                    ->orWhere('arrival', 'LIKE', '%'.$search.'%');
+            });
+        }
+        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == '0') {
+            $data['pay_status'] = $request->pay_status;
+            $admin = $admin->where('all_paid', $request->pay_status);
+            $super_admin = $super_admin->where('all_paid', $request->pay_status);
+        }
+
+        $admin = $admin->get();
+        $super_admin = $super_admin->get();
+
+        foreach ($admin as $key => $value) {
+            $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();
+            $unique = [];
+            $buyers = [];
+            foreach ($buyer as $k => $v) {
+                $user_id = $v->user_id;
+                if (!in_array($user_id, $unique)) {
+                    array_push($unique, $user_id);
+                    $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value->id)->get();
+                    if (count($vehicles) > 0) {
+                        $v->vehicles = $vehicles;
+                        array_push($buyers, $v);
+                    }
+                }
+            }
+            $admin[$key]->buyers = $buyers;
+        }
+
+        foreach ($super_admin as $key => $value) {
+            $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();
+            $unique = [];
+            $buyers = [];
+            foreach ($buyer as $k => $v) {
+                $user_id = $v->user_id;
+                if (!in_array($user_id, $unique)) {
+                    array_push($unique, $user_id);
+                    $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value->id)->get();
+                    if (count($vehicles) > 0) {
+                        $v->vehicles = $vehicles;
+                        array_push($buyers, $v);
+                    }
+                }
+            }
+            $super_admin[$key]->buyers = $buyers;
+        }
+
+        $data['admin'] = $admin;
+        $data['super_admin'] = $super_admin;
+        $data['all_port'] = LoadingPort::all();
+        $data['all_status'] = ContStatus::all();
         return view('user.containers', $data);
     }
 
-    public function container_detail()
+    public function container_detail($id)
     {
         $data['type'] = "containers";
+
+        $container = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("id", $id)->first();
+
+        $buyer = ContainerVehicle::with("user")->where("container_id", $container->id)->get();
+        $unique = [];
+        $buyers = [];
+        foreach ($buyer as $k => $v) {
+            $user_id = $v->user_id;
+            if (!in_array($user_id, $unique)) {
+                array_push($unique, $user_id);
+                $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $container->id)->get();
+                if (count($vehicles) > 0) {
+                    $v->vehicles = $vehicles;
+                    array_push($buyers, $v);
+                }
+            }
+        }
+        $container->buyers = $buyers;
+
+        $data['container'] = $container;
         return view('user.container-detail', $data);
     }
 
     public function financial()
     {
         $data['type'] = "financial";
+        $data['page'] = '1';
+
+        $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer')->where("user_id", Auth::user()->id);
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $transaction_history = $transaction_history->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $data['transaction_history'] = $transaction_history->limit(10)->get();
+
+        $previous = TransactionsHistory::where("user_id", Auth::user()->id)->sum('amount');
+        $auction_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('auction_price');
+        $towing_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('towing_price');
+        $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', Auth::user()->id)->get();
+        $fines = 0;
+        $company_fee = 0;
+        $unloading_fee = 0;
+        foreach ($all_data as $k => $value) {
+            if (!empty(@$value->fines)) {
+                foreach (@$value->fines as $ke => $v) {
+                    $fines += (int)$v->amount;
+                }
+            }
+            if (!empty(@$value->buyer->user_level)) {
+                $company_fee += (int)@$value->buyer->user_level->company_fee;
+            }
+            if (!empty(@$value->destination_port)) {
+                $unloading_fee += (int)@$value->destination_port->unloading_fee;
+            }
+        }
+        $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+        $all_due_payments = (int)$due_payments - (int)$previous;
+        if ($all_due_payments < 0) {
+            $all_due_payments = 0;
+        }
+
+        $data['due_payments'] = $all_due_payments;
+        $data['previous'] = $previous;
+        $data['balance'] = User::where("id", Auth::user()->id)->first()->balance;
         return view('user.financial', $data);
     }
 

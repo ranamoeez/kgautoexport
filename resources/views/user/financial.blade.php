@@ -58,7 +58,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle fs-3">Due payments</h2>
-                                    <p class="card-text fw-bold mt-2 fs-2"><span>23,000</span> $</p>
+                                    <p class="card-text fw-bold mt-2 fs-2"><span>{{ number_format(@$due_payments) }}</span> $</p>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle fs-3">Previous payments</h2>
-                                    <p class="card-text fw-bold mt-2 fs-2"><span>33,000</span> $</p>
+                                    <p class="card-text fw-bold mt-2 fs-2"><span>{{ number_format(@$previous) }}</span> $</p>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle fs-3">Balance</h2>
-                                    <p class="card-text fw-bold mt-2 fs-2"><span>123,000</span> $</p>
+                                    <p class="card-text fw-bold mt-2 fs-2"><span>{{ number_format(@$balance) }}</span> $</p>
                                 </div>
                             </div>
                         </div>
@@ -191,21 +191,27 @@
                             Transactions
                         </h4>
                         <div class="d-flex gap-2 align-items-center page-icon">
-                            <button class="btn">
+                            @php
+                                $prev = (int)$page - 1;
+                                $next = (int)$page + 1;
+                                $pre = 'page='.$prev;
+                                $nex = 'page='.$next;
+                            @endphp
+                            <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('user/financial?'.$pre) }}" @endif>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M15.75 19.5L8.25 12l7.5-7.5" />
                                 </svg>
-                            </button>
-                            <p class="text-fs-4 m-0">Page 1</p>
-                            <button class="btn p-0">
+                            </a>
+                            <p class="text-fs-4 m-0">Page {{ @$page }}</p>
+                            <a class="btn" @if(count($transaction_history) < 10) href="javascript:void();" @else href="{{ url('user/financial?'.$nex) }}" @endif>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                 </svg>
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <div class="tab-content" id="pills-tabContent">
@@ -222,40 +228,41 @@
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
+                                    @if(count(@$transaction_history) > 0)
+                                    @foreach(@$transaction_history as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td>
                                             <span class="fw-bold text-fs-3">
-                                                123ES12123DSF
+                                                {{ @$value->id }}
                                             </span>
                                         </td>
                                         <td>
                                             <span class="fw-bold text-fs-3">
-                                                Hyundai Sonata 2019
+                                                {{ @$value->vehicle->company_name.' '.@$value->vehicle->name.' '.@$value->vehicle->modal }}
                                             </span>
                                         </td>
                                         <td>
                                             <span class="fw-bold text-fs-3">
-                                                1GYKPCRS3LZ238722
+                                                {{ @$value->vehicle->vin }}
                                             </span>
                                         </td>
                                         <td>
                                             <span class="fw-bold text-fs-3">
-                                                31 Mar, 2021
+                                                {{ date("d M, Y", strtotime(@$value->created_at)) }}
                                             </span>
                                         </td>
 
                                         <td>
                                             <div class="col d-flex align-items-center justify-content-center">
-                                                <button
-                                                    class="btn btn-danger rounded-1 text-white text-fs-3 border border-0">
-                                                    Unpaid
+                                                <button class="@if(@$value->status == "paid") btn btn-success @elseif(@$value->status == "partly paid") btn btn-warning @else btn btn-danger @endif rounded-1 text-white text-fs-3 border border-0">
+                                                    {{ ucfirst(@$value->status) }}
                                                 </button>
                                             </div>
                                         </td>
 
                                         <td>
                                             <span class="fw-bold text-fs-3 text-center">
-                                                35,452 $
+                                                {{ @$value->amount }} $
                                             </span>
                                         </td>
                                         <td>
@@ -272,7 +279,7 @@
                                                 </button>
 
                                                 <!-- Modal -->
-                                                <div class="modal fade  " id="commentModal" tabindex="-1"
+                                                <div class="modal fade" id="commentModal" tabindex="-1"
                                                     aria-labelledby="commentModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog rounded-5">
                                                         <div class="modal-content p-3">
@@ -324,7 +331,7 @@
 
 
                                                 <!-- Modal -->
-                                                <div class="modal fade  " id="fullNoteModel" tabindex="-1"
+                                                <div class="modal fade" id="fullNoteModel" tabindex="-1"
                                                     aria-labelledby="fullNoteModelLabel" aria-hidden="true">
                                                     <div class="modal-dialog rounded-5">
                                                         <div class="modal-content p-3">
@@ -351,264 +358,14 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr class="align-middle overflow-hidden shadow mb-2">
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                123ES12123DSF
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                Hyundai Sonata 2019
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                1GYKPCRS3LZ238722
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                31 Mar, 2021
-                                            </span>
-                                        </td>
-
-                                        <td>
-                                            <div class="col d-flex align-items-center justify-content-center">
-                                                <button
-                                                    class="btn btn-success rounded-1 text-white text-fs-3 border border-0">
-                                                    Paid
-                                                </button>
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <span class="fw-bold text-fs-3 text-center">
-                                                35,452 $
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div
-                                                class="d-flex justify-content-center items-center message-icon">
-                                                <button class="btn border-0" data-bs-toggle="modal"
-                                                    data-bs-target="#commentModal">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5"
-                                                        stroke="currentColor" class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                                                    </svg>
-                                                </button>
-
-                                                <!-- Modal -->
-                                                <div class="modal fade  " id="commentModal" tabindex="-1"
-                                                    aria-labelledby="commentModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog rounded-5">
-                                                        <div class="modal-content p-3">
-                                                            <div class="modal-header border-0">
-                                                                <h1 class="modal-title fw-bold"
-                                                                    id="commentModalLabel"
-                                                                    style="font-size: 28px">
-                                                                    Add Comment</h1>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="row mt-4">
-                                                                    <label for="password"
-                                                                        class="col-md-4 fs-5 fw-bold">Admin
-                                                                        Comment </label>
-                                                                    <div class="col-md-8">
-                                                                        <input type="text"
-                                                                            class="form-control text-fs-4 rounded pb-4"
-                                                                            disabled />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mt-4">
-                                                                    <label for="password"
-                                                                        class="col-md-4 fs-5 fw-bold">User
-                                                                        Comment </label>
-                                                                    <div class="col-md-8">
-                                                                        <div
-                                                                            class="d-flex flex-column align-items-end">
-                                                                            <input type="text"
-                                                                                class="form-control text-fs-4 rounded pb-4" />
-                                                                            <button
-                                                                                class="btn btn-sm btn-primary comment-btn fs-6 border-0"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#fullNoteModel">
-                                                                                Update Comment
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <a href="#"
-                                                                    class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5 w-auto"
-                                                                    data-bs-dismiss="modal">Close</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <!-- Modal -->
-                                                <div class="modal fade  " id="fullNoteModel" tabindex="-1"
-                                                    aria-labelledby="fullNoteModelLabel" aria-hidden="true">
-                                                    <div class="modal-dialog rounded-5">
-                                                        <div class="modal-content p-3">
-                                                            <div class="modal-header border-0">
-                                                                <h1 class="modal-title fw-bold"
-                                                                    id="fullNoteModelLabel"
-                                                                    style="font-size: 28px">
-                                                                    Note</h1>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="card-body">
-                                                                    <input type="text"
-                                                                        class="form-control text-fs-5 rounded pb-4" />
-                                                                </div>
-                                                                <a href="#" data-bs-dismiss="modal"
-                                                                    class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    @endforeach
+                                    @else
+                                    <tr id="row" class="align-middle overflow-hidden shadow mb-2">
+                                        <td class="text-center" colspan="7">
+                                            <p>No record found</p>
                                         </td>
                                     </tr>
-                                    <tr class="align-middle overflow-hidden shadow mb-2">
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                123ES12123DSF
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                Hyundai Sonata 2019
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                1GYKPCRS3LZ238722
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                31 Mar, 2021
-                                            </span>
-                                        </td>
-
-                                        <td>
-                                            <div class="col d-flex align-items-center justify-content-center">
-                                                <button
-                                                    class="btn btn-warning rounded-1 text-white text-fs-3 border border-0">
-                                                    Clearing
-                                                </button>
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <span class="fw-bold text-fs-3 text-center">
-                                                35,452 $
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div
-                                                class="d-flex justify-content-center items-center message-icon">
-                                                <button class="btn border-0" data-bs-toggle="modal"
-                                                    data-bs-target="#commentModal">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5"
-                                                        stroke="currentColor" class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                                                    </svg>
-                                                </button>
-
-                                                <!-- Modal -->
-                                                <div class="modal fade  " id="commentModal" tabindex="-1"
-                                                    aria-labelledby="commentModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog rounded-5">
-                                                        <div class="modal-content p-3">
-                                                            <div class="modal-header border-0">
-                                                                <h1 class="modal-title fw-bold"
-                                                                    id="commentModalLabel"
-                                                                    style="font-size: 28px">
-                                                                    Add Comment</h1>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="row mt-4">
-                                                                    <label for="password"
-                                                                        class="col-md-4 fs-5 fw-bold">Admin
-                                                                        Comment </label>
-                                                                    <div class="col-md-8">
-                                                                        <input type="text"
-                                                                            class="form-control text-fs-4 rounded pb-4"
-                                                                            disabled />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mt-4">
-                                                                    <label for="password"
-                                                                        class="col-md-4 fs-5 fw-bold">User
-                                                                        Comment </label>
-                                                                    <div class="col-md-8">
-                                                                        <div
-                                                                            class="d-flex flex-column align-items-end">
-                                                                            <input type="text"
-                                                                                class="form-control text-fs-4 rounded pb-4" />
-                                                                            <button
-                                                                                class="btn btn-sm btn-primary comment-btn fs-6 border-0"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#fullNoteModel">
-                                                                                Update Comment
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <a href="#"
-                                                                    class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5 w-auto"
-                                                                    data-bs-dismiss="modal">Close</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <!-- Modal -->
-                                                <div class="modal fade  " id="fullNoteModel" tabindex="-1"
-                                                    aria-labelledby="fullNoteModelLabel" aria-hidden="true">
-                                                    <div class="modal-dialog rounded-5">
-                                                        <div class="modal-content p-3">
-                                                            <div class="modal-header border-0">
-                                                                <h1 class="modal-title fw-bold"
-                                                                    id="fullNoteModelLabel"
-                                                                    style="font-size: 28px">
-                                                                    Note</h1>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="card-body">
-                                                                    <input type="text"
-                                                                        class="form-control text-fs-5 rounded pb-4" />
-                                                                </div>
-                                                                <a href="#" data-bs-dismiss="modal"
-                                                                    class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

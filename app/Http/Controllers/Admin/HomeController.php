@@ -1251,6 +1251,7 @@ class HomeController extends Controller
             $save->container_id = $container_id;
             $save->user_id = $user_id;
             $save->vehicle_id = $value;
+            $save->added_by = Auth::user()->id;
             $save->save();
             AssignVehicle::where("vehicle_id", $value)->where('user_id', $user_id)->update(["assigned_to"=>$container_id]);
 

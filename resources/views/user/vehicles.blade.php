@@ -148,30 +148,22 @@
                                                     <p class="text-fs-3">
                                                         {{ @$value->vehicle->notes_user }}
                                                     </p>
-                                                    <button
-                                                        class="btn btn-sm btn-primary comment-btn fs-6 border-0"
-                                                        data-bs-toggle="modal" data-bs-target="#fullNoteModel">
-                                                        full note
+                                                    <button class="btn btn-sm btn-primary comment-btn fs-6 border-0" data-bs-toggle="modal" data-bs-target="#fullNoteModel">
+                                                        Full Note
                                                     </button>
 
                                                     <!-- Modal -->
-                                                    <div class="modal fade  " id="fullNoteModel" tabindex="-1"
+                                                    <div class="modal fade" id="fullNoteModel" tabindex="-1"
                                                         aria-labelledby="fullNoteModelLabel" aria-hidden="true">
                                                         <div class="modal-dialog rounded-5">
                                                             <div class="modal-content p-3">
                                                                 <div class="modal-header border-0">
-                                                                    <h1 class="modal-title fw-bold"
-                                                                        id="fullNoteModelLabel"
-                                                                        style="font-size: 28px">
-                                                                        Note</h1>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
+                                                                    <h1 class="modal-title fw-bold" id="fullNoteModelLabel" style="font-size: 28px">Note</h1>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="card-body">
-                                                                        <input type="text"
-                                                                            class="form-control text-fs-5 rounded pb-4" />
+                                                                        <input type="text" class="form-control text-fs-5 rounded pb-4" />
                                                                     </div>
                                                                     <a href="#" data-bs-dismiss="modal"
                                                                         class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>

@@ -15,7 +15,7 @@ class ContainerVehicle extends Model
 
     protected $table = "container_vehicles";
     protected $fillable = [
-        'container_id', 'user_id', 'vehicle_id'
+        'container_id', 'user_id', 'vehicle_id', 'added_by'
     ];
 
     public function container(){

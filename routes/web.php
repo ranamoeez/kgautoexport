@@ -31,9 +31,11 @@ Route::post('/post-login', [App\Http\Controllers\HomeController::class, 'post_lo
 Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('user-home');
 
+	Route::post('/add-pickup-request', [App\Http\Controllers\HomeController::class, 'add_pickup_request'])->name('add-pickup-request');
 	Route::get('/vehicles', [App\Http\Controllers\HomeController::class, 'vehicles'])->name('user-vehicles');
+	Route::get('/vehicles/{id}', [App\Http\Controllers\HomeController::class, 'vehicle_detail'])->name('user-vehicle-detail');
 	Route::get('/containers', [App\Http\Controllers\HomeController::class, 'containers'])->name('user-containers');
-	Route::get('/containers/1', [App\Http\Controllers\HomeController::class, 'container_detail'])->name('user-container-detail');
+	Route::get('/containers/{id}', [App\Http\Controllers\HomeController::class, 'container_detail'])->name('user-container-detail');
 	Route::get('/financial', [App\Http\Controllers\HomeController::class, 'financial'])->name('user-financial');
 });
 

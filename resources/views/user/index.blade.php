@@ -33,8 +33,8 @@
                                     <img src="{{ asset('assets/cargo-ship (2).png') }}" alt="car" class="" />
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="card-subtitle  fw-bold">75</h2>
-                                    <p class="card-text">New vehicles</p>
+                                    <h2 class="card-subtitle fw-bold">{{ @$shipped_vehicles }}</h2>
+                                    <p class="card-text">Shipped</p>
                                 </div>
                             </div>
                         </div>
@@ -47,8 +47,8 @@
                                     <img src="{{ asset('assets/check-circle.svg') }}" alt="car" class="" />
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="card-subtitle  fw-bold">75</h2>
-                                    <p class="card-text">New vehicles</p>
+                                    <h2 class="card-subtitle fw-bold">{{ @$delivered_vehicles }}</h2>
+                                    <p class="card-text">Delivered</p>
                                 </div>
                             </div>
                         </div>
@@ -320,8 +320,7 @@
                                 <h3 class="fw-bold fs-md-13 fs-lg-25">
                                     Due Payments Limit
                                 </h3>
-                                <a href="{{ url('user/financial') }}"
-                                    class="vehicle-icon fw-bold fs-md-13 fs-lg-25">Financial
+                                <a href="{{ url('user/financial') }}" class="vehicle-icon fw-bold fs-md-13 fs-lg-25">Financial
                                     Section
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="3.5" stroke="currentColor" class="w-3 h-3 fs-md-13 ">
@@ -336,7 +335,7 @@
                                     <h4 class="fw-bold text-fs-4">
                                         Due Payments Limit
                                     </h4>
-                                    <p class="text-fs-3 mt-4">Spend: $3,050 / $5,000</p>
+                                    <p class="text-fs-3 mt-4">Spend: ${{ number_format(@$spend) }} / ${{ number_format(@$user->user_level->due_payment_limit) }}</p>
                                 </div>
                                 <div class="col-md">
                                     <canvas style="width: 100%; max-width: 213px" id="myChart"></canvas>
@@ -364,33 +363,30 @@
                             </div>
 
                             <div class="shadow-lg overflow-hidden request-pickup-chart">
-
-                                <div class="d-flex justify-content-between flex-column flex-md-row">
+                                <form method="POST" action="{{ url("user/add-pickup-request") }}" class="form d-flex justify-content-between flex-column flex-md-row">
                                     <div class="m-3">
                                         <h4 class="fw-bold text-fs-4 mt-4">Vehicle</h4>
                                         <div class="rounded-2 shadow-lg w-100 mb-2">
-                                            <select class="selectjs form-select"
-                                                aria-label="Default select example">
-                                                <option selected>Choose Vehicles</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                            <select class="selectjs form-select" aria-label="Default select example" name="vehicle_id">
+                                                <option value="0" selected>Choose Vehicles</option>
+                                                @if(count(@$vehicles) > 0)
+                                                @foreach(@$vehicles as $key => $value)
+                                                    <option value="{{ @$value->vehicle_id }}">{{ @$value->vehicle->company_name." ".@$value->vehicle->name." ".@$value->vehicle->modal }}</option>
+                                                @endforeach
+                                                @endif
                                             </select>
                                         </div>
                                         <h4 class="fw-bold text-fs-4">Comment</h4>
-                                        <input type="text"
-                                            class="border border-1 mb-4 p-2 rounded-2 shadow w-100 text-fs-3"
-                                            placeholder="Your Comment Here" />
+                                        <input type="text" class="border border-1 mb-4 p-2 rounded-2 shadow w-100 text-fs-3" name="comment" placeholder="Your Comment Here" />
                                     </div>
                                     <div class="d-flex align-items-center justify-content-center">
                                         <label for="file-upload">
                                             <img style="cursor: pointer" src="{{ asset('assets/file_img.png') }}"
                                                 alt="icon" />
-                                            <input type="file" id="file-upload" style="display: none;">
+                                            <input type="file" id="file-upload" name="file" style="display: none;">
                                         </label>
                                     </div>
-                                    <button class="bg-primary absolute p-3 border-0" data-bs-toggle="modal"
-                                        data-bs-target="#requestPickupConfirmModel">
+                                    <button class="bg-primary absolute p-3 border-0">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -399,7 +395,7 @@
                                     </button>
 
                                     <!-- Modal -->
-                                    <div class="modal fade  " id="requestPickupConfirmModel" tabindex="-1"
+                                    <div class="modal fade" id="requestPickupConfirmModel" tabindex="-1"
                                         aria-labelledby="requestPickupConfirmModelLabel" aria-hidden="true">
                                         <div class="modal-dialog rounded-5">
                                             <div class="modal-content p-3">
@@ -417,7 +413,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -438,7 +434,7 @@
     <script>
         // chart js
         var xValues = ["Due", "Limit"];
-        var yValues = [3050, 5000];
+        var yValues = [{{ @$spend }}, {{ (int)@$user->user_level->due_payment_limit - (int)@$spend }}];
         var barColors = ["#F9D46C", "#F3F3F3"];
 
         new Chart("myChart", {
@@ -461,6 +457,33 @@
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
+
+            $(document).on("submit", ".form", function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: $(this).attr("method"),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                    success: function (res) {
+                        // res = JSON.parse(res);
+                        console.log(res);
+                        if (res.success == true) {
+                            $("#requestPickupConfirmModel").modal("show");
+
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            toastr["error"](res.msg, "Failed!");
+                        }
+                    }
+                });
+            });
         });
     </script>
     <script>

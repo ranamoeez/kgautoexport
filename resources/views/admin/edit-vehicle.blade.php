@@ -87,9 +87,9 @@
                                         @if(count(@$all_buyer) > 0)
                                         @foreach(@$all_buyer as $key => $value)
                                             @if($value['id'] == @$list->vehicle->buyer_id)
-                                            <option value="{{ @$value['id'] }}" selected>{{ $value['surname'] }}</option>
+                                            <option value="{{ @$value['id'] }}" selected>{{ @$value['name'].' ('.@$value['surname'].')' }}</option>
                                             @else
-                                            <option value="{{ @$value['id'] }}">{{ @$value['surname'] }}</option>
+                                            <option value="{{ @$value['id'] }}">{{ @$value['name'].' ('.@$value['surname'].')' }}</option>
                                             @endif
                                         @endforeach
                                         @endif
@@ -1000,7 +1000,7 @@
 
             $(document).on("click", ".savetrans", function () {
                 var type = $(".transtype").val();
-                var fine = $(".transfine").val();
+                var fine = parseInt($(".transfine").val());
 
                 var html = `<div class="col-12 mt-2">
                     <span class="row align-items-center">
@@ -1021,7 +1021,7 @@
 
             $(document).on("click", ".saveauction", function () {
                 var type = $(".auctiontype").val();
-                var fine = $(".auctionfine").val();
+                var fine = parseInt($(".auctionfine").val());
 
                 var html = `<div class="col-12 mt-2">
                     <span class="row align-items-center">
@@ -1043,7 +1043,7 @@
             $(document).on("click", ".saveexpense", function () {
                 var type = $(".expense_type").val();
                 if (type !== "") {
-                    var fine = $(".expense_fine").val();
+                    var fine = parseInt($(".expense_fine").val());
 
                     var html = `<div class="col-12 mt-2">
                         <span class="row align-items-center">

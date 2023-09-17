@@ -1175,6 +1175,18 @@ class HomeController extends Controller
         if (str_contains($template_name, "{assigned_by}")) { 
             $template_name = str_replace("{assigned_by}", @$vehicle->assigned_by, $template_name);
         }
+        if (str_contains($template_name, "{fuel_type}")) { 
+            $template_name = str_replace("{fuel_type}", @$vehicle->fuel_type, $template_name);
+        }
+        if (str_contains($template_name, "{keys}")) { 
+            $template_name = str_replace("{keys}", @$vehicle->keys, $template_name);
+        }
+        if (str_contains($template_name, "{title}")) { 
+            $template_name = str_replace("{title}", @$vehicle->title, $template_name);
+        }
+        if (str_contains($template_name, "{operable}")) { 
+            $template_name = str_replace("{operable}", @$vehicle->operable, $template_name);
+        }
 
         $template_content = $template->content;
         if (str_contains($template_content, "{vin}")) { 
@@ -1221,6 +1233,18 @@ class HomeController extends Controller
         }
         if (str_contains($template_content, "{assigned_by}")) { 
             $template_content = str_replace("{assigned_by}", @$vehicle->assigned_by, $template_content);
+        }
+        if (str_contains($template_content, "{fuel_type}")) { 
+            $template_content = str_replace("{fuel_type}", @$vehicle->fuel_type, $template_content);
+        }
+        if (str_contains($template_content, "{keys}")) { 
+            $template_content = str_replace("{keys}", @$vehicle->keys, $template_content);
+        }
+        if (str_contains($template_content, "{title}")) { 
+            $template_content = str_replace("{title}", @$vehicle->title, $template_content);
+        }
+        if (str_contains($template_content, "{operable}")) { 
+            $template_content = str_replace("{operable}", @$vehicle->operable, $template_content);
         }
 
         $template->name = $template_name;

@@ -127,8 +127,24 @@
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                             <div class="d-flex px-3 p-1 rounded-pill align-items-center shadow">
-                                                <i class="fa-solid fa-ship" style="font-size: 20px;"></i>
-                                                <span class="fs-5 ms-1">{{ @$value->vehicle->status->name }}</span>
+                                                @php
+                                                    $icon = "new";
+                                                    if (@$value->vehicle->status_id == "6") {
+                                                        $icon = "terminal";
+                                                    } elseif (@$value->vehicle->status_id == "7") {
+                                                        $icon = "booked";
+                                                    } elseif (@$value->vehicle->status_id == "8") {
+                                                        $icon = "loaded";
+                                                    } elseif (@$value->vehicle->status_id == "10") {
+                                                        $icon = "shipped";
+                                                    } elseif (@$value->vehicle->status_id == "11") {
+                                                        $icon = "delivered";
+                                                    } elseif (@$value->vehicle->status_id == "12") {
+                                                        $icon = "released";
+                                                    }
+                                                @endphp
+                                                <img src="{{ asset('assets/icons/'.$icon.'.png') }}" style="width: 25px;">
+                                                <span class="text-fs-4 ms-2">{{ @$value->vehicle->status->name }}</span>
                                             </div>
                                         </td>
 
@@ -383,8 +399,24 @@
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                             <div class="d-flex px-3 p-1 rounded-pill align-items-center shadow">
-                                                <i class="fa-solid fa-ship" style="font-size: 20px;"></i>
-                                                <span class="fs-5 ms-1">{{ @$value->vehicle->status->name }}</span>
+                                                @php
+                                                    $icon = "new";
+                                                    if (@$value->vehicle->status_id == "6") {
+                                                        $icon = "terminal";
+                                                    } elseif (@$value->vehicle->status_id == "7") {
+                                                        $icon = "booked";
+                                                    } elseif (@$value->vehicle->status_id == "8") {
+                                                        $icon = "loaded";
+                                                    } elseif (@$value->vehicle->status_id == "10") {
+                                                        $icon = "shipped";
+                                                    } elseif (@$value->vehicle->status_id == "11") {
+                                                        $icon = "delivered";
+                                                    } elseif (@$value->vehicle->status_id == "12") {
+                                                        $icon = "released";
+                                                    }
+                                                @endphp
+                                                <img src="{{ asset('assets/icons/'.$icon.'.png') }}" style="width: 25px;">
+                                                <span class="text-fs-4 ms-2">{{ @$value->vehicle->status->name }}</span>
                                             </div>
                                         </td>
 

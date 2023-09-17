@@ -29,9 +29,9 @@
                         @if(count(@$all_buyer) > 0)
                         @foreach(@$all_buyer as $key => $value)
                             @if($value->id == @$buyer)
-                            <option value="{{ @$value->id }}" selected>{{ $value->surname }}</option>
+                            <option value="{{ @$value->id }}" selected>{{ @$value->name.' ('.@$value->surname.')' }}</option>
                             @else
-                            <option value="{{ @$value->id }}">{{ @$value->surname }}</option>
+                            <option value="{{ @$value->id }}">{{ @$value->name.' ('.@$value->surname.')' }}</option>
                             @endif
                         @endforeach
                         @endif

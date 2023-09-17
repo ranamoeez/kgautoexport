@@ -389,8 +389,7 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col-md-9">
-                                <button class="btn btn-primary mb-2 border-0" data-bs-toggle="modal"
-                                    data-bs-target="#addNewBuyerModal" type="button">
+                                <button class="btn btn-primary mb-2 border-0 add-new-buyer" type="button">
                                     Add new buyer
                                 </button>
 
@@ -411,11 +410,11 @@
                                                     <label for="choose form"
                                                         class="col-md-4 fs-5 fw-bold">Choose Form</label>
                                                     <div class="col-md-8">
-                                                        <select class="form-select buyers" aria-label="Default select example">
+                                                        <select class="select2js form-select buyers" aria-label="Default select example">
                                                             <option value="0" selected>Select Buyer</option>
                                                             @if(count(@$all_buyer) > 0)
                                                             @foreach(@$all_buyer as $key => $value)
-                                                                <option value="{{ @$value['id'] }}">{{ @$value['surname'] }}</option>
+                                                                <option value="{{ @$value['id'] }}">{{ @$value['name'].' ('.@$value['surname'].')' }}</option>
                                                             @endforeach
                                                             @endif
                                                         </select>
@@ -589,6 +588,16 @@
 
         $(document).on("click", ".upload-documents", function () {
             $("#documents").click();
+        });
+
+        $(document).on("click", ".add-new-buyer", function () {
+            $('.select2js').select2({
+                dropdownParent: $('#addNewBuyerModal')
+            });
+            $("#addNewBuyerModal").modal('show');
+            $("#addNewBuyerModal .select2.select2-container").css("width", "100%");
+            $("#addNewBuyerModal .select2-selection").css("height", "40px");
+            $("#addNewBuyerModal .select2-selection__arrow").css("display", "none");
         });
 
         $(document).on("click", ".quickbook", function () {

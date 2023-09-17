@@ -78,7 +78,9 @@ class HomeController extends Controller
         }
         $data['spend'] = $all_due_payments;
 
-        $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->get();
+        $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {
+            $q->where("status_id", "11");
+        })->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->get();
         $data['user_levels'] = Level::all();
         return view('user.index', $data);
     }

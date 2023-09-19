@@ -685,6 +685,9 @@
                         data = JSON.parse(data);
                         if (data.success == true) {
                             toastr["success"](data.msg, "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
                         } else {
                             toastr["error"](data.msg, "Failed!");
                         }

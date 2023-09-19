@@ -656,43 +656,49 @@
                 var amount = [];
                 var user_id = [];
                 var vehicle_id = [];
+                var flag = 0;
                 $(".pay-form").each(function (key, value) {
                     if ($(value).css("display") !== "none") {
                         type.push($(value).find("input[name='type']").val());
                         amount.push($(value).find("input[name='amount']").val());
                         user_id.push($(value).find("input[name='user_id']").val());
                         vehicle_id.push($(value).find("input[name='vehicle_id']").val());
+                        flag = 1;
                     }
                 });
 
-                var form = new FormData();
-                form.append("type", type);
-                form.append("amount", amount);
-                form.append("user_id", user_id);
-                form.append("vehicle_id", vehicle_id);
+                if (flag == 1) {
+                    var form = new FormData();
+                    form.append("type", type);
+                    form.append("amount", amount);
+                    form.append("user_id", user_id);
+                    form.append("vehicle_id", vehicle_id);
 
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ url("admin/pay-all") }}',
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: form,
-                    success: function(data){
-                        data = JSON.parse(data);
-                        if (data.success == true) {
-                            toastr["success"](data.msg, "Completed!");
-                            setTimeout(function () {
-                                location.reload();
-                            }, 2000);
-                        } else {
-                            toastr["error"](data.msg, "Failed!");
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ url("admin/pay-all") }}',
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: form,
+                        success: function(data){
+                            data = JSON.parse(data);
+                            if (data.success == true) {
+                                toastr["success"](data.msg, "Completed!");
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 2000);
+                            } else {
+                                toastr["error"](data.msg, "Failed!");
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    toastr["error"]("Already paid!", "Failed!");
+                }
             });
 
             $(document).on("click", ".open", function () {

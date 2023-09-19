@@ -775,6 +775,7 @@ class HomeController extends Controller
         }
 
         foreach ($user_id as $key => $value) {
+            $user = User::where("id", $value)->first();
             $pre_balance = $user->balance;
             $balance = (int)$pre_balance - (int)$amount[$key];
             User::where("id", $value)->update(["balance" => $balance]);

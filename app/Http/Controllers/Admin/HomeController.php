@@ -607,7 +607,7 @@ class HomeController extends Controller
             $filter['vin'] = $vin;
         }
 
-        $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer');
+        $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer')->whereHas("vehicle");
         if (!empty($filter)) {
             $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
                 if (!empty($filter['vin'])) {

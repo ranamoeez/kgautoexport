@@ -16,7 +16,7 @@ class AssignVehicle extends Model
 
     protected $table = "assign_vehicle";
     protected $fillable = [
-        'user_id', 'vehicle_id', 'assigned_to'
+        'user_id', 'vehicle_id', 'assigned_to', 'payment_status'
     ];
 
     public function user(){

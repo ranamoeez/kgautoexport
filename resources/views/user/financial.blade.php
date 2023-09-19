@@ -254,8 +254,8 @@
 
                                         <td>
                                             <div class="col d-flex align-items-center justify-content-center">
-                                                <button class="@if(@$value->status == "paid") btn btn-success @elseif(@$value->status == "partly paid") btn btn-warning @else btn btn-danger @endif rounded-1 text-white text-fs-3 border border-0">
-                                                    {{ ucfirst(@$value->status) }}
+                                                <button class="@if(@$value->payment_status == "paid") btn btn-success @elseif(@$value->payment_status == "partly paid") btn btn-warning @else btn btn-danger @endif rounded-1 text-white text-fs-3 border border-0">
+                                                    {{ ucfirst(@$value->payment_status) }}
                                                 </button>
                                             </div>
                                         </td>

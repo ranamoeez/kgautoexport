@@ -117,6 +117,15 @@ class HomeController extends Controller
         return view('user.vehicles', $data);
     }
 
+    public function vehicle_detail($id)
+    {
+        $data['type'] = "vehicles";
+
+        $data['list'] = AssignVehicle::with('vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.shipping_line')->where('id', $id)->first();
+
+        return view('user.vehicle-detail', $data);
+    }
+
     public function containers(Request $request)
     {
         $data['type'] = "containers";
@@ -247,7 +256,13 @@ class HomeController extends Controller
             }
             $data['page'] = $request->page;
         }
-        $data['transaction_history'] = $transaction_history->limit(10)->get();
+        $transaction_history = $transaction_history->limit(10)->get();
+
+        foreach ($transaction_history as $key => $value) {
+            $transaction_history[$key]['payment_status'] = AssignVehicle::where("vehicle_id", $value->vehicle_id)->where("user_id", $value->user_id)->first()->payment_status;
+        }
+
+        $data['transaction_history'] = $transaction_history;
 
         $previous = TransactionsHistory::where("user_id", Auth::user()->id)->sum('amount');
         $auction_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('auction_price');
@@ -294,7 +309,7 @@ class HomeController extends Controller
    
             if ($user->role == '1') {
                 return redirect(url('/admin'));
-            } else if ($user->role == '2') {
+            } else {
                 return redirect(url('/user'));
             }
             return redirect(url('/'))->with(['error' => 'These credentials do not match our records.']);

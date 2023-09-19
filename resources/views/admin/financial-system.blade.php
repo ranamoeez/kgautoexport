@@ -37,6 +37,16 @@
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">VIN Number</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="vin" id="vin" value="{{ @$vin }}" placeholder="Enter Vehicle VIN" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mt-4">
+                            <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">From</label>
                                 <div class="col-sm-9">
                                     <input type="date" class="form-control" name="from" value="{{ @$from }}" id="from" />
@@ -47,22 +57,12 @@
                     <div class="col-md-4">
                         <div class="mt-4">
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">VIN Number</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="vin" id="vin" value="{{ @$vin }}" placeholder="Enter Vehicle VIN" />
-                                </div>
-                            </div>
-                            <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">To</label>
                                 <div class="col-sm-9">
                                     <input type="date" class="form-control" name="to" value="{{ @$to }}" id="to" />
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mt-4">
-                            <div class="form-group row mt-4">
+                            {{-- <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Status</label>
                                 <div class="col-sm-9">
                                     <select id="status" name="status" class="selectjs form-select p-2">
@@ -72,7 +72,7 @@
                                         <option value="partly paid" @if(@$status == "partly paid") selected @endif>Partly Paid</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -170,53 +170,51 @@
 
                                                         <div class="row mt-4">
                                                             <label for="amount" class="col-md-4 fs-5 fw-bold">Amount
-                                                                to Pay</label>
+                                                                to Add</label>
                                                             <div class="col-md-8">
                                                                 <input type="text" name="amount" id="pay_amount" class="form-control shadow-lg" disabled="" />
                                                             </div>
                                                         </div>
                                                     </form>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-12 px-3">
                                                     <div class="d-flex mt-4">
                                                         <label for="username" class="col-md-4 fs-5 fw-bold">Account Status</label>
-                                                        <div class="col-md-6 m-2">
-                                                            <div
-                                                                class="card bg-primary p-2 border-0 align-self-center">
+                                                        <div class="col-md-7 text-center">
+                                                            <div class="card bg-primary p-2 py-3 border-0 align-self-center">
                                                                 <h2 class="card-subtitle fs-5">Balance</h2>
                                                                 <p class="card-text fw-bold fs-6 mt-2">
                                                                     <span id="before_bal">{{ @$balance }}</span> $</p>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6 m-2">
+                                                        {{-- <div class="col-md-6 m-2">
                                                             <div
                                                                 class="card bg-primary p-2 border-0 align-self-center">
                                                                 <h2 class="card-subtitle fs-6">Due payments</h2>
                                                                 <p class="card-text fw-bold fs-6 mt-2">
                                                                     <span id="before_dp">{{ @$due_payments }}</span> $</p>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                     <div class="d-flex mt-4">
                                                         <label for="username"
                                                             class="col-md-4 fs-5 fw-bold">Account Status will
                                                             be</label>
-                                                        <div class="col-md-6 m-2">
-                                                            <div
-                                                                class="card bg-primary p-2 border-0 align-self-center">
+                                                        <div class="col-md-7 text-center">
+                                                            <div class="card bg-primary p-2 py-3 border-0 align-self-center">
                                                                 <h2 class="card-subtitle fs-5">Balance</h2>
                                                                 <p class="card-text fw-bold fs-6 mt-2">
                                                                     <span id="after_bal">{{ @$balance }}</span> $</p>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6 m-2">
+                                                        {{-- <div class="col-md-6 m-2">
                                                             <div
                                                                 class="card bg-primary p-2 border-0 align-self-center">
                                                                 <h2 class="card-subtitle fs-6">Due payments</h2>
                                                                 <p class="card-text fw-bold fs-6 mt-2">
                                                                     <span id="after_dp">{{ @$due_payments }}</span> $</p>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
 
                                                 </div>
@@ -257,10 +255,10 @@
                                 array_push($prev_params, 'to='.$to);
                                 array_push($next_params, 'to='.$to);
                             }
-                            if (!empty(@$status)) {
-                                array_push($prev_params, 'status='.$status);
-                                array_push($next_params, 'status='.$status);
-                            }
+                            // if (!empty(@$status)) {
+                            //     array_push($prev_params, 'status='.$status);
+                            //     array_push($next_params, 'status='.$status);
+                            // }
                             $pre = join("&", $prev_params);
                             $nex = join("&", $next_params);
                         @endphp
@@ -288,15 +286,14 @@
                             @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
                             <th scope="col"></th>
                             @endif
-                            <th scope="col" class="fw-bold">Transaction ID</th>
-                            <th scope="col" class="fw-bold">Buyer</th>
                             <th scope="col" class="fw-bold">VIN</th>
-                            <th scope="col" class="fw-bold">Date</th>
-                            <th scope="col" class="fw-bold">Transaction amount</th>
-                            <th scope="col" class="fw-bold">Status</th>
+                            <th scope="col" class="fw-bold">Buyer</th>
+                            <th scope="col" class="fw-bold">Total Paid</th>
+                            <th scope="col" class="fw-bold">Payment Status</th>
                             @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
                             <th scope="col"></th>
                             @endif
+                            <th scope="col"></th>
                         </thead>
                         <tbody>
                             @if(count(@$transaction_history) > 0)
@@ -311,7 +308,7 @@
                                 @endif
                                 <td>
                                     <span class="fw-bold text-fs-3">
-                                        {{ @$value->id }}
+                                        {{ @$value->vehicle->vin }}
                                     </span>
                                 </td>
                                 <td>
@@ -321,24 +318,12 @@
                                 </td>
                                 <td>
                                     <span class="fw-bold text-fs-3">
-                                        {{ @$value->vehicle->vin }}
+                                        ${{ @$value->total_paid }}
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="fw-bold text-fs-3">
-                                        {{ @$value->created_at }}
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <span class="fw-bold text-fs-3 text-center">
-                                        {{ @$value->amount }} $
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <button class="@if(@$value->status == "paid") btn btn-success @elseif(@$value->status == "partly paid") btn btn-warning @else btn btn-danger @endif rounded-1 text-white text-fs-3 border border-0">
-                                        {{ ucfirst(@$value->status) }}
+                                    <button class="@if(@$value->payment_status == "paid") btn btn-success @elseif(@$value->payment_status == "partly paid") btn btn-warning @else btn btn-danger @endif rounded-1 text-white text-fs-3 border border-0">
+                                        {{ ucfirst(@$value->payment_status) }}
                                     </button>
                                 </td>
                                 @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
@@ -354,7 +339,45 @@
                                         </button>
                                     </div>
                                 </td>
+                                <td>
+                                    <button data-target="#detail_{{ @$value->id }}"
+                                        class="details-button rounded-circle bg-primary p-1 user-icon"
+                                        style="transition: all 0.2s linear;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                            class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </button>
+                                </td>
                                 @endif
+                            </tr>
+                            <tr class="collapse fade show" id="detail_{{ @$value->id }}">
+                                <td colspan="7">
+                                    <div class="container">
+                                        <div class="rounded row shadow header-shipment">
+                                            <div class="col-lg-4 text-center fw-bold py-2">Type</div>
+                                            <div class="col-lg-4 text-center fw-bold py-2">Amount</div>
+                                            <div class="col-lg-4 text-center fw-bold py-2">Date</div>
+                                        </div>
+                                        <div class="row">
+                                            @foreach(@$value->all as $k => $val)
+                                            <div class="col-lg-4 mt-3 text-fs-3 shipment-details">
+                                                {{ @$val->type }}
+                                            </div>
+
+                                            <div class="col-lg-4 d-flex align-items-center justify-content-center">
+                                                <b>${{ @$val->amount }}</b>
+                                            </div>
+
+                                            <div class="col-lg-4 d-flex align-items-center justify-content-center">
+                                                {{ date("d M, Y", strtotime(@$val->created_at)) }}
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             @endforeach
                             @else
@@ -380,7 +403,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form class="pay-form" method="POST" action="{{ url('admin/add-comment') }}">
+                            <form class="comment-form" method="POST" action="{{ url('admin/add-comment') }}">
                                 <input type="hidden" name="vehicle_id" id="add_com_vehicle" value="0">
                                 <div class="row mt-4">
                                     <label for="admin_notes" class="col-md-4 fs-5 fw-bold">Admin Comment
@@ -554,6 +577,11 @@
                             </div>
                             <div class="row draft_expenses pt-2 mb-2" style="border: 1px solid #aaa; border-radius: 10px;">
                             </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-12">
+                                    <button class="btn btn-success" type="button" id="pay_all">Pay All</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -568,6 +596,19 @@
     <script>
         $(document).ready(() => {
             $('.selectjs').select2();
+        })
+    </script>
+    <script>
+        $(document).ready(() => {
+            $('.details-button').click((e) => {
+                $($(e.target).closest('.details-button').attr('data-target')).toggleClass('show')
+                if (
+                    $(e.target).closest('.details-button').css('transform') == 'none'
+                ) $(e.target).closest('.details-button').css('transform', 'rotate(360deg)')
+                else {
+                    $(e.target).closest('.details-button').css('transform', 'none')
+                }
+            })
         })
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -608,6 +649,47 @@
                 });
 
                 $("#commentModal").modal("show");
+            });
+
+            $(document).on("click", "#pay_all", function () {
+                var type = [];
+                var amount = [];
+                var user_id = [];
+                var vehicle_id = [];
+                $(".pay-form").each(function (key, value) {
+                    if ($(value).css("display") !== "none") {
+                        type.push($(value).find("input[name='type']").val());
+                        amount.push($(value).find("input[name='amount']").val());
+                        user_id.push($(value).find("input[name='user_id']").val());
+                        vehicle_id.push($(value).find("input[name='vehicle_id']").val());
+                    }
+                });
+
+                var form = new FormData();
+                form.append("type", type);
+                form.append("amount", amount);
+                form.append("user_id", user_id);
+                form.append("vehicle_id", vehicle_id);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/pay-all") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"](data.msg, "Completed!");
+                        } else {
+                            toastr["error"](data.msg, "Failed!");
+                        }
+                    }
+                });
             });
 
             $(document).on("click", ".open", function () {
@@ -899,6 +981,33 @@
                 });
             });
 
+            $(document).on("submit", ".comment-form", function (event) {
+                event.preventDefault();
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                    success: function (res) {
+                        // res = JSON.parse(res);
+                        console.log(res);
+                        if (res.success == true) {
+                            toastr["success"](res.msg, "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            toastr["error"](res.msg, "Failed!");
+                        }
+                    }
+                });
+            });
+
             $(document).on("change", "#pay_amount", function () {
                 var value = $(this).val();
                 var before_bal = $("#before_bal").text();
@@ -910,7 +1019,7 @@
                         after_bal = after_dp - (2 * after_dp);
                         after_dp = 0;
                     }
-                    $("#after_bal").text(after_bal);
+                    $("#after_bal").text(parseInt(before_bal) + parseInt(value));
                     $("#after_dp").text(after_dp);
                 } else {
                     $("#after_bal").text(before_bal);

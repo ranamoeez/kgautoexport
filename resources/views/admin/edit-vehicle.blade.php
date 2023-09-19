@@ -639,31 +639,31 @@
                                             <p class="mb-1"><b>Container No:</b></p>
                                         </div>
                                         <div class="col-md-7">
-                                            <p class="mb-1"><b>{{ $list->container->container_no }}</b></p>
+                                            <p class="mb-1"><b>{{ @$list->container->container_no }}</b></p>
                                         </div>
                                         <div class="col-md-5">
                                             <p class="mb-1">Shipped Date:</p>
                                         </div>
                                         <div class="col-md-7">
-                                            <p class="mb-1">{{ $list->container->departure }}</p>
+                                            <p class="mb-1">{{ @$list->container->departure }}</p>
                                         </div>
                                         <div class="col-md-5">
                                             <p class="mb-1">Arrival Date:</p>
                                         </div>
                                         <div class="col-md-7">
-                                            <p class="mb-1">{{ $list->container->arrival }}</p>
+                                            <p class="mb-1">{{ @$list->container->arrival }}</p>
                                         </div>
                                         <div class="col-md-5">
                                             <p class="mb-1">Shipping Line:</p>
                                         </div>
                                         <div class="col-md-7">
-                                            <p class="mb-1">{{ $list->container->shipping_line->name }}</p>
+                                            <p class="mb-1">{{ @$list->container->shipping_line->name }}</p>
                                         </div>
                                         <div class="col-md-5">
                                             <p class="mb-1">Vessel Line:</p>
                                         </div>
                                         <div class="col-md-7">
-                                            <p class="mb-1">{{ $list->container->vessel_name }}</p>
+                                            <p class="mb-1">{{ @$list->container->vessel_name }}</p>
                                         </div>
                                     @endif
                                 </div>
@@ -672,7 +672,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Weight (LB)</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="weight" value="{{ $list->vehicle->weight }}" class="form-control" placeholder="Enter a weight" />
+                                    <input type="text" name="weight" value="{{ @$list->vehicle->weight }}" class="form-control" placeholder="Enter a weight" />
                                 </div>
                             </div>
                             @endif

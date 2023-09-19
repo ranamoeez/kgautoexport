@@ -156,13 +156,13 @@ class HomeController extends Controller
             $assign = new AssignVehicle;
             $assign->user_id = $data['buyer_id'];
             $assign->vehicle_id = $vehicle->id;
+            $assign->payment_status = "unpaid";
             $assign->save();
             $transaction_history = new TransactionsHistory;
             $transaction_history->user_id = $data['buyer_id'];
             $transaction_history->amount = '0';
             $transaction_history->vehicle_id = $vehicle->id;
             $transaction_history->type = 'init';
-            $transaction_history->status = 'unpaid';
             $transaction_history->save();
             if ($request->hasFile('images')) {
                 $files = [];
@@ -606,11 +606,7 @@ class HomeController extends Controller
             $vin = $request->vin;
             $filter['vin'] = $vin;
         }
-        if (!empty($request->status) && $request->status !== 'all') {
-            $data['status'] = $request->status;
-            $status = $request->status;
-            $filter['status'] = $status;
-        }
+
         $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer');
         if (!empty($filter)) {
             $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
@@ -619,9 +615,6 @@ class HomeController extends Controller
                 }
                 if (!empty($filter['buyer'])) {
                     $query->where('buyer_id', $filter['buyer']);
-                }
-                if (!empty($filter['status'])) {
-                    $query->where('status', $filter['status']);
                 }
             });
         }
@@ -644,14 +637,30 @@ class HomeController extends Controller
             }
             $data['page'] = $request->page;
         }
-        $transaction_history = $transaction_history->limit(10)->get();
+        $transaction_history = $transaction_history->where("type", "init")->limit(10)->get();
+
+        foreach ($transaction_history as $key => $value) {
+            $all_transactions = TransactionsHistory::where("vehicle_id", $value->vehicle_id)->where("user_id", $value->user_id);
+            $transaction_history[$key]['total_paid'] = $all_transactions->sum("amount");
+            $transaction_history[$key]['all'] = $all_transactions->where("type", "!=", "init")->get();
+            $transaction_history[$key]['payment_status'] = AssignVehicle::where("vehicle_id", $value->vehicle_id)->where("user_id", $value->user_id)->first()->payment_status;
+        }
+
         $data['transaction_history'] = $transaction_history;
+
         $auction_price = \DB::table('vehicles');
         if (!empty($filter['vin'])) {
             $auction_price = $auction_price->where('vin', $filter['vin']);
         }
         if (!empty($filter['buyer'])) {
             $auction_price = $auction_price->where('buyer_id', $filter['buyer']);
+        }
+        if (!empty($request->from) && !empty($request->to)) {
+            $auction_price = $auction_price->where('created_at', '<=', $request->to)->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->from)) {
+            $auction_price = $auction_price->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->to)) {
+            $auction_price = $auction_price->where('created_at', '<=', $request->to);
         }
         $auction_price = $auction_price->sum('auction_price');
         $towing_price = \DB::table('vehicles');
@@ -661,6 +670,13 @@ class HomeController extends Controller
         if (!empty($filter['buyer'])) {
             $towing_price = $towing_price->where('buyer_id', $filter['buyer']);
         }
+        if (!empty($request->from) && !empty($request->to)) {
+            $towing_price = $towing_price->where('created_at', '<=', $request->to)->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->from)) {
+            $towing_price = $towing_price->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->to)) {
+            $towing_price = $towing_price->where('created_at', '<=', $request->to);
+        }
         $towing_price = $towing_price->sum('towing_price');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines");
         if (!empty($filter['vin'])) {
@@ -669,6 +685,15 @@ class HomeController extends Controller
         if (!empty(@$filter['buyer'])) {
             $all_data = $all_data->where('buyer_id', $filter['buyer']);
         }
+        if (!empty($request->from) && !empty($request->to)) {
+            $all_data = $all_data->where('created_at', '<=', $request->to)->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->from)) {
+            $all_data = $all_data->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->to)) {
+            $all_data = $all_data->where('created_at', '<=', $request->to);
+        }
+        $all_data = $all_data->get();
+
         $balance = new User;
         if (!empty($filter['vin'])) {
             $v = Vehicle::where("vin", $filter['vin'])->first();
@@ -678,11 +703,7 @@ class HomeController extends Controller
             $balance = $balance->where('id', $filter['buyer']);
         }
         $balance = $balance->sum('balance');
-        if (empty($filter)) {
-            $all_data = $all_data->get();
-        } else {
-            $all_data = $all_data->get();
-        }
+
         $fines = 0;
         $company_fee = 0;
         $unloading_fee = 0;
@@ -726,6 +747,47 @@ class HomeController extends Controller
             }
         }
         TransactionsHistory::create($data);
+        AssignVehicle::where("vehicle_id", $data['vehicle_id'])->where("user_id", $data['user_id'])->update(["payment_status" => "partly paid"]);
+
+        return json_encode(["success"=>true, 'msg'=>'Transaction is added successfully!', 'action'=>'reload']);
+    }
+
+    public function pay_all(Request $request)
+    {
+        $data = $request->all();
+
+        $amount = explode(",", $data['amount']);
+        $type = explode(",", $data['type']);
+        $user_id = explode(",", $data['user_id']);
+        $vehicle_id = explode(",", $data['vehicle_id']);
+
+        $total_amount = 0;
+        foreach ($amount as $key => $value) {
+            $total_amount += $value;
+        }
+
+        $user = User::where("id", $user_id[0])->first();
+        if (!empty($user)) {
+            if ($user->balance !== 0 && $total_amount <= $user->balance) {
+            } else {
+                return json_encode(["success"=>false, 'msg'=>'Buyer have low balance!']);
+            }
+        }
+
+        foreach ($user_id as $key => $value) {
+            $pre_balance = $user->balance;
+            $balance = (int)$pre_balance - (int)$amount[$key];
+            User::where("id", $value)->update(["balance" => $balance]);
+                
+            $transaction_data = [
+                "user_id" => $value,
+                "vehicle_id" => $vehicle_id[$key],
+                "type" => $type[$key],
+                "amount" => $amount[$key]
+            ];
+            TransactionsHistory::create($transaction_data);   
+        }
+        AssignVehicle::where("vehicle_id", $vehicle_id[0])->where("user_id", $user_id[0])->update(["payment_status" => "paid"]);
 
         return json_encode(["success"=>true, 'msg'=>'Transaction is added successfully!', 'action'=>'reload']);
     }

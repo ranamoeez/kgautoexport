@@ -83,7 +83,9 @@
                             <th scope="col">Status</th>
                             <th scope="col">Terminal</th>
                             <th scope="col">Comment</th>
+                            @if(\Auth::user()->role == "2")
                             <th scope="col"></th>
+                            @endif
                         </thead>
                         <tbody>
                             @if(!empty(@$latest) > 0)
@@ -219,6 +221,7 @@
                                         </div>
                                     </div>
                                 </td>
+                                @if(\Auth::user()->role == "2")
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="rounded-circle bg-primary p-1 user-icon" data-bs-toggle="modal"
                                         data-bs-target="#sendUserModel">
@@ -314,6 +317,7 @@
                                         </div>
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                             @else
@@ -327,6 +331,7 @@
                     </table>
                 </div>
 
+                @if(\Auth::user()->role == "2")
                 <div class="mt-5 row">
                     <div class="col-md  mb-4 mb-md-0">
 
@@ -434,6 +439,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </div>

@@ -25,11 +25,13 @@
                 <span>My Containers</span>
             </a>
         </li>
+        @if(\Auth::user()->role == "2")
         <li class="side_menu_item">
             <a href="{{ url('user/financial') }}" @if(@$type == 'financial') class="active" @endif>
                 <i class="fas fa-money-bill"></i>
                 <span>Financial</span>
             </a>
         </li>
+        @endif
     </ul>
 </nav>

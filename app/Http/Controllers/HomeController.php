@@ -248,7 +248,7 @@ class HomeController extends Controller
         $data['type'] = "financial";
         $data['page'] = '1';
 
-        $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer')->where("user_id", Auth::user()->id);
+        $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle', 'vehicle.buyer')->whereHas("vehicle")->where("user_id", Auth::user()->id);
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;

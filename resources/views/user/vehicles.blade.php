@@ -25,7 +25,7 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link fs-5 fw-bold btn" id="super-admin-tab"
                                     data-bs-toggle="tab" data-bs-target="#super-admin" type="button">
-                                    Super Admin
+                                    Super User
                                 </button>
                             </li>
                         </ul>
@@ -164,12 +164,12 @@
                                                     <p class="text-fs-3">
                                                         {{ @$value->vehicle->notes_user }}
                                                     </p>
-                                                    <button class="btn btn-sm btn-primary comment-btn fs-6 border-0" data-bs-toggle="modal" data-bs-target="#fullNoteModel">
+                                                    <button class="btn btn-sm btn-primary comment-btn fs-6 border-0" data-bs-toggle="modal" data-bs-target="#fullNoteModel1_{{ $key }}">
                                                         Full Note
                                                     </button>
 
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="fullNoteModel" tabindex="-1"
+                                                    <div class="modal fade" id="fullNoteModel1_{{ $key }}" tabindex="-1"
                                                         aria-labelledby="fullNoteModelLabel" aria-hidden="true">
                                                         <div class="modal-dialog rounded-5">
                                                             <div class="modal-content p-3">
@@ -179,7 +179,7 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="card-body">
-                                                                        <input type="text" class="form-control text-fs-5 rounded pb-4" />
+                                                                        <input type="text" class="form-control text-fs-5 rounded pb-4" value="{{ @$value->vehicle->notes_user }}" readonly />
                                                                     </div>
                                                                     <a href="#" data-bs-dismiss="modal"
                                                                         class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>
@@ -192,7 +192,7 @@
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                             <div class="rounded-circle bg-primary p-1 user-icon"
-                                                data-bs-toggle="modal" data-bs-target="#sendUserModel">
+                                                data-bs-toggle="modal" data-bs-target="#sendUserModel1_{{ $key }}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                     class="w-6 h-6">
@@ -202,96 +202,32 @@
                                             </div>
 
                                             <!-- Modal -->
-                                            <div class="modal fade  " id="sendUserModel" tabindex="-1"
+                                            <div class="modal fade" id="sendUserModel1_{{ $key }}" tabindex="-1"
                                                 aria-labelledby="sendUserModelLabel" aria-hidden="true">
                                                 <div class="modal-dialog rounded-5">
                                                     <div class="modal-content p-3">
                                                         <div class="modal-body">
                                                             <div class="">
-                                                                <div class="mt-4">
-                                                                    <form
-                                                                        class="d-flex shadow bg-white rounded-5 rounded"
-                                                                        role="upload">
-                                                                        <input
-                                                                            class="form-control me-2 bg-white border-0 fs-5"
-                                                                            placeholder="Khaled Ibrahim"
-                                                                            disabled aria-label="upload">
-                                                                        <button class="btn btn-primary ded"
-                                                                            type="submit">
-                                                                            <div
-                                                                                class="d-flex align-items-center">
+                                                                @if(count(@$sub_buyers) > 0)
+                                                                @foreach(@$sub_buyers as $k => $v)
+                                                                <div class="my-2">
+                                                                    <form method="POST" action="{{ url("user/assign-vehicle") }}" class="d-flex shadow bg-white rounded-5 rounded assign-form" role="upload">
+                                                                        <input type="hidden" name="vehicle_id" value="{{ @$value->vehicle->id }}">
+                                                                        <input type="hidden" name="user_id" value="{{ @$v->id }}">
+                                                                        <input class="form-control me-2 bg-white border-0 fs-5" placeholder="{{ @$v->surname }}" disabled aria-label="upload">
+                                                                        <button class="btn btn-primary ded" type="submit">
+                                                                            <div class="d-flex align-items-center">
                                                                                 <span class="ms-2">Send</span>
                                                                             </div>
                                                                         </button>
                                                                     </form>
                                                                 </div>
-                                                                <div class="mt-4">
-                                                                    <form
-                                                                        class="d-flex shadow bg-white rounded-5"
-                                                                        role="upload">
-                                                                        <input
-                                                                            class="form-control me-2 bg-white border-0 fs-5"
-                                                                            placeholder="Khaled Ibrahim"
-                                                                            disabled aria-label="upload">
-                                                                        <button class="btn btn-info"
-                                                                            type="submit">
-                                                                            <div
-                                                                                class="d-flex align-items-center">
-                                                                                <span class="ms-2">Send</span>
-                                                                            </div>
-                                                                        </button>
-                                                                    </form>
+                                                                @endforeach
+                                                                @else
+                                                                <div class="my-2">
+                                                                    <input class="form-control me-2 bg-white border-0 fs-5" placeholder="No sub user found" disabled aria-label="upload">
                                                                 </div>
-                                                                <div class="mt-4">
-                                                                    <form
-                                                                        class="d-flex shadow bg-white rounded-5"
-                                                                        role="upload">
-                                                                        <input
-                                                                            class="form-control me-2 bg-white border-0 fs-5"
-                                                                            placeholder="Khaled Ibrahim"
-                                                                            disabled aria-label="upload">
-                                                                        <button class="btn btn-primary"
-                                                                            type="submit">
-                                                                            <div
-                                                                                class="d-flex align-items-center">
-                                                                                <span class="ms-2">Send</span>
-                                                                            </div>
-                                                                        </button>
-                                                                    </form>
-                                                                </div>
-                                                                <div class="mt-4">
-                                                                    <form
-                                                                        class="d-flex shadow bg-white rounded-5"
-                                                                        role="upload">
-                                                                        <input
-                                                                            class="form-control me-2 bg-white border-0 fs-5"
-                                                                            placeholder="Khaled Ibrahim"
-                                                                            disabled aria-label="upload">
-                                                                        <button class="btn btn-primary"
-                                                                            type="submit">
-                                                                            <div
-                                                                                class="d-flex align-items-center">
-                                                                                <span class="ms-2">Send</span>
-                                                                            </div>
-                                                                        </button>
-                                                                    </form>
-                                                                </div>
-                                                                <div class="mt-4">
-                                                                    <form class="d-flex shadow p-1 bg-white"
-                                                                        role="upload">
-                                                                        <input
-                                                                            class="form-control me-2 bg-white border-0 fs-5"
-                                                                            placeholder="Khaled Ibrahim"
-                                                                            disabled aria-label="upload">
-                                                                        <button class="btn btn-info"
-                                                                            type="submit">
-                                                                            <div
-                                                                                class="d-flex align-items-center">
-                                                                                <span class="ms-2">Send</span>
-                                                                            </div>
-                                                                        </button>
-                                                                    </form>
-                                                                </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
@@ -328,8 +264,8 @@
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
-                                    @if(count(@$super_admin) > 0)
-                                    @foreach(@$super_admin as $key => $value)
+                                    @if(count(@$super_user) > 0)
+                                    @foreach(@$super_user as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td @if(@$value->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                             <div class="d-flex flex-column justify-content-center">
@@ -436,14 +372,12 @@
                                                     <p class="text-fs-3">
                                                         {{ @$value->vehicle->notes_user }}
                                                     </p>
-                                                    <button
-                                                        class="btn btn-sm btn-primary comment-btn fs-6 border-0"
-                                                        data-bs-toggle="modal" data-bs-target="#fullNoteModel">
-                                                        full note
+                                                    <button class="btn btn-sm btn-primary comment-btn fs-6 border-0" data-bs-toggle="modal" data-bs-target="#fullNoteModel_{{ $key }}">
+                                                        Full Note
                                                     </button>
 
                                                     <!-- Modal -->
-                                                    <div class="modal fade  " id="fullNoteModel" tabindex="-1"
+                                                    <div class="modal fade" id="fullNoteModel_{{ $key }}" tabindex="-1"
                                                         aria-labelledby="fullNoteModelLabel" aria-hidden="true">
                                                         <div class="modal-dialog rounded-5">
                                                             <div class="modal-content p-3">
@@ -458,8 +392,7 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="card-body">
-                                                                        <input type="text"
-                                                                            class="form-control text-fs-5 rounded pb-4" />
+                                                                        <input type="text" class="form-control text-fs-5 rounded pb-4" value="{{ @$value->vehicle->notes_user }}" readonly />
                                                                     </div>
                                                                     <a href="#" data-bs-dismiss="modal"
                                                                         class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>
@@ -472,7 +405,7 @@
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                             <div class="rounded-circle bg-primary p-1 user-icon"
-                                                data-bs-toggle="modal" data-bs-target="#sendUserModel">
+                                                data-bs-toggle="modal" data-bs-target="#sendUserModel_{{ $key }}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                     class="w-6 h-6">
@@ -482,96 +415,32 @@
                                             </div>
 
                                             <!-- Modal -->
-                                            <div class="modal fade  " id="sendUserModel" tabindex="-1"
+                                            <div class="modal fade" id="sendUserModel_{{ $key }}" tabindex="-1"
                                                 aria-labelledby="sendUserModelLabel" aria-hidden="true">
                                                 <div class="modal-dialog rounded-5">
                                                     <div class="modal-content p-3">
                                                         <div class="modal-body">
                                                             <div class="">
-                                                                <div class="mt-4">
-                                                                    <form
-                                                                        class="d-flex shadow bg-white rounded-5 rounded"
-                                                                        role="upload">
-                                                                        <input
-                                                                            class="form-control me-2 bg-white border-0 fs-5"
-                                                                            placeholder="Khaled Ibrahim"
-                                                                            disabled aria-label="upload">
-                                                                        <button class="btn btn-primary ded"
-                                                                            type="submit">
-                                                                            <div
-                                                                                class="d-flex align-items-center">
+                                                                @if(count(@$sub_buyers) > 0)
+                                                                @foreach(@$sub_buyers as $k => $v)
+                                                                <div class="my-2">
+                                                                    <form method="POST" action="{{ url("user/assign-vehicle") }}" class="d-flex shadow bg-white rounded-5 rounded assign-form" role="upload">
+                                                                        <input type="hidden" name="vehicle_id" value="{{ @$value->vehicle->id }}">
+                                                                        <input type="hidden" name="user_id" value="{{ @$v->id }}">
+                                                                        <input class="form-control me-2 bg-white border-0 fs-5" placeholder="{{ @$v->surname }}" disabled aria-label="upload">
+                                                                        <button class="btn btn-primary ded" type="submit">
+                                                                            <div class="d-flex align-items-center">
                                                                                 <span class="ms-2">Send</span>
                                                                             </div>
                                                                         </button>
                                                                     </form>
                                                                 </div>
-                                                                <div class="mt-4">
-                                                                    <form
-                                                                        class="d-flex shadow bg-white rounded-5"
-                                                                        role="upload">
-                                                                        <input
-                                                                            class="form-control me-2 bg-white border-0 fs-5"
-                                                                            placeholder="Khaled Ibrahim"
-                                                                            disabled aria-label="upload">
-                                                                        <button class="btn btn-info"
-                                                                            type="submit">
-                                                                            <div
-                                                                                class="d-flex align-items-center">
-                                                                                <span class="ms-2">Send</span>
-                                                                            </div>
-                                                                        </button>
-                                                                    </form>
+                                                                @endforeach
+                                                                @else
+                                                                <div class="my-2">
+                                                                    <input class="form-control me-2 bg-white border-0 fs-5" placeholder="No sub user found" disabled aria-label="upload">
                                                                 </div>
-                                                                <div class="mt-4">
-                                                                    <form
-                                                                        class="d-flex shadow bg-white rounded-5"
-                                                                        role="upload">
-                                                                        <input
-                                                                            class="form-control me-2 bg-white border-0 fs-5"
-                                                                            placeholder="Khaled Ibrahim"
-                                                                            disabled aria-label="upload">
-                                                                        <button class="btn btn-primary"
-                                                                            type="submit">
-                                                                            <div
-                                                                                class="d-flex align-items-center">
-                                                                                <span class="ms-2">Send</span>
-                                                                            </div>
-                                                                        </button>
-                                                                    </form>
-                                                                </div>
-                                                                <div class="mt-4">
-                                                                    <form
-                                                                        class="d-flex shadow bg-white rounded-5"
-                                                                        role="upload">
-                                                                        <input
-                                                                            class="form-control me-2 bg-white border-0 fs-5"
-                                                                            placeholder="Khaled Ibrahim"
-                                                                            disabled aria-label="upload">
-                                                                        <button class="btn btn-primary"
-                                                                            type="submit">
-                                                                            <div
-                                                                                class="d-flex align-items-center">
-                                                                                <span class="ms-2">Send</span>
-                                                                            </div>
-                                                                        </button>
-                                                                    </form>
-                                                                </div>
-                                                                <div class="mt-4">
-                                                                    <form class="d-flex shadow p-1 bg-white"
-                                                                        role="upload">
-                                                                        <input
-                                                                            class="form-control me-2 bg-white border-0 fs-5"
-                                                                            placeholder="Khaled Ibrahim"
-                                                                            disabled aria-label="upload">
-                                                                        <button class="btn btn-info"
-                                                                            type="submit">
-                                                                            <div
-                                                                                class="d-flex align-items-center">
-                                                                                <span class="ms-2">Send</span>
-                                                                            </div>
-                                                                        </button>
-                                                                    </form>
-                                                                </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
@@ -594,13 +463,12 @@
                 </div>
             </div>
 
-            <button data-bs-toggle="modal" data-bs-target="#requestPickupModal"
-                class="rounded-circle bg-primary p-4 border border-0 floating-button">
+            <button type="button" id="open-pickup" class="rounded-circle bg-primary p-4 border border-0 floating-button">
                 <img src="{{ asset('/assets/request_car.png') }}" alt="request" />
             </button>
 
             <!-- Modal -->
-            <div class="modal fade modal-lg " id="requestPickupModal" tabindex="-1"
+            <div class="modal fade modal-lg" id="requestPickupModal" tabindex="-1"
                 aria-labelledby="requestPickupModalLabel" aria-hidden="true">
                 <div class="modal-dialog rounded-5">
                     <div class="modal-content p-3">
@@ -615,52 +483,59 @@
                             <div class="border-0">
                                 <img src="{{ asset('/assets/pickup-car.png') }}" alt="Like" />
                             </div>
-                            <div class="row mt-4">
+                            {{-- <div class="row mt-4">
                                 <label for="password" class="col-md-4 fs-5 fw-bold">Amount</label>
                                 <div class="col-md-8">
                                     <input type="text" class="form-control shadow-lg" />
                                 </div>
-                            </div>
-                            <div class="row mt-4">
-                                <label for="password" class="col-md-4 fs-5 fw-bold">Vehicle</label>
-                                <div class="col-md-8">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected>Choose option</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
+                            </div> --}}
+                            <form method="POST" action="{{ url("user/add-pickup-request") }}" class="form">
+                                <div class="row mt-4">
+                                    <label for="comments" class="col-md-4 fs-5 fw-bold">Comments</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control shadow-lg" id="comments" name="comments" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mt-4">
-                                <label for="password" class="col-md-4 fs-5 fw-bold">Exchange Company</label>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control shadow-lg" />
+                                <div class="row mt-4">
+                                    <label for="password" class="col-md-4 fs-5 fw-bold">Vehicle</label>
+                                    <div class="col-md-8">
+                                        <select class="form-select select2js" aria-label="Default select example" name="vehicle_id">
+                                            <option value="0" selected>Choose Vehicles</option>
+                                            @if(count(@$vehicles) > 0)
+                                            @foreach(@$vehicles as $key => $value)
+                                                <option value="{{ @$value->vehicle_id }}">{{ @$value->vehicle->company_name." ".@$value->vehicle->name." ".@$value->vehicle->modal }}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mt-4">
-                                <label for="password" class="col-md-4 fs-5 fw-bold">Upload</label>
-                                <div class="col-md-8">
-                                    <form class="d-flex shadow bg-white rounded" role="upload">
-                                        <input class="form-control me-2 bg-white border-0 rounded fs-5"
-                                            aria-label="upload">
-                                        <button class="btn btn-primary rounded" type="file">
-                                            <div class="d-flex align-items-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
-                                                    viewBox="0 0 19 22" fill="none">
-                                                    <path
-                                                        d="M13.0253 0.170898H6.05884C5.10095 0.170898 4.31722 0.954626 4.31722 1.91252V15.8455C4.31722 16.8033 5.10095 17.5871 6.05884 17.5871H16.5085C17.4664 17.5871 18.2502 16.8033 18.2502 15.8455V5.39575L13.0253 0.170898ZM16.5085 15.8455H6.05884V1.91252H12.1545V6.26656H16.5085V15.8455ZM2.5756 3.65413V19.3287H16.5085V21.0703H2.5756C1.61771 21.0703 0.833984 20.2866 0.833984 19.3287V3.65413H2.5756ZM7.80046 8.87899V10.6206H14.7669V8.87899H7.80046ZM7.80046 12.3622V14.1038H12.1545V12.3622H7.80046Z"
-                                                        fill="white" />
-                                                </svg>
-                                                <span class="ms-2">Upload</span>
-                                            </div>
-                                        </button>
-                                    </form>
+                                {{-- <div class="row mt-4">
+                                    <label for="password" class="col-md-4 fs-5 fw-bold">Exchange Company</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control shadow-lg" />
+                                    </div>
+                                </div> --}}
+                                <div class="row mt-4">
+                                    <label for="password" class="col-md-4 fs-5 fw-bold">Upload</label>
+                                    <div class="col-md-8">
+                                        <div class="d-flex shadow bg-white rounded" role="upload">
+                                            <input type="file" class="form-control me-2 bg-white border-0 rounded fs-5" aria-label="upload" id="images">
+                                            <button class="btn btn-primary rounded upload-images" type="button">
+                                                <div class="d-flex align-items-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
+                                                        viewBox="0 0 19 22" fill="none">
+                                                        <path
+                                                            d="M13.0253 0.170898H6.05884C5.10095 0.170898 4.31722 0.954626 4.31722 1.91252V15.8455C4.31722 16.8033 5.10095 17.5871 6.05884 17.5871H16.5085C17.4664 17.5871 18.2502 16.8033 18.2502 15.8455V5.39575L13.0253 0.170898ZM16.5085 15.8455H6.05884V1.91252H12.1545V6.26656H16.5085V15.8455ZM2.5756 3.65413V19.3287H16.5085V21.0703H2.5756C1.61771 21.0703 0.833984 20.2866 0.833984 19.3287V3.65413H2.5756ZM7.80046 8.87899V10.6206H14.7669V8.87899H7.80046ZM7.80046 12.3622V14.1038H12.1545V12.3622H7.80046Z"
+                                                            fill="white" />
+                                                    </svg>
+                                                    <span class="">Choose</span>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#requestPickupConfirmModel"
-                                class="btn w-auto btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5">Request
-                                Pickup</a>
+                                <button class="btn w-auto btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5">Request Pickup</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -668,7 +543,7 @@
 
 
             <!-- Modal -->
-            <div class="modal fade  " id="requestPickupConfirmModel" tabindex="-1"
+            <div class="modal fade" id="requestPickupConfirmModel" tabindex="-1"
                 aria-labelledby="requestPickupConfirmModelLabel" aria-hidden="true">
                 <div class="modal-dialog rounded-5">
                     <div class="modal-content p-3">
@@ -695,6 +570,15 @@
     <script>
         $(document).ready(() => {
             $('.selectjs').select2();
+            $(document).on("click", "#open-pickup", function () {
+                $(".select2js").select2({
+                    dropdownParent: $('#requestPickupModal')
+                });
+                $("#requestPickupModal").modal("show");
+                $("#requestPickupModal .select2.select2-container").css("width", "100%");
+                $("#requestPickupModal .select2-selection").css("height", "40px");
+                $("#requestPickupModal .select2-selection__arrow").css("display", "none");
+            });
         })
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -715,6 +599,64 @@
 
             $("select.option-select").each(function () {
                 updateBackgroundColor(this);
+            });
+
+            $(document).on("click", ".upload-images", function () {
+                $("#images").click();
+            });
+
+            $(document).on("submit", ".form", function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: $(this).attr("method"),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                    success: function (res) {
+                        // res = JSON.parse(res);
+                        console.log(res);
+                        if (res.success == true) {
+                            $("#requestPickupConfirmModel").modal("show");
+
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            toastr["error"](res.msg, "Failed!");
+                        }
+                    }
+                });
+            });
+
+            $(document).on("submit", ".assign-form", function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: $(this).attr("method"),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                    success: function (res) {
+                        // res = JSON.parse(res);
+                        console.log(res);
+                        if (res.success == true) {
+                            toastr["success"](res.msg, "Completed!");
+
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            toastr["error"](res.msg, "Failed!");
+                        }
+                    }
+                });
             });
         });
     </script>

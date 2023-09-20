@@ -133,6 +133,8 @@
                                                                         <label for="auc_fines">Auction Fines</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="draft" value="1.35" />
                                                                         <label for="draft">Draft Expenses</label><br>
+                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="occean_freight" value="1.42" />
+                                                                        <label for="occean_freight">Occean Freight</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="weight" value="1.36" />
                                                                         <label for="weight">Weight</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="document" value="1.37" />

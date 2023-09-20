@@ -34,7 +34,7 @@
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-5 fw-bold btn" id="super-admin-tab"
                                         data-bs-toggle="tab" data-bs-target="#super-admin" type="button">
-                                        Super Admin
+                                        Super User
                                     </button>
                                 </li>
                             </ul>
@@ -189,7 +189,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                                <tr class="collapse fade" id="detail_{{ @$value->id }}">
+                                <tr class="collapse fade show" id="detail_{{ @$value->id }}">
                                     <td colspan="8">
                                         <div class="container">
                                             <div class="rounded row shadow header-shipment">
@@ -202,6 +202,7 @@
                                                     <ul>
                                                         @if(count(@$value->buyers) > 0)
                                                         @foreach(@$value->buyers as $k => $v)
+                                                        @if(@$v->user->id == auth()->user()->id)
                                                         Buyer:<span class="fw-bold"> {{ @$v->user->surname }}</span>
                                                         @foreach($v->vehicles as $ke => $val)
                                                         <li class="list-unstyled">
@@ -211,6 +212,7 @@
                                                                     class="text-dark text-decoration-none">{{ @$val->vehicle->vin }}</a></span>
                                                         </li>
                                                         @endforeach
+                                                        @endif
                                                         @endforeach
                                                         @endif
                                                     </ul>
@@ -254,8 +256,8 @@
                                 <th scope="col"></th>
                             </thead>
                             <tbody>
-                                @if(count($super_admin) > 0)
-                                @foreach($super_admin as $key => $value)
+                                @if(count($super_user) > 0)
+                                @foreach($super_user as $key => $value)
                                 <tr class="align-middle overflow-hidden shadow mb-2">
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                         <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">

@@ -122,9 +122,12 @@
                                 <div class="financial-btn">
                                     @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
                                     <button type="button" id="payment-modal" class="btn btn-primary border border-1 fs-6">
-                                        Add Payment
+                                        Add Balance
                                     </button>
                                     @endif
+                                    <a href="{{ url("admin/money-transfer") }}" class="btn @if(@$latest_count > 0) btn-info @else btn-primary @endif border border-1 fs-6">
+                                        Money Transfer
+                                    </a>
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="addPaymentModal"
@@ -134,7 +137,7 @@
                                                 <div class="modal-header border-0">
                                                     <h1 class="modal-title fw-bold" id="addPaymentModalLabel"
                                                         style="font-size: 28px">
-                                                        Submit Payment</h1>
+                                                        Add Balance</h1>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
@@ -339,6 +342,7 @@
                                         </button>
                                     </div>
                                 </td>
+                                @endif
                                 <td>
                                     <button data-target="#detail_{{ @$value->id }}"
                                         class="details-button rounded-circle bg-primary p-1 user-icon"
@@ -351,7 +355,6 @@
                                         </svg>
                                     </button>
                                 </td>
-                                @endif
                             </tr>
                             <tr class="collapse fade show" id="detail_{{ @$value->id }}">
                                 <td colspan="7">
@@ -435,6 +438,7 @@
                 <div class="modal-dialog rounded-5">
                     <div class="modal-content p-3">
                         <div class="modal-header border-0">
+                            <h3 class="modal-title fw-bold" id="addPaymentModalLabel" style="font-size: 26px">Submit Payment</h3>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center">
@@ -469,6 +473,25 @@
                                         @csrf
                                         <input type="hidden" name="type" value="towing_price">
                                         <input type="hidden" name="amount" id="tow_price" value="0">
+                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                        <input type="hidden" name="status" value="partly paid">
+                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="offset-md-2 col-md-3">
+                                    <p><b>Occean Freight</b></p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p><b><span class="occean_freight">0</span> $</b></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                        @csrf
+                                        <input type="hidden" name="type" value="occean_freight">
+                                        <input type="hidden" name="amount" id="occean_freight" value="0">
                                         <input type="hidden" name="user_id" class="buyer_id" value="1">
                                         <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
                                         <input type="hidden" name="status" value="partly paid">
@@ -757,6 +780,28 @@
                             } else {
                                 $("#tow_price").parent().css("display", "block");
                                 $("#tow_price").val(response.data.towing_price);
+                            }
+                        }
+                        $(".occean_freight").text(response.data.occean_freight);
+                        if (response.data.occean_freight == "0") {
+                            $("#occean_freight").parent().css("display", "none");
+                        } else {
+                            if (response.data.transaction_history.length > 0) {
+                                var flag = 0;
+                                $(response.data.transaction_history).each(function (key, value) {
+                                    if (value.type == "occean_freight") {
+                                        flag = 1;
+                                    }
+                                });
+                                if (flag == 1) {
+                                    $("#occean_freight").parent().css("display", "none");
+                                } else {
+                                    $("#occean_freight").parent().css("display", "block");
+                                    $("#occean_freight").val(response.data.occean_freight);
+                                }
+                            } else {
+                                $("#occean_freight").parent().css("display", "block");
+                                $("#occean_freight").val(response.data.occean_freight);
                             }
                         }
                         $(".total_auction_fines").text(response.data.total_auction_fines);

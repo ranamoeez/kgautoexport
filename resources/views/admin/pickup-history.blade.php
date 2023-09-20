@@ -238,7 +238,7 @@
                                 </td>
                                 <td>
                                     <p class=" text-fs-3">
-                                        {{ @$value->picker_name }}
+                                        {{ @$value->comments }}
                                     </p>
                                 </td>
                                 <td>

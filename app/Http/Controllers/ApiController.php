@@ -278,8 +278,8 @@ class ApiController extends Controller
                 $pickup_requests = $pickup_requests->where('user_id', $id)->get();
 
                 foreach ($pickup_requests as $key => $value) {
-                    $transaction = TransactionsHistory::orderBy('id', 'DESC')->where("vehicle_id", $value->vehicle_id)->first();
-                    $pickup_requests[$key]['payment_status'] = @$transaction->status;
+                    $transaction = AssignVehicle::where('user_id', $id)->where("vehicle_id", $value->vehicle_id)->first();
+                    $pickup_requests[$key]['payment_status'] = @$transaction->payment_status;
                 }
             
                 return $this->sendResponse($pickup_requests, 'Pickup requests retrieved successfully.');
@@ -550,6 +550,8 @@ class ApiController extends Controller
                     $vehicle = new AssignVehicle;
                     $vehicle->user_id = $input['user_id'];
                     $vehicle->vehicle_id = $input['vehicle_id'];
+                    $vehicle->payment_status = "unpaid";
+                    $vehicle->assigned_by = "super_user";
                     $vehicle->save();
                 } else {
                     return $this->sendError('Not Found.', ['error'=>'Vehicle not found.']);

@@ -35,6 +35,7 @@ use App\Models\TransFineType;
 use App\Models\ReminderTemplate;
 use App\Models\ReminderHistory;
 use App\Models\Level;
+use App\Models\MoneyTransfer;
 use Auth;
 use Storage;
 
@@ -137,12 +138,6 @@ class HomeController extends Controller
             $data = $request->all();
             $this->cleanData($data);
             $data['owner_id'] = \Auth::user()->id;
-            if (\Auth::user()->id == "1") {
-                $role = "super_admin";
-            } else {
-                $role = "admin";
-            }
-            $data['assigned_by'] = $role;
             if (empty($data['purchase_date'])) {
                 $data['purchase_date'] = date('Y-m-d');
             }
@@ -157,6 +152,7 @@ class HomeController extends Controller
             $assign->user_id = $data['buyer_id'];
             $assign->vehicle_id = $vehicle->id;
             $assign->payment_status = "unpaid";
+            $assign->assigned_by = "admin";
             $assign->save();
             $transaction_history = new TransactionsHistory;
             $transaction_history->user_id = $data['buyer_id'];
@@ -678,6 +674,21 @@ class HomeController extends Controller
             $towing_price = $towing_price->where('created_at', '<=', $request->to);
         }
         $towing_price = $towing_price->sum('towing_price');
+        $occean_freight = \DB::table('vehicles');
+        if (!empty($filter['vin'])) {
+            $occean_freight = $occean_freight->where('vin', $filter['vin']);
+        }
+        if (!empty($filter['buyer'])) {
+            $occean_freight = $occean_freight->where('buyer_id', $filter['buyer']);
+        }
+        if (!empty($request->from) && !empty($request->to)) {
+            $occean_freight = $occean_freight->where('created_at', '<=', $request->to)->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->from)) {
+            $occean_freight = $occean_freight->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->to)) {
+            $occean_freight = $occean_freight->where('created_at', '<=', $request->to);
+        }
+        $occean_freight = $occean_freight->sum('occean_freight');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines");
         if (!empty($filter['vin'])) {
             $all_data = $all_data->where('vin', $filter['vin']);
@@ -720,7 +731,7 @@ class HomeController extends Controller
                 $unloading_fee += (int)@$value->destination_port->unloading_fee;
             }
         }
-        $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+        $due_payments = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
         $data['previous'] = $previous;
         $data['due_payments'] = (int)$due_payments - (int)$previous;
         $data['balance'] = $balance;
@@ -730,6 +741,7 @@ class HomeController extends Controller
         $data['user_levels'] = Level::all();
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['latest_count'] = MoneyTransfer::where('latest', '1')->count();
         return view('admin.financial-system', $data);
     }
 
@@ -880,6 +892,7 @@ class HomeController extends Controller
             $previous = TransactionsHistory::where("user_id", $buyer_id)->sum('amount');
             $auction_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('auction_price');
             $towing_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('towing_price');
+            $occean_freight = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('occean_freight');
             $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $buyer_id)->get();
             $balance = User::where('id', $buyer_id)->sum('balance');
             $fines = 0;
@@ -898,7 +911,7 @@ class HomeController extends Controller
                     $unloading_fee += (int)@$value->destination_port->unloading_fee;
                 }
             }
-            $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+            $due_payments = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
             $all_due_payments = (int)$due_payments - (int)$previous;
             if ($all_due_payments < 0) {
                 $all_due_payments = 0;
@@ -973,6 +986,37 @@ class HomeController extends Controller
         return json_encode(["success"=>true, 'action'=>'reload']);
     }
 
+    public function update_money_data(Request $request)
+    {
+        $data = [];
+        $data["status"] = $request->status;
+
+        MoneyTransfer::where('id', $request->id)->update($data);
+
+        return json_encode(["success"=>true, 'action'=>'reload']);
+    }
+
+    public function money_transfer(Request $request)
+    {
+        \DB::table('money_transfer')->update(["latest" => "0"]);
+        
+        $data['type'] = "financial-system";
+        $data['page'] = "1";
+
+        $list = MoneyTransfer::with("user", "vehicle");
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 20;
+                $list = $list->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+
+        $data["list"] = $list->limit(20)->get();
+        $data['user_levels'] = Level::all();
+        return view("admin.money-transfer", $data);
+    }
+
     public function delete_vehicle_fines($id)
     {
         $vehicle = Fine::find($id);
@@ -1040,6 +1084,7 @@ class HomeController extends Controller
         $vehicle = Vehicle::with('buyer', 'buyer.user_level', 'fines', 'destination_port')->where("id", $id)->first();
         $data['auction_price'] = Vehicle::where("id", $id)->sum('auction_price');
         $data['towing_price'] = Vehicle::where("id", $id)->sum('towing_price');
+        $data['occean_freight'] = Vehicle::where("id", $id)->sum('occean_freight');
         $data['fines'] = $vehicle->fines;
         $data['total_auction_fines'] = Fine::where('vehicle_id', $id)->where('type', 'auction')->sum('amount');
         $data['total_trans_fines'] = Fine::where('vehicle_id', $id)->where('type', 'transaction')->sum('amount');
@@ -1071,12 +1116,14 @@ class HomeController extends Controller
         $previous = TransactionsHistory::where("user_id", $id)->sum('amount');
         $auction_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('auction_price');
         $towing_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('towing_price');
+        $occean_freight = \DB::table('vehicles')->where('buyer_id', $id)->sum('occean_freight');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $id)->get();
         $balance = User::where('id', $id)->sum('balance');
         if ($id == "0") {
             $previous = TransactionsHistory::all()->sum('amount');
             $auction_price = \DB::table('vehicles')->sum('auction_price');
             $towing_price = \DB::table('vehicles')->sum('towing_price');
+            $occean_freight = \DB::table('vehicles')->sum('occean_freight');
             $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->get();
             $balance = User::all()->sum('balance');
             $data['data'] = Vehicle::all();
@@ -1097,7 +1144,7 @@ class HomeController extends Controller
                 $unloading_fee += (int)@$value->destination_port->unloading_fee;
             }
         }
-        $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+        $due_payments = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
         $data['previous'] = $previous;
         $data['due_payments'] = (int)$due_payments - (int)$previous;
         $data['balance'] = $balance;
@@ -1112,12 +1159,14 @@ class HomeController extends Controller
         $previous = TransactionsHistory::where("user_id", $buyer_id)->where("vehicle_id", $id)->sum('amount');
         $auction_price = \DB::table('vehicles')->where('id', $id)->sum('auction_price');
         $towing_price = \DB::table('vehicles')->where('id', $id)->sum('towing_price');
+        $occean_freight = \DB::table('vehicles')->where('id', $id)->sum('occean_freight');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('id', $id)->get();
         $balance = User::where('id', $buyer_id)->sum('balance');
         if ($id == "0") {
             $previous = TransactionsHistory::where("user_id", $buyer_id)->sum('amount');
             $auction_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('auction_price');
             $towing_price = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('towing_price');
+            $occean_freight = \DB::table('vehicles')->where('buyer_id', $buyer_id)->sum('occean_freight');
             $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $buyer_id)->get();
             $balance = User::all()->sum('balance');
         }
@@ -1137,7 +1186,7 @@ class HomeController extends Controller
                 $unloading_fee += (int)@$value->destination_port->unloading_fee;
             }
         }
-        $due_payments = (int)$auction_price + (int)$towing_price + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+        $due_payments = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
         $data['previous'] = $previous;
         $data['due_payments'] = (int)$due_payments - (int)$previous;
         $data['balance'] = $balance;
@@ -1217,6 +1266,9 @@ class HomeController extends Controller
         if (str_contains($template_name, "{towing_price}")) { 
             $template_name = str_replace("{towing_price}", @$vehicle->towing_price, $template_name);
         }
+        if (str_contains($template_name, "{occean_freight}")) { 
+            $template_name = str_replace("{occean_freight}", @$vehicle->occean_freight, $template_name);
+        }
         if (str_contains($template_name, "{delivery_date}")) { 
             $template_name = str_replace("{delivery_date}", @$vehicle->delivery_date, $template_name);
         }
@@ -1275,6 +1327,9 @@ class HomeController extends Controller
         }
         if (str_contains($template_content, "{towing_price}")) { 
             $template_content = str_replace("{towing_price}", @$vehicle->towing_price, $template_content);
+        }
+        if (str_contains($template_content, "{occean_freight}")) { 
+            $template_content = str_replace("{occean_freight}", @$vehicle->occean_freight, $template_content);
         }
         if (str_contains($template_content, "{delivery_date}")) { 
             $template_content = str_replace("{delivery_date}", @$vehicle->delivery_date, $template_content);
@@ -1338,7 +1393,7 @@ class HomeController extends Controller
             $save->container_id = $container_id;
             $save->user_id = $user_id;
             $save->vehicle_id = $value;
-            $save->added_by = Auth::user()->id;
+            $save->added_by = "admin";
             $save->save();
             AssignVehicle::where("vehicle_id", $value)->where('user_id', $user_id)->update(["assigned_to"=>$container_id]);
 

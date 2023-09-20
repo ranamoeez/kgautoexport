@@ -631,6 +631,15 @@
                                 </div>
                             </div>
                             @endif
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.42", json_decode($auth_user->admin_level->access)))
+                            <div class="form-group row">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Ocean Freight</label>
+                                <div class="col-sm-9">
+                                    <input type="number" name="occean_freight" value="{{ @$list->vehicle->occean_freight }}" class="form-control" placeholder="Enter a price"
+                                        inputmode="numeric" />
+                                </div>
+                            </div>
+                            @endif
                             <div class="form-group mt-4 px-2">
                                 <label for="notes" class="fw-semibold">Container info</label>
                                 <div class="container-info p-3 row mt-2" style="border: 1px solid black; border-radius: 10px;">

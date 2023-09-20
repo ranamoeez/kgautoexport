@@ -97,13 +97,12 @@
                     </div>
                     <div class="d-flex justify-content-end">
                         <div class="financial-btn">
-                            <button data-bs-toggle="modal" data-bs-target="#moneyTransferModal"
-                                class="btn btn-primary border border-1 fs-6">
+                            <button type="button" id="money" class="btn btn-primary border border-1 fs-6">
                                 Money Transfer
                             </button>
 
                             <!-- Modal -->
-                            <div class="modal fade  " id="moneyTransferModal" tabindex="-1"
+                            <div class="modal fade" id="moneyTransferModal" tabindex="-1"
                                 aria-labelledby="moneyTransferModalLabel" aria-hidden="true">
                                 <div class="modal-dialog rounded-5">
                                     <div class="modal-content p-3">
@@ -115,52 +114,49 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="row mt-4">
-                                                <label for="password"
-                                                    class="col-md-4 fs-5 fw-bold">Amount</label>
-                                                <div class="col-md-8">
-                                                    <input type="text" class="form-control shadow" />
+                                            <form method="POST" action="{{ url("user/money-transfer") }}" class="form">
+                                                <div class="row mt-4">
+                                                    <label for="amount" class="col-md-4 fs-5 fw-bold">Amount</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" name="amount" class="form-control shadow" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row mt-4">
-                                                <label for="password"
-                                                    class="col-md-4 fs-5 fw-bold">Vehicle</label>
-                                                <div class="col-md-8">
-                                                    <select class="form-select shadow"
-                                                        aria-label="Default select example">
-                                                        <option selected>Choose option</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
-                                                    </select>
+                                                <div class="row mt-4">
+                                                    <label for="vehicle_id" class="col-md-4 fs-5 fw-bold">Vehicle</label>
+                                                    <div class="col-md-8">
+                                                        <select class="form-select shadow select2js" aria-label="Default select example" name="vehicle_id">
+                                                            <option selected>Choose vehicle</option>
+                                                            @if(count(@$vehicles) > 0)
+                                                            @foreach(@$vehicles as $key => $value)
+                                                                <option value="{{ @$value->vehicle_id }}">{{ @$value->vehicle->company_name." ".@$value->vehicle->name." ".@$value->vehicle->modal }}</option>
+                                                            @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row mt-4">
-                                                <label for="password" class="col-md-4 fs-5 fw-bold">Exchange
-                                                    Company</label>
-                                                <div class="col-md-8">
-                                                    <input type="text" class="form-control shadow" />
+                                                <div class="row mt-4">
+                                                    <label for="exchange_company" class="col-md-4 fs-5 fw-bold">Exchange
+                                                        Company</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" name="exchange_company" class="form-control shadow" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row mt-4">
-                                                <label for="password" class="col-md-4 fs-5 fw-bold">Transfer
-                                                    No.</label>
-                                                <div class="col-md-8">
-                                                    <input type="text" class="form-control shadow" />
+                                                <div class="row mt-4">
+                                                    <label for="transfer_no" class="col-md-4 fs-5 fw-bold">Transfer
+                                                        No.</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" name="transfer_no" class="form-control shadow" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row mt-4">
-                                                <label for="password"
-                                                    class="col-md-4 fs-5 fw-bold">Comment</label>
-                                                <div class="col-md-8">
-                                                    <input type="text"
-                                                        class="form-control shadow text-fs-4 rounded pb-4" />
+                                                <div class="row mt-4">
+                                                    <label for="comment" class="col-md-4 fs-5 fw-bold">Comment</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" name="comment" class="form-control shadow text-fs-4 rounded pb-4" />
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <a href="#"
-                                                class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5 w-auto"
-                                                data-bs-dismiss="modal">Submit</a>
+                                                <button class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5 w-auto">Submit</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -208,7 +204,7 @@
                                 </svg>
                             </a>
                             <p class="text-fs-4 m-0">Page {{ @$page }}</p>
-                            <a class="btn" @if(count($transaction_history) < 10) href="javascript:void();" @else href="{{ url('user/financial?'.$nex) }}" @endif>
+                            <a class="btn" @if(count($vehicle_cost) < 10) href="javascript:void();" @else href="{{ url('user/financial?'.$nex) }}" @endif>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -222,28 +218,16 @@
                             id="vehicle-cost">
                             <table class="table">
                                 <thead class="text-fs-4">
-                                    <th scope="col">Transaction ID</th>
-                                    <th scope="col">Vehicle</th>
                                     <th scope="col">VIN</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Transaction amount</th>
+                                    <th scope="col">Buyer</th>
+                                    <th scope="col">Total Paid</th>
+                                    <th scope="col">Payment Status</th>
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
-                                    @if(count(@$transaction_history) > 0)
-                                    @foreach(@$transaction_history as $key => $value)
+                                    @if(count(@$vehicle_cost) > 0)
+                                    @foreach(@$vehicle_cost as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                {{ @$value->id }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                {{ @$value->vehicle->company_name.' '.@$value->vehicle->name.' '.@$value->vehicle->modal }}
-                                            </span>
-                                        </td>
                                         <td>
                                             <span class="fw-bold text-fs-3">
                                                 {{ @$value->vehicle->vin }}
@@ -251,112 +235,55 @@
                                         </td>
                                         <td>
                                             <span class="fw-bold text-fs-3">
-                                                {{ date("d M, Y", strtotime(@$value->created_at)) }}
-                                            </span>
-                                        </td>
-
-                                        <td>
-                                            <div class="col d-flex align-items-center justify-content-center">
-                                                <button class="@if(@$value->payment_status == "paid") btn btn-success @elseif(@$value->payment_status == "partly paid") btn btn-warning @else btn btn-danger @endif rounded-1 text-white text-fs-3 border border-0">
-                                                    {{ ucfirst(@$value->payment_status) }}
-                                                </button>
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <span class="fw-bold text-fs-3 text-center">
-                                                {{ @$value->amount }} $
+                                                {{ @$value->vehicle->buyer->surname }}
                                             </span>
                                         </td>
                                         <td>
-                                            <div
-                                                class="d-flex justify-content-center items-center message-icon">
-                                                <button class="btn border-0" data-bs-toggle="modal"
-                                                    data-bs-target="#commentModal">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5"
-                                                        stroke="currentColor" class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                                                    </svg>
-                                                </button>
+                                            <span class="fw-bold text-fs-3">
+                                                ${{ @$value->total_paid }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="@if(@$value->payment_status == "paid") btn btn-success @elseif(@$value->payment_status == "partly paid") btn btn-warning @else btn btn-danger @endif rounded-1 text-white text-fs-3 border border-0">
+                                                {{ ucfirst(@$value->payment_status) }}
+                                            </button>
+                                        </td>
 
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="commentModal" tabindex="-1"
-                                                    aria-labelledby="commentModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog rounded-5">
-                                                        <div class="modal-content p-3">
-                                                            <div class="modal-header border-0">
-                                                                <h1 class="modal-title fw-bold"
-                                                                    id="commentModalLabel"
-                                                                    style="font-size: 28px">
-                                                                    Add Comment</h1>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="row mt-4">
-                                                                    <label for="password"
-                                                                        class="col-md-4 fs-5 fw-bold">Admin
-                                                                        Comment </label>
-                                                                    <div class="col-md-8">
-                                                                        <input type="text"
-                                                                            class="form-control text-fs-4 rounded pb-4"
-                                                                            disabled />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mt-4">
-                                                                    <label for="password"
-                                                                        class="col-md-4 fs-5 fw-bold">User
-                                                                        Comment </label>
-                                                                    <div class="col-md-8">
-                                                                        <div
-                                                                            class="d-flex flex-column align-items-end">
-                                                                            <input type="text"
-                                                                                class="form-control text-fs-4 rounded pb-4" />
-                                                                            <button
-                                                                                class="btn btn-sm btn-primary comment-btn fs-6 border-0"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#fullNoteModel">
-                                                                                Update Comment
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <a href="#"
-                                                                    class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5 w-auto"
-                                                                    data-bs-dismiss="modal">Close</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                        <td>
+                                            <button data-target="#detail_{{ @$value->id }}"
+                                                class="details-button rounded-circle bg-primary p-1 user-icon"
+                                                style="transition: all 0.2s linear;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="w-6 h-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 4.5v15m7.5-7.5h-15" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="collapse fade show" id="detail_{{ @$value->id }}">
+                                        <td colspan="5">
+                                            <div class="container">
+                                                <div class="rounded row shadow header-shipment">
+                                                    <div class="col-lg-4 text-center fw-bold py-2">Type</div>
+                                                    <div class="col-lg-4 text-center fw-bold py-2">Amount</div>
+                                                    <div class="col-lg-4 text-center fw-bold py-2">Date</div>
                                                 </div>
-
-
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="fullNoteModel" tabindex="-1"
-                                                    aria-labelledby="fullNoteModelLabel" aria-hidden="true">
-                                                    <div class="modal-dialog rounded-5">
-                                                        <div class="modal-content p-3">
-                                                            <div class="modal-header border-0">
-                                                                <h1 class="modal-title fw-bold"
-                                                                    id="fullNoteModelLabel"
-                                                                    style="font-size: 28px">
-                                                                    Note</h1>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="card-body">
-                                                                    <input type="text"
-                                                                        class="form-control text-fs-5 rounded pb-4" />
-                                                                </div>
-                                                                <a href="#" data-bs-dismiss="modal"
-                                                                    class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>
-                                                            </div>
-                                                        </div>
+                                                <div class="row">
+                                                    @foreach(@$value->all as $k => $val)
+                                                    <div class="col-lg-4 mt-3 text-fs-3 shipment-details">
+                                                        {{ @$val->type }}
                                                     </div>
+
+                                                    <div class="col-lg-4 d-flex align-items-center justify-content-center">
+                                                        <b>${{ @$val->amount }}</b>
+                                                    </div>
+
+                                                    <div class="col-lg-4 d-flex align-items-center justify-content-center">
+                                                        {{ date("d M, Y", strtotime(@$val->created_at)) }}
+                                                    </div>
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </td>
@@ -375,273 +302,44 @@
                         <div class="table-responsive tab-pane fade" data-bs-toggle="tab" id="transportation">
                             <table class="table">
                                 <thead class="text-fs-4">
-                                    <th scope="col">Transaction ID</th>
-                                    <th scope="col">Vehicle</th>
                                     <th scope="col">VIN</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Transaction amount</th>
-                                    <th scope="col"></th>
+                                    <th scope="col">Buyer</th>
+                                    <th scope="col">Total Paid</th>
+                                    <th scope="col">Payment Status</th>
                                 </thead>
                                 <tbody>
+                                    @if(count(@$transportation) > 0)
+                                    @foreach(@$transportation as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td>
                                             <span class="fw-bold text-fs-3">
-                                                123ES12123DSF
+                                                {{ @$value->vehicle->vin }}
                                             </span>
                                         </td>
                                         <td>
                                             <span class="fw-bold text-fs-3">
-                                                Hyundai Sonata 2019
+                                                {{ @$value->vehicle->buyer->surname }}
                                             </span>
                                         </td>
                                         <td>
                                             <span class="fw-bold text-fs-3">
-                                                1GYKPCRS3LZ238722
+                                                ${{ @$value->total_paid }}
                                             </span>
                                         </td>
                                         <td>
-                                            <span class="fw-bold text-fs-3">
-                                                31 Mar, 2021
-                                            </span>
-                                        </td>
-
-                                        <td>
-                                            <div class="col d-flex align-items-center justify-content-center">
-                                                <button
-                                                    class="btn btn-danger rounded-1 text-white text-fs-3 border border-0">
-                                                    Unpaid
-                                                </button>
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <span class="fw-bold text-fs-3 text-center">
-                                                35,452 $
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div
-                                                class="d-flex justify-content-center items-center message-icon">
-                                                <button class="btn border-0" data-bs-toggle="modal"
-                                                    data-bs-target="#commentModal">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5"
-                                                        stroke="currentColor" class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                                                    </svg>
-                                                </button>
-
-                                                <!-- Modal -->
-                                                <div class="modal fade  " id="commentModal" tabindex="-1"
-                                                    aria-labelledby="commentModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog rounded-5">
-                                                        <div class="modal-content p-3">
-                                                            <div class="modal-header border-0">
-                                                                <h1 class="modal-title fw-bold"
-                                                                    id="commentModalLabel"
-                                                                    style="font-size: 28px">
-                                                                    Add Comment</h1>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="row mt-4">
-                                                                    <label for="password"
-                                                                        class="col-md-4 fs-5 fw-bold">Admin
-                                                                        Comment </label>
-                                                                    <div class="col-md-8">
-                                                                        <input type="text"
-                                                                            class="form-control text-fs-4 rounded pb-4"
-                                                                            disabled />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mt-4">
-                                                                    <label for="password"
-                                                                        class="col-md-4 fs-5 fw-bold">User
-                                                                        Comment </label>
-                                                                    <div class="col-md-8">
-                                                                        <div
-                                                                            class="d-flex flex-column align-items-end">
-                                                                            <input type="text"
-                                                                                class="form-control text-fs-4 rounded pb-4" />
-                                                                            <button
-                                                                                class="btn btn-sm btn-primary comment-btn fs-6 border-0"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#fullNoteModel">
-                                                                                Update Comment
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <a href="#"
-                                                                    class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5 w-auto"
-                                                                    data-bs-dismiss="modal">Close</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <!-- Modal -->
-                                                <div class="modal fade  " id="fullNoteModel" tabindex="-1"
-                                                    aria-labelledby="fullNoteModelLabel" aria-hidden="true">
-                                                    <div class="modal-dialog rounded-5">
-                                                        <div class="modal-content p-3">
-                                                            <div class="modal-header border-0">
-                                                                <h1 class="modal-title fw-bold"
-                                                                    id="fullNoteModelLabel"
-                                                                    style="font-size: 28px">
-                                                                    Note</h1>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="card-body">
-                                                                    <input type="text"
-                                                                        class="form-control text-fs-5 rounded pb-4" />
-                                                                </div>
-                                                                <a href="#" data-bs-dismiss="modal"
-                                                                    class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <button class="@if(@$value->payment_status == "paid") btn btn-success @elseif(@$value->payment_status == "partly paid") btn btn-warning @else btn btn-danger @endif rounded-1 text-white text-fs-3 border border-0">
+                                                {{ ucfirst(@$value->payment_status) }}
+                                            </button>
                                         </td>
                                     </tr>
-                                    <tr class="align-middle overflow-hidden shadow mb-2">
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                123ES12123DSF
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                Hyundai Sonata 2019
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                1GYKPCRS3LZ238722
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold text-fs-3">
-                                                31 Mar, 2021
-                                            </span>
-                                        </td>
-
-                                        <td>
-                                            <div class="col d-flex align-items-center justify-content-center">
-                                                <button
-                                                    class="btn btn-success rounded-1 text-white text-fs-3 border border-0">
-                                                    Paid
-                                                </button>
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <span class="fw-bold text-fs-3 text-center">
-                                                35,452 $
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div
-                                                class="d-flex justify-content-center items-center message-icon">
-                                                <button class="btn border-0" data-bs-toggle="modal"
-                                                    data-bs-target="#commentModal">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5"
-                                                        stroke="currentColor" class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                                                    </svg>
-                                                </button>
-
-                                                <!-- Modal -->
-                                                <div class="modal fade  " id="commentModal" tabindex="-1"
-                                                    aria-labelledby="commentModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog rounded-5">
-                                                        <div class="modal-content p-3">
-                                                            <div class="modal-header border-0">
-                                                                <h1 class="modal-title fw-bold"
-                                                                    id="commentModalLabel"
-                                                                    style="font-size: 28px">
-                                                                    Add Comment</h1>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="row mt-4">
-                                                                    <label for="password"
-                                                                        class="col-md-4 fs-5 fw-bold">Admin
-                                                                        Comment </label>
-                                                                    <div class="col-md-8">
-                                                                        <input type="text"
-                                                                            class="form-control text-fs-4 rounded pb-4"
-                                                                            disabled />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mt-4">
-                                                                    <label for="password"
-                                                                        class="col-md-4 fs-5 fw-bold">User
-                                                                        Comment </label>
-                                                                    <div class="col-md-8">
-                                                                        <div
-                                                                            class="d-flex flex-column align-items-end">
-                                                                            <input type="text"
-                                                                                class="form-control text-fs-4 rounded pb-4" />
-                                                                            <button
-                                                                                class="btn btn-sm btn-primary comment-btn fs-6 border-0"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#fullNoteModel">
-                                                                                Update Comment
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <a href="#"
-                                                                    class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5 w-auto"
-                                                                    data-bs-dismiss="modal">Close</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <!-- Modal -->
-                                                <div class="modal fade  " id="fullNoteModel" tabindex="-1"
-                                                    aria-labelledby="fullNoteModelLabel" aria-hidden="true">
-                                                    <div class="modal-dialog rounded-5">
-                                                        <div class="modal-content p-3">
-                                                            <div class="modal-header border-0">
-                                                                <h1 class="modal-title fw-bold"
-                                                                    id="fullNoteModelLabel"
-                                                                    style="font-size: 28px">
-                                                                    Note</h1>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="card-body">
-                                                                    <input type="text"
-                                                                        class="form-control text-fs-5 rounded pb-4" />
-                                                                </div>
-                                                                <a href="#" data-bs-dismiss="modal"
-                                                                    class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    @endforeach
+                                    @else
+                                    <tr id="row" class="align-middle overflow-hidden shadow mb-2">
+                                        <td class="text-center" colspan="4">
+                                            <p>No record found</p>
                                         </td>
                                     </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -657,6 +355,16 @@
     <script>
         $(document).ready(() => {
             $('.selectjs').select2();
+
+            $(document).on("click", "#money", function () {
+                $(".select2js").select2({
+                    dropdownParent: $('#moneyTransferModal')
+                });
+                $("#moneyTransferModal").modal("show");
+                $("#moneyTransferModal .select2.select2-container").css("width", "100%");
+                $("#moneyTransferModal .select2-selection").css("height", "40px");
+                $("#moneyTransferModal .select2-selection__arrow").css("display", "none");
+            });
 
             $(document).on("submit", ".form", function (event) {
                 event.preventDefault();

@@ -38,6 +38,8 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::get('/containers/{id}', [App\Http\Controllers\HomeController::class, 'container_detail'])->name('user-container-detail');
 	Route::get('/financial', [App\Http\Controllers\HomeController::class, 'financial'])->name('user-financial');
 	Route::post('/check-password', [App\Http\Controllers\HomeController::class, 'check_password'])->name('check-password');
+	Route::post('/assign-vehicle', [App\Http\Controllers\HomeController::class, 'assign_vehicle'])->name('assign-vehicle');
+	Route::post('/money-transfer', [App\Http\Controllers\HomeController::class, 'money_transfer'])->name('money-transfer');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function(){
@@ -82,12 +84,14 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 
 	Route::get('/pickup-history', [App\Http\Controllers\Admin\HomeController::class, 'pickup_history'])->name('pickup-history');
 	Route::post('/update-pickup-data', [App\Http\Controllers\Admin\HomeController::class, 'update_pickup_data'])->name('update-pickup-data');
+	Route::post('/update-money-data', [App\Http\Controllers\Admin\HomeController::class, 'update_money_data'])->name('update-money-data');
 	
 	Route::get('/financial-system', [App\Http\Controllers\Admin\HomeController::class, 'financial_system'])->name('financial-system');
 	Route::post('/pay-all', [App\Http\Controllers\Admin\HomeController::class, 'pay_all'])->name('pay-all');
 	Route::post('/add-balance', [App\Http\Controllers\Admin\HomeController::class, 'add_balance'])->name('add-balance');
 	Route::post('/add-comment', [App\Http\Controllers\Admin\HomeController::class, 'add_comment'])->name('add-comment');
 	Route::post('/transaction-history', [App\Http\Controllers\Admin\HomeController::class, 'transaction_history'])->name('transaction-history');
+	Route::get('/money-transfer', [App\Http\Controllers\Admin\HomeController::class, 'money_transfer'])->name('get-money-transfer');
 	Route::post('/send-reminder', [App\Http\Controllers\Admin\HomeController::class, 'send_reminder'])->name('send-reminder');
 	
 	Route::get('/system-configuration/users', [App\Http\Controllers\Admin\SystemConfigController::class, 'users'])->name('users');

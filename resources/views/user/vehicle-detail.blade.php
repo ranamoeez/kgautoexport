@@ -378,10 +378,12 @@
                                 <label for="" class="col-md-2 fw-bold">Destination</label>
                                 <div class="col-md-10">
                                     <select class="selectjs form-select" aria-label="Default select example">
-                                        <option selected>Choose option</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        <option selected>Choose destination</option>
+                                        @if(count(@$destination_port) > 0)
+                                        @foreach(@$destination_port as $k => $v)
+                                        <option value="{{ @$v->id }}">{{ @$v->name }}</option>
+                                        @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -391,7 +393,6 @@
                                     <button class="btn btn-primary text-white fw-semibold col-md-12">
                                         Update
                                     </button>
-
                                 </div>
                             </div>
                             @endif
@@ -448,19 +449,19 @@
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Contianer No.</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" disabled />
+                                    <input type="text" class="form-control" value="{{ @$list->container->container_no }}" disabled />
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Booking</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" disabled />
+                                    <input type="text" class="form-control" value="{{ @$list->container->booking_no }}" disabled />
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Shipping Line</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" disabled />
+                                    <input type="text" class="form-control" value="{{ @$list->container->shipping_line->name }}" disabled />
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -478,7 +479,7 @@
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Estimated Arrival</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" disabled />
+                                    <input type="text" class="form-control" value="{{ @$list->container->arrival }}" disabled />
                                 </div>
                             </div>
                         </div>
@@ -536,6 +537,10 @@
                                         </div>
                                     </div>
                                     @endforeach
+                                    @else
+                                    <div class="col-lg-12 pt-5">
+                                        <p class="text-center">No document found.</p>
+                                    </div>
                                     @endif
                                 </div>
                             </div>

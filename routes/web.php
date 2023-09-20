@@ -38,7 +38,7 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::get('/containers/{id}', [App\Http\Controllers\HomeController::class, 'container_detail'])->name('user-container-detail');
 	Route::get('/financial', [App\Http\Controllers\HomeController::class, 'financial'])->name('user-financial');
 	Route::post('/check-password', [App\Http\Controllers\HomeController::class, 'check_password'])->name('check-password');
-	Route::post('/assign-vehicle', [App\Http\Controllers\HomeController::class, 'assign_vehicle'])->name('assign-vehicle');
+	Route::post('/assign-vehicle', [App\Http\Controllers\HomeController::class, 'assign_vehicle'])->name('user-assign-vehicle');
 	Route::post('/money-transfer', [App\Http\Controllers\HomeController::class, 'money_transfer'])->name('money-transfer');
 });
 

@@ -12,7 +12,8 @@
         <div class="inner-container">
 
             <!-- Modal -->
-            <div class="modal fade  show" id="financialSheetPasswordModal" tabindex="-1"
+            @if(!\Session::has("success"))
+            <div class="modal fade show" id="financialSheetPasswordModal" tabindex="-1"
                 data-bs-backdrop="static" aria-labelledby="financialSheetPasswordModalLabel" aria-hidden="true">
                 <div class="modal-dialog rounded-5">
                     <div class="modal-content p-3">
@@ -22,18 +23,20 @@
                                 Financial Sheet Password</h1>
                         </div>
                         <div class="modal-body">
-                            <div class="row mt-4">
-                                <label for="password" class="col-md-4 fs-5 fw-bold">Password</label>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control shadow-lg" placeholder="Password" />
+                            <form method="POST" action="{{ url("user/check-password") }}" class="form">
+                                <div class="row mt-4">
+                                    <label for="password" class="col-md-4 fs-5 fw-bold">Password</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control shadow-lg" placeholder="Password" name="sheet_password" required />
+                                    </div>
                                 </div>
-                            </div>
-                            <a href="#" class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5"
-                                data-bs-dismiss="modal">Proceed</a>
+                                <button class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5">Proceed</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+            @endif
 
             <!-- Financial Status part -->
 
@@ -654,6 +657,33 @@
     <script>
         $(document).ready(() => {
             $('.selectjs').select2();
+
+            $(document).on("submit", ".form", function (event) {
+                event.preventDefault();
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                    success: function (res) {
+                        // res = JSON.parse(res);
+                        console.log(res);
+                        if (res.success == true) {
+                            toastr["success"](res.msg, "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            toastr["error"](res.msg, "Failed!");
+                        }
+                    }
+                });
+            });
         })
     </script>
     <script type="text/javascript">

@@ -64,6 +64,9 @@ class SystemConfigController extends Controller
         if ($check_username == 0) {
             if ($data['password'] == $data['cpassword']) {
                 $data['password'] = \Hash::make($data['password']);
+                if (!empty($data['sheet_password'])) {
+                    $data['sheet_password'] = \Hash::make($data['sheet_password']);
+                }
                 if (!empty($data['phone'])) {
                     $data['phone'] = $data['dial_code']." ".$data['phone'];
                 }
@@ -87,6 +90,9 @@ class SystemConfigController extends Controller
                 if (!empty($data['password'])) {
                     if ($data['password'] == $data['cpassword']) {
                         $data['password'] = \Hash::make($data['password']);
+                        if (!empty($data['sheet_password'])) {
+                            $data['sheet_password'] = \Hash::make($data['sheet_password']);
+                        }
                         if (!empty($data['phone'])) {
                             $data['phone'] = $data['dial_code']." ".$data['phone'];
                         }
@@ -100,6 +106,9 @@ class SystemConfigController extends Controller
                         return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
                     }
                 } else {
+                    if (!empty($data['sheet_password'])) {
+                        $data['sheet_password'] = \Hash::make($data['sheet_password']);
+                    }
                     if (!empty($data['phone'])) {
                         $data['phone'] = $data['dial_code']." ".$data['phone'];
                     }

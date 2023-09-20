@@ -37,6 +37,7 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::get('/containers', [App\Http\Controllers\HomeController::class, 'containers'])->name('user-containers');
 	Route::get('/containers/{id}', [App\Http\Controllers\HomeController::class, 'container_detail'])->name('user-container-detail');
 	Route::get('/financial', [App\Http\Controllers\HomeController::class, 'financial'])->name('user-financial');
+	Route::post('/check-password', [App\Http\Controllers\HomeController::class, 'check_password'])->name('check-password');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function(){

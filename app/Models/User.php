@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'AppPassword', 'main_user_id', 'level_id', 'admin_level_id', 'operator_level_id', 'destination_id', 'balance', 'role', 'surname', 'phone', 'address', 'company', 'fax', 'country', 'api_token', 'fcm_token'
+        'name', 'email', 'password', 'AppPassword', 'sheet_password', 'main_user_id', 'level_id', 'admin_level_id', 'operator_level_id', 'destination_id', 'balance', 'role', 'surname', 'phone', 'address', 'company', 'fax', 'country', 'api_token', 'fcm_token'
     ];
 
     /**

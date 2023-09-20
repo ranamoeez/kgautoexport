@@ -169,10 +169,10 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-12 mb-4">
+                                                    <div class="col-md-6 mb-4">
                                                         <div class="row">
-                                                            <label for="" class="col-md-2">User Level</label>
-                                                            <div class="col-md-10">
+                                                            <label for="" class="col-md-4">User Level</label>
+                                                            <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
                                                                     <select class="form-select level" name="level_id">
                                                                         @if(count(@$level) > 0)
@@ -183,6 +183,28 @@
                                                                     </select>
                                                                 </div>
                                                                 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-4">
+                                                        <!-- Password -->
+                                                        <div class="row">
+                                                            <label for="" class="col-md-4">Sheet Password</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group shadow-lg rounded-4">
+                                                                    <div class="input-group-text  rounded-start-4">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                            viewBox="0 0 24 24" stroke-width="1.5"
+                                                                            stroke="#194AF9" class="w-6 h-6">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                                d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                                                                        </svg>
+                                                                    </div>
+                                                                    <input type="password" name="sheet_password"
+                                                                        class="py-2 form-control rounded-end-4"
+                                                                        placeholder="Financial Sheet Password" id="spass" required />
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -649,6 +671,7 @@
                 $("#country option[value='']").attr("selected", true);
                 $("#user-phone").val('');
                 $(".level option[value='']").attr("selected", true);
+                $("#spass").attr("required", true);
                 $("#upass").attr("required", true);
                 $("#ucpass").attr("required", true);
 
@@ -683,6 +706,7 @@
                                 $("#user-phone").val("");
                             }
                             $(".level option[value="+res.data.level_id+"]").attr("selected", true);
+                            $("#spass").attr("required", false);
                             $("#upass").attr("required", false);
                             $("#ucpass").attr("required", false);
 

@@ -296,6 +296,19 @@ class HomeController extends Controller
         return view('user.financial', $data);
     }
 
+    public function check_password(Request $request)
+    {
+        $password = $request->sheet_password;
+
+        if (\Hash::check($password, \Auth::user()->sheet_password)) {
+            \Session::put("success", "1");
+
+            return json_encode(["success" => true, "msg" => "Password is correct!"]);
+        } else {
+            return json_encode(["success" => false, "msg" => "Password is incorrect!"]);
+        }
+    }
+
     public function post_login(Request $request)
     {
         if(Auth::attempt(['name' => $request->username, 'password' => $request->password])){ 

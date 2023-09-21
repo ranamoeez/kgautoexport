@@ -40,6 +40,9 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::post('/check-password', [App\Http\Controllers\HomeController::class, 'check_password'])->name('check-password');
 	Route::post('/assign-vehicle', [App\Http\Controllers\HomeController::class, 'assign_vehicle'])->name('user-assign-vehicle');
 	Route::post('/money-transfer', [App\Http\Controllers\HomeController::class, 'money_transfer'])->name('money-transfer');
+	Route::post('/add-post', [App\Http\Controllers\HomeController::class, 'add_post'])->name('add-post');
+	Route::post('/add-notes', [App\Http\Controllers\HomeController::class, 'add_notes'])->name('add-notes');
+	Route::post('/update-destination', [App\Http\Controllers\HomeController::class, 'update_destination'])->name('update-destination');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function(){
@@ -215,6 +218,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/system-configuration/auction-location/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auction_location'])->name('edit-auction-location');
 	Route::post('/system-configuration/auction-location/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_auction_location'])->name('update-auction-location');
 	Route::get('/system-configuration/auction-location/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_auction_location'])->name('delete-auction-location');
+
+	Route::get('/system-configuration/posts', [App\Http\Controllers\Admin\SystemConfigController::class, 'posts'])->name('posts');
 
 	Route::get('/system-configuration/mail-templates', [App\Http\Controllers\Admin\SystemConfigController::class, 'mail_templates'])->name('mail-templates');
 	Route::post('/system-configuration/mail-templates/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_mail_templates'])->name('add-mail-templates');

@@ -31,6 +31,7 @@ use App\Models\AdminLevel;
 use App\Models\OperatorLevel;
 use App\Models\FineType;
 use App\Models\TransFineType;
+use App\Models\Post;
 use Auth;
 
 class SystemConfigController extends Controller
@@ -1195,6 +1196,26 @@ class SystemConfigController extends Controller
     {
         AuctionLocation::find($id)->delete();
         return json_encode(["success"=>true, "msg"=>"Auction location deleted successfully!"]);
+    }
+
+    // Posts for sale Functions
+
+    public function posts(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $posts = Post::orderBy('id', 'DESC')->with("user", "vehicle");
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $posts = $posts->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $posts = $posts->limit(10)->get();
+        $data['posts'] = $posts;
+        $data['user_levels'] = Level::all();
+        return view('admin.system-configuration.posts', $data);
     }
 
     // Mail Templates Functions

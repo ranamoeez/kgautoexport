@@ -16,6 +16,7 @@ use App\Models\LoadingPort;
 use App\Models\ContStatus;
 use App\Models\MoneyTransfer;
 use App\Models\DestinationPort;
+use App\Models\Post;
 use Auth;
 use Storage;
 use QuickBooksOnline\API\DataService\DataService;
@@ -151,6 +152,42 @@ class HomeController extends Controller
         $data['destination_port'] = DestinationPort::all();
 
         return view('user.vehicle-detail', $data);
+    }
+
+    public function add_post(Request $request)
+    {
+        $data = $request->all();
+
+        if ($data['amount'] == "0") {
+            return json_encode(["success" => false, "msg" => "Amount should be greater than zero!"]);
+        }
+
+        Post::create($data);
+
+        return json_encode(["success" => true, "msg" => "Post is added successfully!"]);
+    }
+
+    public function add_notes(Request $request)
+    {
+        $user_notes = $request->notes_user;
+        $notes = $request->notes_document;
+
+        Vehicle::where("id", $request->vehicle_id)->update(['notes_user' => $user_notes, "notes_document" => $notes]);
+
+        return json_encode(["success" => true, "msg" => "Notes updated successfully!"]);
+    }
+
+    public function update_destination(Request $request)
+    {
+        $destination_port = $request->destination_port_id;
+
+        if (empty($destination_port)) {
+            return json_encode(["success" => false, "msg" => "Please select any destination!"]);
+        }
+
+        Vehicle::where("id", $request->vehicle_id)->update(['destination_port_id' => $destination_port]);
+
+        return json_encode(["success" => true, "msg" => "Destination port updated successfully!"]);
     }
 
     public function containers(Request $request)

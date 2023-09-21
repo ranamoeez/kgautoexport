@@ -519,7 +519,7 @@
                                     <label for="password" class="col-md-4 fs-5 fw-bold">Upload</label>
                                     <div class="col-md-8">
                                         <div class="d-flex shadow bg-white rounded" role="upload">
-                                            <input type="file" class="form-control me-2 bg-white border-0 rounded fs-5" aria-label="upload" id="images">
+                                            <input type="file" class="form-control me-2 bg-white border-0 rounded fs-5" aria-label="upload" name="file" id="images">
                                             <button class="btn btn-primary rounded upload-images" type="button">
                                                 <div class="d-flex align-items-center">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
@@ -620,6 +620,7 @@
                         // res = JSON.parse(res);
                         console.log(res);
                         if (res.success == true) {
+                            $("#requestPickupModal").modal("hide");
                             $("#requestPickupConfirmModel").modal("show");
 
                             setTimeout(function () {

@@ -119,6 +119,10 @@
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Auction location
                 </a>
+                <a href="{{ url('admin/system-configuration/posts') }}"
+                    class="fw-semibold text-dark text-decoration-none fs-6">
+                    Posts for sale
+                </a>
             </div>
         </div>
     </div>

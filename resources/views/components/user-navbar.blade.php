@@ -53,8 +53,10 @@
                 <img src="{{ asset('assets/profileImage.jpg') }}" class="w-100 rounded-circle" alt="user-image" />
             </button>
             <ul class="dropdown-menu dropdown-menu-end bg-white" aria-labelledby="dropdownMenuButton1">
+                @if(\Auth::user()->role == "2")
                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#add-new-user-modal"
                         href="javascript:void(0);">Add New Sub-user</a></li>
+                @endif
                 <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf              
@@ -75,7 +77,7 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ url('user/users/add') }}" method="POST" class="form">
+                        <form action="{{ url('user/add-sub-user') }}" method="POST" class="user-form">
                             @csrf
                             <div class="row mt-4">
 

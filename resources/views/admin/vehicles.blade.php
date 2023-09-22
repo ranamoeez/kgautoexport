@@ -95,8 +95,9 @@
                     <label for="pay_status" class="fw-semibold">Payment Status</label>
                     <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
                         <option value="all" @if(@$paystatus == "all") selected @endif>All</option>
-                        <option value="1" @if(@$pay_status == "1") selected @endif>Paid</option>
-                        <option value="0" @if(@$pay_status == "0") selected @endif>Unpaid</option>
+                        <option value="paid" @if(@$pay_status == "paid") selected @endif>Paid</option>
+                        <option value="partly paid" @if(@$pay_status == "partly paid") selected @endif>Partly paid</option>
+                        <option value="unpaid" @if(@$pay_status == "unpaid") selected @endif>Unpaid</option>
                     </select>
                 </div>
             </form>

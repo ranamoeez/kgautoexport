@@ -21,6 +21,7 @@
                         </h4>
                     </div>
                     <!-- Assigned By -->
+                    @if(\Auth::user()->role == "2")
                     <div class="d-flex justify-content-end">
                         <div class="mt-6 px-14">
                             <h4 class="fw-bold fs-md-13 fs-lg-25">Assigned By:</h4>
@@ -40,6 +41,7 @@
                             </ul>
                         </div>
                     </div>
+                    @endif
                 </div>
 
 
@@ -200,9 +202,15 @@
                                             <div class="row">
                                                 <div class="col mt-3 text-fs-3 shipment-details">
                                                     <ul>
+                                                        @php
+                                                            $user_id = auth()->user()->id;
+                                                            if (auth()->user()->role == "3") {
+                                                                $user_id = auth()->user()->main_user_id;
+                                                            }
+                                                        @endphp
                                                         @if(count(@$value->buyers) > 0)
                                                         @foreach(@$value->buyers as $k => $v)
-                                                        @if(@$v->user->id == auth()->user()->id)
+                                                        @if(@$v->user->id == @$user_id)
                                                         Buyer:<span class="fw-bold"> {{ @$v->user->surname }}</span>
                                                         @foreach($v->vehicles as $ke => $val)
                                                         <li class="list-unstyled">

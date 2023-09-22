@@ -12,6 +12,7 @@
         <div class="inner-container">
             <div class="mt-5">
                 <!-- Assigned By -->
+                @if(\Auth::user()->role == "2")
                 <div class="d-flex justify-content-end">
                     <div class="mt-6 px-14">
                         <h4 class="fw-bold fs-md-13 fs-lg-25">Assigned By:</h4>
@@ -31,6 +32,7 @@
                         </ul>
                     </div>
                 </div>
+                @endif
 
                 <div class="mt-5">
                     <div class="d-flex justify-content-between mt-3">
@@ -53,7 +55,9 @@
                                     <th scope="col">Fuel</th>
                                     <th scope="col">Terminal</th>
                                     <th scope="col">Comment</th>
+                                    @if(\Auth::user()->role == "2")
                                     <th scope="col"></th>
+                                    @endif
                                 </thead>
                                 <tbody>
                                     @if(count(@$admin) > 0)
@@ -190,6 +194,7 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        @if(\Auth::user()->role == "2")
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                             <div class="rounded-circle bg-primary p-1 user-icon"
                                                 data-bs-toggle="modal" data-bs-target="#sendUserModel1_{{ $key }}">
@@ -234,6 +239,7 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        @endif
                                     </tr>
                                     @endforeach
                                     @else
@@ -463,9 +469,11 @@
                 </div>
             </div>
 
+            @if(\Auth::user()->role == "2")
             <button type="button" id="open-pickup" class="rounded-circle bg-primary p-4 border border-0 floating-button">
                 <img src="{{ asset('/assets/request_car.png') }}" alt="request" />
             </button>
+            @endif
 
             <!-- Modal -->
             <div class="modal fade modal-lg" id="requestPickupModal" tabindex="-1"
@@ -549,7 +557,7 @@
                     <div class="modal-content p-3">
                         <div class="modal-body">
                             <div class="border-0">
-                                <img src="/assets/like.png" alt="Like" />
+                                <img src="{{ asset('assets/like.png') }}" alt="Like" />
                             </div>
                             <div class="card-body request-pickup-popup">
                                 <div class="mt-4">

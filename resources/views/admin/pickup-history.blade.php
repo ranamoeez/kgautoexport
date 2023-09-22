@@ -291,7 +291,7 @@
                             @endforeach
                             @else
                             <tr id="row" class="align-middle overflow-hidden shadow mb-2">
-                                <td class="text-center" colspan="8">
+                                <td class="text-center" colspan="11">
                                     <p>No record found</p>
                                 </td>
                             </tr>

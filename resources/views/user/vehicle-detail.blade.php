@@ -44,10 +44,12 @@
                         </button>
                     </div>
                     <div class="col-md mb-2 mb-md-0">
+                        @if(\Auth::user()->role == "2")
                         <button class="text-nowrap btn btn-primary fw-semibold text-fs-3 border-0"
-                            data-bs-toggle="modal" data-bs-target="#requestPickupModal">
+                            data-bs-toggle="modal" data-bs-target="#requestPickupModal" @if(@$list->vehicle->status_id !== 11) disabled @endif>
                             Request Pickup
                         </button>
+                        @endif
 
                         <!-- Modal -->
                         <div class="modal fade" id="requestPickupModal" tabindex="-1"
@@ -119,10 +121,12 @@
                         </div>
                     </div>
                     <div class="col-md mb-2 mb-md-0">
+                        @if(\Auth::user()->role == "2")
                         <button class="text-nowrap btn btn-primary fw-semibold text-fs-3 border-0"
                             data-bs-toggle="modal" data-bs-target="#postForSaleModel">
                             Post for Sale
                         </button>
+                        @endif
 
                         <!-- Modal -->
                         <div class="modal fade" id="postForSaleModel" tabindex="-1"
@@ -186,9 +190,11 @@
                                                 <input type="text" class="border border-1 mb-4 p-2 rounded-2 shadow w-100 text-fs-3" value="{{ @$list->vehicle->notes_user }}" name="notes_user" />
                                                 <h4 class="fw-semibold text-fs-3">Personal Notes</h4>
                                                 <input type="text" class="border border-1 mb-4 p-2 rounded-2 shadow w-100 text-fs-3" value="{{ @$list->vehicle->notes_document }}" name="notes_document" />
+                                                @if(\Auth::user()->role == "2")
                                                 <button class="btn btn-primary text-white fw-semibold col-md-4">
                                                     Update
                                                 </button>
+                                                @endif
                                             </form>
                                         </div>
                                     </div>
@@ -248,9 +254,11 @@
                                                 <input type="text" class="border border-1 mb-4 p-2 rounded-2 shadow w-100 text-fs-3" value="{{ @$list->vehicle->notes_user }}" name="notes_user" />
                                                 <h4 class="fw-semibold text-fs-3">Personal Notes</h4>
                                                 <input type="text" class="border border-1 mb-4 p-2 rounded-2 shadow w-100 text-fs-3" value="{{ @$list->vehicle->notes_document }}" name="notes_document" />
+                                                @if(\Auth::user()->role == "2")
                                                 <button class="btn btn-primary text-white fw-semibold col-md-4">
                                                     Update
                                                 </button>
+                                                @endif
                                             </form>
                                         </div>
                                     </div>
@@ -487,7 +495,7 @@
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Measurement</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" disabled />
+                                    <input type="text" class="form-control" value="{{ @$list->container->measurement->name }}" disabled />
                                 </div>
                             </div>
                             <div class="row mt-4">

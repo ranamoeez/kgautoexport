@@ -43,6 +43,7 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::post('/add-post', [App\Http\Controllers\HomeController::class, 'add_post'])->name('add-post');
 	Route::post('/add-notes', [App\Http\Controllers\HomeController::class, 'add_notes'])->name('add-notes');
 	Route::post('/update-destination', [App\Http\Controllers\HomeController::class, 'update_destination'])->name('update-destination');
+	Route::post('/add-sub-user', [App\Http\Controllers\HomeController::class, 'add_sub_user'])->name('add-sub-user');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function(){

@@ -112,6 +112,29 @@ class HomeController extends Controller
         }
     }
 
+    public function add_sub_user(Request $request)
+    {
+        $data = $request->all();
+        $check_username = User::where("name", $data['name'])->count();
+        if ($check_username == 0) {
+            if ($data['password'] == $data['cpassword']) {
+                $data['password'] = \Hash::make($data['password']);
+                $data['role'] = "3";
+                $data['main_user_id'] = Auth::user()->id;
+                if (!empty($data['phone'])) {
+                    $data['phone'] = $data['dial_code']." ".$data['phone'];
+                }
+                User::create($data);
+
+                return json_encode(["success"=>true, "msg"=>"Sub user added successfully!", "action"=>"reload"]);
+            } else {
+                return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+            }
+        } else {
+            return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
+        }
+    }
+
     public function add_pickup_request(Request $request)
     {
         $data = $request->all();
@@ -135,12 +158,16 @@ class HomeController extends Controller
     public function vehicles()
     {
         $data['type'] = "vehicles";
-        $data['super_user'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "super_user")->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->get();
-        $data['admin'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->get();
-        $data['sub_buyers'] = User::where("main_user_id", \Auth::user()->id)->get();
+        $user_id = Auth::user()->id;
+        if (Auth::user()->role == "3") {
+            $user_id = Auth::user()->main_user_id;
+        }
+        $data['super_user'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "super_user")->where('user_id', $user_id)->orderBy("id", "DESC")->get();
+        $data['admin'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->where('user_id', $user_id)->orderBy("id", "DESC")->get();
+        $data['sub_buyers'] = User::where("main_user_id", $user_id)->get();
         $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {
             $q->where("status_id", "11");
-        })->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->get();
+        })->where('user_id', $user_id)->orderBy("id", "DESC")->get();
         return view('user.vehicles', $data);
     }
 
@@ -148,7 +175,7 @@ class HomeController extends Controller
     {
         $data['type'] = "vehicles";
 
-        $data['list'] = AssignVehicle::with('vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.shipping_line')->where('id', $id)->first();
+        $data['list'] = AssignVehicle::with('vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.shipping_line', 'container.measurement')->where('id', $id)->first();
         $data['destination_port'] = DestinationPort::all();
 
         return view('user.vehicle-detail', $data);
@@ -195,6 +222,9 @@ class HomeController extends Controller
         $data['type'] = "containers";
 
         $user_id = Auth::user()->id;
+        if (Auth::user()->role == "3") {
+            $user_id = Auth::user()->main_user_id;
+        }
         $admin = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
             $q->where("user_id", $user_id);
             $q->where("added_by", "admin");

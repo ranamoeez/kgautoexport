@@ -54,5 +54,46 @@
         </main>
     </div>
 </body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on("submit", ".user-form", function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: $(this).attr("method"),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                    success: function (res) {
+                        // res = JSON.parse(res);
+                        console.log(res);
+                        if (res.success == true) {
+                            toastr["success"](res.msg, "Completed!");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            toastr["error"](res.msg, "Failed!");
+                        }
+                    }
+                });
+            });
+            
+            $(document).on("click", ".iti__country", function () {
+                $("#top_dial_code").val($(".iti__selected-dial-code").first().text().trim());
+            });
+        });
+    </script>
     @yield('script')
+    <script type="text/javascript">
+        var input = document.querySelector("#phone");
+        window.intlTelInput(input, {
+            separateDialCode: true,
+            excludeCountries: ["in", "il"],
+            preferredCountries: ["jo", "iq"]
+        });
+    </script>
 </html>

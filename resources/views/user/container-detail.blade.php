@@ -158,7 +158,7 @@
                                 <div class="row mt-4">
                                     <label for="" class="col-md-2 fw-bold">Consignee</label>
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" disabled />
+                                        <input type="text" class="form-control" value="{{ @$container->consignee->company_name }}" disabled />
                                     </div>
                                 </div>
                                 <div class="row mt-4">
@@ -174,9 +174,9 @@
                                     </div>
                                 </div>
                                 <div class="row mt-4">
-                                    <label for="" class="col-md-2 fw-bold">Date of sail</label>
+                                    <label for="" class="col-md-2 fw-bold">Departure</label>
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" disabled />
+                                        <input type="text" class="form-control" value="{{ @$container->departure }}" disabled />
                                     </div>
                                 </div>
                                 <div class="row mt-4">

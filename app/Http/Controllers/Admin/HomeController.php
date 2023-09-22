@@ -52,7 +52,7 @@ class HomeController extends Controller
         $data['type'] = "vehicles";
         $data['page'] = '1';
         $filter = [];
-        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas('vehicle');
+        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->whereHas('vehicle');
         if (!empty($request->terminal) && $request->terminal !== 'all') {
         	$data['terminal'] = $request->terminal;
             $terminal = $request->terminal;
@@ -73,12 +73,8 @@ class HomeController extends Controller
         	$search = $request->search;
             $filter['search'] = $search;
         }
-        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
-        	$data['pay_status'] = $request->pay_status;
-            $filter['pay_status'] = $request->pay_status;
-        }
         if (!empty($filter)) {
-            $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas('vehicle', function ($query) use($filter) {
+            $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->whereHas('vehicle', function ($query) use($filter) {
                 if (!empty($filter['terminal'])) {
                     $query->where('terminal_id', $filter['terminal']);
                 }
@@ -101,14 +97,15 @@ class HomeController extends Controller
                         ->orWhere('notes', 'LIKE', '%'.$search.'%');
                     });
                 }
-                if (!empty($filter['pay_status']) || @$filter['pay_status'] == "0") {
-                    $query->where('all_paid', $filter['pay_status']);
-                }
             });
         }
         if (!empty($request->buyer) && $request->buyer !== 'all') {
             $data['buyer'] = $request->buyer;
             $vehicles = $vehicles->where('user_id', $request->buyer);
+        }
+        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
+            $data['pay_status'] = $request->pay_status;
+            $vehicles = $vehicles->where('payment_status', $request->pay_status);
         }
         if (!empty($request->page)) {
             if ($request->page > 1) {
@@ -250,21 +247,16 @@ class HomeController extends Controller
 
         if($request->isMethod('post')){
             $data = $request->all();
-            $buyer = AssignVehicle::where('id', $id)->first()->user_id;
-            if ($data['buyer_id'] !== $buyer) {
-                AssignVehicle::where('id', $id)->update(["user_id" => $data['buyer_id']]);
-                $vehicle_id = AssignVehicle::where('id', $id)->first()->vehicle_id;
-                if (\Auth::user()->id == "1") {
-                    $role = "super_admin";
-                } else {
-                    $role = "admin";
-                }
-                Vehicle::where('id', $vehicle_id)->update(["assigned_by" => $role]);
-                if ($data['buyer_id'] !== "1") {
-                    $fcm_token = User::where("id", $data['buyer_id'])->first()->fcm_token;
-                    $this->send_noti($fcm_token, "add-vehicle");
-                }
-            }
+            // $buyer = AssignVehicle::where('id', $id)->first()->user_id;
+            // if ($data['buyer_id'] !== $buyer) {
+            //     AssignVehicle::where('id', $id)->update(["user_id" => $data['buyer_id']]);
+            //     $vehicle_id = AssignVehicle::where('id', $id)->first()->vehicle_id;
+            //     TransactionsHistory::where('user_id', $buyer)->where('vehicle_id', $vehicle_id)->update(["user_id" => $data['buyer_id']]);
+            //     if ($data['buyer_id'] !== "1") {
+            //         $fcm_token = User::where("id", $data['buyer_id'])->first()->fcm_token;
+            //         $this->send_noti($fcm_token, "add-vehicle");
+            //     }
+            // }
             $id = AssignVehicle::where('id', $id)->first()->vehicle_id;
             if ($request->hasFile('images')) {
                 $files = [];

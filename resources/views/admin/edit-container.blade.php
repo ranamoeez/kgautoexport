@@ -636,6 +636,7 @@
         });
 
         $(document).on("click", "#send-buyer", function () {
+            $('.center-body').css('display', 'block');
             $.ajax({
                 type: 'GET',
                 url: '{{ url("admin/send-to-cont-buyer", @$container->id) }}',
@@ -646,6 +647,7 @@
                     } else {
                         toastr["error"](data.msg, "Failed!");
                     }
+                    $('.center-body').css('display', 'none');
                 }
             });
         });

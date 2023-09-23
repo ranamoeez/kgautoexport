@@ -42,7 +42,7 @@ class SystemConfigController extends Controller
     {
     	$data['type'] = "system-configuration";
         $data['page'] = '1';
-    	$users = User::with('user_level')->where('role', '2');
+    	$users = User::with('user_level')->where('role', '2')->orWhere('role', '3');
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;

@@ -247,7 +247,7 @@ class HomeController extends Controller
 
         if($request->isMethod('post')){
             $data = $request->all();
-            // $buyer = AssignVehicle::where('id', $id)->first()->user_id;
+            $buyer = AssignVehicle::where('id', $id)->first()->user_id;
             // if ($data['buyer_id'] !== $buyer) {
             //     AssignVehicle::where('id', $id)->update(["user_id" => $data['buyer_id']]);
             //     $vehicle_id = AssignVehicle::where('id', $id)->first()->vehicle_id;
@@ -267,7 +267,7 @@ class HomeController extends Controller
                     $image = new VehicleImage;
                     $image->vehicle_id = $id;
                     $image->filesize = $value->getSize();
-                    $image->owner_id = $data['buyer_id'];
+                    $image->owner_id = $buyer;
                     $image->title = '';
                     $image->filename = $filename;
                     $image->filepath = 'storage/app/';

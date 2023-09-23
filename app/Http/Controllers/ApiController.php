@@ -256,30 +256,67 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                $pickup_requests = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle');
+                $user = User::with("destination")->where('api_token', $token)->first();
 
-                if (!empty($request->client)) {
-                    $client = $request->client;
-                    $pickup_requests = $pickup_requests->whereHas('user', function ($q) use($client)
+                if ($user->role == "4") {
+                    
+                    $pickup_requests = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle')->whereHas('vehicle', function ($q) use($client)
                     {
-                        $q->where("surname", $client);
+                        $q->where("destination_port_id", $user->destination_id);
                     });
-                }
-                if (!empty($request->start_date)) {
-                    $pickup_requests = $pickup_requests->where("created_at", ">", $request->start_date);
-                }
-                if (!empty($request->end_date)) {
-                    $pickup_requests = $pickup_requests->where("created_at", "<", $request->end_date);
-                }
-                if (!empty($request->status)) {
-                    $pickup_requests = $pickup_requests->where("status", $request->status);
-                }
 
-                $pickup_requests = $pickup_requests->where('user_id', $id)->get();
+                    if (!empty($request->client)) {
+                        $client = $request->client;
+                        $pickup_requests = $pickup_requests->whereHas('user', function ($q) use($client)
+                        {
+                            $q->where("surname", $client);
+                        });
+                    }
+                    if (!empty($request->start_date)) {
+                        $pickup_requests = $pickup_requests->where("created_at", ">", $request->start_date);
+                    }
+                    if (!empty($request->end_date)) {
+                        $pickup_requests = $pickup_requests->where("created_at", "<", $request->end_date);
+                    }
+                    if (!empty($request->status)) {
+                        $pickup_requests = $pickup_requests->where("status", $request->status);
+                    }
 
-                foreach ($pickup_requests as $key => $value) {
-                    $transaction = AssignVehicle::where('user_id', $id)->where("vehicle_id", $value->vehicle_id)->first();
-                    $pickup_requests[$key]['payment_status'] = @$transaction->payment_status;
+                    $pickup_requests = $pickup_requests->where('user_id', $id)->get();
+
+                    foreach ($pickup_requests as $key => $value) {
+                        $transaction = AssignVehicle::where('user_id', $id)->where("vehicle_id", $value->vehicle_id)->first();
+                        $pickup_requests[$key]['payment_status'] = @$transaction->payment_status;
+                    }
+
+                } else {
+
+                    $pickup_requests = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle');
+
+                    if (!empty($request->client)) {
+                        $client = $request->client;
+                        $pickup_requests = $pickup_requests->whereHas('user', function ($q) use($client)
+                        {
+                            $q->where("surname", $client);
+                        });
+                    }
+                    if (!empty($request->start_date)) {
+                        $pickup_requests = $pickup_requests->where("created_at", ">", $request->start_date);
+                    }
+                    if (!empty($request->end_date)) {
+                        $pickup_requests = $pickup_requests->where("created_at", "<", $request->end_date);
+                    }
+                    if (!empty($request->status)) {
+                        $pickup_requests = $pickup_requests->where("status", $request->status);
+                    }
+
+                    $pickup_requests = $pickup_requests->where('user_id', $id)->get();
+
+                    foreach ($pickup_requests as $key => $value) {
+                        $transaction = AssignVehicle::where('user_id', $id)->where("vehicle_id", $value->vehicle_id)->first();
+                        $pickup_requests[$key]['payment_status'] = @$transaction->payment_status;
+                    }
+
                 }
             
                 return $this->sendResponse($pickup_requests, 'Pickup requests retrieved successfully.');

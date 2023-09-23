@@ -43,9 +43,20 @@
             <div class="card financial-card-header border border-0">
                 <div class="card-body" style="margin-bottom: 100px">
                     <h3 class="text-white fw-bold fs-2">Great Job, {{ \Auth::user()->surname }}!</h3>
+                    @php
+                        $whole = $user->user_level->due_payment_limit;
+                        $given = $due_payments;
+                        $percentage = ($given / $whole) * 100;
+                    @endphp
                     <h4 class="text-white px-5 text-fs-5 fw-bold">
                         Your Account Health is
+                        @if($percentage < 20)
                         <span class="text-exceed">exceeding 80%</span>
+                        @elseif($percentage >= 50 && $percentage < 80)
+                        <span style="color: orange;">50%</span>
+                        @elseif($percentage < 50)
+                        <span class="text-danger">less than 40%</span>
+                        @endif
                     </h4>
                     <h5 class="text-white px-5 text-fs-3">
                         To maintain a healthy account Status, ensure timely payment of

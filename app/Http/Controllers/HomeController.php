@@ -428,6 +428,7 @@ class HomeController extends Controller
         $data['due_payments'] = $all_due_payments;
         $data['previous'] = $previous;
         $data['balance'] = User::where("id", Auth::user()->id)->first()->balance;
+        $data['user'] = User::with("user_level")->where("id", Auth::user()->id)->first();
         $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->get();
         return view('user.financial', $data);
     }

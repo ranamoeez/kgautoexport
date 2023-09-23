@@ -292,6 +292,7 @@
                             <th scope="col" class="fw-bold">VIN</th>
                             <th scope="col" class="fw-bold">Buyer</th>
                             <th scope="col" class="fw-bold">Total Paid</th>
+                            <th scope="col" class="fw-bold">Total Unpaid</th>
                             <th scope="col" class="fw-bold">Payment Status</th>
                             @if(empty($auth_user->admin_level->access) || @in_array("5.2", json_decode($auth_user->admin_level->access)))
                             <th scope="col"></th>
@@ -320,8 +321,13 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="fw-bold text-fs-3">
+                                    <span class="fw-bold text-fs-3 text-success">
                                         ${{ @$value->total_paid }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-fs-3 text-danger">
+                                        ${{ @$value->total_unpaid }}
                                     </span>
                                 </td>
                                 <td>

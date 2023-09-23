@@ -632,6 +632,18 @@ class HomeController extends Controller
             $transaction_history[$key]['total_paid'] = $all_transactions->sum("amount");
             $transaction_history[$key]['all'] = $all_transactions->where("type", "!=", "init")->get();
             $transaction_history[$key]['payment_status'] = AssignVehicle::where("vehicle_id", $value->vehicle_id)->where("user_id", $value->user_id)->first()->payment_status;
+
+            $auction_price = Vehicle::where("id", $value->vehicle_id)->first()->auction_price;
+            $towing_price = Vehicle::where("id", $value->vehicle_id)->first()->towing_price;
+            $occean_freight = Vehicle::where("id", $value->vehicle_id)->first()->occean_freight;
+            $fines = Fine::where("vehicle_id", $value->vehicle_id)->sum('amount');
+            $get_vehicle = Vehicle::with("buyer.user_level", "destination_port")->where("id", $value->vehicle_id)->first();
+            $company_fee = $get_vehicle->buyer->user_level->company_fee;
+            $unloading_fee = $get_vehicle->destination_port->unloading_fee;
+
+            $total_unpaid = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+
+            $transaction_history[$key]['total_unpaid'] = $total_unpaid - (int)$all_transactions->sum("amount");
         }
 
         $data['transaction_history'] = $transaction_history;

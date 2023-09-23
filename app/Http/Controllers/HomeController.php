@@ -17,6 +17,7 @@ use App\Models\ContStatus;
 use App\Models\MoneyTransfer;
 use App\Models\DestinationPort;
 use App\Models\Post;
+use App\Models\Fine;
 use Auth;
 use Storage;
 use QuickBooksOnline\API\DataService\DataService;
@@ -370,6 +371,25 @@ class HomeController extends Controller
                       ->orWhere('type', 'draft_expenses');
             })->get();
             $vehicle_cost[$key]['payment_status'] = AssignVehicle::where("vehicle_id", $value->vehicle_id)->where("user_id", $value->user_id)->first()->payment_status;
+
+            $auction_price = Vehicle::where("id", $value->vehicle_id)->first()->auction_price;
+            $fines = 0;
+            $all_fines = Fine::where("vehicle_id", $value->vehicle_id)->get();
+            if (count($all_fines) > 0) {
+                foreach ($all_fines as $k => $v) {
+                    if ($v->type == "auction" || $v->type == "draft_expense") {
+                        $fines += $v->amount;
+                    }
+                }
+            }
+
+            $total_unpaid = (int)$auction_price + (int)$fines;
+
+            $vehicle_cost[$key]['total_unpaid'] = $total_unpaid - (int)$all_transactions->where(function ($query) {
+                $query->where('type', 'auction_price')
+                      ->orWhere('type', 'auction_fines')
+                      ->orWhere('type', 'draft_expenses');
+            })->sum("amount");
         }
 
         $data['vehicle_cost'] = $vehicle_cost;
@@ -394,6 +414,31 @@ class HomeController extends Controller
                       ->orWhere('type', 'occean_freight');
             })->sum("amount");
             $transportation[$key]['payment_status'] = AssignVehicle::where("vehicle_id", $value->vehicle_id)->where("user_id", $value->user_id)->first()->payment_status;
+
+            $towing_price = Vehicle::where("id", $value->vehicle_id)->first()->towing_price;
+            $occean_freight = Vehicle::where("id", $value->vehicle_id)->first()->occean_freight;
+            $get_vehicle = Vehicle::with("buyer.user_level", "destination_port")->where("id", $value->vehicle_id)->first();
+            $company_fee = $get_vehicle->buyer->user_level->company_fee;
+            $unloading_fee = $get_vehicle->destination_port->unloading_fee;
+            $fines = 0;
+            $all_fines = Fine::where("vehicle_id", $value->vehicle_id)->get();
+            if (count($all_fines) > 0) {
+                foreach ($all_fines as $k => $v) {
+                    if ($v->type == "transaction") {
+                        $fines += $v->amount;
+                    }
+                }
+            }
+
+            $total_unpaid = (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+
+            $transportation[$key]['total_unpaid'] = $total_unpaid - (int)$all_transactions->where(function ($query) {
+                $query->where('type', 'company_fee')
+                      ->orWhere('type', 'towing_price')
+                      ->orWhere('type', 'unloading_fee')
+                      ->orWhere('type', 'trans_fines')
+                      ->orWhere('type', 'occean_freight');
+            })->sum("amount");
         }
 
         $data['transportation'] = $transportation;

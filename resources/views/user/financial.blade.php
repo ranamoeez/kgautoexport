@@ -232,6 +232,7 @@
                                     <th scope="col">VIN</th>
                                     <th scope="col">Buyer</th>
                                     <th scope="col">Total Paid</th>
+                                    <th scope="col">Total Unpaid</th>
                                     <th scope="col">Payment Status</th>
                                     <th scope="col"></th>
                                 </thead>
@@ -250,8 +251,13 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <span class="fw-bold text-fs-3">
+                                            <span class="fw-bold text-fs-3 text-success">
                                                 ${{ @$value->total_paid }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-fs-3 text-danger">
+                                                ${{ @$value->total_unpaid }}
                                             </span>
                                         </td>
                                         <td>
@@ -316,6 +322,7 @@
                                     <th scope="col">VIN</th>
                                     <th scope="col">Buyer</th>
                                     <th scope="col">Total Paid</th>
+                                    <th scope="col">Total Unpaid</th>
                                     <th scope="col">Payment Status</th>
                                 </thead>
                                 <tbody>
@@ -333,8 +340,13 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <span class="fw-bold text-fs-3">
+                                            <span class="fw-bold text-fs-3 text-success">
                                                 ${{ @$value->total_paid }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-fs-3 text-danger">
+                                                ${{ @$value->total_unpaid }}
                                             </span>
                                         </td>
                                         <td>

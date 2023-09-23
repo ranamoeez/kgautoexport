@@ -14,6 +14,7 @@ use App\Models\Status;
 use App\Models\AssignVehicle;
 use App\Models\UserLoginLog;
 use App\Models\ContainerVehicle;
+use App\Models\DestinationPort;
 use Validator;
 use Storage;
 
@@ -130,7 +131,7 @@ class ApiController extends Controller
             if ($check_user > 0) {
                 $user_id = User::where('api_token', $token)->first()->id;
 
-                $sub_users = User::where('role', '3')->where('main_user_id', $user_id)->orderBy('id', 'DESC')->limit(100)->get();
+                $sub_users = User::where('role', '3')->where('main_user_id', $user_id)->orderBy('id', 'DESC')->get();
             
                 return $this->sendResponse($sub_users, 'Sub Users retrieved successfully.');
             } else {
@@ -555,6 +556,42 @@ class ApiController extends Controller
                 $success['containers'] =  $containers;
            
                 return $this->sendResponse($success, 'Containers retrieved successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
+    public function users(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('api_token', $token)->count();
+            if ($check_user > 0) {
+                $users = User::where('role', '2')->orderBy('id', 'DESC')->get();
+            
+                return $this->sendResponse($users, 'Users retrieved successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
+    public function destination_port(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('api_token', $token)->count();
+            if ($check_user > 0) {
+                $destination = DestinationPort::all();
+            
+                return $this->sendResponse($destination, 'Destination port retrieved successfully.');
             } else {
                 return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
             }

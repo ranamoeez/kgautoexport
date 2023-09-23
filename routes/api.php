@@ -31,6 +31,8 @@ Route::post('send-vehicle-images', [ApiController::class, 'send_vehicle_images']
 Route::get('operator-containers/{id}', [ApiController::class, 'operator_containers']);
 Route::post('add-user-to-vehicle', [ApiController::class, 'add_user_to_vehicle']);
 Route::post('update-pickup-request', [ApiController::class, 'update_pickup_request']);
+Route::get('users', [ApiController::class, 'users']);
+Route::get('destination-port', [ApiController::class, 'destination_port']);
 Route::get('logout/{id}', [ApiController::class, 'logout']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

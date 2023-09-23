@@ -813,7 +813,7 @@ class HomeController extends Controller
         $admin_notes = $request->admin_notes;
         $vehicle_id = $request->vehicle_id;
 
-        Vehicle::where("id", $vehicle_id)->update(["notes" => $admin_notes]);
+        Vehicle::where("id", $vehicle_id)->update(["notes_financial" => $admin_notes]);
 
         return json_encode(["success"=>true, 'msg'=>'Comment is updated successfully!', 'action'=>'reload']);
     }

@@ -666,7 +666,7 @@
                 $.ajax(settings).done(function (response) {
                     response = JSON.parse(response);
                     if (response.success == true) {
-                        $("#admin_notes").val(response.data.admin_notes);
+                        $("#admin_notes").val(response.data.notes_financial);
                         $("#user_notes").val(response.data.user_notes);
                     }
                 });

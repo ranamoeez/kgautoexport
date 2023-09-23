@@ -405,6 +405,7 @@
                                 <input type="hidden" name="vehicle_id" value="{{ @$list->vehicle_id }}">
                                 <label for="" class="col-md-2 fw-bold">Destination</label>
                                 <div class="col-md-10">
+                                    @if(@$list->vehicle->update_destination == "0")
                                     <select class="selectjs form-select" name="destination_port_id" aria-label="Default select example">
                                         @if(count(@$destination_port) > 0)
                                         @foreach(@$destination_port as $k => $v)
@@ -416,12 +417,17 @@
                                         @endforeach
                                         @endif
                                     </select>
+                                    @else
+                                    <input type="text" class="form-control" value="{{ @$list->vehicle->destination_port->name }}" disabled />
+                                    @endif
                                 </div>
+                                @if(@$list->vehicle->update_destination == "0")
                                 <div class="offset-md-2 col-md-10 mt-4">
                                     <button class="btn btn-primary text-white fw-semibold col-md-12">
                                         Update
                                     </button>
                                 </div>
+                                @endif
                             </form>
                             @endif
                         </div>

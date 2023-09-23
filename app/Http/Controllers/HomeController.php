@@ -217,7 +217,7 @@ class HomeController extends Controller
             return json_encode(["success" => false, "msg" => "Please select any destination!"]);
         }
 
-        Vehicle::where("id", $request->vehicle_id)->update(['destination_port_id' => $destination_port]);
+        Vehicle::where("id", $request->vehicle_id)->update(['destination_port_id' => $destination_port, "update_destination" => "1"]);
 
         return json_encode(["success" => true, "msg" => "Destination port updated successfully!"]);
     }

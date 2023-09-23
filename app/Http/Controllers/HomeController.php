@@ -418,8 +418,14 @@ class HomeController extends Controller
             $towing_price = Vehicle::where("id", $value->vehicle_id)->first()->towing_price;
             $occean_freight = Vehicle::where("id", $value->vehicle_id)->first()->occean_freight;
             $get_vehicle = Vehicle::with("buyer.user_level", "destination_port")->where("id", $value->vehicle_id)->first();
-            $company_fee = $get_vehicle->buyer->user_level->company_fee;
-            $unloading_fee = $get_vehicle->destination_port->unloading_fee;
+            $company_fee = 0;
+            $unloading_fee = 0;
+            if (!empty($get_vehicle->buyer->user_level->company_fee)) {
+                $company_fee = $get_vehicle->buyer->user_level->company_fee;
+            }
+            if (!empty($get_vehicle->destination_port->unloading_fee)) {
+                $unloading_fee = $get_vehicle->destination_port->unloading_fee;
+            }
             $fines = 0;
             $all_fines = Fine::where("vehicle_id", $value->vehicle_id)->get();
             if (count($all_fines) > 0) {

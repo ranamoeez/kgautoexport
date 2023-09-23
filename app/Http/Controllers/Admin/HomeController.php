@@ -1096,7 +1096,7 @@ class HomeController extends Controller
     public function get_vehicle_notes($id)
     {
         $vehicle = Vehicle::where("id", $id)->first();
-        $data['admin_notes'] = $vehicle->notes;
+        $data['notes_financial'] = $vehicle->notes_financial;
         $data['user_notes'] = $vehicle->notes_user;
         return json_encode(["success"=>true, "data" => $data]);
     }

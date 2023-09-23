@@ -237,7 +237,7 @@ class ApiController extends Controller
                     $input['notes'] = '';
                 }
            
-                Vehicle::where('id', $id)->update(['destination_manual' => $input['destination'], 'notes' => $input['notes']]);
+                Vehicle::where('id', $id)->update(['destination_manual' => $input['destination'], 'notes' => $input['notes'], "update_destination" => "1"]);
 
                 $vehicle = Vehicle::where('id', $id)->first();
            

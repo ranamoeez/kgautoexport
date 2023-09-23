@@ -192,20 +192,20 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Title</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
-                                        <input id="radio1" type="radio" name="title" class="form-check-input" value="1" @if($list->vehicle->title == '1') checked @endif 
+                                        <input id="radio1" type="radio" name="title" class="form-check-input" value="No" @if($list->vehicle->title == 'No') checked @endif 
                                             checked />
                                         <label for="radio1" class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio2" type="radio" name="title" value="2" @if($list->vehicle->title == '2') checked @endif class="form-check-input" />
+                                        <input id="radio2" type="radio" name="title" value="Yes" @if($list->vehicle->title == 'Yes') checked @endif class="form-check-input" />
                                         <label for="radio2" class="form-check-label">Yes</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio3" type="radio" name="title" value="3" @if($list->vehicle->title == '3') checked @endif class="form-check-input" />
+                                        <input id="radio3" type="radio" name="title" value="BOS" @if($list->vehicle->title == 'BOS') checked @endif class="form-check-input" />
                                         <label for="radio3" class="form-check-label">BOS</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio4" type="radio" name="title" value="4" @if($list->vehicle->title == '4') checked @endif class="form-check-input" />
+                                        <input id="radio4" type="radio" name="title" value="TBO" @if($list->vehicle->title == 'TBO') checked @endif class="form-check-input" />
                                         <label for="radio4" class="form-check-label">TBO</label>
                                     </div>
                                 </div>
@@ -217,12 +217,12 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio5" type="radio" name="keys"
-                                            class="form-check-input" value="1" @if($list->vehicle->keys == '1') checked @endif />
+                                            class="form-check-input" value="No" @if($list->vehicle->keys == 'No') checked @endif />
                                         <label for="radio5" class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio6" type="radio" name="keys"
-                                            class="form-check-input" value="2" @if($list->vehicle->keys == '2') checked @endif />
+                                            class="form-check-input" value="Yes" @if($list->vehicle->keys == 'Yes') checked @endif />
                                         <label for="radio6" class="form-check-label">Yes</label>
                                     </div>
                                 </div>
@@ -234,12 +234,12 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio7" type="radio" name="operable"
-                                            class="form-check-input" value="1" @if($list->vehicle->operable == '1') checked @endif />
+                                            class="form-check-input" value="No" @if($list->vehicle->operable == 'No') checked @endif />
                                         <label for="radio7" class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio8" type="radio" name="operable"
-                                            class="form-check-input" value="2" @if($list->vehicle->operable == '2') checked @endif />
+                                            class="form-check-input" value="Yes" @if($list->vehicle->operable == 'Yes') checked @endif />
                                         <label for="radio8" class="form-check-label">Yes</label>
                                     </div>
                                 </div>
@@ -251,19 +251,19 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio9" type="radio" name="fuel_type" class="form-check-input"
-                                            @if($list->vehicle->fuel_type == 'hybrid') checked @endif value="hybrid" />
+                                            @if($list->vehicle->fuel_type == 'Hybrid') checked @endif value="Hybrid" />
                                         <label for="radio9" class="form-check-label">Hybrid</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio10" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'electric car') checked @endif class="form-check-input" value="electric car" />
+                                        <input id="radio10" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'Electric Car') checked @endif class="form-check-input" value="Electric Car" />
                                         <label for="radio10" class="form-check-label">Electric Car</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio11" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'gas car') checked @endif class="form-check-input" value="gas car" />
+                                        <input id="radio11" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'Gas Car') checked @endif class="form-check-input" value="Gas Car" />
                                         <label for="radio11" class="form-check-label">Gas Car</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio12" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'other') checked @endif class="form-check-input" value="other" />
+                                        <input id="radio12" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'Other') checked @endif class="form-check-input" value="Other" />
                                         <label for="radio12" class="form-check-label">Other</label>
                                     </div>
                                 </div>

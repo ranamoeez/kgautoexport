@@ -242,18 +242,18 @@
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
                                         <select class="form-select option-select text-white ps-1 pe-2 py-1 title" style="background-position: right; min-width: 50px;" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
-                                            <option value="1" data-color="danger" @if(@$value->vehicle->title == "1") selected @endif>No</option>
-                                            <option value="2" data-color="info" @if(@$value->vehicle->title == "2") selected @endif>Yes</option>
-                                            <option value="3" data-color="success" @if(@$value->vehicle->title == "3") selected @endif>BOS</option>
-                                            <option value="4" data-color="warning" @if(@$value->vehicle->title == "4") selected @endif>TBO</option>
+                                            <option value="No" data-color="danger" @if(@$value->vehicle->title == "No") selected @endif>No</option>
+                                            <option value="Yes" data-color="info" @if(@$value->vehicle->title == "Yes") selected @endif>Yes</option>
+                                            <option value="BOS" data-color="success" @if(@$value->vehicle->title == "BOS") selected @endif>BOS</option>
+                                            <option value="TBO" data-color="warning" @if(@$value->vehicle->title == "TBO") selected @endif>TBO</option>
                                         </select>
                                     </div>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
                                         <select class="form-select option-select text-white ps-1 pe-2 py-1 keys" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
-                                            <option value="1" data-color="danger" @if(@$value->vehicle->keys == "1") selected @endif>No</option>
-                                            <option value="2" data-color="info" @if(@$value->vehicle->keys == "2") selected @endif>Yes</option>
+                                            <option value="No" data-color="danger" @if(@$value->vehicle->keys == "No") selected @endif>No</option>
+                                            <option value="Yes" data-color="info" @if(@$value->vehicle->keys == "Yes") selected @endif>Yes</option>
                                         </select>
                                     </div>
                                 </td>

@@ -63,20 +63,25 @@ class SystemConfigController extends Controller
         $data = $request->all();
         $check_username = User::where("name", $data['name'])->count();
         if ($check_username == 0) {
-            if ($data['password'] == $data['cpassword']) {
-                $data['password'] = \Hash::make($data['password']);
-                if (!empty($data['sheet_password'])) {
-                    $data['sheet_password'] = \Hash::make($data['sheet_password']);
-                }
-                if (!empty($data['phone'])) {
-                    $data['phone'] = $data['dial_code']." ".$data['phone'];
-                }
-                User::create($data);
+        	$check_email = User::where("email", $data['email'])->count();
+        	if ($check_email == 0) {
+	            if ($data['password'] == $data['cpassword']) {
+	                $data['password'] = \Hash::make($data['password']);
+	                if (!empty($data['sheet_password'])) {
+	                    $data['sheet_password'] = \Hash::make($data['sheet_password']);
+	                }
+	                if (!empty($data['phone'])) {
+	                    $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                }
+	                User::create($data);
 
-                return json_encode(["success"=>true, "msg"=>"User added successfully!", "action"=>"reload"]);
-            } else {
-                return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
-            }
+	                return json_encode(["success"=>true, "msg"=>"User added successfully!", "action"=>"reload"]);
+	            } else {
+	                return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+	            }
+	        } else {
+	            return json_encode(["success"=>false, "msg"=>"Email already taken!"]);
+	        }
         } else {
             return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
         }
@@ -88,39 +93,44 @@ class SystemConfigController extends Controller
             $data = $request->all();
             $check_username = User::where("name", $data['name'])->where('id', '!=', $id)->count();
             if ($check_username == 0) {
-                if (!empty($data['password'])) {
-                    if ($data['password'] == $data['cpassword']) {
-                        $data['password'] = \Hash::make($data['password']);
-                        if (!empty($data['sheet_password'])) {
-                            $data['sheet_password'] = \Hash::make($data['sheet_password']);
-                        }
-                        if (!empty($data['phone'])) {
-                            $data['phone'] = $data['dial_code']." ".$data['phone'];
-                        }
-                        unset($data['_token']);
-                        unset($data['cpassword']);
-                        unset($data['dial_code']);
-                        User::where('id', $id)->update($data);
+            	$check_email = User::where("email", $data['email'])->count();
+        		if ($check_email == 0) {
+	                if (!empty($data['password'])) {
+	                    if ($data['password'] == $data['cpassword']) {
+	                        $data['password'] = \Hash::make($data['password']);
+	                        if (!empty($data['sheet_password'])) {
+	                            $data['sheet_password'] = \Hash::make($data['sheet_password']);
+	                        }
+	                        if (!empty($data['phone'])) {
+	                            $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                        }
+	                        unset($data['_token']);
+	                        unset($data['cpassword']);
+	                        unset($data['dial_code']);
+	                        User::where('id', $id)->update($data);
 
-                        return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
-                    } else {
-                        return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
-                    }
-                } else {
-                    if (!empty($data['sheet_password'])) {
-                        $data['sheet_password'] = \Hash::make($data['sheet_password']);
-                    }
-                    if (!empty($data['phone'])) {
-                        $data['phone'] = $data['dial_code']." ".$data['phone'];
-                    }
-                    $data['password'] = User::where('id', $id)->first()->password;
-                    unset($data['_token']);
-                    unset($data['cpassword']);
-                    unset($data['dial_code']);
-                    User::where('id', $id)->update($data);
+	                        return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
+	                    } else {
+	                        return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+	                    }
+	                } else {
+	                    if (!empty($data['sheet_password'])) {
+	                        $data['sheet_password'] = \Hash::make($data['sheet_password']);
+	                    }
+	                    if (!empty($data['phone'])) {
+	                        $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                    }
+	                    $data['password'] = User::where('id', $id)->first()->password;
+	                    unset($data['_token']);
+	                    unset($data['cpassword']);
+	                    unset($data['dial_code']);
+	                    User::where('id', $id)->update($data);
 
-                    return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
-                }
+	                    return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
+	                }
+	            } else {
+	                return json_encode(["success"=>false, "msg"=>"Email already taken!"]);
+	            }
             } else {
                 return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
             }
@@ -163,17 +173,22 @@ class SystemConfigController extends Controller
         $data = $request->all();
         $check_username = User::where("name", $data['name'])->count();
         if ($check_username == 0) {
-            if ($data['password'] == $data['cpassword']) {
-                $data['password'] = \Hash::make($data['password']);
-                if (!empty($data['phone'])) {
-                    $data['phone'] = $data['dial_code']." ".$data['phone'];
-                }
-                $data['role'] = "1";
-                User::create($data);
+        	$check_email = User::where("email", $data['email'])->count();
+        	if ($check_email == 0) {
+	            if ($data['password'] == $data['cpassword']) {
+	                $data['password'] = \Hash::make($data['password']);
+	                if (!empty($data['phone'])) {
+	                    $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                }
+	                $data['role'] = "1";
+	                User::create($data);
 
-                return json_encode(["success"=>true, "msg"=>"Admin added successfully!", "action"=>"reload"]);
-            } else {
-                return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+	                return json_encode(["success"=>true, "msg"=>"Admin added successfully!", "action"=>"reload"]);
+	            } else {
+	                return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+	            }
+        	} else {
+                return json_encode(["success"=>false, "msg"=>"Email already taken!"]);
             }
         } else {
             return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
@@ -186,33 +201,38 @@ class SystemConfigController extends Controller
             $data = $request->all();
             $check_username = User::where("name", $data['name'])->where('id', '!=', $id)->count();
             if ($check_username == 0) {
-                if (!empty($data['password'])) {
-                    if ($data['password'] == $data['cpassword']) {
-                        $data['password'] = \Hash::make($data['password']);
-                        if (!empty($data['phone'])) {
-                            $data['phone'] = $data['dial_code']." ".$data['phone'];
-                        }
-                        unset($data['_token']);
-                        unset($data['cpassword']);
-                        unset($data['dial_code']);
-                        User::where('id', $id)->update($data);
+            	$check_email = User::where("email", $data['email'])->count();
+        		if ($check_email == 0) {
+	                if (!empty($data['password'])) {
+	                    if ($data['password'] == $data['cpassword']) {
+	                        $data['password'] = \Hash::make($data['password']);
+	                        if (!empty($data['phone'])) {
+	                            $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                        }
+	                        unset($data['_token']);
+	                        unset($data['cpassword']);
+	                        unset($data['dial_code']);
+	                        User::where('id', $id)->update($data);
 
-                        return json_encode(["success"=>true, "msg"=>"Admin updated successfully!", "action"=>"reload"]);
-                    } else {
-                        return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
-                    }
-                } else {
-                    if (!empty($data['phone'])) {
-                        $data['phone'] = $data['dial_code']." ".$data['phone'];
-                    }
-                    $data['password'] = User::where('id', $id)->first()->password;
-                    unset($data['_token']);
-                    unset($data['cpassword']);
-                    unset($data['dial_code']);
-                    User::where('id', $id)->update($data);
+	                        return json_encode(["success"=>true, "msg"=>"Admin updated successfully!", "action"=>"reload"]);
+	                    } else {
+	                        return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+	                    }
+	                } else {
+	                    if (!empty($data['phone'])) {
+	                        $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                    }
+	                    $data['password'] = User::where('id', $id)->first()->password;
+	                    unset($data['_token']);
+	                    unset($data['cpassword']);
+	                    unset($data['dial_code']);
+	                    User::where('id', $id)->update($data);
 
-                    return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
-                }
+	                    return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
+	                }
+	            } else {
+	                return json_encode(["success"=>false, "msg"=>"Email already taken!"]);
+	            }
             } else {
                 return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
             }
@@ -256,20 +276,25 @@ class SystemConfigController extends Controller
         $data = $request->all();
         $check_username = User::where("name", $data['name'])->count();
         if ($check_username == 0) {
-            if ($data['password'] == $data['cpassword']) {
-                $data['password'] = \Hash::make($data['password']);
-                if (!empty($data['phone'])) {
-                    $data['phone'] = $data['dial_code']." ".$data['phone'];
-                }
-                $data['role'] = "4";
-                if (!empty($data['access'])) {
-                    $data['access'] = json_encode($data['access']);   
-                }
-                User::create($data);
+        	$check_email = User::where("email", $data['email'])->count();
+        	if ($check_email == 0) {
+	            if ($data['password'] == $data['cpassword']) {
+	                $data['password'] = \Hash::make($data['password']);
+	                if (!empty($data['phone'])) {
+	                    $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                }
+	                $data['role'] = "4";
+	                if (!empty($data['access'])) {
+	                    $data['access'] = json_encode($data['access']);   
+	                }
+	                User::create($data);
 
-                return json_encode(["success"=>true, "msg"=>"Operators added successfully!", "action"=>"reload"]);
+	                return json_encode(["success"=>true, "msg"=>"Operators added successfully!", "action"=>"reload"]);
+	            } else {
+	                return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+	            }
             } else {
-                return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+                return json_encode(["success"=>false, "msg"=>"Email already taken!"]);
             }
         } else {
             return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
@@ -282,36 +307,41 @@ class SystemConfigController extends Controller
             $data = $request->all();
             $check_username = User::where("name", $data['name'])->where('id', '!=', $id)->count();
             if ($check_username == 0) {
-                if (!empty($data['password'])) {
-                    if ($data['password'] == $data['cpassword']) {
-                        $data['password'] = \Hash::make($data['password']);
-                        if (!empty($data['phone'])) {
-                            $data['phone'] = $data['dial_code']." ".$data['phone'];
-                        }
-                        unset($data['_token']);
-                        unset($data['cpassword']);
-                        unset($data['dial_code']);
-                        if (!empty($data['access'])) {
-                            $data['access'] = json_encode($data['access']);   
-                        }
-                        User::where('id', $id)->update($data);
+            	$check_email = User::where("email", $data['email'])->count();
+        		if ($check_email == 0) {
+	                if (!empty($data['password'])) {
+	                    if ($data['password'] == $data['cpassword']) {
+	                        $data['password'] = \Hash::make($data['password']);
+	                        if (!empty($data['phone'])) {
+	                            $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                        }
+	                        unset($data['_token']);
+	                        unset($data['cpassword']);
+	                        unset($data['dial_code']);
+	                        if (!empty($data['access'])) {
+	                            $data['access'] = json_encode($data['access']);   
+	                        }
+	                        User::where('id', $id)->update($data);
 
-                        return json_encode(["success"=>true, "msg"=>"Operators updated successfully!", "action"=>"reload"]);
-                    } else {
-                        return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
-                    }
-                } else {
-                    if (!empty($data['phone'])) {
-                        $data['phone'] = $data['dial_code']." ".$data['phone'];
-                    }
-                    $data['password'] = User::where('id', $id)->first()->password;
-                    unset($data['_token']);
-                    unset($data['cpassword']);
-                    unset($data['dial_code']);
-                    User::where('id', $id)->update($data);
+	                        return json_encode(["success"=>true, "msg"=>"Operators updated successfully!", "action"=>"reload"]);
+	                    } else {
+	                        return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+	                    }
+	                } else {
+	                    if (!empty($data['phone'])) {
+	                        $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                    }
+	                    $data['password'] = User::where('id', $id)->first()->password;
+	                    unset($data['_token']);
+	                    unset($data['cpassword']);
+	                    unset($data['dial_code']);
+	                    User::where('id', $id)->update($data);
 
-                    return json_encode(["success"=>true, "msg"=>"Operators updated successfully!", "action"=>"reload"]);
-                }
+	                    return json_encode(["success"=>true, "msg"=>"Operators updated successfully!", "action"=>"reload"]);
+	                }
+	            } else {
+	                return json_encode(["success"=>false, "msg"=>"Email already taken!"]);
+	            }
             } else {
                 return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
             }

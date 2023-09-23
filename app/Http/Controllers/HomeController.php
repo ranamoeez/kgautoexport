@@ -117,18 +117,23 @@ class HomeController extends Controller
         $data = $request->all();
         $check_username = User::where("name", $data['name'])->count();
         if ($check_username == 0) {
-            if ($data['password'] == $data['cpassword']) {
-                $data['password'] = \Hash::make($data['password']);
-                $data['role'] = "3";
-                $data['main_user_id'] = Auth::user()->id;
-                if (!empty($data['phone'])) {
-                    $data['phone'] = $data['dial_code']." ".$data['phone'];
-                }
-                User::create($data);
+            $check_email = User::where("email", $data['email'])->count();
+            if ($check_email == 0) {
+                if ($data['password'] == $data['cpassword']) {
+                    $data['password'] = \Hash::make($data['password']);
+                    $data['role'] = "3";
+                    $data['main_user_id'] = Auth::user()->id;
+                    if (!empty($data['phone'])) {
+                        $data['phone'] = $data['dial_code']." ".$data['phone'];
+                    }
+                    User::create($data);
 
-                return json_encode(["success"=>true, "msg"=>"Sub user added successfully!", "action"=>"reload"]);
+                    return json_encode(["success"=>true, "msg"=>"Sub user added successfully!", "action"=>"reload"]);
+                } else {
+                    return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+                }
             } else {
-                return json_encode(["success"=>false, "msg"=>"Confirm password should be same as password!"]);
+                return json_encode(["success"=>false, "msg"=>"Username already taken!"]);
             }
         } else {
             return json_encode(["success"=>false, "msg"=>"Username already taken!"]);

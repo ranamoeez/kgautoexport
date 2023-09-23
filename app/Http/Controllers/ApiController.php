@@ -260,8 +260,7 @@ class ApiController extends Controller
 
                 if ($user->role == "4") {
                     
-                    $pickup_requests = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle')->whereHas('vehicle', function ($q) use($client)
-                    {
+                    $pickup_requests = PickupRequest::orderBy('id', 'DESC')->with('user', 'vehicle')->whereHas('vehicle', function ($q) {
                         $q->where("destination_port_id", $user->destination_id);
                     });
 

@@ -42,7 +42,21 @@ class SystemConfigController extends Controller
     {
     	$data['type'] = "system-configuration";
         $data['page'] = '1';
-    	$users = User::with('user_level')->where('role', '2')->orWhere('role', '3');
+    	$users = User::with('user_level')->where(function ($query) {
+    		$query->where('role', '2')
+    		->orWhere('role', '3');
+    	});
+    	if (!empty($request->search)) {
+    		$data['search'] = $request->search;
+    		$search = $request->search;
+    		$users = $users->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%'.$search.'%')
+                    ->orWhere('surname', 'LIKE', '%'.$search.'%')
+                    ->orWhere('email', 'LIKE', '%'.$search.'%')
+                    ->orWhere('phone', 'LIKE', '%'.$search.'%')
+                    ->orWhere('company', 'LIKE', '%'.$search.'%');
+            });
+    	}
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;

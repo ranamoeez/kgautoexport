@@ -8,35 +8,35 @@
         }
     </style>
 
-    <div class="below-header-height outer-container">
-        <div class="inner-container">
-
-            <!-- Modal -->
-            @if(!\Session::has("success"))
-            <div class="modal fade show" id="financialSheetPasswordModal" tabindex="-1"
-                data-bs-backdrop="static" aria-labelledby="financialSheetPasswordModalLabel" aria-hidden="true">
-                <div class="modal-dialog rounded-5">
-                    <div class="modal-content p-3">
-                        <div class="modal-header border-0">
-                            <h1 class="modal-title fw-bold" id="financialSheetPasswordModalLabel"
-                                style="font-size: 28px">
-                                Financial Sheet Password</h1>
+    <!-- Modal -->
+    @if(!\Session::has("success"))
+    <div class="modal fade show" id="financialSheetPasswordModal" tabindex="-1"
+        data-bs-backdrop="static" aria-labelledby="financialSheetPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog rounded-5">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0">
+                    <h1 class="modal-title fw-bold" id="financialSheetPasswordModalLabel"
+                        style="font-size: 28px">
+                        Financial Sheet Password</h1>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url("user/check-password") }}" class="form">
+                        <div class="row mt-4">
+                            <label for="password" class="col-md-4 fs-5 fw-bold">Password</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control shadow-lg" placeholder="Password" name="sheet_password" required />
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <form method="POST" action="{{ url("user/check-password") }}" class="form">
-                                <div class="row mt-4">
-                                    <label for="password" class="col-md-4 fs-5 fw-bold">Password</label>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control shadow-lg" placeholder="Password" name="sheet_password" required />
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5">Proceed</button>
-                            </form>
-                        </div>
-                    </div>
+                        <button class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5">Proceed</button>
+                    </form>
                 </div>
             </div>
-            @endif
+        </div>
+    </div>
+    @endif
+
+    <div class="below-header-height outer-container" @if(!\Session::has("success")) style="filter: blur(15px);" @endif>
+        <div class="inner-container">
 
             <!-- Financial Status part -->
 

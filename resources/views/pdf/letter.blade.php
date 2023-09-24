@@ -180,63 +180,25 @@
 				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
 			</div>
 		</div>
+		@if(count(@$vehicle > 0))
+		@foreach(@$vehicle as $key => $value)
 		<div class="fourth-section" style="width: 100%; min-height: 50px;">
 			<div class="part-one" style="width: 9%; float: left;">
-				<p style="margin-bottom: 5px; margin-top: 0px;">1. VIN#</p>
+				<p style="margin-bottom: 5px; margin-top: 0px;">{{ $key+1 }}. VIN#</p>
 			</div>
 			<div class="part-two" style="width: 35%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$value->vehicle->vin }}">
 			</div>
 			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
 				<p style="margin-bottom: 5px; margin-top: 0px;">Year/Make/Model:</p>
 			</div>
 			<div class="part-two" style="width: 35%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$value->vehicle->modal.' '.@$value->vehicle->company_name.' '.@$value->vehicle->name }}">
 			</div>
 		</div>
-		<div class="fourth-section" style="width: 100%; min-height: 50px;">
-			<div class="part-one" style="width: 9%; float: left;">
-				<p style="margin-bottom: 5px; margin-top: 0px;">2. VIN#</p>
-			</div>
-			<div class="part-two" style="width: 35%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
-			</div>
-			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
-				<p style="margin-bottom: 5px; margin-top: 0px;">Year/Make/Model:</p>
-			</div>
-			<div class="part-two" style="width: 35%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
-			</div>
-		</div>
-		<div class="fourth-section" style="width: 100%; min-height: 50px;">
-			<div class="part-one" style="width: 9%; float: left;">
-				<p style="margin-bottom: 5px; margin-top: 0px;">3. VIN#</p>
-			</div>
-			<div class="part-two" style="width: 35%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
-			</div>
-			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
-				<p style="margin-bottom: 5px; margin-top: 0px;">Year/Make/Model:</p>
-			</div>
-			<div class="part-two" style="width: 35%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
-			</div>
-		</div>
-		<div class="fourth-section" style="width: 100%; min-height: 100px;">
-			<div class="part-one" style="width: 9%; float: left;">
-				<p style="margin-bottom: 5px; margin-top: 0px;">4. VIN#</p>
-			</div>
-			<div class="part-two" style="width: 35%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
-			</div>
-			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
-				<p style="margin-bottom: 5px; margin-top: 0px;">Year/Make/Model:</p>
-			</div>
-			<div class="part-two" style="width: 35%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
-			</div>
-		</div>
-		<div class="fourth-section" style="width: 100%; min-height: 50px;">
+		@endforeach
+		@endif
+		<div class="fourth-section" style="width: 100%; min-height: 50px; margin-top: 50px;">
 			<div class="part-one" style="width: 11%; float: left;">
 				<p style="margin-bottom: 5px; margin-top: 0px;">Authorized Signature:</p>
 			</div>

@@ -121,13 +121,13 @@
 				<p style="margin-bottom: 5px; margin-top: 0px;">AES Number XTN:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$container->aes_nr_xtn }}">
 			</div>
 			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
 				<p style="margin-bottom: 5px; margin-top: 0px;">AES Number ITN:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$container->aes_nr_itn }}">
 			</div>
 		</div>
 		<div class="fourth-section" style="width: 100%; min-height: 50px;">

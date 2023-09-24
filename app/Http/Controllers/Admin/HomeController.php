@@ -576,11 +576,13 @@ class HomeController extends Controller
         echo json_encode($response); return;
     }
 
-    public function loading_order(Request $request)
+    public function loading_order(Request $request, $id)
     {
+        $container = Container::with('status', 'shipping_line', 'shipper', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'measurement')->where("id", $id)->first();
+        $vehicle = ContainerVehicle::with("vehicle")->where("container_id", $id)->get();
         $data = [
-            'title' => 'My PDF Document',
-            'content' => 'This is the content of the PDF.',
+            'container' => $container,
+            'vehicle' => $vehicle
         ];
 
         $pdf = PDF::loadView('pdf.loading-order', $data);

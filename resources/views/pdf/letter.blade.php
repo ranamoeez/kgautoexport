@@ -11,11 +11,11 @@
 		</div>
 		<div class="first-section" style="width: 100%; min-height: 180px;">
 			<div class="part-one" style="width: 33%; float: left;">
-				<p style="margin-bottom: 5px;">TO:</p>
-				<p style="margin-bottom: 5px; margin-top: 5px;">ATTN:EXODUS TEAM</p>
-				<p style="margin-bottom: 5px; margin-top: 5px;">U.S.Customs and Border Protection</p>
-				<p style="margin-bottom: 5px; margin-top: 5px;">139 Southern Boulevard</p>
-				<p style="margin-bottom: 5px; margin-top: 5px;">Savannah, GA 31405</p>
+				<p style="margin-bottom: 5px; font-size: 16px;">TO:</p>
+				<p style="margin-bottom: 5px; margin-top: 5px; font-size: 16px;">ATTN:EXODUS TEAM</p>
+				<p style="margin-bottom: 5px; margin-top: 5px; font-size: 16px;">U.S.Customs and Border Protection</p>
+				<p style="margin-bottom: 5px; margin-top: 5px; font-size: 16px;">139 Southern Boulevard</p>
+				<p style="margin-bottom: 5px; margin-top: 5px; font-size: 16px;">Savannah, GA 31405</p>
 			</div>
 			<div class="part-two" style="width: 33%; float: left; text-align: center;">
 				<img src="{{ asset("assets/logo.png") }}" style="width: 170px; height: 150px;">
@@ -68,7 +68,7 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="third-section" style="width: 100%; min-height: 150px;">
+		<div class="third-section" style="width: 100%; min-height: 130px;">
 			<p style="margin-bottom: 5px; font-size: 14px;">***Note: Additional Containers and/or Vehicles Maybe Listed on Additional Pages Following Format***</p>
 			<p style="margin-bottom: 5px; margin-top: 5px; font-size: 14px;">Date: 08/25/2023</p>
 			<p style="margin-bottom: 5px; margin-top: 5px; font-size: 14px;">The following are documents for the vehicles we have booked with our lines. The sailing and vontainer information,</p>

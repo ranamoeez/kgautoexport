@@ -2,12 +2,6 @@
 
 @section('content')
 
-    <style type="text/css">
-        .slick-prev:before, .slick-next:before {
-            color: #003791 !important;
-        } 
-    </style>
-
     <div class="below-header-height outer-container">
         <div class="inner-container">
             <!-- Money transfer -->
@@ -170,7 +164,7 @@
                                                 @foreach($list->vehicle->vehicle_images as $key => $value)
                                                 @if($value->type == "warehouse")
                                                 <li class="splide__slide">
-                                                    <img src="{{ url($value->filepath.$value->filename) }}" class="image w-100" alt="car-image" />
+                                                    <img src="{{ url($value->filepath.$value->filename) }}" class="image w-100" alt="Vehicle Image" />
                                                 </li>
                                                 @endif
                                                 @endforeach
@@ -211,7 +205,7 @@
                                         @foreach($list->vehicle->vehicle_images as $key => $value)
                                         @if($value->type == "warehouse")
                                         <li class="splide__slide">
-                                            <img src="{{ url($value->filepath.$value->filename) }}" class="image vehicle-image w-100" alt="car-image" />
+                                            <img src="{{ url($value->filepath.$value->filename) }}" class="image vehicle-image w-100" alt="Vehicle Image" />
                                         </li>
                                         @endif
                                         @endforeach
@@ -233,7 +227,7 @@
                                                 @foreach($list->vehicle->vehicle_images as $key => $value)
                                                 @if($value->type == "unloading")
                                                 <li class="splide__slide">
-                                                    <img src="{{ url($value->filepath.$value->filename) }}" class="image w-100" alt="car-image" />
+                                                    <img src="{{ url($value->filepath.$value->filename) }}" class="image w-100" alt="Vehicle Image" />
                                                 </li>
                                                 @endif
                                                 @endforeach
@@ -267,7 +261,7 @@
                         </div>
 
                         <!-- car other photo -->
-                        <div class="container-car-image  mx-0">
+                        <div class="container-car-image mx-0">
                             <div id="thumbnail-slider-unloading" class="splide mt-2">
                                 @if(count(@$list->vehicle->vehicle_images) > 0)
                                 <div class="splide__track">
@@ -275,31 +269,13 @@
                                         @foreach($list->vehicle->vehicle_images as $key => $value)
                                         @if($value->type == "unloading")
                                         <li class="splide__slide">
-                                            <img src="{{ url($value->filepath.$value->filename) }}" class="image vehicle-image w-100" alt="car-image"/>
+                                            <img src="{{ url($value->filepath.$value->filename) }}" class="image vehicle-image w-100" alt="Vehicle Image" />
                                         </li>
                                         @endif
                                         @endforeach
                                     </ul>
                                 </div>
                                 @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal -->
-                <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="postForSaleModelLabel" aria-hidden="true">
-                    <div class="modal-dialog rounded-5">
-                        <div class="modal-content p-4">
-                            <div class="modal-header border-0">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="image-slider">
-                                    @foreach($list->vehicle->vehicle_images as $key => $value)
-                                    <img src="{{ url($value->filepath.$value->filename) }}" alt="Image 1">
-                                    @endforeach
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -621,16 +597,37 @@
 
 @section('script')
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css" integrity="sha512-6lLUdeQ5uheMFbWm3CP271l14RsX1xtx+J5x2yeIDkkiBpeVTNhTqijME7GgRKKi6hCqovwCoBTlRBEC20M8Mg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            let dots = document.getElementsByClassName("dot");
+            if (n > slides.length) {slideIndex = 1}    
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex-1].style.display = "block";  
+            dots[slideIndex-1].className += " active";
+        }
+    </script>
     <script>
         $(document).ready(() => {
             $('.selectjs').select2();
-            $(".image-slider").slick({
-                lazyLoad: 'ondemand',
-                dots: true
-            });
 
             $(document).on("submit", ".form", function (event) {
                 event.preventDefault();
@@ -790,6 +787,23 @@
             separateDialCode: true,
             excludeCountries: ["in", "il"],
             preferredCountries: ["ru", "jp", "pk", "no"]
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" rel="stylesheet" />
+    <script src="{{ asset('js/jquery.popup.lightbox.js') }}"></script>
+    <link href="{{ asset('css/popup-lightbox.css') }}" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function(){
+
+            $(".splide__list").popupLightbox({
+                width: 800,
+                height: 600
+            });
+
         });
     </script>
 

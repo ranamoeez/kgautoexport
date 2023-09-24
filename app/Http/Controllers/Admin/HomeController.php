@@ -591,7 +591,7 @@ class HomeController extends Controller
     public function letter(Request $request, $id)
     {
         $container = Container::with('status', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'measurement')->where("id", $id)->first();
-        $vehicle = ContainerVehicle::with("vehicle")->where("container_id", $id)->first();
+        $vehicle = ContainerVehicle::with("vehicle")->where("container_id", $id)->get();
         $data = [
             'container' => $container,
             'vehicle' => $vehicle

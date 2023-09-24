@@ -180,7 +180,7 @@
 				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
 			</div>
 		</div>
-		@if(count(@$vehicle > 0))
+		@if(count(@$vehicle) > 0)
 		@foreach(@$vehicle as $key => $value)
 		<div class="fourth-section" style="width: 100%; min-height: 50px;">
 			<div class="part-one" style="width: 9%; float: left;">

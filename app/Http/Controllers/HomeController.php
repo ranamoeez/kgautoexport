@@ -18,6 +18,7 @@ use App\Models\MoneyTransfer;
 use App\Models\DestinationPort;
 use App\Models\Post;
 use App\Models\Fine;
+use App\Models\VehicleImage;
 use Auth;
 use Storage;
 use QuickBooksOnline\API\DataService\DataService;
@@ -221,6 +222,53 @@ class HomeController extends Controller
         Vehicle::where("id", $request->vehicle_id)->update(['destination_port_id' => $destination_port, "update_destination" => "1"]);
 
         return json_encode(["success" => true, "msg" => "Destination port updated successfully!"]);
+    }
+
+    public function download_images(Request $request)
+    {
+        // Get the image URLs from the textarea and split them into an array
+        $imageUrls = VehicleImage::where("vehicle_id", $request->vehicle_id)->get();
+
+        // Create a ZIP archive
+        $zip = new \ZipArchive();
+        $zipFileName = 'images.zip';
+
+        if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === TRUE) {
+            // Loop through each image URL
+            foreach ($imageUrls as $imageUrl) {
+                // Remove leading/trailing whitespace and skip empty lines
+                $imageUrl = url($imageUrl->filepath.$imageUrl->filename);
+                if (!empty($imageUrl)) {
+                    // Get the image content from the URL
+                    $imageContent = file_get_contents($imageUrl);
+
+                    if ($imageContent !== false) {
+                        // Add the image to the ZIP archive with a unique name
+                        $zip->addFromString(basename($imageUrl), $imageContent);
+                    } else {
+                        return json_encode(["success" => false, "msg" => "Failed to download images!"]);
+                    }
+                }
+            }
+
+            // Close the ZIP archive
+            $zip->close();
+
+            // Set headers to force download
+            header('Content-Type: application/zip');
+            header('Content-Disposition: attachment; filename="' . $zipFileName . '"');
+            header('Content-Length: ' . filesize($zipFileName));
+
+            // Output the ZIP file
+            readfile($zipFileName);
+
+            // Delete the temporary ZIP file
+            unlink($zipFileName);
+
+            return json_encode(["success" => true, "msg" => "Zip downloaded successfully!"]);
+        } else {
+            return json_encode(["success" => false, "msg" => "Failed to download images!"]);
+        }
     }
 
     public function containers(Request $request)

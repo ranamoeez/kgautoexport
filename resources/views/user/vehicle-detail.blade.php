@@ -32,11 +32,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md text-md-end mb-2 mb-md-0">
-                        <button class="bg-white border-0 download" type="button">
+                    <form method="post" action="{{ url("user/download-images") }}" class="col-md text-md-end mb-2 mb-md-0 form">
+                        @csrf
+                        <input type="hidden" name="vehicle_id" value="{{ @$list->vehicle_id }}">
+                        <button class="bg-white border-0 download">
                             <img src="{{ asset("assets/photos.png") }}" alt="" />
                         </button>
-                    </div>
+                    </form>
                     <div class="col-md mb-2 mb-md-0">
                         @if(\Auth::user()->role == "2")
                         <button class="text-nowrap btn btn-primary fw-semibold text-fs-3 border-0"

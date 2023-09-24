@@ -230,7 +230,7 @@ class HomeController extends Controller
         $imageUrls = VehicleImage::where("vehicle_id", $request->vehicle_id)->get();
 
         // Create a ZIP archive
-        $zip = new \ZipArchive();
+        $zip = new \ZipArchive;
         $zipFileName = 'images.zip';
 
         if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === TRUE) {

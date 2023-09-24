@@ -45,9 +45,6 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::post('/update-destination', [App\Http\Controllers\HomeController::class, 'update_destination'])->name('update-destination');
 	Route::post('/add-sub-user', [App\Http\Controllers\HomeController::class, 'add_sub_user'])->name('add-sub-user');
 	Route::post('/download-images', [App\Http\Controllers\HomeController::class, 'download_images'])->name('download-images');
-	
-	Route::post('/letter', [App\Http\Controllers\HomeController::class, 'letter'])->name('letter');
-	Route::post('/loading-order', [App\Http\Controllers\HomeController::class, 'loading_order'])->name('loading-order');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function(){
@@ -68,6 +65,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/containers/delete/{id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_containers'])->name('delete-containers');
 	Route::get('/delete-buyer/{c_id}/{u_id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_buyer'])->name('delete-buyer');
 	Route::get('/delete-buyer-vehicle/{c_id}/{u_id}/{v_id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_buyer_vehicle'])->name('delete-buyer-vehicle');
+
+	Route::post('/letter', [App\Http\Controllers\Admin\HomeController::class, 'letter'])->name('letter');
+	Route::post('/loading-order', [App\Http\Controllers\Admin\HomeController::class, 'loading_order'])->name('loading-order');
 
 	Route::post('/update-vehicle-data', [App\Http\Controllers\Admin\HomeController::class, 'update_vehicle_data'])->name('update-vehicle-data');
 	Route::post('/update-container-data', [App\Http\Controllers\Admin\HomeController::class, 'update_container_data'])->name('update-container-data');

@@ -38,6 +38,7 @@ use App\Models\Level;
 use App\Models\MoneyTransfer;
 use Auth;
 use Storage;
+use PDF;
 
 class HomeController extends Controller
 {
@@ -573,6 +574,34 @@ class HomeController extends Controller
         $container->delete();
         $response = array('success'=>true,'msg'=>'Container has been deleted.');
         echo json_encode($response); return;
+    }
+
+    public function loading_order(Request $request)
+    {
+        $data = [
+            'title' => 'My PDF Document',
+            'content' => 'This is the content of the PDF.',
+        ];
+
+        $pdf = PDF::loadView('pdf.loading-order', $data);
+
+        $pdf->download('loading-order.pdf');
+
+        return redirect()->back();
+    }
+
+    public function letter(Request $request)
+    {
+        $data = [
+            'title' => 'My PDF Document',
+            'content' => 'This is the content of the PDF.',
+        ];
+
+        $pdf = PDF::loadView('pdf.letter', $data);
+
+        $pdf->download('letter.pdf');
+
+        return redirect()->back();
     }
 
     public function financial_system(Request $request)

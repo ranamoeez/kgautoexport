@@ -588,11 +588,11 @@ class HomeController extends Controller
         return $pdf->download('loading-order.pdf');
     }
 
-    public function letter(Request $request)
+    public function letter(Request $request, $id)
     {
+        $container = Container::->with('status', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'measurement')->where("id", $id)->first();
         $data = [
-            'title' => 'My PDF Document',
-            'content' => 'This is the content of the PDF.',
+            'container' => $container
         ];
 
         $pdf = PDF::loadView('pdf.letter', $data);

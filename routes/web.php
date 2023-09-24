@@ -66,8 +66,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/delete-buyer/{c_id}/{u_id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_buyer'])->name('delete-buyer');
 	Route::get('/delete-buyer-vehicle/{c_id}/{u_id}/{v_id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_buyer_vehicle'])->name('delete-buyer-vehicle');
 
-	Route::get('/letter', [App\Http\Controllers\Admin\HomeController::class, 'letter'])->name('letter');
-	Route::get('/loading-order', [App\Http\Controllers\Admin\HomeController::class, 'loading_order'])->name('loading-order');
+	Route::get('/letter/{id}', [App\Http\Controllers\Admin\HomeController::class, 'letter'])->name('letter');
+	Route::get('/loading-order/{id}', [App\Http\Controllers\Admin\HomeController::class, 'loading_order'])->name('loading-order');
 
 	Route::post('/update-vehicle-data', [App\Http\Controllers\Admin\HomeController::class, 'update_vehicle_data'])->name('update-vehicle-data');
 	Route::post('/update-container-data', [App\Http\Controllers\Admin\HomeController::class, 'update_container_data'])->name('update-container-data');

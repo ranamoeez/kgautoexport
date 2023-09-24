@@ -79,13 +79,13 @@
 				<p style="margin-bottom: 5px; margin-top: 0px;">Container Number:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$container->container_no }}">
 			</div>
 			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
 				<p style="margin-bottom: 5px; margin-top: 0px;">Booking Number:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$container->booking_no }}">
 			</div>
 		</div>
 		<div class="fourth-section" style="width: 100%; min-height: 50px;">
@@ -135,7 +135,7 @@
 				<p style="margin-bottom: 5px; margin-top: 0px;">Shipping Line:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$container->shipping_line->name }}">
 			</div>
 			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
 				<p style="margin-bottom: 5px; margin-top: 0px;">SCAC Code:</p>
@@ -155,7 +155,7 @@
 				<p style="margin-bottom: 5px; margin-top: 0px;">Vessel Name:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$container->vessel_name }}">
 			</div>
 		</div>
 		<div class="fourth-section" style="width: 100%; min-height: 50px;">
@@ -163,13 +163,13 @@
 				<p style="margin-bottom: 5px; margin-top: 0px;">Arrival Date:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$container->arrival }}">
 			</div>
 			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
 				<p style="margin-bottom: 5px; margin-top: 0px;">Departure Date:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$container->departure }}">
 			</div>
 		</div>
 		<div class="fourth-section" style="width: 100%; min-height: 100px;">

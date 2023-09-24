@@ -450,10 +450,10 @@
                                     Send release request
                                 </button> --}}
                                 <br>
-                                <a href="{{ url('admin/loading-order') }}" class="btn btn-primary mb-2 border-0">
+                                <a href="{{ url('admin/loading-order', $container->id) }}" class="btn btn-primary mb-2 border-0">
                                     Loading Order
                                 </a>
-                                <a href="{{ url('admin/letter') }}" class="btn btn-primary mb-2 border-0">
+                                <a href="{{ url('admin/letter', $container->id) }}" class="btn btn-primary mb-2 border-0">
                                     Letter ()
                                 </a>
                                 <button class="btn btn-primary mb-2 border-0" type="button" id="send-buyer">

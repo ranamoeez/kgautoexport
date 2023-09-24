@@ -393,12 +393,12 @@
                                     Send release request
                                 </button> --}}
                                 <br>
-                                <a href="{{ asset('assets/loading-order.pdf') }}" class="btn btn-primary mb-2 border-0" download="loading-order.pdf">
+                                <button class="btn btn-primary mb-2 border-0" type="button" disabled>
                                     Loading Order
-                                </a>
-                                <a href="{{ asset('assets/letter.pdf') }}" class="btn btn-primary mb-2 border-0" download="letter.pdf">
+                                </button>
+                                <button class="btn btn-primary mb-2 border-0" type="button" disabled>
                                     Letter ()
-                                </a>
+                                </button>
                                 <button class="btn btn-primary mb-2 border-0" type="button" disabled>
                                     Send to buyer
                                 </button>

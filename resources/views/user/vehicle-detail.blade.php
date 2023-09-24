@@ -160,7 +160,7 @@
                                     @if(count(@$list->vehicle->vehicle_images) > 0)
                                     <div id="main-slider-warehouse" class="splide mt-2 mt-md-0 p-0 container-fluid">
                                         <div class="splide__track">
-                                            <ul class="splide__list">
+                                            <ul class="splide__list warehouse-images">
                                                 @foreach($list->vehicle->vehicle_images as $key => $value)
                                                 @if($value->type == "warehouse")
                                                 <li class="splide__slide">
@@ -223,7 +223,7 @@
                                     @if(count(@$list->vehicle->vehicle_images) > 0)
                                     <div id="main-slider-unloading" class="splide mt-2 mt-md-0 p-0 container-fluid">
                                         <div class="splide__track">
-                                            <ul class="splide__list">
+                                            <ul class="splide__list unloading-images">
                                                 @foreach($list->vehicle->vehicle_images as $key => $value)
                                                 @if($value->type == "unloading")
                                                 <li class="splide__slide">
@@ -799,7 +799,12 @@
     <script>
         $(document).ready(function(){
 
-            $(".splide__list").popupLightbox({
+            $(".warehouse-images").popupLightbox({
+                width: 800,
+                height: 600
+            });
+
+            $(".unloading-images").popupLightbox({
                 width: 800,
                 height: 600
             });

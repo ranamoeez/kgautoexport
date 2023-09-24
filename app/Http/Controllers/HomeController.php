@@ -280,7 +280,9 @@ class HomeController extends Controller
 
         $pdf = PDF::loadView('pdf.loading-order', $data);
 
-        return $pdf->download('loading-order.pdf');
+        $pdf->download('loading-order.pdf');
+
+        return redirect()->back();
     }
 
     public function letter(Request $request)
@@ -292,7 +294,9 @@ class HomeController extends Controller
 
         $pdf = PDF::loadView('pdf.letter', $data);
 
-        return $pdf->download('letter.pdf');
+        $pdf->download('letter.pdf');
+
+        return redirect()->back();
     }
 
     public function containers(Request $request)

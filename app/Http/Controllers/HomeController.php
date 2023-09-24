@@ -271,6 +271,30 @@ class HomeController extends Controller
         }
     }
 
+    public function loading_order(Request $request)
+    {
+        $data = [
+            'title' => 'My PDF Document',
+            'content' => 'This is the content of the PDF.',
+        ];
+
+        $pdf = PDF::loadView('pdf.loading-order', $data);
+
+        return $pdf->download('loading-order.pdf');
+    }
+
+    public function letter(Request $request)
+    {
+        $data = [
+            'title' => 'My PDF Document',
+            'content' => 'This is the content of the PDF.',
+        ];
+
+        $pdf = PDF::loadView('pdf.letter', $data);
+
+        return $pdf->download('letter.pdf');
+    }
+
     public function containers(Request $request)
     {
         $data['type'] = "containers";

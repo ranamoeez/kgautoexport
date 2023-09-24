@@ -45,6 +45,9 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::post('/update-destination', [App\Http\Controllers\HomeController::class, 'update_destination'])->name('update-destination');
 	Route::post('/add-sub-user', [App\Http\Controllers\HomeController::class, 'add_sub_user'])->name('add-sub-user');
 	Route::post('/download-images', [App\Http\Controllers\HomeController::class, 'download_images'])->name('download-images');
+	
+	Route::post('/letter', [App\Http\Controllers\HomeController::class, 'letter'])->name('letter');
+	Route::post('/loading-order', [App\Http\Controllers\HomeController::class, 'loading_order'])->name('loading-order');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function(){

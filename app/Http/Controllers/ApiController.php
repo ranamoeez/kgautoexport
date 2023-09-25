@@ -60,16 +60,30 @@ class ApiController extends Controller
                     $status = Status::where('name', $request->Status)->first();
                     if (!empty($status->id)) {
                         $status_id = $status->id;
-                        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->whereHas('vehicle', function ($query) use($status_id) {
-                                $query->where('status_id', $status_id);
-                            })->where('user_id', $user_id)->limit(100)->get();
+                        $filter["status_id"] = $status_id;
                     }
+                }
+
+                if (!empty($request->vin)) {
+                    $vin = $request->vin;
+                    $filter["vin"] = $vin;
+                }
+
+                if (!empty($filter)) {
+                    $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->whereHas('vehicle', function ($query) use($filter) {
+                        if (!empty($filter['status_id'])) {
+                            $query->where('status_id', $filter['status_id']);
+                        }
+                        if (!empty($filter['vin'])) {
+                            $query->where('vin', $filter['vin']);
+                        }
+                    })->where('user_id', $user_id);
                 }
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex > 1) {
                         $offset = ($request->PageIndex - 1) * 100;
-                        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->where('user_id', $user_id)->offset((int)$offset)->limit(100)->get();
+                        $vehicles = $vehicles->offset((int)$offset)->limit(100)->get();
                     }
                 }
             

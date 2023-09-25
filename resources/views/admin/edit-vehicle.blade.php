@@ -769,8 +769,12 @@
                             </div>
                         </div>
                         <div class="row mb-4">
+                            <div class="col-md-12">
+                                <h3>Warehouse</h3>
+                            </div>
                             @if(count(@$list->vehicle->vehicle_images) > 0)
                             @foreach($list->vehicle->vehicle_images as $key => $value)
+                            @if($value->type == "warehouse")
                             <div class="col-md-4">
                                 <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
                                     <div class="card-header d-flex align-items-center justify-content-between">
@@ -791,6 +795,36 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
+                            @endforeach
+                            @endif
+                            <div class="col-md-12 mt-3">
+                                <h3>Unloading</h3>
+                            </div>
+                            @if(count(@$list->vehicle->vehicle_images) > 0)
+                            @foreach($list->vehicle->vehicle_images as $key => $value)
+                            @if($value->type == "unloading")
+                            <div class="col-md-4">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-image fa-solid fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
+                                                <i class="fas fa-trash text-danger"></i>
+                                            </button>
+                                            <a href="{{ url($value->filepath.$value->filename) }}" download>
+                                                <i class="fas fa-download text-dark"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="{{ url($value->filepath.$value->filename) }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                             @endforeach
                             @endif
                         </div>

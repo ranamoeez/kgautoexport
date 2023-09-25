@@ -61,6 +61,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <form method="POST" action="{{ url("user/add-pickup-request") }}" id="pickup-form">
+                                            @csrf
                                             <div class="mt-4">
                                                 <input type="text" name="comments" class="form-control text-fs-3 rounded pb-4"
                                                     placeholder="Add Comment" required />
@@ -135,6 +136,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <form method="POST" action="{{ url("user/add-post") }}" class="form">
+                                            @csrf
                                             <div class="mt-4">
                                                 <input type="hidden" name="user_id" value="{{ @$list->user_id }}">
                                                 <input type="hidden" name="vehicle_id" value="{{ @$list->vehicle_id }}">
@@ -599,34 +601,6 @@
 
 @section('script')
 
-    <script>
-        let slideIndex = 1;
-        showSlides(slideIndex);
-
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
-        }
-
-        function currentSlide(n) {
-            showSlides(slideIndex = n);
-        }
-
-        function showSlides(n) {
-            let i;
-            let slides = document.getElementsByClassName("mySlides");
-            let dots = document.getElementsByClassName("dot");
-            if (n > slides.length) {slideIndex = 1}    
-            if (n < 1) {slideIndex = slides.length}
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";  
-            }
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-            slides[slideIndex-1].style.display = "block";  
-            dots[slideIndex-1].className += " active";
-        }
-    </script>
     <script>
         $(document).ready(() => {
             $('.selectjs').select2();

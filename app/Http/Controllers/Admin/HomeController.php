@@ -683,7 +683,7 @@ class HomeController extends Controller
 
         $data['transaction_history'] = $transaction_history;
 
-        $auction_price = \DB::table('vehicles');
+        $auction_price = new Vehicle;
         if (!empty($filter['vin'])) {
             $auction_price = $auction_price->where('vin', $filter['vin']);
         }
@@ -698,7 +698,7 @@ class HomeController extends Controller
             $auction_price = $auction_price->where('created_at', '<=', $request->to);
         }
         $auction_price = $auction_price->sum('auction_price');
-        $towing_price = \DB::table('vehicles');
+        $towing_price = new Vehicle;
         if (!empty($filter['vin'])) {
             $towing_price = $towing_price->where('vin', $filter['vin']);
         }
@@ -713,7 +713,7 @@ class HomeController extends Controller
             $towing_price = $towing_price->where('created_at', '<=', $request->to);
         }
         $towing_price = $towing_price->sum('towing_price');
-        $occean_freight = \DB::table('vehicles');
+        $occean_freight = new Vehicle;
         if (!empty($filter['vin'])) {
             $occean_freight = $occean_freight->where('vin', $filter['vin']);
         }

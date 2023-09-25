@@ -57,9 +57,9 @@ class HomeController extends Controller
         $data['user'] = User::with("user_level")->where("id", Auth::user()->id)->first();
 
         $previous = TransactionsHistory::where("user_id", Auth::user()->id)->sum('amount');
-        $auction_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('auction_price');
-        $towing_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('towing_price');
-        $occean_freight = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('occean_freight');
+        $auction_price = Vehicle::where('buyer_id', Auth::user()->id)->sum('auction_price');
+        $towing_price = Vehicle::where('buyer_id', Auth::user()->id)->sum('towing_price');
+        $occean_freight = Vehicle::where('buyer_id', Auth::user()->id)->sum('occean_freight');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', Auth::user()->id)->get();
         $fines = 0;
         $company_fee = 0;
@@ -151,9 +151,9 @@ class HomeController extends Controller
         }
 
         $previous = TransactionsHistory::where("user_id", Auth::user()->id)->sum('amount');
-        $auction_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('auction_price');
-        $towing_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('towing_price');
-        $occean_freight = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('occean_freight');
+        $auction_price = Vehicle::where('buyer_id', Auth::user()->id)->sum('auction_price');
+        $towing_price = Vehicle::where('buyer_id', Auth::user()->id)->sum('towing_price');
+        $occean_freight = Vehicle::where('buyer_id', Auth::user()->id)->sum('occean_freight');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', Auth::user()->id)->get();
         $fines = 0;
         $company_fee = 0;
@@ -536,9 +536,9 @@ class HomeController extends Controller
         $data['transportation'] = $transportation;
 
         $previous = TransactionsHistory::where("user_id", Auth::user()->id)->sum('amount');
-        $auction_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('auction_price');
-        $towing_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('towing_price');
-        $occean_freight = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('occean_freight');
+        $auction_price = Vehicle::where('buyer_id', Auth::user()->id)->sum('auction_price');
+        $towing_price = Vehicle::where('buyer_id', Auth::user()->id)->sum('towing_price');
+        $occean_freight = Vehicle::where('buyer_id', Auth::user()->id)->sum('occean_freight');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', Auth::user()->id)->get();
         $fines = 0;
         $company_fee = 0;

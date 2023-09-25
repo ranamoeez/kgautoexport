@@ -362,9 +362,9 @@ class ApiController extends Controller
                 }
 
                 $previous = TransactionsHistory::where("user_id", $id)->sum('amount');
-                $auction_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('auction_price');
-                $towing_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('towing_price');
-                $occean_freight = \DB::table('vehicles')->where('buyer_id', $id)->sum('occean_freight');
+                $auction_price = Vehicle::where('buyer_id', $id)->sum('auction_price');
+                $towing_price = Vehicle::where('buyer_id', $id)->sum('towing_price');
+                $occean_freight = Vehicle::where('buyer_id', $id)->sum('occean_freight');
                 $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $id)->get();
                 $fines = 0;
                 $company_fee = 0;
@@ -457,9 +457,9 @@ class ApiController extends Controller
                 if (!empty($vehicle)) {
 
                     $previous = TransactionsHistory::where("user_id", $user->id)->sum('amount');
-                    $auction_price = \DB::table('vehicles')->where('buyer_id', $user->id)->sum('auction_price');
-                    $towing_price = \DB::table('vehicles')->where('buyer_id', $user->id)->sum('towing_price');
-                    $occean_freight = \DB::table('vehicles')->where('buyer_id', $user->id)->sum('occean_freight');
+                    $auction_price = Vehicle::where('buyer_id', $user->id)->sum('auction_price');
+                    $towing_price = Vehicle::where('buyer_id', $user->id)->sum('towing_price');
+                    $occean_freight = Vehicle::where('buyer_id', $user->id)->sum('occean_freight');
                     $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $user->id)->get();
                     $fines = 0;
                     $company_fee = 0;

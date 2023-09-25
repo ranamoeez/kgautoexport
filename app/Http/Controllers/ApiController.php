@@ -340,7 +340,7 @@ class ApiController extends Controller
                 $financial_data['history'] = TransactionsHistory::with('vehicle')->where('user_id', $id)->get();
                 $financial_data['total_transactions'] = TransactionsHistory::where('user_id', $id)->sum('amount');
                 $financial_data['balance'] = User::where('id', $id)->first()->balance;
-                $financial_data['due_payments_limit'] = (int)User::with("user_level")->where('id', $id)->first();
+                $financial_data['due_payments_limit'] = User::with("user_level")->where('id', $id)->first();
                 if (!empty($financial_data['due_payments_limit']->user_level)) {
                     $financial_data['due_payments_limit'] = (int)$financial_data['due_payments_limit']->user_level->due_payment_limit;
                 } else {

@@ -340,13 +340,40 @@ class ApiController extends Controller
                 $financial_data['history'] = TransactionsHistory::with('vehicle')->where('user_id', $id)->get();
                 $financial_data['total_transactions'] = TransactionsHistory::where('user_id', $id)->sum('amount');
                 $financial_data['balance'] = User::where('id', $id)->first()->balance;
-                $financial_data['due_payments'] = TransactionsHistory::where('user_id', $id)->sum('amount');
                 $financial_data['due_payments_limit'] = (int)User::with("user_level")->where('id', $id)->first();
                 if (!empty($financial_data['due_payments_limit']->user_level)) {
                     $financial_data['due_payments_limit'] = (int)$financial_data['due_payments_limit']->user_level->due_payment_limit;
                 } else {
                     $financial_data['due_payments_limit'] = 0;
                 }
+
+                $auction_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('auction_price');
+                $towing_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('towing_price');
+                $occean_freight = \DB::table('vehicles')->where('buyer_id', $id)->sum('occean_freight');
+                $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $id)->get();
+                $fines = 0;
+                $company_fee = 0;
+                $unloading_fee = 0;
+                foreach ($all_data as $k => $value) {
+                    if (!empty(@$value->fines)) {
+                        foreach (@$value->fines as $ke => $v) {
+                            $fines += (int)$v->amount;
+                        }
+                    }
+                    if (!empty(@$value->buyer->user_level)) {
+                        $company_fee += (int)@$value->buyer->user_level->company_fee;
+                    }
+                    if (!empty(@$value->destination_port)) {
+                        $unloading_fee += (int)@$value->destination_port->unloading_fee;
+                    }
+                }
+                $due_payments = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+                $all_due_payments = (int)$due_payments - (int)$previous;
+                if ($all_due_payments < 0) {
+                    $all_due_payments = 0;
+                }
+
+                $financial_data['due_payments'] = $all_due_payments;
             
                 return $this->sendResponse($financial_data, 'Financial data retrieved successfully.');
             } else {

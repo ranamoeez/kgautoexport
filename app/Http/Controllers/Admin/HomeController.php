@@ -1144,7 +1144,7 @@ class HomeController extends Controller
     {
         $vehicle = Vehicle::where("id", $id)->first();
         $data['notes_financial'] = $vehicle->notes_financial;
-        $data['user_notes'] = $vehicle->notes_user;
+        $data['notes_user_financial'] = $vehicle->notes_user_financial;
         return json_encode(["success"=>true, "data" => $data]);
     }
 

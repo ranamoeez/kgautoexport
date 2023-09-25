@@ -57,7 +57,7 @@
                                                             <label for="" class="col-md-4">Vehicles Brand</label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
-                                                                    <select class="form-select brand" name="vehicle_brand_id">
+                                                                    <select class="select2js form-select brand" name="vehicle_brand_id">
                                                                         <option value=""></option>
                                                                         @if(count(@$brands) > 0)
                                                                         @foreach(@$brands as $key => $value)
@@ -235,6 +235,13 @@
                 $("#name").val('');
                 $("#position").val('');
                 $(".brand option[value='']").attr('selected', true);
+
+                $('.select2js').select2({
+                    dropdownParent: $('#modal')
+                });
+                $("#modal .select2.select2-container").css("width", "100%");
+                $("#modal .select2-selection").css("height", "40px");
+                $("#modal .select2-selection__arrow").css("display", "none");
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/vehicles-modal/add') }}");

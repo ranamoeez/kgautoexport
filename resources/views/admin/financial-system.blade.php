@@ -673,7 +673,7 @@
                     response = JSON.parse(response);
                     if (response.success == true) {
                         $("#admin_notes").val(response.data.notes_financial);
-                        $("#user_notes").val(response.data.user_notes);
+                        $("#user_notes").val(response.data.notes_user_financial);
                     }
                 });
 

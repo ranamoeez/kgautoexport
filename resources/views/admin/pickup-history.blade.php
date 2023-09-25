@@ -211,7 +211,7 @@
                             <th scope="col" class="fw-bold">VIN</th>
                             <th scope="col" class="fw-bold">Destination</th>
                             <th scope="col" class="fw-bold">Date</th>
-                            <th scope="col" class="fw-bold">Payment</th>
+                            <th scope="col" class="fw-bold">Due Payments</th>
                             <th scope="col" class="fw-bold">Balance</th>
                             @if(empty($auth_user->admin_level->access) || @in_array("6.2", json_decode($auth_user->admin_level->access)))
                             <th scope="col" class="fw-bold">Updated By</th>

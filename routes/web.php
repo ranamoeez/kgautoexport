@@ -43,6 +43,8 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::post('/add-post', [App\Http\Controllers\HomeController::class, 'add_post'])->name('add-post');
 	Route::post('/add-notes', [App\Http\Controllers\HomeController::class, 'add_notes'])->name('add-notes');
 	Route::post('/update-destination', [App\Http\Controllers\HomeController::class, 'update_destination'])->name('update-destination');
+	Route::post('/add-comment', [App\Http\Controllers\HomeController::class, 'add_comment'])->name('add-user-comment');
+	Route::get('/get-vehicle-notes/{id}', [App\Http\Controllers\HomeController::class, 'get_vehicle_notes'])->name('get-user-vehicle-notes');
 	Route::post('/add-sub-user', [App\Http\Controllers\HomeController::class, 'add_sub_user'])->name('add-sub-user');
 	Route::post('/download-images', [App\Http\Controllers\HomeController::class, 'download_images'])->name('download-images');
 });

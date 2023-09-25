@@ -235,6 +235,7 @@
                                     <th scope="col">Total Unpaid</th>
                                     <th scope="col">Payment Status</th>
                                     <th scope="col"></th>
+                                    <th scope="col"></th>
                                 </thead>
                                 <tbody>
                                     @if(count(@$vehicle_cost) > 0)
@@ -265,7 +266,18 @@
                                                 {{ ucfirst(@$value->payment_status) }}
                                             </button>
                                         </td>
-
+                                        <td>
+                                            <div class="d-flex justify-content-center items-center message-icon">
+                                                <button class="btn border-0 comment_modal" data-id="{{ @$value->vehicle_id }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="w-6 h-6">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
                                         <td>
                                             <button data-target="#detail_{{ @$value->id }}"
                                                 class="details-button rounded-circle bg-primary p-1 user-icon"
@@ -280,7 +292,7 @@
                                         </td>
                                     </tr>
                                     <tr class="collapse fade show" id="detail_{{ @$value->id }}">
-                                        <td colspan="5">
+                                        <td colspan="7">
                                             <div class="container">
                                                 <div class="rounded row shadow header-shipment">
                                                     <div class="col-lg-4 text-center fw-bold py-2">Type</div>
@@ -367,6 +379,44 @@
                             </table>
                         </div>
                     </div>
+                    <div class="modal fade" id="commentModal" tabindex="-1"
+                        aria-labelledby="commentModalLabel" aria-hidden="true">
+                        <div class="modal-dialog rounded-5">
+                            <div class="modal-content p-3">
+                                <div class="modal-header border-0">
+                                    <h1 class="modal-title fw-bold" id="commentModalLabel"
+                                        style="font-size: 28px">
+                                        Add Comment</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form" method="POST" action="{{ url('user/add-comment') }}">
+                                        <input type="hidden" name="vehicle_id" id="add_com_vehicle" value="0">
+                                        <div class="row mt-4">
+                                            <label for="admin_notes" class="col-md-4 fs-5 fw-bold">Admin Comment
+                                            </label>
+                                            <div class="col-md-8">
+                                                <input type="text" id="admin_notes" class="form-control text-fs-4 rounded pb-4" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <label for="user_notes" class="col-md-4 fs-5 fw-bold">User Comment
+                                            </label>
+                                            <div class="col-md-8">
+                                                <div class="d-flex flex-column align-items-end">
+                                                    <input type="text" id="user_notes" name="user_notes" class="form-control text-fs-4 rounded pb-4" required />
+                                                    <button class="btn btn-sm btn-primary mt-3 comment-btn fs-6 border-0">
+                                                        Update Comment
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="javascript:void;" class="btn btn-primary border-0 mt-4 col-md-12 rounded-3 fs-5 w-auto" data-bs-dismiss="modal">Close</a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -387,6 +437,26 @@
                 $("#moneyTransferModal .select2.select2-container").css("width", "100%");
                 $("#moneyTransferModal .select2-selection").css("height", "40px");
                 $("#moneyTransferModal .select2-selection__arrow").css("display", "none");
+            });
+
+            $(document).on("click", ".comment_modal", function () {
+                var id = $(this).attr("data-id");
+                $("#add_com_vehicle").val(id);
+
+                var settings = {
+                  "url": "{{ url('user/get-vehicle-notes') }}"+"/"+id,
+                  "method": "GET",
+                };
+
+                $.ajax(settings).done(function (response) {
+                    response = JSON.parse(response);
+                    if (response.success == true) {
+                        $("#admin_notes").val(response.data.notes_financial);
+                        $("#user_notes").val(response.data.notes_user_financial);
+                    }
+                });
+
+                $("#commentModal").modal("show");
             });
 
             $(document).on("submit", ".form", function (event) {

@@ -556,6 +556,24 @@ class HomeController extends Controller
         return json_encode(["success" => true, "msg" => "Money is transfered successfully!"]);
     }
 
+    public function add_comment(Request $request)
+    {
+        $user_notes = $request->user_notes;
+        $vehicle_id = $request->vehicle_id;
+
+        Vehicle::where("id", $vehicle_id)->update(["notes_user_financial" => $user_notes]);
+
+        return json_encode(["success"=>true, 'msg'=>'Comment is updated successfully!', 'action'=>'reload']);
+    }
+
+    public function get_vehicle_notes($id)
+    {
+        $vehicle = Vehicle::where("id", $id)->first();
+        $data['notes_financial'] = $vehicle->notes_financial;
+        $data['notes_user_financial'] = $vehicle->notes_user_financial;
+        return json_encode(["success"=>true, "data" => $data]);
+    }
+
     public function post_login(Request $request)
     {
         if(Auth::attempt(['name' => $request->username, 'password' => $request->password])){ 

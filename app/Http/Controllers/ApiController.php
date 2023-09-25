@@ -347,6 +347,7 @@ class ApiController extends Controller
                     $financial_data['due_payments_limit'] = 0;
                 }
 
+                $previous = TransactionsHistory::where("user_id", $id)->sum('amount');
                 $auction_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('auction_price');
                 $towing_price = \DB::table('vehicles')->where('buyer_id', $id)->sum('towing_price');
                 $occean_freight = \DB::table('vehicles')->where('buyer_id', $id)->sum('occean_freight');

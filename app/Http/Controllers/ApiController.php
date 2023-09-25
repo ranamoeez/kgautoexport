@@ -338,10 +338,15 @@ class ApiController extends Controller
             if ($check_user > 0) {
                 $financial_data = [];
                 $financial_data['history'] = TransactionsHistory::with('vehicle')->where('user_id', $id)->get();
-                $financial_data['total_transactions'] = TransactionsHistory::where('user_id', $id)->where('status', 'paid')->sum('amount');
-                $financial_data['balance'] = TransactionsHistory::where('user_id', $id)->where('status', 'paid')->sum('amount');
-                $financial_data['due_payments'] = TransactionsHistory::where('user_id', $id)->where('status', 'unpaid')->sum('amount');
-                $financial_data['due_payments_limit'] = (int)User::where('id', $id)->first()->due_payments_limit;
+                $financial_data['total_transactions'] = TransactionsHistory::where('user_id', $id)->sum('amount');
+                $financial_data['balance'] = User::where('id', $id)->first()->balance;
+                $financial_data['due_payments'] = TransactionsHistory::where('user_id', $id)->sum('amount');
+                $financial_data['due_payments_limit'] = (int)User::with("user_level")->where('id', $id)->first();
+                if (!empty($financial_data['due_payments_limit']->user_level)) {
+                    $financial_data['due_payments_limit'] = (int)$financial_data['due_payments_limit']->user_level->due_payment_limit;
+                } else {
+                    $financial_data['due_payments_limit'] = 0;
+                }
             
                 return $this->sendResponse($financial_data, 'Financial data retrieved successfully.');
             } else {
@@ -415,7 +420,6 @@ class ApiController extends Controller
                     }
                     $pickup_request->user_id = $id;
                     $pickup_request->vehicle_id = $input['vehicle_id'];
-                    $pickup_request->picker_name = @$input['picker_name'];
                     $pickup_request->comments = $input['comments'];
                     $pickup_request->save();
                 } else {

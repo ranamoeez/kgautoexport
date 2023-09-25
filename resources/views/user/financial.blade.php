@@ -50,11 +50,11 @@
                     @endphp
                     <h4 class="text-white px-5 text-fs-5 fw-bold">
                         Your Account Health is
-                        @if($percentage < 20)
+                        @if($percentage < 50)
                         <span class="text-exceed">exceeding 80%</span>
-                        @elseif($percentage >= 50 && $percentage < 80)
+                        @elseif($percentage >= 50 && $percentage <= 80)
                         <span style="color: orange;">50%</span>
-                        @elseif($percentage < 50)
+                        @elseif($percentage > 80)
                         <span class="text-danger">less than 40%</span>
                         @endif
                     </h4>

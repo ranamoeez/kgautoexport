@@ -150,6 +150,44 @@ class HomeController extends Controller
             return json_encode(["success" => false, "msg" => "Please select any vehicle first!"]);
         }
 
+        $previous = TransactionsHistory::where("user_id", Auth::user()->id)->sum('amount');
+        $auction_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('auction_price');
+        $towing_price = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('towing_price');
+        $occean_freight = \DB::table('vehicles')->where('buyer_id', Auth::user()->id)->sum('occean_freight');
+        $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', Auth::user()->id)->get();
+        $fines = 0;
+        $company_fee = 0;
+        $unloading_fee = 0;
+        foreach ($all_data as $k => $value) {
+            if (!empty(@$value->fines)) {
+                foreach (@$value->fines as $ke => $v) {
+                    $fines += (int)$v->amount;
+                }
+            }
+            if (!empty(@$value->buyer->user_level)) {
+                $company_fee += (int)@$value->buyer->user_level->company_fee;
+            }
+            if (!empty(@$value->destination_port)) {
+                $unloading_fee += (int)@$value->destination_port->unloading_fee;
+            }
+        }
+        $due_payments = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
+        $all_due_payments = (int)$due_payments - (int)$previous;
+        if ($all_due_payments < 0) {
+            $all_due_payments = 0;
+        }
+
+        $due_payment_limit = User::with("user_level")->where('id', Auth::user()->id)->first();
+        if (!empty($due_payment_limit->user_level)) {
+            $due_payment_limit = (int)$due_payment_limit->user_level->due_payment_limit;
+        } else {
+            $due_payment_limit = 0;
+        }
+
+        if ($all_due_payments >= $due_payment_limit) {
+            return json_encode(["success" => false, "msg" => "Your due payments limit exceeded!"]);
+        }
+
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $filename = Storage::putFile("pickup-request", $file);

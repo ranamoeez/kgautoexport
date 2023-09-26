@@ -15,6 +15,7 @@ use App\Models\AssignVehicle;
 use App\Models\UserLoginLog;
 use App\Models\ContainerVehicle;
 use App\Models\DestinationPort;
+use App\Models\ShippingLine;
 use Validator;
 use Storage;
 
@@ -675,9 +676,10 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                $destination = DestinationPort::all();
+                $data['destination'] = DestinationPort::all();
+                $data['shipping_line'] = ShippingLine::all();
             
-                return $this->sendResponse($destination, 'Destination port retrieved successfully.');
+                return $this->sendResponse($data, 'Destination port retrieved successfully.');
             } else {
                 return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
             }

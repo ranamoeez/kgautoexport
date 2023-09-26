@@ -35,7 +35,7 @@
                     <form method="post" action="{{ url("user/download-images") }}" class="col-md text-md-end mb-2 mb-md-0 form">
                         @csrf
                         <input type="hidden" name="vehicle_id" value="{{ @$list->vehicle_id }}">
-                        <button class="bg-white border-0 download">
+                        <button class="bg-white border-0 download" type="button">
                             <img src="{{ asset("assets/photos.png") }}" alt="" />
                         </button>
                     </form>

@@ -55,7 +55,7 @@ class ApiController extends Controller
             if ($check_user > 0) {
                 $user_id = User::where('api_token', $token)->first()->id;
 
-                $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->where('user_id', $user_id)->limit(100)->get();
+                $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->where('user_id', $user_id);
 
                 if (!empty($request->Status)) {
                     $status = Status::where('name', $request->Status)->first();
@@ -84,9 +84,11 @@ class ApiController extends Controller
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex > 1) {
                         $offset = ($request->PageIndex - 1) * 100;
-                        $vehicles = $vehicles->offset((int)$offset)->limit(100)->get();
+                        $vehicles = $vehicles->offset((int)$offset);
                     }
                 }
+
+                $vehicles = $vehicles->limit(100)->get();
             
                 return $this->sendResponse($vehicles, 'Vehicles retrieved successfully.');
             } else {

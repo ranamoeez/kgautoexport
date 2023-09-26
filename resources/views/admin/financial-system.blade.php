@@ -448,163 +448,147 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center">
-                            <div class="row">
-                                <div class="offset-md-2 col-md-3">
-                                    <p><b>Auction Price</b></p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b><span class="auction_price">0</span> $</b></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
-                                        @csrf
-                                        <input type="hidden" name="type" value="auction_price">
-                                        <input type="hidden" name="amount" id="auc_price" value="0">
-                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
-                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
-                                        <input type="hidden" name="status" value="partly paid">
-                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="offset-md-2 col-md-3">
-                                    <p><b>Towing Price</b></p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b><span class="towing_price">0</span> $</b></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
-                                        @csrf
-                                        <input type="hidden" name="type" value="towing_price">
-                                        <input type="hidden" name="amount" id="tow_price" value="0">
-                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
-                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
-                                        <input type="hidden" name="status" value="partly paid">
-                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="offset-md-2 col-md-3">
-                                    <p><b>Occean Freight</b></p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b><span class="occean_freight">0</span> $</b></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
-                                        @csrf
-                                        <input type="hidden" name="type" value="occean_freight">
-                                        <input type="hidden" name="amount" id="occean_freight" value="0">
-                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
-                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
-                                        <input type="hidden" name="status" value="partly paid">
-                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="offset-md-2 col-md-3">
-                                    <p><b>Company Fee</b></p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b><span class="company_fee">0</span> $</b></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
-                                        @csrf
-                                        <input type="hidden" name="type" value="company_fee">
-                                        <input type="hidden" name="amount" id="comp_price" value="0">
-                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
-                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
-                                        <input type="hidden" name="status" value="partly paid">
-                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="offset-md-2 col-md-3">
-                                    <p><b>Unloading Fee</b></p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b><span class="unloading_fee">0</span> $</b></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
-                                        @csrf
-                                        <input type="hidden" name="type" value="unloading_fee">
-                                        <input type="hidden" name="amount" id="unload_price" value="0">
-                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
-                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
-                                        <input type="hidden" name="status" value="partly paid">
-                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="offset-md-2 col-md-3">
-                                    <p><b>Auction Fines</b></p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b><span class="total_auction_fines">0</span> $</b></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
-                                        @csrf
-                                        <input type="hidden" name="type" value="auction_fines">
-                                        <input type="hidden" name="amount" id="auc_fine_price" value="0">
-                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
-                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
-                                        <input type="hidden" name="status" value="partly paid">
-                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row auction_fines pt-2 mb-2" style="border: 1px solid #aaa; border-radius: 10px;">
-                            </div>
-                            <div class="row">
-                                <div class="offset-md-2 col-md-3">
-                                    <p><b>Trans. Fines</b></p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b><span class="total_trans_fines">0</span> $</b></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
-                                        @csrf
-                                        <input type="hidden" name="type" value="trans_fines">
-                                        <input type="hidden" name="amount" id="trans_price" value="0">
-                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
-                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
-                                        <input type="hidden" name="status" value="partly paid">
-                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row trans_fines pt-2 mb-2" style="border: 1px solid #aaa; border-radius: 10px;">
-                            </div>
-                            <div class="row">
-                                <div class="offset-md-2 col-md-3">
-                                    <p><b>Draft Expenses</b></p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b><span class="total_draft_expenses">0</span> $</b></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
-                                        @csrf
-                                        <input type="hidden" name="type" value="draft_expenses">
-                                        <input type="hidden" name="amount" id="draft_price" value="0">
-                                        <input type="hidden" name="user_id" class="buyer_id" value="1">
-                                        <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
-                                        <input type="hidden" name="status" value="partly paid">
-                                        <button class="btn btn-primary mb-2 border-0">Pay</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row draft_expenses pt-2 mb-2" style="border: 1px solid #aaa; border-radius: 10px;">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="text-fs-4">
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Paid</th>
+                                            <th>Unpaid</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Auction Price</td>
+                                            <td>$<span id="paid_ap">0</span></td>
+                                            <td>$<span id="unpaid_ap">0</span></td>
+                                            <td>
+                                                <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="type" value="auction_price">
+                                                    <input type="hidden" name="amount" id="auc_price" value="0">
+                                                    <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                                    <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                                    <input type="hidden" name="status" value="partly paid">
+                                                    <button class="btn btn-primary mb-2 border-0" id="ap_pay">Pay</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Towing Price</td>
+                                            <td>$<span id="paid_tp">0</span></td>
+                                            <td>$<span id="unpaid_tp">0</span></td>
+                                            <td>
+                                                <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="type" value="towing_price">
+                                                    <input type="hidden" name="amount" id="tow_price" value="0">
+                                                    <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                                    <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                                    <input type="hidden" name="status" value="partly paid">
+                                                    <button class="btn btn-primary mb-2 border-0" id="tp_pay">Pay</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Occean Freight</td>
+                                            <td>$<span id="paid_of">0</span></td>
+                                            <td>$<span id="unpaid_of">0</span></td>
+                                            <td>
+                                                <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="type" value="occean_freight">
+                                                    <input type="hidden" name="amount" id="occ_freight" value="0">
+                                                    <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                                    <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                                    <input type="hidden" name="status" value="partly paid">
+                                                    <button class="btn btn-primary mb-2 border-0" id="of_pay">Pay</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Company Fee</td>
+                                            <td>$<span id="paid_cf">0</span></td>
+                                            <td>$<span id="unpaid_cf">0</span></td>
+                                            <td>
+                                                <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="type" value="company_fee">
+                                                    <input type="hidden" name="amount" id="comp_price" value="0">
+                                                    <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                                    <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                                    <input type="hidden" name="status" value="partly paid">
+                                                    <button class="btn btn-primary mb-2 border-0" id="cf_pay">Pay</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Unloading Fee</td>
+                                            <td>$<span id="paid_uf">0</span></td>
+                                            <td>$<span id="unpaid_uf">0</span></td>
+                                            <td>
+                                                <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="type" value="unloading_fee">
+                                                    <input type="hidden" name="amount" id="unload_price" value="0">
+                                                    <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                                    <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                                    <input type="hidden" name="status" value="partly paid">
+                                                    <button class="btn btn-primary mb-2 border-0" id="uf_pay">Pay</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Auction Fines</td>
+                                            <td>$<span id="paid_af">0</span></td>
+                                            <td>$<span id="unpaid_af">0</span></td>
+                                            <td>
+                                                <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="type" value="auction_fines">
+                                                    <input type="hidden" name="amount" id="auc_fine_price" value="0">
+                                                    <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                                    <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                                    <input type="hidden" name="status" value="partly paid">
+                                                    <button class="btn btn-primary mb-2 border-0" id="af_pay">Pay</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Trans. Fines</td>
+                                            <td>$<span id="paid_tf">0</span></td>
+                                            <td>$<span id="unpaid_tf">0</span></td>
+                                            <td>
+                                                <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="type" value="trans_fines">
+                                                    <input type="hidden" name="amount" id="trans_price" value="0">
+                                                    <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                                    <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                                    <input type="hidden" name="status" value="partly paid">
+                                                    <button class="btn btn-primary mb-2 border-0" id="tf_pay">Pay</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Draft Expenses</td>
+                                            <td>$<span id="paid_de">0</span></td>
+                                            <td>$<span id="unpaid_de">0</span></td>
+                                            <td>
+                                                <form class="pay-form" method="POST" action="{{ url('admin/transaction-history') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="type" value="draft_expenses">
+                                                    <input type="hidden" name="amount" id="draft_price" value="0">
+                                                    <input type="hidden" name="user_id" class="buyer_id" value="1">
+                                                    <input type="hidden" name="vehicle_id" class="vehicle_id" value="1">
+                                                    <input type="hidden" name="status" value="partly paid">
+                                                    <button class="btn btn-primary mb-2 border-0" id="de_pay">Pay</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-lg-12">
@@ -744,223 +728,70 @@
                 $.ajax(settings).done(function (response) {
                     response = JSON.parse(response);
                     if (response.success == true) {
-                        $(".auction_price").text(response.data.auction_price);
-                        if (response.data.auction_price == "0.00") {
-                            $("#auc_price").parent().css("display", "none");
+                        $("#paid_ap").text(response.data.paid_ap);
+                        $("#unpaid_ap").text(response.data.unpaid_ap);
+                        $("#auc_price").val(response.data.unpaid_ap);
+                        if (response.data.unpaid_ap > 0) {
+                            $("#ap_pay").parent().css("display", "block");
                         } else {
-                            if (response.data.transaction_history.length > 0) {
-                                var flag = 0;
-                                $(response.data.transaction_history).each(function (key, value) {
-                                    if (value.type == "auction_price") {
-                                        flag = 1;
-                                    }
-                                });
-                                if (flag == 1) {
-                                    $("#auc_price").parent().css("display", "none");
-                                } else {
-                                    $("#auc_price").parent().css("display", "block");
-                                    $("#auc_price").val(response.data.auction_price);
-                                }
-                            } else {
-                                $("#auc_price").parent().css("display", "block");
-                                $("#auc_price").val(response.data.auction_price);
-                            }
+                            $("#ap_pay").parent().css("display", "none");
                         }
-                        $(".towing_price").text(response.data.towing_price);
-                        if (response.data.towing_price == "0") {
-                            $("#tow_price").parent().css("display", "none");
+                        $("#paid_tp").text(response.data.paid_tp);
+                        $("#unpaid_tp").text(response.data.unpaid_tp);
+                        $("#tow_price").val(response.data.unpaid_tp);
+                        if (response.data.unpaid_tp > 0) {
+                            $("#tp_pay").parent().css("display", "block");
                         } else {
-                            if (response.data.transaction_history.length > 0) {
-                                var flag = 0;
-                                $(response.data.transaction_history).each(function (key, value) {
-                                    if (value.type == "towing_price") {
-                                        flag = 1;
-                                    }
-                                });
-                                if (flag == 1) {
-                                    $("#tow_price").parent().css("display", "none");
-                                } else {
-                                    $("#tow_price").parent().css("display", "block");
-                                    $("#tow_price").val(response.data.towing_price);
-                                }
-                            } else {
-                                $("#tow_price").parent().css("display", "block");
-                                $("#tow_price").val(response.data.towing_price);
-                            }
+                            $("#tp_pay").parent().css("display", "none");
                         }
-                        $(".occean_freight").text(response.data.occean_freight);
-                        if (response.data.occean_freight == "0") {
-                            $("#occean_freight").parent().css("display", "none");
+                        $("#paid_of").text(response.data.paid_of);
+                        $("#unpaid_of").text(response.data.unpaid_of);
+                        $("#occ_freight").val(response.data.unpaid_of);
+                        if (response.data.unpaid_of > 0) {
+                            $("#of_pay").parent().css("display", "block");
                         } else {
-                            if (response.data.transaction_history.length > 0) {
-                                var flag = 0;
-                                $(response.data.transaction_history).each(function (key, value) {
-                                    if (value.type == "occean_freight") {
-                                        flag = 1;
-                                    }
-                                });
-                                if (flag == 1) {
-                                    $("#occean_freight").parent().css("display", "none");
-                                } else {
-                                    $("#occean_freight").parent().css("display", "block");
-                                    $("#occean_freight").val(response.data.occean_freight);
-                                }
-                            } else {
-                                $("#occean_freight").parent().css("display", "block");
-                                $("#occean_freight").val(response.data.occean_freight);
-                            }
+                            $("#of_pay").parent().css("display", "none");
                         }
-                        $(".total_auction_fines").text(response.data.total_auction_fines);
-                        if (response.data.total_auction_fines == "0") {
-                            $("#auc_fine_price").parent().css("display", "none");
+                        $("#paid_cf").text(response.data.paid_cf);
+                        $("#unpaid_cf").text(response.data.unpaid_cf);
+                        $("#comp_price").val(response.data.unpaid_cf);
+                        if (response.data.unpaid_cf > 0) {
+                            $("#cf_pay").parent().css("display", "block");
                         } else {
-                            if (response.data.transaction_history.length > 0) {
-                                var flag = 0;
-                                $(response.data.transaction_history).each(function (key, value) {
-                                    if (value.type == "auction_fines") {
-                                        flag = 1;
-                                    }
-                                });
-                                if (flag == 1) {
-                                    $("#auc_fine_price").parent().css("display", "none");
-                                } else {
-                                    $("#auc_fine_price").parent().css("display", "block");
-                                    $("#auc_fine_price").val(response.data.total_auction_fines);
-                                }
-                            } else {
-                                $("#auc_fine_price").parent().css("display", "block");
-                                $("#auc_fine_price").val(response.data.total_auction_fines);
-                            }
+                            $("#cf_pay").parent().css("display", "none");
                         }
-                        $(".total_trans_fines").text(response.data.total_trans_fines);
-                        if (response.data.total_trans_fines == "0") {
-                            $("#trans_price").parent().css("display", "none");
+                        $("#paid_uf").text(response.data.paid_uf);
+                        $("#unpaid_uf").text(response.data.unpaid_uf);
+                        $("#unload_price").val(response.data.unpaid_uf);
+                        if (response.data.unpaid_uf > 0) {
+                            $("#uf_pay").parent().css("display", "block");
                         } else {
-                            if (response.data.transaction_history.length > 0) {
-                                var flag = 0;
-                                $(response.data.transaction_history).each(function (key, value) {
-                                    if (value.type == "trans_fines") {
-                                        flag = 1;
-                                    }
-                                });
-                                if (flag == 1) {
-                                    $("#trans_price").parent().css("display", "none");
-                                } else {
-                                    $("#trans_price").parent().css("display", "block");
-                                    $("#trans_price").val(response.data.total_trans_fines);
-                                }
-                            } else {
-                                $("#trans_price").parent().css("display", "block");
-                                $("#trans_price").val(response.data.total_trans_fines);
-                            }
+                            $("#uf_pay").parent().css("display", "none");
                         }
-                        $(".total_draft_expenses").text(response.data.total_draft_expenses);
-                        if (response.data.total_draft_expenses == "0") {
-                            $("#draft_price").parent().css("display", "none");
+                        $("#paid_af").text(response.data.paid_af);
+                        $("#unpaid_af").text(response.data.unpaid_af);
+                        $("#auc_fine_price").val(response.data.unpaid_af);
+                        if (response.data.unpaid_af > 0) {
+                            $("#af_pay").parent().css("display", "block");
                         } else {
-                            if (response.data.transaction_history.length > 0) {
-                                var flag = 0;
-                                $(response.data.transaction_history).each(function (key, value) {
-                                    if (value.type == "draft_expenses") {
-                                        flag = 1;
-                                    }
-                                });
-                                if (flag == 1) {
-                                    $("#draft_price").parent().css("display", "none");
-                                } else {
-                                    $("#draft_price").parent().css("display", "block");
-                                    $("#draft_price").val(response.data.total_draft_expenses);
-                                }
-                            } else {
-                                $("#draft_price").parent().css("display", "block");
-                                $("#draft_price").val(response.data.total_draft_expenses);
-                            }
+                            $("#af_pay").parent().css("display", "none");
                         }
-                        $(".company_fee").text(response.data.company_fee);
-                        if (response.data.company_fee == "0") {
-                            $("#comp_price").parent().css("display", "none");
+                        $("#paid_tf").text(response.data.paid_tf);
+                        $("#unpaid_tf").text(response.data.unpaid_tf);
+                        $("#trans_price").val(response.data.unpaid_tf);
+                        if (response.data.unpaid_tf > 0) {
+                            $("#tf_pay").parent().css("display", "block");
                         } else {
-                            if (response.data.transaction_history.length > 0) {
-                                var flag = 0;
-                                $(response.data.transaction_history).each(function (key, value) {
-                                    if (value.type == "company_fee") {
-                                        flag = 1;
-                                    }
-                                });
-                                if (flag == 1) {
-                                    $("#comp_price").parent().css("display", "none");
-                                } else {
-                                    $("#comp_price").parent().css("display", "block");
-                                    $("#comp_price").val(response.data.company_fee);
-                                }
-                            } else {
-                                $("#comp_price").parent().css("display", "block");
-                                $("#comp_price").val(response.data.company_fee);
-                            }
+                            $("#tf_pay").parent().css("display", "none");
                         }
-                        $(".unloading_fee").text(response.data.unloading_fee);
-                        if (response.data.unloading_fee == "0") {
-                            $("#unload_price").parent().css("display", "none");
+                        $("#paid_de").text(response.data.paid_de);
+                        $("#unpaid_de").text(response.data.unpaid_de);
+                        $("#draft_price").val(response.data.unpaid_de);
+                        if (response.data.unpaid_de > 0) {
+                            $("#de_pay").parent().css("display", "block");
                         } else {
-                            if (response.data.transaction_history.length > 0) {
-                                var flag = 0;
-                                $(response.data.transaction_history).each(function (key, value) {
-                                    if (value.type == "unloading_fee") {
-                                        flag = 1;
-                                    }
-                                });
-                                if (flag == 1) {
-                                    $("#unload_price").parent().css("display", "none");
-                                } else {
-                                    $("#unload_price").parent().css("display", "block");
-                                    $("#unload_price").val(response.data.unloading_fee);
-                                }
-                            } else {
-                                $("#unload_price").parent().css("display", "block");
-                                $("#unload_price").val(response.data.unloading_fee);
-                            }
+                            $("#de_pay").parent().css("display", "none");
                         }
-                        $(".auction_fines").html("");
-                        $(".trans_fines").html("");
-                        $(".draft_expenses").html("");
-                        $(response.data.fines).each(function (key, value) {
-                            var date = value.created_at.split('T');
-                            date = date[0] + " " + date[1].replace(".000000Z", ""); 
-                            if (value.type == "auction") {
-                                var auction_fines = `<div class="offset-md-2 col-md-3">
-                                    <p>`+value.cause+`</p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b>`+value.amount+` $</b></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <p>`+date+`</p>
-                                </div>`;
-                                $(".auction_fines").append(auction_fines);
-                            } else if (value.type == "transaction") {
-                                var trans_fines = `<div class="offset-md-2 col-md-3">
-                                    <p>`+value.cause+`</p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b>`+value.amount+` $</b></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <p>`+date+`</p>
-                                </div>`;
-                                $(".trans_fines").append(trans_fines);
-                            } else if (value.type == "draft_expense") {
-                                var draft_expenses = `<div class="offset-md-2 col-md-3">
-                                    <p>`+value.cause+`</p>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><b>`+value.amount+` $</b></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <p>`+date+`</p>
-                                </div>`;
-                                $(".draft_expenses").append(draft_expenses);
-                            }
-                        });
 
                         $("#detailModal").modal("show");
                     }

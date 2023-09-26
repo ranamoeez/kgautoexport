@@ -104,22 +104,38 @@ class ApiController extends Controller
         if (!empty($token)) {
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
-                $user_id = User::where('api_token', $token)->first()->id;
+                $user = User::where('api_token', $token)->first();
+                $user_id = $user->id;
 
-                $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
-                    $q->where("user_id", $user_id);
-                })->limit(100)->get();
+                if ($user->role == "4") {
+                    $destination_id = $user->destination_id;
 
-                if (!empty($request->PageIndex)) {
-                    if ($request->PageIndex == 1) {
-                        $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
-                            $q->where("user_id", $user_id);
-                        })->limit(100)->get();
-                    } else {
-                        $offset = ($request->PageIndex - 1) * 100;
-                        $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
-                            $q->where("user_id", $user_id);
-                        })->limit(100)->offset((int)$offset)->get();
+                    $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $destination_id)->limit(100)->get();
+
+                    if (!empty($request->PageIndex)) {
+                        if ($request->PageIndex == 1) {
+                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $destination_id)->limit(100)->get();
+                        } else {
+                            $offset = ($request->PageIndex - 1) * 100;
+                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $destination_id)->limit(100)->offset((int)$offset)->get();
+                        }
+                    }
+                } else {
+                    $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
+                        $q->where("user_id", $user_id);
+                    })->limit(100)->get();
+
+                    if (!empty($request->PageIndex)) {
+                        if ($request->PageIndex == 1) {
+                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
+                                $q->where("user_id", $user_id);
+                            })->limit(100)->get();
+                        } else {
+                            $offset = ($request->PageIndex - 1) * 100;
+                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
+                                $q->where("user_id", $user_id);
+                            })->limit(100)->offset((int)$offset)->get();
+                        }
                     }
                 }
 

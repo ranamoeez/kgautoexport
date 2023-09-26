@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Letter</title>
+	<title>Loading Order</title>
 </head>
 <body>
 	<div class="main">
@@ -29,7 +29,7 @@
 					<tr>
 						<td style="border: 1px solid #000; padding: 10px;">
 							<p style="font-size: 10px;">EXPORT REFERENCE</p>
-							<p style="text-align: center;">REF#{{ @$container->export_referrence }}</p>
+							<p style="text-align: center;">REF#{{ @$container->export_reference }}</p>
 						</td>
 					</tr>
 					<tr>
@@ -60,7 +60,7 @@
 							<p style="font-size: 10px;">OCEAN/VESSEL</p>
 							<p>{{ @$container->vessel_name }}</p>
 							<p style="font-size: 10px; margin-top: 20px;">DATE OF SAIL</p>
-							<b>09/03/2023</b>
+							<b>{{ @$container->departure }}</b>
 						</td>
 						<td style="border: 1px solid #000; padding: 10px;">
 							<p style="font-size: 10px;">PORT OF LOADING</p>
@@ -108,8 +108,9 @@
 					</tr>
 					<tr>
 						<td style="border: 1px solid #000; padding: 10px;">
-							<p><b style="font-size: 10px;">SEAL#</b></p>
+							{{-- <p><b style="font-size: 10px;">SEAL#</b></p> --}}
 							<p><b style="font-size: 10px;">CONTAINER #</b></p>
+							<b>{{ @$container->container_no }}</b>
 						</td>
 						<td style="border: 1px solid #000; padding: 10px; text-align: center;">
 							<p style="font-size: 14px;">{{ count(@$vehicle) }}</p>
@@ -130,7 +131,7 @@
 						<td style="border: 1px solid #000; padding: 10px;">
 							@if(count(@$vehicle) > 0)
 							@foreach(@$vehicle as $key => $value)
-							<p style="margin-bottom: 5px; margin-top: 10px; font-size: 12px;">{{ @$value->vehicle->weight }} KG</p>
+							<p style="margin-bottom: 5px; margin-top: 10px; font-size: 12px;">{{ (!empty(@$value->vehicle->weight)) ? @$value->vehicle->weight : "0" }} KG</p>
 							@endforeach
 							@endif
 						</td>

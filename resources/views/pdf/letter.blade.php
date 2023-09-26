@@ -93,13 +93,13 @@
 				<p style="margin-bottom: 5px; margin-top: 0px;">POC Name:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="TOMAS ICKOVIC">
 			</div>
 			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
 				<p style="margin-bottom: 5px; margin-top: 0px;">POC Company:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="JAX AUTO SHIPPING">
 			</div>
 		</div>
 		<div class="fourth-section" style="width: 100%; min-height: 50px;">
@@ -107,13 +107,13 @@
 				<p style="margin-bottom: 5px; margin-top: 0px;">POC Phone#:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="912-234-8984">
 			</div>
 			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
 				<p style="margin-bottom: 5px; margin-top: 0px;">POC Fax#:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="912-234-8985">
 			</div>
 		</div>
 		<div class="fourth-section" style="width: 100%; min-height: 50px;">
@@ -121,7 +121,7 @@
 				<p style="margin-bottom: 5px; margin-top: 0px;">AES Number XTN:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$container->aes_nr_xtn }}">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$container->export_reference }}">
 			</div>
 			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
 				<p style="margin-bottom: 5px; margin-top: 0px;">AES Number ITN:</p>
@@ -149,7 +149,7 @@
 				<p style="margin-bottom: 5px; margin-top: 0px;">Country of Final Destination:</p>
 			</div>
 			<div class="part-two" style="width: 30%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="{{ @$container->destination_port->name }}">
 			</div>
 			<div class="part-one" style="width: 19%; float: left; margin-left: 20px;">
 				<p style="margin-bottom: 5px; margin-top: 0px;">Vessel Name:</p>
@@ -177,7 +177,7 @@
 				<p style="margin-bottom: 5px; margin-top: 0px;">Location of Cargo:</p>
 			</div>
 			<div class="part-two" style="width: 80%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%;" value="PORT">
 			</div>
 		</div>
 		@if(count(@$vehicle) > 0)
@@ -209,7 +209,7 @@
 				<p style="margin-bottom: 5px; margin-top: 0px;">Date Signed:</p>
 			</div>
 			<div class="part-two" style="width: 38%; float: left;">
-				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%; margin-top: 30px;">
+				<input type="text" style="border-top: none; border-left: none; border-right: none; width: 100%; margin-top: 30px;"  value="{{ @$container->date_for_letter }}">
 			</div>
 		</div>
 	</div>

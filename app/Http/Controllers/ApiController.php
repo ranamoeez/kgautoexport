@@ -266,7 +266,7 @@ class ApiController extends Controller
                     return $this->sendError('Validation Error.', $validator->errors());       
                 }
            
-                Vehicle::where('id', $id)->update(['destination_manual' => $input['destination'], "update_destination" => "1"]);
+                Vehicle::where('id', $id)->update(['destination_port_id' => $input['destination'], "update_destination" => "1"]);
 
                 $vehicle = Vehicle::where('id', $id)->first();
            

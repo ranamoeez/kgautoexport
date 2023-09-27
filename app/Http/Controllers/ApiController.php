@@ -265,12 +265,8 @@ class ApiController extends Controller
                 if($validator->fails()){
                     return $this->sendError('Validation Error.', $validator->errors());       
                 }
-
-                if(empty($input['notes'])){
-                    $input['notes'] = '';
-                }
            
-                Vehicle::where('id', $id)->update(['destination_manual' => $input['destination'], 'notes' => $input['notes'], "update_destination" => "1"]);
+                Vehicle::where('id', $id)->update(['destination_manual' => $input['destination'], "update_destination" => "1"]);
 
                 $vehicle = Vehicle::where('id', $id)->first();
            

@@ -190,7 +190,7 @@ class HomeController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $filename = Storage::putFile("pickup-request", $file);
+            $filename = Storage::disk("s3")->putFile("pickup-request", $file);
             $data['file'] = $filename;
         }
 

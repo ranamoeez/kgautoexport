@@ -229,7 +229,7 @@
                                 </td>
                                 <td>
                                     @if(!empty(@$value->file))
-                                        <img src="{{ url('storage/app/'.@$value->file) }}" style="width: 100px; height: 100px; cursor: pointer;" class="rounded-4 myImg">
+                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ @$value->file }}" style="width: 100px; height: 100px; cursor: pointer;" class="rounded-4 myImg">
                                     @else
                                     <p class="text-fs-3">
                                         N / A

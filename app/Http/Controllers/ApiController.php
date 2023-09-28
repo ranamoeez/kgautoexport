@@ -512,7 +512,7 @@ class ApiController extends Controller
                     $pickup_request = new PickupRequest;
                     if ($request->hasFile('file')) {
                         $file = $request->file('file');
-                        $filename = Storage::putFile("pickup-request", $file);
+                        $filename = Storage::disk("s3")->putFile("pickup-request", $file);
                         $pickup_request->file = $filename;
                     }
                     $pickup_request->user_id = $id;
@@ -598,7 +598,7 @@ class ApiController extends Controller
                         if (is_array($request->file('images'))) {
                             foreach ($request->file('images') as $key => $value) {
                                 $file = $value;
-                                $filename = Storage::putFile('vehicle/images/'.$vehicle_id, $file);
+                                $filename = Storage::disk("s3")->putFile('vehicle/images/'.$vehicle_id, $file);
                                 
                                 $image = new VehicleImage;
                                 $image->vehicle_id = $vehicle_id;
@@ -612,7 +612,7 @@ class ApiController extends Controller
                             }
                         } else {
                             $file = $request->file('images');
-                            $filename = Storage::putFile('vehicle/images/'.$vehicle_id, $file);
+                            $filename = Storage::disk("s3")->putFile('vehicle/images/'.$vehicle_id, $file);
                             
                             $image = new VehicleImage;
                             $image->vehicle_id = $vehicle_id;

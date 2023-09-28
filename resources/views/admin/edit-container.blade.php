@@ -494,14 +494,14 @@
                                             <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-container-documents', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="{{ url($value->filepath.$value->filename) }}" download>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <object data="{{ url($value->filepath.$value->filename) }}" style="width: 100%; height: 100% !important;">
-                                            Alt : <a href="{{ url($value->filepath.$value->filename) }}">test.pdf</a>
+                                        <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" style="width: 100%; height: 100% !important;">
+                                            Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}">test.pdf</a>
                                         </object>
                                     </div>
                                 </div>

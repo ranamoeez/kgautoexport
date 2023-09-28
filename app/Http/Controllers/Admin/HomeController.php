@@ -162,8 +162,8 @@ class HomeController extends Controller
                 $files = [];
                 foreach ($request->file('images') as $key => $value) {
                     $file = $value;
-                    $filename = Storage::putFile('vehicle/images/'.$vehicle->id, $file);
-                    
+                    $filename = Storage::disk("s3")->putFile('vehicle/images/'.$vehicle->id, $file);
+
                     $image = new VehicleImage;
                     $image->vehicle_id = $vehicle->id;
                     $image->filesize = $value->getSize();
@@ -179,7 +179,7 @@ class HomeController extends Controller
                 $files = [];
                 foreach ($request->file('documents') as $key => $value) {
                     $file = $value;
-                    $filename = Storage::putFile('vehicle/documents/'.$vehicle->id, $file);
+                    $filename = Storage::disk("s3")->putFile('vehicle/documents/'.$vehicle->id, $file);
                     
                     $image = new VehicleDocuments;
                     $image->vehicle_id = $vehicle->id;
@@ -263,7 +263,7 @@ class HomeController extends Controller
                 $files = [];
                 foreach ($request->file('images') as $key => $value) {
                     $file = $value;
-                    $filename = Storage::putFile('vehicle/images/'.$id, $file);
+                    $filename = Storage::disk("s3")->putFile('vehicle/images/'.$id, $file);
                     
                     $image = new VehicleImage;
                     $image->vehicle_id = $id;
@@ -280,7 +280,7 @@ class HomeController extends Controller
                 $files = [];
                 foreach ($request->file('documents') as $key => $value) {
                     $file = $value;
-                    $filename = Storage::putFile('vehicle/documents/'.$id, $file);
+                    $filename = Storage::disk("s3")->putFile('vehicle/documents/'.$id, $file);
                     
                     $image = new VehicleDocuments;
                     $image->vehicle_id = $id;
@@ -495,7 +495,7 @@ class HomeController extends Controller
                 $files = [];
                 foreach ($request->file('documents') as $key => $value) {
                     $file = $value;
-                    $filename = Storage::putFile('container/'.$container->id, $file);
+                    $filename = Storage::disk("s3")->putFile('container/'.$container->id, $file);
                     
                     $image = new ContainerImage;
                     $image->container_id = $container->id;
@@ -539,7 +539,7 @@ class HomeController extends Controller
                 $files = [];
                 foreach ($request->file('documents') as $key => $value) {
                     $file = $value;
-                    $filename = Storage::putFile('container/'.$id, $file);
+                    $filename = Storage::disk("s3")->putFile('container/'.$id, $file);
                     
                     $image = new ContainerImage;
                     $image->container_id = $id;

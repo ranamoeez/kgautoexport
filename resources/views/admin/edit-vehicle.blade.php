@@ -730,14 +730,14 @@
                                             <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-vehicle-documents', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="{{ url($value->filepath.$value->filename) }}" download>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <object data="{{ url($value->filepath.$value->filename) }}" style="width: 100%; height: 100% !important;">
-                                            Alt : <a href="{{ url($value->filepath.$value->filename) }}">test.pdf</a>
+                                        <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" style="width: 100%; height: 100% !important;">
+                                            Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}">test.pdf</a>
                                         </object>
                                     </div>
                                 </div>
@@ -785,13 +785,13 @@
                                             <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="{{ url($value->filepath.$value->filename) }}" download>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <img src="{{ url($value->filepath.$value->filename) }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
+                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -814,13 +814,13 @@
                                             <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="{{ url($value->filepath.$value->filename) }}" download>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <img src="{{ url($value->filepath.$value->filename) }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
+                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -838,7 +838,7 @@
                                                 @if(count(@$list->vehicle->vehicle_images) > 0)
                                                 @foreach($list->vehicle->vehicle_images as $key => $value)
                                                 <li>
-                                                    <img src="{{ url($value->filepath.$value->filename) }}" class="w-100"
+                                                    <img src="{{ url($value->filename) }}" class="w-100"
                                                         alt="car-image" />
                                                 </li>
                                                 @endforeach

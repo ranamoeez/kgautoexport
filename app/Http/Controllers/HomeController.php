@@ -223,7 +223,7 @@ class HomeController extends Controller
 
         $data['list'] = AssignVehicle::with('vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.shipping_line', 'container.measurement')->where('id', $id)->first();
         $data['destination_port'] = DestinationPort::all();
-        $data['email_history'] = EmailHistory::where("vehicle_id", $id)->where("user_id", \Auth::user()->id)->get();
+        $data['email_history'] = EmailHistory::where("vehicle_id", $data['list']->vehicle_id)->where("user_id", \Auth::user()->id)->get();
 
         return view('user.vehicle-detail', $data);
     }

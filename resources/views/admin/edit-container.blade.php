@@ -541,6 +541,37 @@
 
                 </div>
             </form>
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <form method="POST" action="{{ url('admin/send-email') }}" class="d-flex align-items-center shadow mb-2 email-form">
+                        <input type="hidden" name="container_id" value="{{ @$container->id }}">
+                        <input type="hidden" name="user_id" value="{{ \Auth::user()->id }}">
+                        <div class="flex-grow-1">
+                            <input type="email" id="default-search" class="form-control border border-1 rounded-2 p-2" placeholder="Enter Email to get details" name="sent_to" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary border border-0 p-2 text-white">Send</button>
+                    </form>
+                    <h5 class="text-fs-4 fw-bold">Sent emails History</h5>
+                    <div class="container-search p-3">
+                        <div class="row shadow border rounded-5 w-100 mb-3 py-2">
+                            <span class="col text-fs-3 fw-bold text-center">Email</span>
+                            <span class="col text-fs-3 fw-bold text-center">Date</span>
+                        </div>
+                        @if(count(@$email_history) > 0)
+                        @foreach(@$email_history as $key => $value)
+                        <div class="row shadow border rounded-5 w-100 mb-3 py-2">
+                            <span class="col text-fs-3 text-center">{{ @$value->sent_to }}</span>
+                            <span class="col text-fs-3 text-center">{{ date("d-m-Y", strtotime(@$value->created_at)) }}</span>
+                        </div>
+                        @endforeach
+                        @else
+                        <div class="row shadow border rounded-5 w-100 mb-3 py-2">
+                            <span class="col text-fs-3 text-center">No history found.</span>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
             <!-- Modal -->
             <div class="modal fade remove" id="removeRowModal" tabindex="-1"
                 aria-labelledby="removeRowModalLabel" aria-hidden="true">
@@ -721,6 +752,35 @@
                             });
                         }
                     }
+                }
+            });
+        });
+
+        $(document).on("submit", ".email-form", function (event) {
+            event.preventDefault();
+            $('.center-body').css('display', 'block');
+            $.ajax({
+                type: $(this).attr("method"),
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                url: $(this).attr("action"),
+                data: new FormData(this),
+                headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                success: function (res) {
+                    // res = JSON.parse(res);
+                    console.log(res);
+                    if (res.success == true) {
+                        toastr["success"](res.msg, "Complete!");
+
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        toastr["error"](res.msg, "Failed!");
+                    }
+                    $('.center-body').css('display', 'none');
                 }
             });
         });

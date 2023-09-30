@@ -36,6 +36,7 @@ use App\Models\ReminderTemplate;
 use App\Models\ReminderHistory;
 use App\Models\Level;
 use App\Models\MoneyTransfer;
+use App\Models\EmailHistory;
 use Auth;
 use Storage;
 use PDF;
@@ -381,6 +382,7 @@ class HomeController extends Controller
         $vid = AssignVehicle::where('id', $id)->first()->vehicle_id;
         $data['history'] = ReminderHistory::where('vehicle_id', $vid)->get();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['email_history'] = EmailHistory::where("vehicle_id", $vid)->where("user_id", \Auth::user()->id)->get();
         return view('admin.edit-vehicle', $data);
     }
 
@@ -594,6 +596,7 @@ class HomeController extends Controller
         $data['all_measurement'] = Measurement::all();
         $data['all_discharge_port'] = DischargePort::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['email_history'] = EmailHistory::where("container_id", $id)->where("user_id", \Auth::user()->id)->get();
         return view('admin.edit-container', $data);
     }
 
@@ -603,6 +606,27 @@ class HomeController extends Controller
         $container->delete();
         $response = array('success'=>true,'msg'=>'Container has been deleted.');
         echo json_encode($response); return;
+    }
+
+    public function send_email(Request $request)
+    {
+        $data = $request->all();
+
+        if (!empty($data['vehicle_id'])) {
+            $vehicle = Vehicle::where('id', $data['vehicle_id'])->first();
+
+            \Mail::to($data['sent_to'])->send(new \App\Mail\SendVehicle($vehicle));
+        }
+
+        if (!empty($data['container_id'])) {
+            $container = Container::with('status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('id', $data['container_id'])->first();
+
+            \Mail::to($data['sent_to'])->send(new \App\Mail\SendContainer($container));
+        }
+
+        EmailHistory::create($data);
+
+        return json_encode(["success" => true, "msg" => "Email is sended successfully!"]);
     }
 
     public function loading_order(Request $request, $id)

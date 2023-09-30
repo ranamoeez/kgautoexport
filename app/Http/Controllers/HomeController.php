@@ -669,14 +669,14 @@ class HomeController extends Controller
                 'ClientID' => "ABIdJb32v3epesMWXz0y5xokrQDirpjHrEKa0n39mLIvUGbN9t",
                 'ClientSecret' => "40uEBRLODbAQgmVu5vs6X38Bbt8Kv45Bp3P0znfs",
                 'RedirectURI' => "https://developer.intuit.com/v2/OAuth2Playground/RedirectUrl",
-                'accessTokenKey' => "eyJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiZGlyIn0..KkelcVNFfGNrQ2HblMhT2w.LXD-PnavCS34xHc72_Nict4Y_IwpNmGOBhQuTvejTZ1RavaTbsn-7J4R8cmS2qbzrEjWQ6iYpp5IL0bsvXENkEpU1aPMLse8DDln-EqalatbA0BQCnAorAvhlf-8XPdNxG-vYfXO7PRJcE1ujkV4yQiSG25hIdeJHMZcOA6WTcqrutADcfYgJA5x1oChc6Q6qKtnw-t3O3zExf52YSTaWq3T6bfTzvoXtg3m29XKRG3s4C5quRCOUhmiuiQZfpGhX9ETiJk0ToWWUSK-viIqFj7snCzxLQSnDCkJkaZXcVHI-QH1WVYIp3q-axi2NJjvdvHIluDDicwdBQdibDUZeNb2UYZy13wWOce8Vv2sbhZloneJIqGGGYH85LFMdG3kXT70uqvZnIHXA60X71GwCB_CLLHYkKRP6UbhrMHkg_fmlQUVhyhV2vX_sk_A7_WTF5nEl-nldtU_ZCx8FNTyxubcBPYZM7QtXM4vI_4DIgkUFjYF7oBwHZqytGxgDhXDbMZbwsvNeyq8A2YM9154xfXfluSR5B1AqA9JyWVJ2Cl5Vjo6F4tnjEZYdTypeC3ddDQSD-f6iUpDVztTabgADTynlrx9nhPmzMwvMdbisF2KKoRcnR5u7d5JQ4DUydhBG0M8uXqaElAfFHBCR5qHMUo96z6KyshZxm8dn8PThQO29srYW7B3m3CrvauRX9uvFKWyRa9TgDPRpNqX-3bspeyUAdQ4e85CO7HALvdPjVQ.9TVPvTe6KHQR3-IlaXf7cA",
-                'refreshTokenKey' => "AB11702929503i1FgiNZa2TJq9rMNMVTQBo3X46AGn7N7246TK",
-                'QBORealmID' => "4620816365340509870",
-                'baseUrl' => "development"
+                'accessTokenKey' => "eyJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiZGlyIn0..j5qRkd0nNpSXsHOzxMAGMg.re4y2eX85Z1z7LruDIWk7ZH9wRmUCMQ2GrcTZayDCKS742Zp6hLDthbvPslls3kZtJCRo_UzbYBhMiPK0MHerUL1I2tzZotpE2nJ5zdQJgNKjbxCMGx9B14yVCVU6i5gPd18ehcwfbKnyXO1BYKym4pCA6ZCS_RltkcE2eH65eON4YMVzdMLKUKG1mDBuwSVUMgSyKthytrT-cS5eVtS7iF58E1rAICYrPWoXi4HpU7fxwYnT551K2pajCeqj_aG2whkeLd7DNlJ1p8a9zNb4t11a8DAOfKdjso9zUpgmuHIOydx36T0pNoAMxM9rsdsSWhxDLIGskNmQPplShPKykhQRzeQIisqpyZcTZpcxMrtVEyvLBb-iR2CEErF6SzaH14zKxR4c44TNWn_cPRRdpCmzptin38KgBT43wH9EK6zgfJ-Z1_O9BJEVJ5hqOexFXuMyoTM5stIYawVsDN6twcF8XihjtaduOiW2gj1RHc5M1t3rk3CBsmuBH1Z4ApUk0G2kewtY0Iofnz-Xf3T6DbJo3ek1K7yprwg5Ojyuo4tZQnBBVCnRUScNGT8YZqDmnJ8Exuu0YzPyUzzrgggFDjl3fi1lokD81GX91toz32KRzaW7HjvjxPNxKw6swFLsnYiP2diiBNqOcjIsAUZyJFusoWryVQI5Lz4OL5tF7ZRx_mVDjSp0NrYlNOtY5Qc1SvkBOOs__Q-yJ1fv56RgO8v-0Uoa18mZZ7mHyIg2ac8CvSEtqOnJu_sCjSzxUN6.s-YzU6TlZBfG3qtT12_beQ",
+                'refreshTokenKey' => "AB11704821944MLABN9W2HkMTurNGq909yjvEH6zzT160kSkFI",
+                'QBORealmID' => "9130357402864616",
+                'baseUrl' => "production"
             ]);
 
             $OAuth2LoginHelper = $dataService->getOAuth2LoginHelper();
-            $accessTokenObj = $OAuth2LoginHelper->refreshAccessTokenWithRefreshToken("AB11702929503i1FgiNZa2TJq9rMNMVTQBo3X46AGn7N7246TK");
+            $accessTokenObj = $OAuth2LoginHelper->refreshAccessTokenWithRefreshToken("AB11704821944MLABN9W2HkMTurNGq909yjvEH6zzT160kSkFI");
             $accessTokenValue = $accessTokenObj->getAccessToken();
             $refreshTokenValue = $accessTokenObj->getRefreshToken();
 
@@ -687,8 +687,8 @@ class HomeController extends Controller
                 'RedirectURI' => "https://developer.intuit.com/v2/OAuth2Playground/RedirectUrl",
                 'accessTokenKey' => $accessTokenValue,
                 'refreshTokenKey' => $refreshTokenValue,
-                'QBORealmID' => "4620816365340509870",
-                'baseUrl' => "development"
+                'QBORealmID' => "9130357402864616",
+                'baseUrl' => "production"
             ]);
 
             $total_users = [];
@@ -771,7 +771,7 @@ class HomeController extends Controller
 
             }
 
-            if (!empty($resultObj->DocNumber) && !empty($resultObj->Id)) {
+            if (!empty($resultObj->Id)) {
                 return json_encode(["flag" => true, "msg" => "Invoice created successfully!"]);
             } else {
                 return json_encode(["flag" => false, "msg" => "Something went wrong. Invoice creation failed!"]);

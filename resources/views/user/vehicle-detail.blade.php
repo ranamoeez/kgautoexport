@@ -502,7 +502,7 @@
 
                 <div class="mt-5 container">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="container">
 
                                 <div class="px-14 d-flex justify-content-between mb-3">
@@ -560,36 +560,35 @@
                             </div>
                         </div>
 
-                        {{-- <div class="col-md-6">
-                            <div class="d-flex align-items-center shadow mb-2">
+                        <div class="col-md-6">
+                            <form method="POST" action="{{ url('user/send-email') }}" class="d-flex align-items-center shadow mb-2 email-form">
                                 <div class="flex-grow-1">
-                                    <input type="search" id="default-search"
-                                        class="form-control border border-1 rounded-2 p-2"
-                                        placeholder="Enter Email to get details" required />
+                                    <input type="hidden" name="vehicle_id" value="{{ @$list->vehicle_id }}">
+                                    <input type="hidden" name="user_id" value="{{ \Auth::user()->id }}">
+                                    <input type="email" id="default-search" class="form-control border border-1 rounded-2 p-2" placeholder="Enter Email to get details" name="sent_to" required />
                                 </div>
-                                <button type="submit"
-                                    class="btn btn-primary border border-0 p-2 text-white">Send</button>
-                            </div>
+                                <button type="submit" class="btn btn-primary border border-0 p-2 text-white">Send</button>
+                            </form>
                             <h5 class="text-fs-4 fw-bold">Sent emails History</h5>
                             <div class="container-search p-3">
-                                <div class="row shadow border rounded-5 w-100 mb-3">
+                                <div class="row shadow border rounded-5 w-100 mb-3 py-2">
                                     <span class="col text-fs-3 fw-bold text-center">Email</span>
                                     <span class="col text-fs-3 fw-bold text-center">Date</span>
                                 </div>
-                                <div class="row shadow border rounded-5 w-100 mb-3">
-                                    <span class="col text-fs-3 text-center">moh@gmail.com</span>
-                                    <span class="col text-fs-3 text-center">23.3.2023</span>
+                                @if(count(@$email_history) > 0)
+                                @foreach(@$email_history as $key => $value)
+                                <div class="row shadow border rounded-5 w-100 mb-3 py-2">
+                                    <span class="col text-fs-3 text-center">{{ @$value->sent_to }}</span>
+                                    <span class="col text-fs-3 text-center">{{ date("d-m-Y", strtotime(@$value->created_at)) }}</span>
                                 </div>
-                                <div class="row shadow border rounded-5 w-100 mb-3">
-                                    <span class="col text-fs-3 text-center">Anas@tach.com</span>
-                                    <span class="col text-fs-3 text-center">3.3.2023</span>
+                                @endforeach
+                                @else
+                                <div class="row shadow border rounded-5 w-100 mb-3 py-2">
+                                    <span class="col text-fs-3 text-center">No history found.</span>
                                 </div>
-                                <div class="row shadow border rounded-5 w-100 mb-3">
-                                    <span class="col text-fs-3 text-center">Ahmad@tools.com</span>
-                                    <span class="col text-fs-3 text-center">2.5.2023</span>
-                                </div>
+                                @endif
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
 
@@ -628,6 +627,35 @@
                         } else {
                             toastr["error"](res.msg, "Failed!");
                         }
+                    }
+                });
+            });
+
+            $(document).on("submit", ".email-form", function (event) {
+                event.preventDefault();
+                $('.center-body').css('display', 'block');
+                $.ajax({
+                    type: $(this).attr("method"),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                    success: function (res) {
+                        // res = JSON.parse(res);
+                        console.log(res);
+                        if (res.success == true) {
+                            toastr["success"](res.msg, "Complete!");
+
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            toastr["error"](res.msg, "Failed!");
+                        }
+                        $('.center-body').css('display', 'none');
                     }
                 });
             });

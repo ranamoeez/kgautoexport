@@ -47,6 +47,8 @@ Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::get('/get-vehicle-notes/{id}', [App\Http\Controllers\HomeController::class, 'get_vehicle_notes'])->name('get-user-vehicle-notes');
 	Route::post('/add-sub-user', [App\Http\Controllers\HomeController::class, 'add_sub_user'])->name('add-sub-user');
 	Route::post('/download-images', [App\Http\Controllers\HomeController::class, 'download_images'])->name('download-images');
+
+	Route::post('/send-email', [App\Http\Controllers\HomeController::class, 'send_email'])->name('send-email');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function(){

@@ -19,6 +19,7 @@ use App\Models\DestinationPort;
 use App\Models\Post;
 use App\Models\Fine;
 use App\Models\VehicleImage;
+use App\Models\EmailHistory;
 use Auth;
 use Storage;
 use QuickBooksOnline\API\DataService\DataService;
@@ -222,6 +223,7 @@ class HomeController extends Controller
 
         $data['list'] = AssignVehicle::with('vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.shipping_line', 'container.measurement')->where('id', $id)->first();
         $data['destination_port'] = DestinationPort::all();
+        $data['email_history'] = EmailHistory::where("vehicle_id", $id)->where("user_id", \Auth::user()->id)->get();
 
         return view('user.vehicle-detail', $data);
     }
@@ -237,6 +239,27 @@ class HomeController extends Controller
         Post::create($data);
 
         return json_encode(["success" => true, "msg" => "Post is added successfully!"]);
+    }
+
+    public function send_email(Request $request)
+    {
+        $data = $request->all();
+
+        if (!empty($data['vehicle_id'])) {
+            $vehicle = Vehicle::where('id', $data['vehicle_id'])->first();
+
+            \Mail::to($data['sent_to'])->send(new \App\Mail\SendVehicle($vehicle));
+        }
+
+        if (!empty($data['container_id'])) {
+            $container = Container::with('status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('id', $data['container_id'])->first();
+
+            \Mail::to($data['sent_to'])->send(new \App\Mail\SendContainer($container));
+        }
+
+        EmailHistory::create($data);
+
+        return json_encode(["success" => true, "msg" => "Email is sended successfully!"]);
     }
 
     public function add_notes(Request $request)
@@ -426,6 +449,7 @@ class HomeController extends Controller
         $container->buyers = $buyers;
 
         $data['container'] = $container;
+        $data['email_history'] = EmailHistory::where("container_id", $id)->where("user_id", \Auth::user()->id)->get();
         return view('user.container-detail', $data);
     }
 

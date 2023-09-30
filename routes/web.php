@@ -76,7 +76,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::post('/update-vehicle-data', [App\Http\Controllers\Admin\HomeController::class, 'update_vehicle_data'])->name('update-vehicle-data');
 	Route::post('/update-container-data', [App\Http\Controllers\Admin\HomeController::class, 'update_container_data'])->name('update-container-data');
 
-	Route::post('/send-email', [App\Http\Controllers\Admin\HomeController::class, 'send_email'])->name('user-send-email');
+	Route::post('/send-email', [App\Http\Controllers\Admin\HomeController::class, 'send_email'])->name('send-email');
 
 	Route::get('/delete-vehicle-fines/{id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_vehicle_fines'])->name('delete-vehicle-fines');
 	Route::get('/delete-vehicle-documents/{id}', [App\Http\Controllers\Admin\HomeController::class, 'delete_vehicle_documents'])->name('delete-vehicle-documents');

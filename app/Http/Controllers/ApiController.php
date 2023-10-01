@@ -380,7 +380,7 @@ class ApiController extends Controller
                 $financial_data['history'] = $transaction_history;
 
                 $financial_data['total_transactions'] = TransactionsHistory::where('user_id', $id)->sum('amount');
-                $last_transaction_amount = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle')->where('user_id', $id)->first();
+                $last_transaction_amount = TransactionsHistory::orderBy('id', 'DESC')->where('user_id', $id)->first();
                 $financial_data['last_transaction_amount'] = 0;
                 if (!empty($last_transaction_amount)) {
                     $financial_data['last_transaction_amount'] = (int)$last_transaction_amount->amount;

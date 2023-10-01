@@ -366,8 +366,25 @@ class ApiController extends Controller
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $financial_data = [];
-                $financial_data['history'] = TransactionsHistory::with('vehicle')->where('user_id', $id)->get();
+                $transaction_history = TransactionsHistory::with('vehicle')->where('user_id', $id);
+
+                if (!empty($request->PageIndex)) {
+                    if ($request->PageIndex > 1) {
+                        $offset = ($request->PageIndex - 1) * 100;
+                        $transaction_history = $transaction_history->offset((int)$offset);
+                    }
+                }
+
+                $transaction_history = $transaction_history->limit(100)->get();
+
+                $financial_data['history'] = $transaction_history;
+
                 $financial_data['total_transactions'] = TransactionsHistory::where('user_id', $id)->sum('amount');
+                $last_transaction_amount = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle')->where('user_id', $id)->first();
+                $financial_data['last_transaction_amount'] = 0;
+                if (!empty($last_transaction_amount)) {
+                    $financial_data['last_transaction_amount'] = (int)$last_transaction_amount->amount;
+                }
                 $financial_data['balance'] = User::where('id', $id)->first()->balance;
                 $financial_data['due_payments_limit'] = User::with("user_level")->where('id', $id)->first();
                 if (!empty($financial_data['due_payments_limit']->user_level)) {

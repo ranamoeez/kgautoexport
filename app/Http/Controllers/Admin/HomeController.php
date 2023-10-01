@@ -144,7 +144,7 @@ class HomeController extends Controller
             if ($data['buyer_id'] !== "1") {
                 $fcm_token = User::where("id", $data['buyer_id'])->first()->fcm_token;
                 if (!empty($fcm_token)) {
-                    $this->send_noti($fcm_token, "add-vehicle");
+                    $this->send_noti($fcm_token, "add-vehicle", $vehicle);
                 }
             }
             $assign = new AssignVehicle;
@@ -1028,7 +1028,7 @@ class HomeController extends Controller
             if ($vehicle->buyer_id !== "1") {
                 $fcm_token = User::where("id", $vehicle->buyer_id)->first()->fcm_token;
                 if (!empty($fcm_token)) {
-                    $this->send_noti($fcm_token, "status_changed");
+                    $this->send_noti($fcm_token, "status_changed", $vehicle);
                 }
             }
     	}
@@ -1071,7 +1071,7 @@ class HomeController extends Controller
         if ($pickup->user_id !== "1") {
             $fcm_token = User::where("id", $pickup->user_id)->first()->fcm_token;
             if (!empty($fcm_token)) {
-                $this->send_noti($fcm_token, "pickup-status-changed");
+                $this->send_noti($fcm_token, "pickup-status-changed", $pickup);
             }
         }
 
@@ -1533,7 +1533,8 @@ class HomeController extends Controller
             if ($user_id !== "1") {
                 $fcm_token = User::where("id", $user_id)->first()->fcm_token;
                 if (!empty($fcm_token)) {
-                    $this->send_noti($fcm_token, "added-to-container");
+                    $data = Container::with('status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("id", $container_id)->first();
+                    $this->send_noti($fcm_token, "added-to-container", $data);
                 }
             }
         }
@@ -1541,7 +1542,7 @@ class HomeController extends Controller
         return json_encode(["success"=>true, "action" => 'reload']);
     }
 
-    public function send_noti($fcm_token, $type)
+    public function send_noti($fcm_token, $type, $inside_data)
     {
         $request_body = (object)[];
         if ($type == "add-vehicle") {
@@ -1553,6 +1554,7 @@ class HomeController extends Controller
             $data = (object)[];
             $data->message = "New vehicle is added!";
             $data->type = "add-vehicle";
+            $data->all_data = $inside_data;
         } else if ($type == "added-to-container") {
             $notification = (object)[];
             $notification->title = "K&G Auto Export";
@@ -1562,6 +1564,7 @@ class HomeController extends Controller
             $data = (object)[];
             $data->message = "Vehicle status is changed";
             $data->type = "added-to-container";
+            $data->all_data = $inside_data;
         } else if ($type == "status-changed") {
             $notification = (object)[];
             $notification->title = "K&G Auto Export";
@@ -1571,6 +1574,7 @@ class HomeController extends Controller
             $data = (object)[];
             $data->message = "Vehicle status is changed";
             $data->type = "status-changed";
+            $data->all_data = $inside_data;
         } else if ($type == "pickup-status-changed") {
             $notification = (object)[];
             $notification->title = "K&G Auto Export";
@@ -1580,6 +1584,7 @@ class HomeController extends Controller
             $data = (object)[];
             $data->message = "Pickup request status is updated";
             $data->type = "pickup-status-changed";
+            $data->all_data = $inside_data;
         }
         $request_body->notification = $notification;
         $request_body->priority = "high";

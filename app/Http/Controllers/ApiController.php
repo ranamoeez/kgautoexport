@@ -366,7 +366,7 @@ class ApiController extends Controller
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $financial_data = [];
-                $transaction_history = TransactionsHistory::with('vehicle')->where('user_id', $id);
+                $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle')->where('user_id', $id);
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex > 1) {

@@ -141,18 +141,19 @@ class HomeController extends Controller
                 $data['purchase_date'] = date('Y-m-d');
             }
             $vehicle = Vehicle::create($data);
-            if ($data['buyer_id'] !== "1") {
-                $fcm_token = User::where("id", $data['buyer_id'])->first()->fcm_token;
-                if (!empty($fcm_token)) {
-                    $this->send_noti($fcm_token, "add-vehicle", $vehicle);
-                }
-            }
             $assign = new AssignVehicle;
             $assign->user_id = $data['buyer_id'];
             $assign->vehicle_id = $vehicle->id;
             $assign->payment_status = "unpaid";
             $assign->assigned_by = "admin";
             $assign->save();
+            if ($data['buyer_id'] !== "1") {
+                $fcm_token = User::where("id", $data['buyer_id'])->first()->fcm_token;
+                if (!empty($fcm_token)) {
+                    $assign_vehicle = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->where("id", $assign->id)->first();
+                    $this->send_noti($fcm_token, "add-vehicle", $assign_vehicle);
+                }
+            }
             $transaction_history = new TransactionsHistory;
             $transaction_history->user_id = $data['buyer_id'];
             $transaction_history->amount = '0';
@@ -1533,7 +1534,7 @@ class HomeController extends Controller
             if ($user_id !== "1") {
                 $fcm_token = User::where("id", $user_id)->first()->fcm_token;
                 if (!empty($fcm_token)) {
-                    $data = Container::with('status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("id", $container_id)->first();
+                    $data = Container::with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("id", $container_id)->first();
                     $this->send_noti($fcm_token, "added-to-container", $data);
                 }
             }

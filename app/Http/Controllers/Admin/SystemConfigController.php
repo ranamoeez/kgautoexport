@@ -107,7 +107,7 @@ class SystemConfigController extends Controller
             $data = $request->all();
             $check_username = User::where("name", $data['name'])->where('id', '!=', $id)->count();
             if ($check_username == 0) {
-            	$check_email = User::where("email", $data['email'])->count();
+            	$check_email = User::where("email", $data['email'])->where('id', '!=', $id)->count();
         		if ($check_email == 0) {
 	                if (!empty($data['password'])) {
 	                    if ($data['password'] == $data['cpassword']) {
@@ -215,7 +215,7 @@ class SystemConfigController extends Controller
             $data = $request->all();
             $check_username = User::where("name", $data['name'])->where('id', '!=', $id)->count();
             if ($check_username == 0) {
-            	$check_email = User::where("email", $data['email'])->count();
+            	$check_email = User::where("email", $data['email'])->where('id', '!=', $id)->count();
         		if ($check_email == 0) {
 	                if (!empty($data['password'])) {
 	                    if ($data['password'] == $data['cpassword']) {
@@ -321,7 +321,7 @@ class SystemConfigController extends Controller
             $data = $request->all();
             $check_username = User::where("name", $data['name'])->where('id', '!=', $id)->count();
             if ($check_username == 0) {
-            	$check_email = User::where("email", $data['email'])->count();
+            	$check_email = User::where("email", $data['email'])->where('id', '!=', $id)->count();
         		if ($check_email == 0) {
 	                if (!empty($data['password'])) {
 	                    if ($data['password'] == $data['cpassword']) {

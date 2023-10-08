@@ -76,7 +76,7 @@
                                 </td>
                                 <td>
                                     <p class=" text-fs-3">
-                                        {{ @$value->amount }}
+                                        ${{ @$value->amount }}
                                     </p>
                                 </td>
                                 <td>

@@ -92,7 +92,7 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
-                                <label for="" class="col-md-3 col-form-label fw-semibold">Cut off</label>
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Doc Cutoff</label>
                                 <div class="col-md-9">
                                     <input type="date" name="cut_off" class="form-control" />
                                 </div>
@@ -154,12 +154,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Departure</label>
-                                <div class="col-sm-9">
-                                    <input type="date" name="departure" class="form-control" />
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -169,7 +163,6 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Status</label>
                                 <div class="col-sm-9">
                                     <select class="form-select" name="status_id">
-                                        <option value=""></option>
                                         @if(count(@$all_status) > 0)
                                         @foreach(@$all_status as $key => $value)
                                             @if($value['id'] == @$status)
@@ -193,7 +186,6 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Notify Party</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="notify_part_id">
-                                        <option value=""></option>
                                         @if(count(@$all_notify_party) > 0)
                                         @foreach(@$all_notify_party as $key => $value)
                                             @if($value['id'] == @$notify_party)
@@ -204,6 +196,12 @@
                                         @endforeach
                                         @endif
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Departure</label>
+                                <div class="col-sm-9">
+                                    <input type="date" name="departure" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">

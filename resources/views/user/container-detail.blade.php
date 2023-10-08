@@ -210,7 +210,7 @@
                                         $weight = $weight + @$val->vehicle->weight;
                                     @endphp
                                     <div class="row shadow border rounded-5 w-10 mb-3 py-4">
-                                        <span class="col text-fs-3 text-center">{{ @$val->vehicle->company_name.' '.@$val->vehicle->name.' '.@$val->vehicle->modal }}</span>
+                                        <span class="col text-fs-3 text-center">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name }}</span>
                                         <span class="col text-fs-3 text-center">{{ @$val->vehicle->vin }}</span>
                                         <span class="col text-fs-3 text-center">{{ @$val->vehicle->weight }} kg</span>
                                     </div>

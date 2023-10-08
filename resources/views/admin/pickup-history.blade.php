@@ -263,12 +263,12 @@
                                 </td>
                                 <td>
                                     <p class="text-fs-3">
-                                        {{ @$value->due_payments }} $
+                                        ${{ @$value->due_payments }}
                                     </p>
                                 </td>
                                 <td>
                                     <p class="text-fs-3">
-                                        {{ @$value->balance }} $
+                                        ${{ @$value->balance }}
                                     </p>
                                 </td>
                                 @if(empty($auth_user->admin_level->access) || @in_array("6.2", json_decode($auth_user->admin_level->access)))

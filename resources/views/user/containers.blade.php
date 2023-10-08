@@ -214,7 +214,7 @@
                                                         Buyer:<span class="fw-bold"> {{ @$v->user->surname }}</span>
                                                         @foreach($v->vehicles as $ke => $val)
                                                         <li class="list-unstyled">
-                                                            » <span class="fw-bold">{{ @$val->vehicle->company_name.' '.@$val->vehicle->name.' '.@$val->vehicle->modal }}</span>,
+                                                            » <span class="fw-bold">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name }}</span>,
                                                             VIN: <span class="fw-bold fs-5"><a
                                                                     href="{{ url('user/containers/1') }}"
                                                                     class="text-dark text-decoration-none">{{ @$val->vehicle->vin }}</a></span>
@@ -355,7 +355,7 @@
                                                         Buyer:<span class="fw-bold"> {{ @$v->user->surname }}</span>
                                                         @foreach($v->vehicles as $ke => $val)
                                                         <li class="list-unstyled">
-                                                            » <span class="fw-bold">{{ @$val->vehicle->company_name.' '.@$val->vehicle->name.' '.@$val->vehicle->modal }}</span>,
+                                                            » <span class="fw-bold">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name }}</span>,
                                                             VIN: <span class="fw-bold fs-5"><a
                                                                     href="{{ url('user/containers/1') }}"
                                                                     class="text-dark text-decoration-none">{{ @$val->vehicle->vin }}</a></span>

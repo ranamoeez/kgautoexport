@@ -170,7 +170,7 @@
                 </a>
                 <a href="{{ url('admin/system-configuration/vehicles-modal') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">
-                    Vehicles Modal
+                    Vehicles Model
                 </a>
                 <a href="{{ url('admin/system-configuration/fine-type') }}"
                     class="fw-semibold text-dark text-decoration-none fs-6">

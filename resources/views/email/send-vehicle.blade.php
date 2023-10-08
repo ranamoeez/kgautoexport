@@ -43,7 +43,7 @@
         <tr style="font-size: 14px;">
           <td style="padding: 15px; background-color: #b3c0df; text-align: center; font-size: 16px;">{{ $data->vin }}</td>
           <td style="padding: 15px; background-color: #c6d0e9; text-align: center;">{{ $data->delivery_date }}</td>
-          <td style="padding: 15px; background-color: #b3c0df; text-align: center;">{{ $data->company_name.' '.$data->name.' '.$data->modal }}</td>
+          <td style="padding: 15px; background-color: #b3c0df; text-align: center;">{{ $data->modal.' '.$data->company_name.' '.$data->name }}</td>
           <td style="padding: 15px; background-color: #c6d0e9; text-align: center;">{{ $data->client_name }}</td>
           <td style="padding: 15px; background-color: #b3c0df; text-align: center;">{{ $data->destination_port->name }}</td>
         </tr>

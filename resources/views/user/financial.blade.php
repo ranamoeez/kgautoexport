@@ -72,7 +72,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle fs-3">Due payments</h2>
-                                    <p class="card-text fw-bold mt-2 fs-2"><span>{{ number_format(@$due_payments) }}</span> $</p>
+                                    <p class="card-text fw-bold mt-2 fs-2">$ <span>{{ number_format(@$due_payments) }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle fs-3">Previous payments</h2>
-                                    <p class="card-text fw-bold mt-2 fs-2"><span>{{ number_format(@$previous) }}</span> $</p>
+                                    <p class="card-text fw-bold mt-2 fs-2">$ <span>{{ number_format(@$previous) }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle fs-3">Balance</h2>
-                                    <p class="card-text fw-bold mt-2 fs-2"><span>{{ number_format(@$balance) }}</span> $</p>
+                                    <p class="card-text fw-bold mt-2 fs-2">$ <span>{{ number_format(@$balance) }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                                                             <option selected>Choose vehicle</option>
                                                             @if(count(@$vehicles) > 0)
                                                             @foreach(@$vehicles as $key => $value)
-                                                                <option value="{{ @$value->vehicle_id }}">{{ @$value->vehicle->company_name." ".@$value->vehicle->name." ".@$value->vehicle->modal }}</option>
+                                                                <option value="{{ @$value->vehicle_id }}">{{ @$value->vehicle->modal." ".@$value->vehicle->company_name." ".@$value->vehicle->name }}</option>
                                                             @endforeach
                                                             @endif
                                                         </select>

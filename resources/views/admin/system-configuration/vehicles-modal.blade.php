@@ -22,7 +22,7 @@
                 <div class="col-md-9">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex align-items-center">
-                            <h3 class="fw-bold fs-5 mb-0">Vehicles Modal</h3>
+                            <h3 class="fw-bold fs-5 mb-0">Vehicles Model</h3>
                             <button class="btn border-0 add" type="button">
                                 <img src="{{ asset('assets/plus_green.svg') }}" alt="add" />
                             </button>
@@ -30,7 +30,7 @@
                                 <div class="modal-dialog rounded-5" style="max-width: 746px; width: 746px;">
                                     <div class="modal-content p-3">
                                         <div class="modal-header border-0">
-                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Vehicles Modal</h1>
+                                            <h1 class="modal-title fw-bold" id="modalLabel" style="font-size: 28px">Add New Vehicles Model</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
@@ -57,7 +57,7 @@
                                                             <label for="" class="col-md-4">Vehicles Brand</label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
-                                                                    <select class="select2js form-select brand" name="vehicle_brand_id">
+                                                                    <select class="select2js form-select brand" name="vehicle_brand_id" required>
                                                                         <option value=""></option>
                                                                         @if(count(@$brands) > 0)
                                                                         @foreach(@$brands as $key => $value)
@@ -231,7 +231,7 @@
 
             $(document).on("click", ".add", function () {
                 
-                $("#modalLabel").text("Add New Vehicles Modal");
+                $("#modalLabel").text("Add New Vehicles Model");
                 $("#name").val('');
                 $("#position").val('');
                 $(".brand option[value='']").attr('selected', true);
@@ -258,7 +258,7 @@
                         res = JSON.parse(res);
                         console.log(res);
                         if (res.success == true) {
-                            $("#modalLabel").text("Edit Vehicles Modal");
+                            $("#modalLabel").text("Edit Vehicles Model");
                             $("#name").val(res.data.name);
                             $(".brand option[value="+res.data.vehicle_brand_id+"]").attr('selected', true);
 

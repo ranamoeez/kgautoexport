@@ -86,7 +86,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle text-fs-5">Due payments</h2>
-                                    <p class="card-text fw-bold mt-2"><span>{{ @$due_payments }}</span> $</p>
+                                    <p class="card-text fw-bold mt-2">$ <span>{{ @$due_payments }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +96,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle text-fs-5">Previous payments</h2>
-                                    <p class="card-text fw-bold mt-2"><span>{{ @$previous }}</span> $</p>
+                                    <p class="card-text fw-bold mt-2">$ <span>{{ @$previous }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -106,7 +106,7 @@
                             <div class="card-body d-flex flex-row p-5">
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle text-fs-5">Balance</h2>
-                                    <p class="card-text fw-bold mt-2"><span>{{ @$balance }}</span> $</p>
+                                    <p class="card-text fw-bold mt-2">$ <span>{{ @$balance }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -186,8 +186,7 @@
                                                         <div class="col-md-7 text-center">
                                                             <div class="card bg-primary p-2 py-3 border-0 align-self-center">
                                                                 <h2 class="card-subtitle fs-5">Balance</h2>
-                                                                <p class="card-text fw-bold fs-6 mt-2">
-                                                                    <span id="before_bal">{{ @$balance }}</span> $</p>
+                                                                <p class="card-text fw-bold fs-6 mt-2">$ <span id="before_bal">{{ @$balance }}</span></p>
                                                             </div>
                                                         </div>
                                                         {{-- <div class="col-md-6 m-2">
@@ -206,8 +205,7 @@
                                                         <div class="col-md-7 text-center">
                                                             <div class="card bg-primary p-2 py-3 border-0 align-self-center">
                                                                 <h2 class="card-subtitle fs-5">Balance</h2>
-                                                                <p class="card-text fw-bold fs-6 mt-2">
-                                                                    <span id="after_bal">{{ @$balance }}</span> $</p>
+                                                                <p class="card-text fw-bold fs-6 mt-2">$ <span id="after_bal">{{ @$balance }}</span></p>
                                                             </div>
                                                         </div>
                                                         {{-- <div class="col-md-6 m-2">

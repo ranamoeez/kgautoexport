@@ -55,11 +55,6 @@
                 </div>
 
                 <div class="col-md-2">
-                    <label for="search" class="fw-semibold">Search</label>
-                    <input type="text" class="form-control p-2" placeholder="Search" name="search" value="{{ @$search }}" id="search-cont">
-                </div>
-
-                <div class="col-md-2">
                     <label for="Date" class="fw-semibold">Date</label>
                     <div class="d-flex gap-4 align-items-center">
                         <div class="d-flex align-items-center">
@@ -77,6 +72,11 @@
                         <option value="1" @if(@$pay_status == "1") selected @endif>Paid</option>
                         <option value="0" @if(@$pay_status == "0") selected @endif>Unpaid</option>
                     </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="search" class="fw-semibold">Search</label>
+                    <input type="text" class="form-control p-2" placeholder="Search" name="search" value="{{ @$search }}" id="search-cont">
                 </div>
             </form>
 
@@ -171,7 +171,7 @@
                                         <span class="fw-bold">Buyer : {{ @$v->user->surname }}</span>
                                         @foreach($v->vehicles as $ke => $val)
                                         <li class="list-unstyled">
-                                            » <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;">{{ @$val->vehicle->company_name.' '.@$val->vehicle->name.' '.@$val->vehicle->modal }}</a>
+                                            » <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name.', VIN: '.@$val->vehicle->vin }}</a>
                                         </li>
                                         @endforeach
                                         @endforeach
@@ -318,7 +318,7 @@
                         data = JSON.parse(data);
                         if (data.success == true) {
                             $("#removeRowModal").modal("hide");
-                            toastr["success"]("Vehicle deleted successfully!", "Completed!");
+                            toastr["success"]("Container deleted successfully!", "Completed!");
                             setTimeout(function () {
                                 location.reload();
                             }, 3000);

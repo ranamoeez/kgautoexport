@@ -670,13 +670,13 @@ class HomeController extends Controller
                 'ClientSecret' => "40uEBRLODbAQgmVu5vs6X38Bbt8Kv45Bp3P0znfs",
                 'RedirectURI' => "https://developer.intuit.com/v2/OAuth2Playground/RedirectUrl",
                 'accessTokenKey' => "eyJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiZGlyIn0..j5qRkd0nNpSXsHOzxMAGMg.re4y2eX85Z1z7LruDIWk7ZH9wRmUCMQ2GrcTZayDCKS742Zp6hLDthbvPslls3kZtJCRo_UzbYBhMiPK0MHerUL1I2tzZotpE2nJ5zdQJgNKjbxCMGx9B14yVCVU6i5gPd18ehcwfbKnyXO1BYKym4pCA6ZCS_RltkcE2eH65eON4YMVzdMLKUKG1mDBuwSVUMgSyKthytrT-cS5eVtS7iF58E1rAICYrPWoXi4HpU7fxwYnT551K2pajCeqj_aG2whkeLd7DNlJ1p8a9zNb4t11a8DAOfKdjso9zUpgmuHIOydx36T0pNoAMxM9rsdsSWhxDLIGskNmQPplShPKykhQRzeQIisqpyZcTZpcxMrtVEyvLBb-iR2CEErF6SzaH14zKxR4c44TNWn_cPRRdpCmzptin38KgBT43wH9EK6zgfJ-Z1_O9BJEVJ5hqOexFXuMyoTM5stIYawVsDN6twcF8XihjtaduOiW2gj1RHc5M1t3rk3CBsmuBH1Z4ApUk0G2kewtY0Iofnz-Xf3T6DbJo3ek1K7yprwg5Ojyuo4tZQnBBVCnRUScNGT8YZqDmnJ8Exuu0YzPyUzzrgggFDjl3fi1lokD81GX91toz32KRzaW7HjvjxPNxKw6swFLsnYiP2diiBNqOcjIsAUZyJFusoWryVQI5Lz4OL5tF7ZRx_mVDjSp0NrYlNOtY5Qc1SvkBOOs__Q-yJ1fv56RgO8v-0Uoa18mZZ7mHyIg2ac8CvSEtqOnJu_sCjSzxUN6.s-YzU6TlZBfG3qtT12_beQ",
-                'refreshTokenKey' => "AB11704821944MLABN9W2HkMTurNGq909yjvEH6zzT160kSkFI",
+                'refreshTokenKey' => "AB11703026428IX6DG4nTcBseXi1K5oYMN5hJ6X6JtBXr9CiFa",
                 'QBORealmID' => "9130357402864616",
                 'baseUrl' => "production"
             ]);
 
             $OAuth2LoginHelper = $dataService->getOAuth2LoginHelper();
-            $accessTokenObj = $OAuth2LoginHelper->refreshAccessTokenWithRefreshToken("AB11704821944MLABN9W2HkMTurNGq909yjvEH6zzT160kSkFI");
+            $accessTokenObj = $OAuth2LoginHelper->refreshAccessTokenWithRefreshToken("AB11703026428IX6DG4nTcBseXi1K5oYMN5hJ6X6JtBXr9CiFa");
             $accessTokenValue = $accessTokenObj->getAccessToken();
             $refreshTokenValue = $accessTokenObj->getRefreshToken();
 
@@ -707,7 +707,7 @@ class HomeController extends Controller
                     $amount = 100;
 
                     $veh_data = [
-                        "Description" => @$v->vehicle->company_name.' '.@$v->vehicle->name.' '.@$v->vehicle->modal,
+                        "Description" => @$v->vehicle->modal.' '.@$v->vehicle->company_name.' '.@$v->vehicle->name,
                         "Amount" => $amount,
                         "DetailType" => "SalesItemLineDetail",
                         "SalesItemLineDetail" => [

@@ -10,6 +10,9 @@
         a:hover {
             color: #023e8a !important;
         }
+        .select2-selection {
+            min-height: 37px;
+        }
     </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
@@ -71,11 +74,6 @@
                 </div>
 
                 <div class="col-md-2">
-                    <label for="search" class="fw-semibold">Search</label>
-                    <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-veh" placeholder="Search">
-                </div>
-
-                <div class="col-md-2">
                     <label for="destination" class="fw-semibold">Destination</label>
                     <select id="destination" name="destination" class="selectjs form-select p-2 border border-gray-200 rounded-lg">
                         <option value="all">All</option>
@@ -99,6 +97,11 @@
                         <option value="partly paid" @if(@$pay_status == "partly paid") selected @endif>Partly paid</option>
                         <option value="unpaid" @if(@$pay_status == "unpaid") selected @endif>Unpaid</option>
                     </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="search" class="fw-semibold">Search</label>
+                    <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-veh" placeholder="Search">
                 </div>
             </form>
 
@@ -216,7 +219,7 @@
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ @$value->vehicle->company_name.' '.@$value->vehicle->name.' '.@$value->vehicle->modal }}
+                                        {{ @$value->vehicle->modal.' '.@$value->vehicle->company_name.' '.@$value->vehicle->name }}
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
@@ -234,9 +237,20 @@
                                         {{ @$value->vehicle->client_name }}
                                     </a>
                                 </td>
-                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <div class="text-center text-fs-4 p-1 rounded-pill shadow">
-                                        <span class="text-fs-4 ms-1" style="font-size: 14px;">{{ @$value->vehicle->destination_port->name }}</span>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important; width: 230px !important;" @endif>
+                                    <div class="text-center text-fs-4">
+                                        <select id="selectDestOption{{$key+1}}" class="selectjs form-select destination_port" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
+                                            <option value="0" selected disabled></option>
+                                            @if(count(@$all_destination_port) > 0)
+                                            @foreach(@$all_destination_port as $k => $v)
+                                                @if(@$v['id'] == @$value->vehicle->destination_port_id)
+                                                <option value="{{ @$v['id'] }}" selected>{{ @$v['name'] }}</option>
+                                                @else
+                                                <option value="{{ @$v['id'] }}">{{ @$v['name'] }}</option>
+                                                @endif
+                                            @endforeach
+                                            @endif
+                                        </select>
                                     </div>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
@@ -259,7 +273,7 @@
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <span style="font-size: 16px;">{{ (!empty(@$value->vehicle->auction_price)) ? @$value->vehicle->auction_price : '0.00' }}$</span>
+                                        <span style="font-size: 16px;">${{ (!empty(@$value->vehicle->auction_price)) ? @$value->vehicle->auction_price : '0.00' }}</span>
                                     </div>
                                 </td>
 
@@ -369,6 +383,30 @@
             $(document).on("change", ".status", function () {
                 var form = new FormData();
                 form.append("status", $(this).find("option:selected").val());
+                form.append("id", $(this).attr("data-id"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/update-vehicle-data") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Vehicle data updated successfully!", "Completed!");
+                        }
+                    }
+                });
+            });
+
+            $(document).on("change", ".destination_port", function () {
+                var form = new FormData();
+                form.append("destination_port", $(this).find("option:selected").val());
                 form.append("id", $(this).attr("data-id"));
 
                 $.ajax({

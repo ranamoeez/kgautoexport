@@ -1411,6 +1411,12 @@ class SystemConfigController extends Controller
     public function add_vehicles_brand(Request $request)
     {
         $data = $request->all();
+        if (!empty($data['name'])) {
+            $total_count = VehicleBrand::where("name", $data['name'])->count();
+            if ($total_count > 0) {
+                return json_encode(["success"=>false, "msg" => "Vehicle brand already exists!"]);
+            }
+        }
         VehicleBrand::create($data);
         return json_encode(["success"=>true, "msg"=>"Vehicles brand added successfully!", "action"=>"reload"]);
     }
@@ -1419,6 +1425,12 @@ class SystemConfigController extends Controller
     {
         if($request->isMethod('post')){
             $data = $request->all();
+            if (!empty($data['name'])) {
+                $total_count = VehicleBrand::where('id', '!=', $id)->where("name", $data['name'])->count();
+                if ($total_count > 0) {
+                    return json_encode(["success"=>false, "msg" => "Vehicle brand already exists!"]);
+                }
+            }
 
             unset($data['_token']);
             VehicleBrand::where('id', $id)->update($data);
@@ -1460,18 +1472,29 @@ class SystemConfigController extends Controller
     public function add_vehicles_modal(Request $request)
     {
         $data = $request->all();
+        if (!empty($data['name'])) {
+            $total_count = VehicleModal::where("name", $data['name'])->where("vehicle_brand_id", $data['vehicle_brand_id'])->count();
+            if ($total_count > 0) {
+                return json_encode(["success"=>false, "msg" => "Vehicle model already exists!"]);
+            }
+        }
         VehicleModal::create($data);
-        return json_encode(["success"=>true, "msg"=>"Vehicles modal added successfully!", "action"=>"reload"]);
+        return json_encode(["success"=>true, "msg"=>"Vehicles model added successfully!", "action"=>"reload"]);
     }
 
     public function edit_vehicles_modal(Request $request, $id)
     {
         if($request->isMethod('post')){
             $data = $request->all();
-
+            if (!empty($data['name'])) {
+                $total_count = VehicleModal::where('id', '!=', $id)->where("name", $data['name'])->where("vehicle_brand_id", $data['vehicle_brand_id'])->count();
+                if ($total_count > 0) {
+                    return json_encode(["success"=>false, "msg" => "Vehicle model already exists!"]);
+                }
+            }
             unset($data['_token']);
             VehicleModal::where('id', $id)->update($data);
-            return json_encode(["success"=>true, "msg"=>"Vehicles modal updated successfully!", "action"=>"reload"]);
+            return json_encode(["success"=>true, "msg"=>"Vehicles model updated successfully!", "action"=>"reload"]);
         }
 
         $data = VehicleModal::with('vehicles_brand')->where('id', $id)->first(); 
@@ -1481,7 +1504,7 @@ class SystemConfigController extends Controller
     public function delete_vehicles_modal($id)
     {
         VehicleModal::find($id)->delete();
-        return json_encode(["success"=>true, "msg"=>"Vehicles modal deleted successfully!"]);
+        return json_encode(["success"=>true, "msg"=>"Vehicles model deleted successfully!"]);
     }
 
     // User Levels Functions

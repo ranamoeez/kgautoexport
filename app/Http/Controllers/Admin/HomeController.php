@@ -136,6 +136,14 @@ class HomeController extends Controller
         if($request->isMethod('post')){
             $data = $request->all();
             $this->cleanData($data);
+            if (!empty($data['vin'])) {
+                $total_count = Vehicle::where("vin", $data['vin'])->count();
+                if ($total_count > 0) {
+                    return json_encode(["success"=>false, "msg" => "VIN already exists!"]);
+                }
+            } else {
+                return json_encode(["success"=>false, "msg" => "VIN is required!"]);
+            }
             $data['owner_id'] = \Auth::user()->id;
             if (empty($data['purchase_date'])) {
                 $data['purchase_date'] = date('Y-m-d');
@@ -251,6 +259,14 @@ class HomeController extends Controller
         if($request->isMethod('post')){
             $data = $request->all();
             $vehicle = AssignVehicle::where('id', $id)->first();
+            if (!empty($data['vin'])) {
+                $total_count = Vehicle::where("id", "!=", $vehicle->vehicle_id)->where("vin", $data['vin'])->count();
+                if ($total_count > 0) {
+                    return json_encode(["success"=>false, "msg" => "VIN already exists!"]);
+                }
+            } else {
+                return json_encode(["success"=>false, "msg" => "VIN is required!"]);
+            }
             // if ($data['buyer_id'] !== $buyer) {
             //     AssignVehicle::where('id', $id)->update(["user_id" => $data['buyer_id']]);
             //     $vehicle_id = AssignVehicle::where('id', $id)->first()->vehicle_id;
@@ -1033,6 +1049,9 @@ class HomeController extends Controller
                 }
             }
     	}
+        if (!empty($request->destination_port)) {
+            $data["destination_port_id"] = $request->destination_port;
+        }
     	if (!empty($request->title)) {
     		$data["title"] = $request->title;
     	}
@@ -1383,10 +1402,10 @@ class HomeController extends Controller
             $template_name = str_replace("{destination_port}", @$vehicle->destination_port->name, $template_name);
         }
         if (str_contains($template_name, "{description}")) { 
-            $template_name = str_replace("{description}", @$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal, $template_name);
+            $template_name = str_replace("{description}", @$vehicle->modal." ".@$vehicle->company_name." ".@$vehicle->name, $template_name);
         }
         if (str_contains($template_name, "{vehicle_name}")) { 
-            $template_name = str_replace("{vehicle_name}", @$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal, $template_name);
+            $template_name = str_replace("{vehicle_name}", @$vehicle->modal." ".@$vehicle->company_name." ".@$vehicle->name, $template_name);
         }
         if (str_contains($template_name, "{lotnumber}")) { 
             $template_name = str_replace("{lotnumber}", @$vehicle->lotnumber, $template_name);
@@ -1445,10 +1464,10 @@ class HomeController extends Controller
             $template_content = str_replace("{destination_port}", @$vehicle->destination_port->name, $template_content);
         }
         if (str_contains($template_content, "{description}")) { 
-            $template_content = str_replace("{description}", @$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal, $template_content);
+            $template_content = str_replace("{description}", @$vehicle->modal." ".@$vehicle->company_name." ".@$vehicle->name, $template_content);
         }
         if (str_contains($template_content, "{vehicle_name}")) { 
-            $template_content = str_replace("{vehicle_name}", @$vehicle->company_name." ".@$vehicle->name." ".@$vehicle->modal, $template_content);
+            $template_content = str_replace("{vehicle_name}", @$vehicle->modal." ".@$vehicle->company_name." ".@$vehicle->name, $template_content);
         }
         if (str_contains($template_content, "{lotnumber}")) { 
             $template_content = str_replace("{lotnumber}", @$vehicle->lotnumber, $template_content);
@@ -1521,6 +1540,16 @@ class HomeController extends Controller
         $vehicle_id = explode(",", $request->vehicle_id);
         $container_id = $request->container_id;
         $user_id = $request->user_id;
+
+        foreach ($vehicle_id as $key => $value) {
+            $vehicle = Vehicle::where("id", $value)->first();
+            $container = Container::where("id", $container_id)->first();
+            if ($vehicle->destination_port_id !== $container->destination_port_id) {
+                return json_encode(["success"=>false, "msg" => "Destination port is not same for the vehicle with this vin: ".$vehicle->vin]);
+            } else if ($vehicle->title !== "Yes") {
+                return json_encode(["success"=>false, "msg" => 'Title is not "Yes" for the vehicle with this vin: '.$vehicle->vin]);
+            }
+        }
 
         foreach ($vehicle_id as $key => $value) {
             $save = new ContainerVehicle;

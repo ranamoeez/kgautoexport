@@ -92,7 +92,7 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
-                                <label for="" class="col-md-3 col-form-label fw-semibold">Cut off</label>
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Doc Cutoff</label>
                                 <div class="col-md-9">
                                     <input type="date" name="cut_off" value="{{ $container->cut_off }}" class="form-control" />
                                 </div>
@@ -154,12 +154,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Departure</label>
-                                <div class="col-sm-9">
-                                    <input type="date" name="departure" value="{{ $container->departure }}" class="form-control" />
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -169,7 +163,6 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Status</label>
                                 <div class="col-sm-9">
                                     <select class="form-select" name="status_id">
-                                        <option value=""></option>
                                         @if(count(@$all_status) > 0)
                                         @foreach(@$all_status as $key => $value)
                                             @if($value['id'] == @$container->status_id)
@@ -193,7 +186,6 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Notify Party</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="notify_part_id">
-                                        <option value=""></option>
                                         @if(count(@$all_notify_party) > 0)
                                         @foreach(@$all_notify_party as $key => $value)
                                             @if($value['id'] == @$container->notify_part_id)
@@ -204,6 +196,12 @@
                                         @endforeach
                                         @endif
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Departure</label>
+                                <div class="col-sm-9">
+                                    <input type="date" name="departure" value="{{ $container->departure }}" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
@@ -528,7 +526,7 @@
                                 @foreach($value->vehicles as $k => $v)
                                 <div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data mx-1">
                                     <div class="col text-fs-3 text-center">{{ $v->vehicle->vin }}</div>
-                                    <div class="col text-fs-3 text-center">{{ @$v->vehicle->company_name.' '.@$v->vehicle->name.' '.@$v->vehicle->modal }}</div>
+                                    <div class="col text-fs-3 text-center">{{ @$v->vehicle->modal.' '.@$v->vehicle->company_name.' '.@$v->vehicle->name }}</div>
                                     <div class="col d-flex justify-content-center align-items-center">
                                         <i class="fa-solid fa-circle-minus text-danger fs-3 delete-buyer" data-url="{{ url('admin/delete-buyer-vehicle/'.@$container->id.'/'.@$value->user->id.'/'.@$v->vehicle->id) }}" style="cursor: pointer;"></i>
                                     </div>
@@ -711,6 +709,8 @@
                         setTimeout(function () {
                             location.reload();
                         }, 2000);
+                    } else {
+                        toastr["error"](data.msg, "Failed!");
                     }
                 }
             });
@@ -733,12 +733,12 @@
                             $(".vehicles").append(html);
                         } else {
                             $(data.vehicles).each(function (key, value) {
-                                var description = value.vehicle.company_name;
+                                var description = value.vehicle.modal;
                                 if (value.vehicle.name !== null) {
-                                    description += " "+value.vehicle.name;
+                                    description += " "+value.vehicle.company_name;
                                 }
                                 if (value.vehicle.modal !== null) {
-                                    description += " "+value.vehicle.modal;
+                                    description += " "+value.vehicle.name;
                                 }
                                 var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
                                     <div class="col text-fs-3 text-center">`+value.vehicle.vin+`</div>

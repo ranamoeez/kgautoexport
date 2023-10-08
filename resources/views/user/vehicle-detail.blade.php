@@ -303,7 +303,7 @@
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Description</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" value="{{ @$list->vehicle->company_name.' '.@$list->vehicle->name.' '.@$list->vehicle->modal }}" disabled />
+                                    <input type="text" class="form-control" value="{{ @$list->vehicle->modal.' '.@$list->vehicle->company_name.' '.@$list->vehicle->name }}" disabled />
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -341,7 +341,7 @@
                         <div class="col-md-6">
                             <div class="px-14 d-flex">
                                 <h4 class="fw-bold fs-md-13 fs-lg-25">
-                                    Additional Details
+                                    Auction Details
                                 </h4>
                             </div>
                             <div class="row mt-4">
@@ -363,7 +363,7 @@
                                 </div>
                             </div>
                             <div class="row mt-4">
-                                <label for="" class="col-md-2 fw-bold">Auction buyer</label>
+                                <label for="" class="col-md-2 fw-bold">Buyer #</label>
                                 <div class="col-md-10">
                                     <input type="text" class="form-control" value="{{ @$list->vehicle->auction_buyer }}" disabled />
                                 </div>
@@ -449,7 +449,7 @@
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Notes</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" value="{{ @$list->vehicle->notes }}" disabled />
+                                    <input type="text" class="form-control" value="{{ @$list->vehicle->notes_user }}" disabled />
                                 </div>
                             </div>
                         </div>

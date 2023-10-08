@@ -88,9 +88,9 @@
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="location" value="1.13" />
                                                                         <label for="location">Location</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="auc_buyer" value="1.14" />
-                                                                        <label for="auc_buyer">Auction Buyer</label><br>
+                                                                        <label for="auc_buyer">Buyer #</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="lot" value="1.15" />
-                                                                        <label for="lot">Lot Number</label><br>
+                                                                        <label for="lot">Lot #</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="purchase" value="1.16" />
                                                                         <label for="purchase">Purchase Date</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="destination" value="1.17" />
@@ -106,7 +106,7 @@
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="carrier" value="1.21" />
                                                                         <label for="carrier">Carrier</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="pay_date" value="1.22" />
-                                                                        <label for="pay_date">Pay Date</label><br>
+                                                                        <label for="pay_date">Paid Date</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="pickup_address" value="1.23" />
                                                                         <label for="pickup_address">Pickup Address</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="del_address" value="1.24" />

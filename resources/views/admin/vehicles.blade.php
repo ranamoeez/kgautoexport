@@ -256,8 +256,8 @@
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
                                         <select class="form-select option-select text-white ps-1 pe-2 py-1 title" style="background-position: right; min-width: 50px;" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
-                                            <option value="No" data-color="danger" @if(@$value->vehicle->title == "No") selected @endif>No</option>
-                                            <option value="Yes" data-color="info" @if(@$value->vehicle->title == "Yes") selected @endif>Yes</option>
+                                            <option value="NO" data-color="danger" @if(@$value->vehicle->title == "NO") selected @endif>NO</option>
+                                            <option value="YES" data-color="info" @if(@$value->vehicle->title == "YES") selected @endif>YES</option>
                                             <option value="BOS" data-color="success" @if(@$value->vehicle->title == "BOS") selected @endif>BOS</option>
                                             <option value="TBO" data-color="warning" @if(@$value->vehicle->title == "TBO") selected @endif>TBO</option>
                                         </select>
@@ -266,8 +266,8 @@
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
                                         <select class="form-select option-select text-white ps-1 pe-2 py-1 keys" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
-                                            <option value="No" data-color="danger" @if(@$value->vehicle->keys == "No") selected @endif>No</option>
-                                            <option value="Yes" data-color="info" @if(@$value->vehicle->keys == "Yes") selected @endif>Yes</option>
+                                            <option value="NO" data-color="danger" @if(@$value->vehicle->keys == "NO") selected @endif>NO</option>
+                                            <option value="YES" data-color="info" @if(@$value->vehicle->keys == "YES") selected @endif>YES</option>
                                         </select>
                                     </div>
                                 </td>

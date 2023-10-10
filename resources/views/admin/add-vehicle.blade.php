@@ -155,13 +155,13 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Title</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
-                                        <input id="radio1" type="radio" name="title" class="form-check-input" value="No" 
+                                        <input id="radio1" type="radio" name="title" class="form-check-input" value="NO" 
                                             checked />
-                                        <label for="radio1" class="form-check-label">No</label>
+                                        <label for="radio1" class="form-check-label">NO</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio2" type="radio" name="title" value="Yes" class="form-check-input" />
-                                        <label for="radio2" class="form-check-label">Yes</label>
+                                        <input id="radio2" type="radio" name="title" value="YES" class="form-check-input" />
+                                        <label for="radio2" class="form-check-label">YES</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio3" type="radio" name="title" value="BOS" class="form-check-input" />
@@ -180,13 +180,13 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio5" type="radio" name="keys"
-                                            class="form-check-input" value="No" checked />
-                                        <label for="radio5" class="form-check-label">No</label>
+                                            class="form-check-input" value="NO" checked />
+                                        <label for="radio5" class="form-check-label">NO</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio6" type="radio" name="keys"
-                                            class="form-check-input" value="Yes" />
-                                        <label for="radio6" class="form-check-label">Yes</label>
+                                            class="form-check-input" value="YES" />
+                                        <label for="radio6" class="form-check-label">YES</label>
                                     </div>
                                 </div>
                             </div>
@@ -197,13 +197,13 @@
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
                                         <input id="radio7" type="radio" name="operable"
-                                            class="form-check-input" value="No" checked />
-                                        <label for="radio7" class="form-check-label">No</label>
+                                            class="form-check-input" value="NO" checked />
+                                        <label for="radio7" class="form-check-label">NO</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio8" type="radio" name="operable"
-                                            class="form-check-input" value="Yes" />
-                                        <label for="radio8" class="form-check-label">Yes</label>
+                                            class="form-check-input" value="YES" />
+                                        <label for="radio8" class="form-check-label">YES</label>
                                     </div>
                                 </div>
                             </div>

@@ -68,7 +68,7 @@
                                         </td>
                                         <td>
                                             <p class=" text-fs-3">
-                                                {{ @$value->datetime }}
+                                                @if(@$value->datetime) {{ date("M d, Y H:i:s", strtotime(@$value->datetime)) }} @endif
                                             </p>
                                         </td>
                                     </tr>

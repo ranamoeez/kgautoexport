@@ -381,7 +381,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-primary mb-2 border-0">
+                                <button class="btn btn-primary mb-2 border-0" id="submit-form">
                                     Save
                                 </button>
                                 <a href="{{ url('admin/containers/add') }}" class="btn btn-primary mb-2 border-0">
@@ -494,6 +494,8 @@
             $('.select2-selection--single').removeClass('select2-selection--single');
 
             $(document).on("submit", ".form", function (event) {
+                $('#submit-form').attr('disabled', true);
+
                 event.preventDefault();
                 $.ajax({
                     type: $(this).attr("method"),
@@ -515,6 +517,7 @@
                         } else {
                             toastr["error"](res.msg, "Failed!");
                         }
+                        $('#submit-form').attr('disabled', false);
                     }
                 });
             });

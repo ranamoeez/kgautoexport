@@ -310,7 +310,7 @@
                                                     </div>
 
                                                     <div class="col-lg-4 d-flex align-items-center justify-content-center">
-                                                        {{ date("d M, Y", strtotime(@$val->created_at)) }}
+                                                        @if(@$val->created_at) {{ date("M d, Y", strtotime(@$val->created_at)) }} @endif
                                                     </div>
                                                     @endforeach
                                                 </div>

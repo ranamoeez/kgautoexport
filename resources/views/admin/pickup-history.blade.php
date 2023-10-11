@@ -258,7 +258,7 @@
                                 </td>
                                 <td>
                                     <p class=" text-fs-3">
-                                        {{ @$value->created_at }}
+                                        @if(@$value->created_at) {{ date("M d, Y", strtotime(@$value->created_at)) }} @endif
                                     </p>
                                 </td>
                                 <td>

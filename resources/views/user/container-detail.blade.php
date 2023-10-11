@@ -49,12 +49,18 @@
                                             <a href="{{ url($value->filepath.$value->filename) }}" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
+                                            <a href="{{ url($value->filepath.$value->filename) }}" target="_blank">
+                                                <i class="fas fa-eye text-primary"></i>
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <object data="{{ url($value->filepath.$value->filename) }}" style="width: 100%; height: 100% !important;">
                                             Alt : <a href="{{ url($value->filepath.$value->filename) }}">test.pdf</a>
                                         </object>
+                                        <div class="w-100 mt-2">
+                                            <input type="text" value="{{ @$value->type }}" class="form-control text-center" readonly>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +92,7 @@
                             @foreach(@$email_history as $key => $value)
                             <div class="row shadow border rounded-5 w-100 mb-3 py-2">
                                 <span class="col text-fs-3 text-center">{{ @$value->sent_to }}</span>
-                                <span class="col text-fs-3 text-center">{{ date("d-m-Y", strtotime(@$value->created_at)) }}</span>
+                                <span class="col text-fs-3 text-center">@if(@$value->created_at) {{ date("M d, Y", strtotime(@$value->created_at)) }} @endif</span>
                             </div>
                             @endforeach
                             @else
@@ -169,13 +175,13 @@
                                 <div class="row mt-4">
                                     <label for="" class="col-md-2 fw-bold">Arrival</label>
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" value="{{ @$container->arrival }}" disabled />
+                                        <input type="text" class="form-control" @if(@$container->arrival) value="{{ date("M d, Y", strtotime(@$container->arrival)) }}" @endif disabled />
                                     </div>
                                 </div>
                                 <div class="row mt-4">
                                     <label for="" class="col-md-2 fw-bold">Departure</label>
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" value="{{ @$container->departure }}" disabled />
+                                        <input type="text" class="form-control" @if(@$container->departure) value="{{ date("M d, Y", strtotime(@$container->departure)) }}" @endif disabled />
                                     </div>
                                 </div>
                                 <div class="row mt-4">

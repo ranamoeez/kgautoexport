@@ -130,6 +130,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <select class="selectjs form-select" name="modal" required>
+                                                <option value=""></option>
                                                 @php
                                                     $current_date = date("Y-m-d");
                                                     $year = (int)explode("-", $current_date)[0] + 1;
@@ -213,16 +214,16 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Fuel Type</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
-                                        <input id="radio11" type="radio" name="fuel_type" class="form-check-input" checked value="Gas Car" />
-                                        <label for="radio11" class="form-check-label">Gas Car</label>
+                                        <input id="radio11" type="radio" name="fuel_type" class="form-check-input" value="GAS" />
+                                        <label for="radio11" class="form-check-label">GAS</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio9" type="radio" name="fuel_type" class="form-check-input" value="Hybrid" />
-                                        <label for="radio9" class="form-check-label">Hybrid</label>
+                                        <input id="radio9" type="radio" name="fuel_type" class="form-check-input" value="HYB" />
+                                        <label for="radio9" class="form-check-label">HYB</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio10" type="radio" name="fuel_type" class="form-check-input" value="Electric Car" />
-                                        <label for="radio10" class="form-check-label">Electric Car</label>
+                                        <input id="radio10" type="radio" name="fuel_type" class="form-check-input" value="EV" />
+                                        <label for="radio10" class="form-check-label">EV</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio12" type="radio" name="fuel_type" class="form-check-input" value="Other" />
@@ -257,8 +258,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.11", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Auction
-                                    location</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Branch</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select auction_location" name="auction_location_id" disabled>
                                         <option value=""></option>
@@ -279,7 +279,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="address" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="address" id="auction_address" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             @endif
@@ -310,7 +310,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.16", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase date</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase</label>
                                 <div class="col-sm-9">
                                     <input type="date" name="purchase_date" id="purchase_date" class="form-control" />
                                 </div>
@@ -378,14 +378,14 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.23", json_decode($auth_user->admin_level->access)))
+                            {{-- @if(empty($auth_user->admin_level->access) || @in_array("1.23", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup address</label>
                                 <div class="col-sm-9">
                                     <input type="text" name="pickup_address" class="form-control" placeholder="John Sabestin" />
                                 </div>
                             </div>
-                            @endif
+                            @endif --}}
                             @if(empty($auth_user->admin_level->access) || @in_array("1.24", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Delivery
@@ -405,7 +405,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.26", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Dispatch date</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Dispatch</label>
                                 <div class="col-sm-9">
                                     <input type="date" name="dispatch_date" class="form-control" />
                                 </div>
@@ -413,7 +413,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.27", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup date</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup</label>
                                 <div class="col-sm-9">
                                     <input type="date" name="pickup_date" class="form-control" />
                                 </div>
@@ -421,8 +421,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.28", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated del.
-                                    date</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated delivery</label>
                                 <div class="col-sm-9">
                                     <input type="date" name="delivery_date" class="form-control" />
                                 </div>
@@ -430,8 +429,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.29", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Actual delivery
-                                    date</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Actual del.</label>
                                 <div class="col-sm-9">
                                     <input type="date" name="delivered_on_date" class="form-control" />
                                 </div>
@@ -542,6 +540,20 @@
                                 </div>
                             </div>
                             @endif
+                            <div class="row my-3">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">US Towing price</label>
+                                <div class="col-sm-9">
+                                    <input type="number" name="us_towing_price" class="form-control" placeholder="Enter a price"
+                                        inputmode="numeric" />
+                                </div>
+                            </div>
+                            <div class="row my-3">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">US Trans fines</label>
+                                <div class="col-sm-9">
+                                    <input type="number" name="us_trans_fines" class="form-control" placeholder="Enter a price"
+                                        inputmode="numeric" />
+                                </div>
+                            </div>
                             @if(empty($auth_user->admin_level->access) || @in_array("1.42", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Ocean Freight</label>
@@ -807,6 +819,8 @@
                     response = JSON.parse(response);
                     if (response.success == true) {
                         $(".name").html("");
+                        option = "<option value=''></option>";
+                        $(".name").append(option);
                         $(response.data).each(function (key, value) {
                             option = "<option value="+value.name+">"+value.name+"</option>";
                             $(".name").append(option);
@@ -819,8 +833,13 @@
                 $(".add-vehicle").submit();
             });
 
+            $(document).on("change", ".auction_location", function () {
+                $("#auction_address").val($(this).find("option:selected").text());
+            });
+
             $(document).on("submit", ".form", function (event) {
                 $('.center-body').css('display', 'block');
+                $('.submit-form').attr('disabled', true);
                 event.preventDefault();
 
                 if ($(".company_name option:selected").val() == "") {
@@ -848,6 +867,7 @@
                                 toastr["error"](res.msg, "Failed!");
                             }
                             $('.center-body').css('display', 'none');
+                            $('.submit-form').attr('disabled', false);
                         }
                     });
                 }

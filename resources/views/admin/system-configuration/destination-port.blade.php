@@ -138,7 +138,7 @@
                                         </td>
                                         <td>
                                             <p class=" text-fs-3">
-                                                {{ @$value->unloading_fee }} $
+                                                ${{ @$value->unloading_fee }}
                                             </p>
                                         </td>
                                         <td>

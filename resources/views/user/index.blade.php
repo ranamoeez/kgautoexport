@@ -81,6 +81,7 @@
                             <th scope="col">Title</th>
                             <th scope="col">Keys</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Fuel Type</th>
                             <th scope="col">Terminal</th>
                             <th scope="col">Comment</th>
                             @if(\Auth::user()->role == "2")
@@ -129,7 +130,7 @@
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ @$value->vehicle->delivery_date }}
+                                        @if(@$value->vehicle->delivery_date) {{ date("M d, Y", strtotime(@$value->vehicle->delivery_date)) }} @endif
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
@@ -176,6 +177,21 @@
                                         <img src="{{ asset('assets/icons/'.$icon.'.png') }}" style="width: 25px;">
                                         <span class="text-fs-4 ms-2">{{ @$value->vehicle->status->name }}</span>
                                     </div>
+                                </td>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
+                                    @php
+                                        $ico = "";
+                                        if (@$value->vehicle->fuel_type == "EV") {
+                                            $ico = "fa-solid fa-plug text-primary";
+                                        } elseif (@$value->vehicle->fuel_type == "HYB") {
+                                            $ico = "fa-solid fa-leaf text-success";
+                                        } elseif (@$value->vehicle->fuel_type == "GAS") {
+                                            $ico = "fa-solid fa-gas-pump text-secondary";
+                                        }
+                                    @endphp
+                                    {{-- <i class="text-fs-5 fa-solid fa-charging-station"></i> --}}
+                                    <i class="text-fs-5 {{ $ico }}"></i>
+                                    <span class="fs-5 ms-1">{{ @$value->vehicle->fuel_type }}</span>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold text-fs-4">

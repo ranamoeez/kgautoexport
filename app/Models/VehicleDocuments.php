@@ -13,6 +13,6 @@ class VehicleDocuments extends Model
 
     protected $table = "vehicle_documents";
     protected $fillable = [
-        'vehicle_id', 'filename', 'filepath'
+        'vehicle_id', 'filename', 'filepath', 'type'
     ];
 }

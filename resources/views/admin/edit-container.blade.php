@@ -483,7 +483,7 @@
                             @if(count(@$container->container_documents) > 0)
                             @foreach($container->container_documents as $key => $value)
                             <div class="col-md-4">
-                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:350px;">
                                     <div class="card-header d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
                                             <i class="fa-file-pdf fa-solid fs-4"></i>
@@ -495,12 +495,21 @@
                                             <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank">
+                                                <i class="fas fa-eye text-primary"></i>
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" style="width: 100%; height: 100% !important;">
                                             Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}">test.pdf</a>
                                         </object>
+                                        <div class="w-100 mt-3">
+                                            <select class="form-control" id="pdf-type" data-id="{{ $value->id }}">
+                                                <option value="BOS" @if($value->type == "BOS") selected @endif>BOS</option>
+                                                <option value="Title" @if($value->type == "Title") selected @endif>Title</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -781,6 +790,32 @@
                         toastr["error"](res.msg, "Failed!");
                     }
                     $('.center-body').css('display', 'none');
+                }
+            });
+        });
+
+        $(document).on("change", "#pdf-type", function () {
+            var form = new FormData();
+            form.append("type", $(this).find("option:selected").val());
+            form.append("id", $(this).attr("data-id"));
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ url("admin/update-pdf-type") }}',
+                processData: false,
+                contentType: false,
+                cache: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: form,
+                success: function(data){
+                    data = JSON.parse(data);
+                    if (data.success == true) {
+                        toastr["success"]("PDF type updated successfully!", "Completed!");
+                    } else {
+                        toastr["error"](data.msg, "Failed!");
+                    }
                 }
             });
         });

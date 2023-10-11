@@ -110,7 +110,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Description</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select company_name" name="company_name" required="">
-                                        <option value="1"></option>
+                                        <option value=""></option>
                                         @if(count(@$all_vehicle_brand) > 0)
                                         @foreach(@$all_vehicle_brand as $key => $value)
                                             @if($value['name'] == @$list->vehicle->company_name)
@@ -126,7 +126,7 @@
                                     <div class="row mt-2">
                                         <div class="col-md-6">
                                             <select class="selectjs form-select name" name="name" required="" disabled="">
-                                                <option value="1"></option>
+                                                <option value=""></option>
                                                 @if(count(@$all_vehicle_modal) > 0)
                                                 @foreach(@$all_vehicle_modal as $key => $value)
                                                     @if($value['name'] == @$list->vehicle->name)
@@ -140,6 +140,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <select class="selectjs form-select" name="modal">
+                                                <option value=""></option>
                                                 @php
                                                     $current_date = date("Y-m-d");
                                                     $year = (int)explode("-", $current_date)[0] + 1;
@@ -223,17 +224,17 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Fuel Type</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
-                                        <input id="radio11" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'Gas Car') checked @endif class="form-check-input" value="Gas Car" />
-                                        <label for="radio11" class="form-check-label">Gas Car</label>
+                                        <input id="radio11" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'GAS') checked @endif class="form-check-input" value="GAS" />
+                                        <label for="radio11" class="form-check-label">GAS</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio9" type="radio" name="fuel_type" class="form-check-input"
-                                            @if($list->vehicle->fuel_type == 'Hybrid') checked @endif value="Hybrid" />
-                                        <label for="radio9" class="form-check-label">Hybrid</label>
+                                            @if($list->vehicle->fuel_type == 'HYB') checked @endif value="HYB" />
+                                        <label for="radio9" class="form-check-label">HYB</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio10" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'Electric Car') checked @endif class="form-check-input" value="Electric Car" />
-                                        <label for="radio10" class="form-check-label">Electric Car</label>
+                                        <input id="radio10" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'EV') checked @endif class="form-check-input" value="EV" />
+                                        <label for="radio10" class="form-check-label">EV</label>
                                     </div>
                                     <div class="form-check">
                                         <input id="radio12" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'Other') checked @endif class="form-check-input" value="Other" />
@@ -268,8 +269,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.11", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Auction
-                                    location</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Branch</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select auction_location" name="auction_location_id">
                                         <option value=""></option>
@@ -290,7 +290,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="address" value="{{ $list->vehicle->address }}" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="address" id="auction_address" value="{{ $list->vehicle->address }}" placeholder="John Sabestin" />
                                 </div>
                             </div>
                             @endif
@@ -321,7 +321,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.16", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase date</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase</label>
                                 <div class="col-sm-9">
                                     <input type="date" name="purchase_date" value="{{ $list->vehicle->purchase_date }}" class="form-control" />
                                 </div>
@@ -389,14 +389,14 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.23", json_decode($auth_user->admin_level->access)))
+                            {{-- @if(empty($auth_user->admin_level->access) || @in_array("1.23", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup address</label>
                                 <div class="col-sm-9">
                                     <input type="text" name="pickup_address" value="{{ $list->vehicle->pickup_address }}" class="form-control" placeholder="John Sabestin" />
                                 </div>
                             </div>
-                            @endif
+                            @endif --}}
                             @if(empty($auth_user->admin_level->access) || @in_array("1.24", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Delivery
@@ -416,7 +416,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.26", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Dispatch date</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Dispatch</label>
                                 <div class="col-sm-9">
                                     <input type="date" name="dispatch_date" value="{{ $list->vehicle->dispatch_date }}" class="form-control" />
                                 </div>
@@ -424,7 +424,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.27", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup date</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup</label>
                                 <div class="col-sm-9">
                                     <input type="date" name="pickup_date" value="{{ $list->vehicle->pickup_date }}" class="form-control" />
                                 </div>
@@ -432,8 +432,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.28", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated del.
-                                    date</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated delivery</label>
                                 <div class="col-sm-9">
                                     <input type="date" name="delivery_date" value="{{ $list->vehicle->delivery_date }}" class="form-control" />
                                 </div>
@@ -441,8 +440,7 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.29", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Actual delivery
-                                    date</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Actual del.</label>
                                 <div class="col-sm-9">
                                     <input type="date" name="delivered_on_date" value="{{ $list->vehicle->delivered_on_date }}" class="form-control" />
                                 </div>
@@ -604,6 +602,20 @@
                                 </div>
                             </div>
                             @endif
+                            <div class="row my-3">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">US Towing price</label>
+                                <div class="col-sm-9">
+                                    <input type="number" name="us_towing_price" value="{{ $list->vehicle->us_towing_price }}" class="form-control" placeholder="Enter a price"
+                                        inputmode="numeric" />
+                                </div>
+                            </div>
+                            <div class="row my-3">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">US Trans fines</label>
+                                <div class="col-sm-9">
+                                    <input type="number" name="us_trans_fines" class="form-control" value="{{ $list->vehicle->us_trans_fines }}" placeholder="Enter a price"
+                                        inputmode="numeric" />
+                                </div>
+                            </div>
                             @if(empty($auth_user->admin_level->access) || @in_array("1.42", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Ocean Freight</label>
@@ -694,7 +706,7 @@
                             @if(count(@$list->vehicle->vehicle_documents) > 0)
                             @foreach($list->vehicle->vehicle_documents as $key => $value)
                             <div class="col-md-4">
-                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:350px;">
                                     <div class="card-header d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
                                             <i class="fa-file-pdf fa-solid fs-4"></i>
@@ -706,12 +718,21 @@
                                             <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank">
+                                                <i class="fas fa-eye text-primary"></i>
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" style="width: 100%; height: 100% !important;">
                                             Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}">test.pdf</a>
                                         </object>
+                                        <div class="w-100 mt-3">
+                                            <select class="form-control" id="pdf-type" data-id="{{ $value->id }}">
+                                                <option value="BOS" @if($value->type == "BOS") selected @endif>BOS</option>
+                                                <option value="Title" @if($value->type == "Title") selected @endif>Title</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -763,7 +784,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body warehouse-images">
                                         <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
                                     </div>
                                 </div>
@@ -792,7 +813,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body unloading-images">
                                         <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
                                     </div>
                                 </div>
@@ -904,7 +925,7 @@
                                 <div class="row shadow border rounded-5 w-100 mb-3 p-1">
                                     <p class="col text-fs-3 text-center">{{ @$v->id }}</p>
                                     <p class="col text-fs-3 text-center">{{ @$v->template->name }}</p>
-                                    <p class="col text-fs-3 text-center">{{ @$v->created_at }}</p>
+                                    <p class="col text-fs-3 text-center">@if(@$v->created_at) {{ date("M d, Y", strtotime(@$v->created_at)) }} @endif</p>
                                 </div>
                                 @endforeach
                                 @else
@@ -965,6 +986,8 @@
                     response = JSON.parse(response);
                     if (response.success == true) {
                         $(".name").html("");
+                        option = "<option value=''></option>";
+                        $(".name").append(option);
                         $(response.data).each(function (key, value) {
                             option = "<option value="+value.name+">"+value.name+"</option>";
                             $(".name").append(option);
@@ -975,6 +998,32 @@
             });
             $(document).on("click", ".submit-form", function () {
                 $(".add-vehicle").submit();
+            });
+
+            $(document).on("change", "#pdf-type", function () {
+                var form = new FormData();
+                form.append("type", $(this).find("option:selected").val());
+                form.append("id", $(this).attr("data-id"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/vehicle-pdf-type") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("PDF type updated successfully!", "Completed!");
+                        } else {
+                            toastr["error"](data.msg, "Failed!");
+                        }
+                    }
+                });
             });
 
             $(document).on("submit", ".send-form", function (event) {
@@ -1043,6 +1092,10 @@
 
             $(document).on("click", ".upload-documents", function () {
                 $("#documents").click();
+            });
+
+            $(document).on("change", ".auction_location", function () {
+                $("#auction_address").val($(this).find("option:selected").text());
             });
 
             $(document).on("click", ".savetrans", function () {
@@ -1189,6 +1242,26 @@
             });
         });
     </script>
+
+    <script src="{{ asset('js/jquery.popup.lightbox.js') }}"></script>
+    <link href="{{ asset('css/popup-lightbox.css') }}" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function(){
+
+            $(".warehouse-images").popupLightbox({
+                width: 800,
+                height: 600
+            });
+
+            $(".unloading-images").popupLightbox({
+                width: 800,
+                height: 600
+            });
+
+        });
+    </script>
+
     <script>
         const numericTextarea = document.getElementById("numeric-textarea");
         numericTextarea.addEventListener("input", restrictToNumeric);

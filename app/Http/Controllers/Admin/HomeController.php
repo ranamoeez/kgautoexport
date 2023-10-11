@@ -65,6 +65,11 @@ class HomeController extends Controller
             $status = $request->status;
             $filter['status'] = $status;
         }
+        if (!empty($request->fuel_type) && $request->fuel_type !== 'all') {
+            $data['fuel_type'] = $request->fuel_type;
+            $fuel_type = $request->fuel_type;
+            $filter['fuel_type'] = $fuel_type;
+        }
         if (!empty($request->destination) && $request->destination !== 'all') {
         	$data['destination'] = $request->destination;
             $destination = $request->destination;
@@ -79,6 +84,9 @@ class HomeController extends Controller
             $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->whereHas('vehicle', function ($query) use($filter) {
                 if (!empty($filter['terminal'])) {
                     $query->where('terminal_id', $filter['terminal']);
+                }
+                if (!empty($filter['fuel_type'])) {
+                    $query->where('fuel_type', $filter['fuel_type']);
                 }
                 if (!empty($filter['status'])) {
                     $query->where('status_id', $filter['status']);
@@ -118,8 +126,9 @@ class HomeController extends Controller
         }
         $vehicles = $vehicles->limit(20)->get();
         $data['list'] = $vehicles;
+        $data['total_vehicles'] = Vehicle::all()->count();
         $data['user_levels'] = Level::all();
-        $data['all_terminal'] = Terminal::all();
+        $data['all_terminal'] = Terminal::with("vehicles")->get();
         $data['all_status'] = Status::all();
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();
@@ -347,6 +356,9 @@ class HomeController extends Controller
             unset($data['auction_fine']);
             unset($data['expense_type']);
             unset($data['expense_fine']);
+            if ($data['status_id'] == "6") {
+                $data["delivered_on_date"] = date("Y-m-d");
+            }
             Vehicle::where('id', $id)->update($data);
 
             $total_paid = TransactionsHistory::where("vehicle_id", $id)->where("user_id", $vehicle->user_id)->sum("amount");
@@ -463,6 +475,14 @@ class HomeController extends Controller
         if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == '0') {
         	$data['pay_status'] = $request->pay_status;
         	$containers = $containers->where('all_paid', $request->pay_status);
+        }
+        if (!empty($request->released_status) && $request->released_status !== 'all') {
+            $data['released_status'] = $request->released_status;
+            $containers = $containers->where('released_status', $request->released_status);
+        }
+        if (!empty($request->unloaded_status) && $request->unloaded_status !== 'all') {
+            $data['unloaded_status'] = $request->unloaded_status;
+            $containers = $containers->where('unloaded_status', $request->unloaded_status);
         }
         $containers = $containers->limit(20)->get();
         foreach ($containers as $key => $value) {
@@ -1041,6 +1061,9 @@ class HomeController extends Controller
     	$data = [];
     	if (!empty($request->status)) {
     		$data["status_id"] = $request->status;
+            if ($request->status == "6") {
+                $data["delivered_on_date"] = date("Y-m-d");
+            }
             $vehicle = Vehicle::where('id', $request->id)->first();
             if ($vehicle->buyer_id !== "1") {
                 $fcm_token = User::where("id", $vehicle->buyer_id)->first()->fcm_token;
@@ -1049,6 +1072,9 @@ class HomeController extends Controller
                 }
             }
     	}
+        if (!empty($request->payment_status)) {
+            $data["all_paid"] = $request->payment_status;
+        }
         if (!empty($request->destination_port)) {
             $data["destination_port_id"] = $request->destination_port;
         }
@@ -1068,11 +1094,41 @@ class HomeController extends Controller
         if (!empty($request->status)) {
             $data["status_id"] = $request->status;
         }
+        if (!empty($request->released_status)) {
+            $data["released_status"] = $request->released_status;
+        }
+        if (!empty($request->unloaded_status)) {
+            $data["unloaded_status"] = $request->unloaded_status;
+        }
         if (!empty($request->payment_status) || $request->payment_status == '0') {
             $data["all_paid"] = $request->payment_status;
         }
         Container::where('id', $request->id)->update($data);
         return json_encode(["success"=>true, 'action'=>'reload']);
+    }
+
+    public function update_pdf_type(Request $request)
+    {
+        $data = [];
+        if (!empty($request->type)) {
+            $data["type"] = $request->type;
+            ContainerImage::where('id', $request->id)->update($data);
+            return json_encode(["success"=>true, 'action'=>'reload']);
+        } else {
+            return json_encode(["success"=>false, 'msg'=>'Please provide pdf type.']);
+        }
+    }
+
+    public function vehicle_pdf_type(Request $request)
+    {
+        $data = [];
+        if (!empty($request->type)) {
+            $data["type"] = $request->type;
+            VehicleDocuments::where('id', $request->id)->update($data);
+            return json_encode(["success"=>true, 'action'=>'reload']);
+        } else {
+            return json_encode(["success"=>false, 'msg'=>'Please provide pdf type.']);
+        }
     }
 
     public function update_pickup_data(Request $request)

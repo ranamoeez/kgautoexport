@@ -131,12 +131,12 @@
                                         </td>
                                         <td>
                                             <p class=" text-fs-3">
-                                                {{ @$value->company_fee }} $
+                                                ${{ @$value->company_fee }}
                                             </p>
                                         </td>
                                         <td>
                                             <p class=" text-fs-3">
-                                                {{ @$value->due_payment_limit }} $
+                                                ${{ @$value->due_payment_limit }}
                                             </p>
                                         </td>
                                         <td>

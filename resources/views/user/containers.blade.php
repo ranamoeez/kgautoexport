@@ -132,12 +132,12 @@
                                     </td>
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                         <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
-                                            {{ @$value->departure }}
+                                            @if(@$value->departure) {{ date("M d, Y", strtotime(@$value->departure)) }} @endif
                                         </a>
                                     </td>
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                         <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
-                                            {{ @$value->arrival }}
+                                            @if(@$value->arrival) {{ date("M d, Y", strtotime(@$value->arrival)) }} @endif
                                         </a>
                                     </td>
 
@@ -279,12 +279,12 @@
                                     </td>
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                         <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
-                                            {{ @$value->departure }}
+                                            @if(@$value->departure) {{ date("M d, Y", strtotime(@$value->departure)) }} @endif
                                         </a>
                                     </td>
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                         <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
-                                            {{ @$value->arrival }}
+                                            @if(@$value->arrival) {{ date("M d, Y", strtotime(@$value->arrival)) }} @endif
                                         </a>
                                     </td>
 

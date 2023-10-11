@@ -75,6 +75,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 
 	Route::post('/update-vehicle-data', [App\Http\Controllers\Admin\HomeController::class, 'update_vehicle_data'])->name('update-vehicle-data');
 	Route::post('/update-container-data', [App\Http\Controllers\Admin\HomeController::class, 'update_container_data'])->name('update-container-data');
+	Route::post('/vehicle-pdf-type', [App\Http\Controllers\Admin\HomeController::class, 'vehicle_pdf_type'])->name('vehicle-pdf-type');
+	Route::post('/update-pdf-type', [App\Http\Controllers\Admin\HomeController::class, 'update_pdf_type'])->name('update-pdf-type');
 
 	Route::post('/send-email', [App\Http\Controllers\Admin\HomeController::class, 'send_email'])->name('send-email');
 

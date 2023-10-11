@@ -25,7 +25,7 @@
 
             <form method="GET" action="{{ url('admin/vehicles') }}" class="row align-items-center" id="filters-form">
                 <input type="hidden" name="page" value="{{ @$page }}">
-                <div class="col-md-2">
+                <div class="col-md-3 mb-2">
                     <label for="buyer" class="fw-semibold">Buyer</label>
                     <select id="buyer" name="buyer" class="selectjs form-select p-2 border border-gray-200 rounded-lg">
                         <option value="all">All</option>
@@ -41,23 +41,23 @@
                     </select>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3 mb-2">
                     <label for="terminal" class="fw-semibold">Terminal</label>
                     <select id="terminal" name="terminal" class="selectjs form-select p-2">
                         <option value="all">All</option>
                         @if(count(@$all_terminal) > 0)
                         @foreach(@$all_terminal as $key => $value)
-                            @if($value['id'] == @$terminal)
-                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                            @if($value->id == @$terminal)
+                            <option value="{{ @$value->id }}" selected>{{ $value->name.' ('.count($value->vehicles).')' }}</option>
                             @else
-                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                            <option value="{{ @$value->id }}">{{ @$value->name.' ('.count($value->vehicles).')' }}</option>
                             @endif
                         @endforeach
                         @endif
                     </select>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3 mb-2">
                     <label for="status" class="fw-semibold">Status</label>
                     <select id="status" name="status" class="selectjs form-select p-2">
                         <option value="all">All</option>
@@ -73,7 +73,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3 mb-2">
                     <label for="destination" class="fw-semibold">Destination</label>
                     <select id="destination" name="destination" class="selectjs form-select p-2 border border-gray-200 rounded-lg">
                         <option value="all">All</option>
@@ -89,25 +89,36 @@
                     </select>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3 mb-2">
                     <label for="pay_status" class="fw-semibold">Payment Status</label>
                     <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
-                        <option value="all" @if(@$paystatus == "all") selected @endif>All</option>
+                        <option value="all" @if(@$pay_status == "all") selected @endif>All</option>
                         <option value="paid" @if(@$pay_status == "paid") selected @endif>Paid</option>
                         <option value="partly paid" @if(@$pay_status == "partly paid") selected @endif>Partly paid</option>
                         <option value="unpaid" @if(@$pay_status == "unpaid") selected @endif>Unpaid</option>
                     </select>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3 mb-2">
+                    <label for="fuel_type" class="fw-semibold">Fuel Type</label>
+                    <select id="fuel_type" name="fuel_type" class="selectjs form-select p-2">
+                        <option value="all" @if(@$fuel_type == "all") selected @endif>All</option>
+                        <option value="GAS" @if(@$fuel_type == "GAS") selected @endif>GAS</option>
+                        <option value="HYB" @if(@$fuel_type == "HYB") selected @endif>HYB</option>
+                        <option value="EV" @if(@$fuel_type == "EV") selected @endif>EV</option>
+                        <option value="Other" @if(@$fuel_type == "Other") selected @endif>Other</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 mb-2">
                     <label for="search" class="fw-semibold">Search</label>
                     <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-veh" placeholder="Search">
                 </div>
             </form>
 
             <div>
-                <div class="d-flex justify-content-between mt-3 align-items-center justify-content-lg-end">
-
+                <div class="d-flex justify-content-between mt-3 align-items-center">
+                    <p class="text-fs-4 m-0">Total vehicles: <b>{{ @$total_vehicles }}</b></p>
                     <div class="d-flex gap-2 align-items-center page-icon">
                         @php
                             $prev = (int)$page - 1;
@@ -125,6 +136,10 @@
                             if (!empty(@$status)) {
                                 array_push($prev_params, 'status='.$status);
                                 array_push($next_params, 'status='.$status);
+                            }
+                            if (!empty(@$fuel_type)) {
+                                array_push($prev_params, 'fuel_type='.$fuel_type);
+                                array_push($next_params, 'fuel_type='.$fuel_type);
                             }
                             if (!empty(@$search)) {
                                 array_push($prev_params, 'search='.$search);
@@ -172,7 +187,7 @@
                             <th scope="col" class="fw-bold">Destination</th>
                             <th scope="col" class="fw-bold">Title</th>
                             <th scope="col" class="fw-bold">Keys</th>
-                            <th scope="col" class="fw-bold">Price</th>
+                            <th scope="col" class="fw-bold">Payment Status</th>
                             <th scope="col" class="fw-bold">Status</th>
                             <th scope="col" class="fw-bold">Terminal</th>
                             <th scope="col" class="fw-bold">Notes</th>
@@ -214,7 +229,9 @@
                                 </td> --}}
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        {{ @$value->vehicle->delivery_date }}
+                                        @if(!empty(@$value->vehicle->delivered_on_date))
+                                        {{ date("M d, Y", strtotime(@$value->vehicle->delivered_on_date)) }}
+                                        @endif
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
@@ -237,7 +254,7 @@
                                         {{ @$value->vehicle->client_name }}
                                     </a>
                                 </td>
-                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important; width: 230px !important;" @endif>
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important; width: 230px !important;" @else style="width: 230px !important;" @endif>
                                     <div class="text-center text-fs-4">
                                         <select id="selectDestOption{{$key+1}}" class="selectjs form-select destination_port" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
                                             <option value="0" selected disabled></option>
@@ -272,8 +289,13 @@
                                     </div>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <div class="text-center text-fs-4">
-                                        <span style="font-size: 16px;">${{ (!empty(@$value->vehicle->auction_price)) ? @$value->vehicle->auction_price : '0.00' }}</span>
+                                    <div class="text-center text-fs-4 d-flex">
+                                        {{-- <span style="font-size: 16px;">${{ (!empty(@$value->vehicle->auction_price)) ? @$value->vehicle->auction_price : '0.00' }}</span> --}}
+                                        <span style="font-size: 18px;" class="mt-1">${{ (int)@$value->vehicle->us_towing_price + (int)@$value->vehicle->us_trans_fines }}</span>
+                                        <select class="option-select text-white ps-1 pe-2 py-1 payment-status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}" style="border-radius: 5px;">
+                                            <option value="1" data-color="success" @if(@$value->vehicle->all_paid == "1") selected @endif>Paid</option>
+                                            <option value="0" data-color="danger" @if(@$value->vehicle->all_paid == "0") selected @endif>Unpaid</option>
+                                        </select>
                                     </div>
                                 </td>
 
@@ -404,6 +426,30 @@
                 });
             });
 
+            $(document).on("change", ".payment-status", function () {
+                var form = new FormData();
+                form.append("payment_status", $(this).find("option:selected").val());
+                form.append("id", $(this).attr("data-id"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/update-vehicle-data") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Vehicle data updated successfully!", "Completed!");
+                        }
+                    }
+                });
+            });
+
             $(document).on("change", ".destination_port", function () {
                 var form = new FormData();
                 form.append("destination_port", $(this).find("option:selected").val());
@@ -480,7 +526,7 @@
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
-            $(document).on("change", "#buyer, #terminal, #status, #destination, #search-veh, #pay_status", function () {
+            $(document).on("change", "#buyer, #terminal, #status, #destination, #search-veh, #pay_status, #fuel_type", function () {
                 $("#filters-form").submit();
             });
             $(document).on("click", ".delete", function () {

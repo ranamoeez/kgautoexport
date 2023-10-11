@@ -15,4 +15,8 @@ class Terminal extends Model
     protected $fillable = [
         'name', 'position', 'selected'
     ];
+
+    public function vehicles(){
+    	return $this->hasMany(Vehicle::class, 'terminal_id');
+    }
 }

@@ -22,7 +22,7 @@
 
             <form method="GET" action="{{ url('admin/containers') }}" class="row align-items-center" id="filters-form">
                 <input type="hidden" name="page" value="{{ @$page }}">
-                <div class="col-md-2">
+                <div class="col-md-3 mb-2">
                     <label for="port" class="fw-semibold">Port</label>
                     <select class="selectjs form-select p-2 border border-gray-200 rounded-lg" id="port" name="port">
                         <option value="all" selected>All</option>
@@ -38,7 +38,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3 mb-2">
                     <label for="status" class="fw-semibold">Status</label>
                     <select id="status" name="status" class="selectjs form-select p-2">
                         <option value="all" selected>All</option>
@@ -54,7 +54,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3 mb-2">
                     <label for="Date" class="fw-semibold">Date</label>
                     <div class="d-flex gap-4 align-items-center">
                         <div class="d-flex align-items-center">
@@ -65,16 +65,34 @@
                     </div>
                 </div>
 
-                <div class="offset-md-1 col-md-2">
+                <div class="col-md-3 mb-2">
                     <label for="pay_status" class="fw-semibold">Payment Status</label>
                     <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
-                        <option value="all" @if(@$paystatus == "all") selected @endif>All</option>
+                        <option value="all" @if(@$pay_status == "all") selected @endif>All</option>
                         <option value="1" @if(@$pay_status == "1") selected @endif>Paid</option>
                         <option value="0" @if(@$pay_status == "0") selected @endif>Unpaid</option>
                     </select>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3 mb-2">
+                    <label for="released_status" class="fw-semibold">Released Status</label>
+                    <select id="released_status" name="released_status" class="selectjs form-select p-2">
+                        <option value="all" @if(@$released_status == "all") selected @endif>All</option>
+                        <option value="No" @if(@$released_status == "No") selected @endif>No</option>
+                        <option value="In hand" @if(@$released_status == "In hand") selected @endif>In hand</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 mb-2">
+                    <label for="unloaded_status" class="fw-semibold">Unloaded Status</label>
+                    <select id="unloaded_status" name="unloaded_status" class="selectjs form-select p-2">
+                        <option value="all" @if(@$unloaded_status == "all") selected @endif>All</option>
+                        <option value="No" @if(@$unloaded_status == "No") selected @endif>No</option>
+                        <option value="Yes" @if(@$unloaded_status == "Yes") selected @endif>Yes</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 mb-2">
                     <label for="search" class="fw-semibold">Search</label>
                     <input type="text" class="form-control p-2" placeholder="Search" name="search" value="{{ @$search }}" id="search-cont">
                 </div>
@@ -114,6 +132,14 @@
                                 array_push($prev_params, 'pay_status='.$pay_status);
                                 array_push($next_params, 'pay_status='.$pay_status);
                             }
+                            if (!empty(@$released_status)) {
+                                array_push($prev_params, 'released_status='.$released_status);
+                                array_push($next_params, 'released_status='.$released_status);
+                            }
+                            if (!empty(@$unloaded_status)) {
+                                array_push($prev_params, 'unloaded_status='.$unloaded_status);
+                                array_push($next_params, 'unloaded_status='.$unloaded_status);
+                            }
                             $pre = join("&", $prev_params);
                             $nex = join("&", $next_params);
                         @endphp
@@ -144,6 +170,8 @@
                             <th scope="col" class="fw-bold">Dates</th>
                             <th scope="col" class="fw-bold">Status</th>
                             <th scope="col" class="fw-bold">P. Status</th>
+                            <th scope="col" class="fw-bold">Released Status</th>
+                            <th scope="col" class="fw-bold">Unloaded Status</th>
                             <th scope="col" class="fw-bold">Tracking</th>
                             <th scope="col" class="fw-bold"></th>
                         </thead>
@@ -185,16 +213,16 @@
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        Departure : {{ $value->departure }}
+                                        Departure : @if(@$value->departure) {{ date("M d, Y", strtotime(@$value->departure)) }} @endif
                                     </a>
                                     <br>
                                     <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        Arrival : {{ $value->arrival }}
+                                        Arrival : @if(@$value->arrival) {{ date("M d, Y", strtotime(@$value->arrival)) }} @endif
                                     </a>
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white status" aria-label="Default select example" data-id="{{ $value->id }}">
+                                        <select class="form-select option-select text-white status" aria-label="Default select example" data-id="{{ @$value->id }}">
                                             @if(count(@$all_status) > 0)
                                             @foreach(@$all_status as $k => $v)
                                                 @if($value->status_id == @$v['id'])
@@ -218,6 +246,22 @@
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
+                                        <select class="form-select option-select text-white released_status" aria-label="Default select example" data-id="{{ $value->id }}">
+                                            <option value="No" data-color="danger" @if(@$value->released_status == "No") selected @endif>No</option>
+                                            <option value="In hand" data-color="success" @if(@$value->released_status == "In hand") selected @endif>In hand</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                    <div class="text-center text-fs-4">
+                                        <select class="form-select option-select text-white unloaded_status" aria-label="Default select example" data-id="{{ $value->id }}">
+                                            <option value="No" data-color="danger" @if(@$value->unloaded_status == "No") selected @endif>No</option>
+                                            <option value="Yes" data-color="success" @if(@$value->unloaded_status == "Yes") selected @endif>Yes</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                    <div class="text-center text-fs-4">
                                         <button class="btn btn-primary text-fs-4 border-0 tracking" type="button" data-text="{{ @$value->shipping_line->name }}" data-id="{{ @$value->container_no }}">
                                             Tracking
                                         </button>
@@ -232,7 +276,7 @@
                             @endforeach
                             @else
                             <tr id="row" class="align-middle overflow-hidden shadow mb-2">
-                                <td class="text-center" colspan="8">
+                                <td class="text-center" colspan="10">
                                     <p>No record found</p>
                                 </td>
                             </tr>
@@ -303,7 +347,7 @@
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
-            $(document).on("change", "#port, #status, #search-cont, #fromDate, #toDate, #pay_status", function () {
+            $(document).on("change", "#port, #status, #search-cont, #fromDate, #toDate, #pay_status, #released_status, #unloaded_status", function () {
                 $("#filters-form").submit();
             });
             $(document).on("click", ".delete", function () {
@@ -354,6 +398,54 @@
             $(document).on("change", ".payment_status", function () {
                 var form = new FormData();
                 form.append("payment_status", $(this).find("option:selected").val());
+                form.append("id", $(this).attr("data-id"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/update-container-data") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Container data updated successfully!", "Completed!");
+                        }
+                    }
+                });
+            });
+
+            $(document).on("change", ".released_status", function () {
+                var form = new FormData();
+                form.append("released_status", $(this).find("option:selected").val());
+                form.append("id", $(this).attr("data-id"));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url("admin/update-container-data") }}',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: form,
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if (data.success == true) {
+                            toastr["success"]("Container data updated successfully!", "Completed!");
+                        }
+                    }
+                });
+            });
+
+            $(document).on("change", ".unloaded_status", function () {
+                var form = new FormData();
+                form.append("unloaded_status", $(this).find("option:selected").val());
                 form.append("id", $(this).attr("data-id"));
 
                 $.ajax({

@@ -762,7 +762,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="row mb-4">
+                        <div class="row mb-4 warehouse-images">
                             <div class="col-md-12">
                                 <h3>Warehouse</h3>
                             </div>
@@ -784,7 +784,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="card-body warehouse-images">
+                                    <div class="card-body">
                                         <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
                                     </div>
                                 </div>
@@ -792,6 +792,8 @@
                             @endif
                             @endforeach
                             @endif
+                        </div>
+                        <div class="row mb-4 unloading-images">
                             <div class="col-md-12 mt-3">
                                 <h3>Unloading</h3>
                             </div>
@@ -813,7 +815,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="card-body unloading-images">
+                                    <div class="card-body">
                                         <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
                                     </div>
                                 </div>

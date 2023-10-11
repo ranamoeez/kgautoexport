@@ -785,7 +785,9 @@
                                         </div>
                                     </div>
                                     <div class="card-body warehouse-images">
-                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
+                                        <div>
+                                            <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

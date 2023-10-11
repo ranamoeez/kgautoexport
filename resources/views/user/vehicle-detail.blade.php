@@ -168,7 +168,7 @@
                                                 @foreach($list->vehicle->vehicle_images as $key => $value)
                                                 @if($value->type == "warehouse")
                                                 <li class="splide__slide">
-                                                    <img src="{{ url($value->filepath.$value->filename) }}" class="image w-100" alt="Vehicle Image" style="max-height: 400px;" />
+                                                    <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="image w-100" alt="Vehicle Image" style="max-height: 400px;" />
                                                 </li>
                                                 @endif
                                                 @endforeach
@@ -209,7 +209,7 @@
                                         @foreach($list->vehicle->vehicle_images as $key => $value)
                                         @if($value->type == "warehouse")
                                         <li class="splide__slide">
-                                            <img src="{{ url($value->filepath.$value->filename) }}" class="image vehicle-image w-100" alt="Vehicle Image" />
+                                            <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="image vehicle-image w-100" alt="Vehicle Image" />
                                         </li>
                                         @endif
                                         @endforeach
@@ -231,7 +231,7 @@
                                                 @foreach($list->vehicle->vehicle_images as $key => $value)
                                                 @if($value->type == "unloading")
                                                 <li class="splide__slide">
-                                                    <img src="{{ url($value->filepath.$value->filename) }}" class="image w-100" alt="Vehicle Image" style="max-height: 400px;" />
+                                                    <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="image w-100" alt="Vehicle Image" style="max-height: 400px;" />
                                                 </li>
                                                 @endif
                                                 @endforeach
@@ -273,7 +273,7 @@
                                         @foreach($list->vehicle->vehicle_images as $key => $value)
                                         @if($value->type == "unloading")
                                         <li class="splide__slide">
-                                            <img src="{{ url($value->filepath.$value->filename) }}" class="image vehicle-image w-100" alt="Vehicle Image" />
+                                            <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="image vehicle-image w-100" alt="Vehicle Image" />
                                         </li>
                                         @endif
                                         @endforeach

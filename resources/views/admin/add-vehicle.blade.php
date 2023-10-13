@@ -10,6 +10,9 @@
         .select2-selection {
             min-height: 37px;
         }
+        .phone_number .iti--separate-dial-code {
+            width: 100%;
+        }
     </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
@@ -123,7 +126,7 @@
                                                 <option value=""></option>
                                                 @if(count(@$all_vehicle_modal) > 0)
                                                 @foreach(@$all_vehicle_modal as $key => $value)
-                                                    <option value="{{ @$value['name'] }}">{{ @$value['name'] }}</option>
+                                                    <option value="{{ @$value['name'] }}" data-weight="{{ @$value['weight'] }}" data-fuel="{{ @$value['fuel_type'] }}">{{ @$value['name'] }}</option>
                                                 @endforeach
                                                 @endif
                                             </select>
@@ -214,19 +217,19 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Fuel Type</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
-                                        <input id="radio11" type="radio" name="fuel_type" class="form-check-input" value="GAS" />
+                                        <input id="radio11" type="radio" name="fuel_type" class="form-check-input fuel_type" value="GAS" />
                                         <label for="radio11" class="form-check-label">GAS</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio9" type="radio" name="fuel_type" class="form-check-input" value="HYB" />
+                                        <input id="radio9" type="radio" name="fuel_type" class="form-check-input fuel_type" value="HYB" />
                                         <label for="radio9" class="form-check-label">HYB</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio10" type="radio" name="fuel_type" class="form-check-input" value="EV" />
+                                        <input id="radio10" type="radio" name="fuel_type" class="form-check-input fuel_type" value="EV" />
                                         <label for="radio10" class="form-check-label">EV</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio12" type="radio" name="fuel_type" class="form-check-input" value="Other" />
+                                        <input id="radio12" type="radio" name="fuel_type" class="form-check-input fuel_type" value="Other" />
                                         <label for="radio12" class="form-check-label">Other</label>
                                     </div>
                                 </div>
@@ -285,9 +288,10 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.13", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Location</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="location" placeholder="John Sabestin" />
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Phone #</label>
+                                <div class="col-sm-9 phone_number">
+                                    <input type="hidden" name="dial_code" id="buyer_dial_code" value="+962">
+                                    <input type="text" class="form-control" name="phone" id="buyer-phone" placeholder="XXXXXXXXX" />
                                 </div>
                             </div>
                             @endif
@@ -305,14 +309,6 @@
                                 <div class="col-sm-9">
                                     <input type="number" class="form-control" name="lotnumber" placeholder="Enter a number"
                                         inputmode="numeric" />
-                                </div>
-                            </div>
-                            @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.16", json_decode($auth_user->admin_level->access)))
-                            <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase</label>
-                                <div class="col-sm-9">
-                                    <input type="date" name="purchase_date" id="purchase_date" class="form-control" />
                                 </div>
                             </div>
                             @endif
@@ -370,14 +366,6 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.22", json_decode($auth_user->admin_level->access)))
-                            <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Paid date</label>
-                                <div class="col-sm-9">
-                                    <input type="date" name="pdate" class="form-control" />
-                                </div>
-                            </div>
-                            @endif
                             {{-- @if(empty($auth_user->admin_level->access) || @in_array("1.23", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup address</label>
@@ -395,11 +383,19 @@
                                 </div>
                             </div>
                             @endif
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.22", json_decode($auth_user->admin_level->access)))
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Paid date</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="pdate" class="form-control datepicker" />
+                                </div>
+                            </div>
+                            @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.25", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Due date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="due_date" class="form-control" />
+                                    <input type="text" name="due_date" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
@@ -407,7 +403,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Dispatch</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="dispatch_date" class="form-control" />
+                                    <input type="text" name="dispatch_date" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
@@ -415,15 +411,15 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="pickup_date" class="form-control" />
+                                    <input type="text" name="pickup_date" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.28", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.16", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated delivery</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="delivery_date" class="form-control" />
+                                    <input type="text" name="purchase_date" id="purchase_date" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
@@ -431,7 +427,15 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Actual del.</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="delivered_on_date" class="form-control" />
+                                    <input type="text" name="delivered_on_date" class="form-control datepicker" />
+                                </div>
+                            </div>
+                            @endif
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.28", json_decode($auth_user->admin_level->access)))
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated delivery</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="delivery_date" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
@@ -571,7 +575,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Weight (LB)</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="weight" class="form-control" placeholder="Enter a weight" />
+                                    <input type="text" name="weight" id="weight" class="form-control" placeholder="Enter a weight" />
                                 </div>
                             </div>
                             @endif
@@ -822,19 +826,30 @@
                         option = "<option value=''></option>";
                         $(".name").append(option);
                         $(response.data).each(function (key, value) {
-                            option = "<option value="+value.name+">"+value.name+"</option>";
+                            option = "<option value="+value.name+" data-weight="+value.weight+" data-fuel="+value.fuel_type+">"+value.name+"</option>";
                             $(".name").append(option);
                         });
                         $(".name").attr("disabled", false);
                     }
                 });
             });
+            $(document).on("change", ".name", function () {
+                var weight = $(this).find("option:selected").attr("data-weight");
+                var fuel = $(this).find("option:selected").attr("data-fuel");
+                $("#weight").val(weight);
+                $(".fuel_type[value='"+fuel+"']").attr("checked", true);
+            });
+
             $(document).on("click", ".submit-form", function () {
                 $(".add-vehicle").submit();
             });
 
             $(document).on("change", ".auction_location", function () {
                 $("#auction_address").val($(this).find("option:selected").text());
+            });
+
+            $(document).on("click", ".phone_number .iti__country", function () {
+                $("#buyer_dial_code").val($(".phone_number .iti__selected-dial-code").first().text().trim());
             });
 
             $(document).on("submit", ".form", function (event) {
@@ -883,7 +898,7 @@
 
             $(document).on("click", ".savetrans", function () {
                 var type = $(".transtype").val();
-                var fine = parseInt($(".transfine").val());
+                var fine = $(".transfine").val();
 
                 var html = `<div class="col-12 mt-2">
                     <span class="row align-items-center">
@@ -904,7 +919,7 @@
 
             $(document).on("click", ".saveauction", function () {
                 var type = $(".auctiontype").val();
-                var fine = parseInt($(".auctionfine").val());
+                var fine = $(".auctionfine").val();
 
                 var html = `<div class="col-12 mt-2">
                     <span class="row align-items-center">
@@ -926,7 +941,7 @@
             $(document).on("click", ".saveexpense", function () {
                 var type = $(".expense_type").val();
                 if (type !== "") {
-                    var fine = parseInt($(".expense_fine").val());
+                    var fine = $(".expense_fine").val();
 
                     var html = `<div class="col-12 mt-2">
                         <span class="row align-items-center">
@@ -965,10 +980,16 @@
 
     <script>
         var input = document.querySelector("#phone");
+        var input2 = document.querySelector("#buyer-phone");
         window.intlTelInput(input, {
             separateDialCode: true,
             excludeCountries: ["in", "il"],
             preferredCountries: ["ru", "jp", "pk", "no"]
+        });
+        window.intlTelInput(input2, {
+            separateDialCode: true,
+            excludeCountries: ["in", "il"],
+            preferredCountries: ["jo", "iq"]
         });
     </script>
 

@@ -10,6 +10,9 @@
         .select2-selection {
             min-height: 37px;
         }
+        .phone_number .iti--separate-dial-code {
+            width: 100%;
+        }
     </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
@@ -130,9 +133,9 @@
                                                 @if(count(@$all_vehicle_modal) > 0)
                                                 @foreach(@$all_vehicle_modal as $key => $value)
                                                     @if($value['name'] == @$list->vehicle->name)
-                                                        <option value="{{ @$value['name'] }}" selected>{{ @$value['name'] }}</option>
+                                                        <option value="{{ @$value['name'] }}" data-weight="{{ @$value['weight'] }}" data-fuel="{{ @$value['fuel_type'] }}" selected>{{ @$value['name'] }}</option>
                                                         @else
-                                                        <option value="{{ @$value['name'] }}">{{ @$value['name'] }}</option>
+                                                        <option value="{{ @$value['name'] }}" data-weight="{{ @$value['weight'] }}" data-fuel="{{ @$value['fuel_type'] }}">{{ @$value['name'] }}</option>
                                                         @endif
                                                 @endforeach
                                                 @endif
@@ -224,20 +227,20 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Fuel Type</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
                                     <div class="form-check">
-                                        <input id="radio11" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'GAS') checked @endif class="form-check-input" value="GAS" />
+                                        <input id="radio11" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'GAS') checked @endif class="form-check-input fuel_type" value="GAS" />
                                         <label for="radio11" class="form-check-label">GAS</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio9" type="radio" name="fuel_type" class="form-check-input"
+                                        <input id="radio9" type="radio" name="fuel_type" class="form-check-input fuel_type"
                                             @if($list->vehicle->fuel_type == 'HYB') checked @endif value="HYB" />
                                         <label for="radio9" class="form-check-label">HYB</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio10" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'EV') checked @endif class="form-check-input" value="EV" />
+                                        <input id="radio10" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'EV') checked @endif class="form-check-input fuel_type" value="EV" />
                                         <label for="radio10" class="form-check-label">EV</label>
                                     </div>
                                     <div class="form-check">
-                                        <input id="radio12" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'Other') checked @endif class="form-check-input" value="Other" />
+                                        <input id="radio12" type="radio" name="fuel_type" @if($list->vehicle->fuel_type == 'Other') checked @endif class="form-check-input fuel_type" value="Other" />
                                         <label for="radio12" class="form-check-label">Other</label>
                                     </div>
                                 </div>
@@ -296,9 +299,21 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.13", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Location</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="location" value="{{ $list->vehicle->location }}" placeholder="John Sabestin" />
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Phone #</label>
+                                <div class="col-sm-9 phone_number">
+                                    @php
+                                        $dial_code = "";
+                                        $phone_number = "";
+                                        $phone = explode(" ", $list->vehicle->phone);
+                                        if (!empty(@$phone[0])) {
+                                            $dial_code = $phone[0];
+                                        }
+                                        if (!empty(@$phone[1])) {
+                                            $phone_number = $phone[1];
+                                        }
+                                    @endphp
+                                    <input type="hidden" name="dial_code" id="buyer_dial_code" value="+962">
+                                    <input type="text" class="form-control" name="phone" id="buyer-phone" value="{{ $phone_number }}" placeholder="XXXXXXXXX" />
                                 </div>
                             </div>
                             @endif
@@ -316,14 +331,6 @@
                                 <div class="col-sm-9">
                                     <input type="number" class="form-control" name="lotnumber" value="{{ $list->vehicle->lotnumber }}" placeholder="Enter a number"
                                         inputmode="numeric" />
-                                </div>
-                            </div>
-                            @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.16", json_decode($auth_user->admin_level->access)))
-                            <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase</label>
-                                <div class="col-sm-9">
-                                    <input type="date" name="purchase_date" value="{{ $list->vehicle->purchase_date }}" class="form-control" />
                                 </div>
                             </div>
                             @endif
@@ -348,11 +355,53 @@
                             @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.18", json_decode($auth_user->admin_level->access)))
                             <div class="form-group mt-4">
-                                <label for="notes" class="fw-semibold">Notes</label>
+                                <div class="d-flex justify-content-between">
+                                    <label for="notes" class="fw-semibold">Notes</label>
+                                    <button class="btn btn-primary mb-2" type="button" data-bs-toggle="modal" data-bs-target="#notesHistoryModal">Notes History</button>
+                                </div>
                                 <textarea name="notes_user" cols="10" rows="4" value="Title received on 12 / 18r"
                                     class="form-control">{{ $list->vehicle->notes_user }}</textarea>
                             </div>
                             @endif
+                            <!-- Modal -->
+                            <div class="modal fade" id="notesHistoryModal" tabindex="-1" aria-labelledby="notesHistoryLabel" aria-hidden="true">
+                                <div class="modal-dialog rounded-5">
+                                    <div class="modal-content p-3">
+                                        <div class="modal-header border-0">
+                                            <h3 class="modal-title fw-bold" id="notesHistoryLabel" style="font-size: 26px">Notes History</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead class="text-fs-4">
+                                                        <tr>
+                                                            <th><b>Notes</b></th>
+                                                            <th><b>Added By</b></th>
+                                                            <th><b>Added On</b></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if(count(@$notes_history) > 0)
+                                                        @foreach(@$notes_history as $key => $value)
+                                                        <tr>
+                                                            <td>{{ @$value->notes }}</td>
+                                                            <td>{{ @$value->user->surname }}</td>
+                                                            <td>@if(@$value->created_at) {{ date("M d, Y", strtotime(@$value->created_at)) }} @endif</td>
+                                                        </tr>
+                                                        @endforeach
+                                                        @else
+                                                        <tr>
+                                                            <td class="text-center" colspan="3">No history found.</td>
+                                                        </tr>
+                                                        @endif
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             @if(empty($auth_user->admin_level->access) || @in_array("1.19", json_decode($auth_user->admin_level->access)))
                             <div class="form-group mt-4">
                                 <label for="notes" class="fw-semibold">Admin Notes</label>
@@ -381,14 +430,6 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.22", json_decode($auth_user->admin_level->access)))
-                            <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Paid date</label>
-                                <div class="col-sm-9">
-                                    <input type="date" name="pdate" value="{{ str_replace(" 00:00:00", "", $list->vehicle->pdate) }}" class="form-control" />
-                                </div>
-                            </div>
-                            @endif
                             {{-- @if(empty($auth_user->admin_level->access) || @in_array("1.23", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup address</label>
@@ -406,11 +447,19 @@
                                 </div>
                             </div>
                             @endif
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.22", json_decode($auth_user->admin_level->access)))
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Paid date</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="pdate" value="{{ str_replace(" 00:00:00", "", $list->vehicle->pdate) }}" class="form-control datepicker" />
+                                </div>
+                            </div>
+                            @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.25", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Due date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="due_date" value="{{ $list->vehicle->due_date }}" class="form-control" />
+                                    <input type="text" name="due_date" value="{{ $list->vehicle->due_date }}" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
@@ -418,7 +467,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Dispatch</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="dispatch_date" value="{{ $list->vehicle->dispatch_date }}" class="form-control" />
+                                    <input type="text" name="dispatch_date" value="{{ $list->vehicle->dispatch_date }}" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
@@ -426,15 +475,15 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="pickup_date" value="{{ $list->vehicle->pickup_date }}" class="form-control" />
+                                    <input type="text" name="pickup_date" value="{{ $list->vehicle->pickup_date }}" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.28", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.16", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated delivery</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="delivery_date" value="{{ $list->vehicle->delivery_date }}" class="form-control" />
+                                    <input type="text" name="purchase_date" value="{{ $list->vehicle->purchase_date }}" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
@@ -442,7 +491,15 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Actual del.</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="delivered_on_date" value="{{ $list->vehicle->delivered_on_date }}" class="form-control" />
+                                    <input type="text" name="delivered_on_date" value="{{ $list->vehicle->delivered_on_date }}" class="form-control datepicker" />
+                                </div>
+                            </div>
+                            @endif
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.28", json_decode($auth_user->admin_level->access)))
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated delivery</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="delivery_date" value="{{ $list->vehicle->delivery_date }}" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
@@ -475,7 +532,7 @@
                                                 <div class="col-12 mt-2">
                                                     <span class="row align-items-center">
                                                         <div class="col-md-6">{{ $value->cause }}</div>
-                                                        <div class="col-md-3">{{ $value->amount }} $</div>
+                                                        <div class="col-md-3">${{ $value->amount }}</div>
                                                         <div class="col-md-3">
                                                             <div class="d-flex justify-content-center items-center message-icon">
                                                                 <i class="fa-circle-minus fa-solid text-danger delete-fines" data-url="{{ url('admin/delete-vehicle-fines', $value->id) }}" style="cursor: pointer;"></i>
@@ -540,7 +597,7 @@
                                                 <div class="col-12 mt-2">
                                                     <span class="row align-items-center">
                                                         <div class="col-md-6">{{ $value->cause }}</div>
-                                                        <div class="col-md-3">{{ $value->amount }} $</div>
+                                                        <div class="col-md-3">${{ $value->amount }}</div>
                                                         <div class="col-md-3">
                                                             <div class="d-flex justify-content-center items-center message-icon">
                                                                 <i class="fa-circle-minus fa-solid text-danger delete-fines" data-url="{{ url('admin/delete-vehicle-fines', $value->id) }}" style="cursor: pointer;"></i>
@@ -578,7 +635,7 @@
                                                 <div class="col-12 mt-2">
                                                     <span class="row align-items-center">
                                                         <div class="col-md-6">{{ $value->cause }}</div>
-                                                        <div class="col-md-3">{{ $value->amount }} $</div>
+                                                        <div class="col-md-3">${{ $value->amount }}</div>
                                                         <div class="col-md-3">
                                                             <div class="d-flex justify-content-center items-center message-icon">
                                                                 <i class="fa-circle-minus fa-solid text-danger delete-fines" data-url="{{ url('admin/delete-vehicle-fines', $value->id) }}" style="cursor: pointer;"></i>
@@ -666,7 +723,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Weight (LB)</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="weight" value="{{ @$list->vehicle->weight }}" class="form-control" placeholder="Enter a weight" />
+                                    <input type="text" name="weight" id="weight" value="{{ @$list->vehicle->weight }}" class="form-control" placeholder="Enter a weight" />
                                 </div>
                             </div>
                             @endif
@@ -991,13 +1048,20 @@
                         option = "<option value=''></option>";
                         $(".name").append(option);
                         $(response.data).each(function (key, value) {
-                            option = "<option value="+value.name+">"+value.name+"</option>";
+                            option = "<option value="+value.name+" data-weight="+value.weight+" data-fuel="+value.fuel_type+">"+value.name+"</option>";
                             $(".name").append(option);
                         });
                         $(".name").attr("disabled", false);
                     }
                 });
             });
+            $(document).on("change", ".name", function () {
+                var weight = $(this).find("option:selected").attr("data-weight");
+                var fuel = $(this).find("option:selected").attr("data-fuel");
+                $("#weight").val(weight);
+                $(".fuel_type[value='"+fuel+"']").attr("checked", true);
+            });
+
             $(document).on("click", ".submit-form", function () {
                 $(".add-vehicle").submit();
             });
@@ -1026,6 +1090,10 @@
                         }
                     }
                 });
+            });
+
+            $(document).on("click", ".phone_number .iti__country", function () {
+                $("#buyer_dial_code").val($(".phone_number .iti__selected-dial-code").first().text().trim());
             });
 
             $(document).on("submit", ".send-form", function (event) {
@@ -1102,7 +1170,7 @@
 
             $(document).on("click", ".savetrans", function () {
                 var type = $(".transtype").val();
-                var fine = parseInt($(".transfine").val());
+                var fine = $(".transfine").val();
 
                 var html = `<div class="col-12 mt-2">
                     <span class="row align-items-center">
@@ -1123,7 +1191,7 @@
 
             $(document).on("click", ".saveauction", function () {
                 var type = $(".auctiontype").val();
-                var fine = parseInt($(".auctionfine").val());
+                var fine = $(".auctionfine").val();
 
                 var html = `<div class="col-12 mt-2">
                     <span class="row align-items-center">
@@ -1145,7 +1213,7 @@
             $(document).on("click", ".saveexpense", function () {
                 var type = $(".expense_type").val();
                 if (type !== "") {
-                    var fine = parseInt($(".expense_fine").val());
+                    var fine = $(".expense_fine").val();
 
                     var html = `<div class="col-12 mt-2">
                         <span class="row align-items-center">
@@ -1276,11 +1344,22 @@
 
     <script>
         var input = document.querySelector("#phone");
+        var input2 = document.querySelector("#buyer-phone");
         window.intlTelInput(input, {
             separateDialCode: true,
             excludeCountries: ["in", "il"],
             preferredCountries: ["ru", "jp", "pk", "no"]
         });
+        window.intlTelInput(input2, {
+            separateDialCode: true,
+            excludeCountries: ["in", "il"],
+            preferredCountries: ["jo", "iq"]
+        });
+
+        @if(!empty($dial_code))
+            $(".phone_number .iti__selected-dial-code").text("{{$dial_code}}");
+            $("#buyer_dial_code").val("{{$dial_code}}");
+        @endif
     </script>
 
 @endsection

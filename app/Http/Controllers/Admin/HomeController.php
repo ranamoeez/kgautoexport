@@ -37,6 +37,7 @@ use App\Models\ReminderHistory;
 use App\Models\Level;
 use App\Models\MoneyTransfer;
 use App\Models\EmailHistory;
+use App\Models\NotesHistory;
 use Auth;
 use Storage;
 use PDF;
@@ -157,6 +158,10 @@ class HomeController extends Controller
             if (empty($data['purchase_date'])) {
                 $data['purchase_date'] = date('Y-m-d');
             }
+            if (!empty($data['phone'])) {
+                $data['phone'] = $data['dial_code'].' '.$data['phone'];
+            }
+            unset($data['dial_code']);
             $vehicle = Vehicle::create($data);
             $assign = new AssignVehicle;
             $assign->user_id = $data['buyer_id'];
@@ -285,6 +290,9 @@ class HomeController extends Controller
             //         $this->send_noti($fcm_token, "add-vehicle");
             //     }
             // }
+            if ($data['destination_port_id'] == '') {
+                $data['update_destination'] = 0; 
+            }
             $id = AssignVehicle::where('id', $id)->first()->vehicle_id;
             if ($request->hasFile('images')) {
                 $files = [];
@@ -348,6 +356,9 @@ class HomeController extends Controller
                 }
             }
             $this->cleanData($data);
+            if (!empty($data['phone'])) {
+                $data['phone'] = $data['dial_code'].' '.$data['phone'];
+            }
             unset($data['documents']);
             unset($data['images']);
             unset($data['trans_type']);
@@ -356,6 +367,7 @@ class HomeController extends Controller
             unset($data['auction_fine']);
             unset($data['expense_type']);
             unset($data['expense_fine']);
+            unset($data['dial_code']);
             if ($data['status_id'] == "6") {
                 $data["delivered_on_date"] = date("Y-m-d");
             }
@@ -410,6 +422,7 @@ class HomeController extends Controller
         $data['templates'] = ReminderTemplate::all();
         $vid = AssignVehicle::where('id', $id)->first()->vehicle_id;
         $data['history'] = ReminderHistory::where('vehicle_id', $vid)->get();
+        $data['notes_history'] = NotesHistory::where('vehicle_id', $vid)->get();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         $data['email_history'] = EmailHistory::where("vehicle_id", $vid)->where("user_id", \Auth::user()->id)->get();
         return view('admin.edit-vehicle', $data);
@@ -530,6 +543,22 @@ class HomeController extends Controller
                 }
             }
             $container = Container::create($data);
+            if ($request->hasFile('images')) {
+                $files = [];
+                foreach ($request->file('images') as $key => $value) {
+                    $file = $value;
+                    $filename = Storage::disk("s3")->putFile('container/images/'.$container->id, $file);
+                    
+                    $image = new ContainerImage;
+                    $image->container_id = $container->id;
+                    $image->filesize = $value->getSize();
+                    $image->title = 'images';
+                    $image->owner_id = Auth::user()->id;
+                    $image->filename = $filename;
+                    $image->filepath = 'storage/app/';
+                    $image->save();
+                }
+            }
             if ($request->hasFile('documents')) {
                 $files = [];
                 foreach ($request->file('documents') as $key => $value) {
@@ -574,6 +603,23 @@ class HomeController extends Controller
 
         if($request->isMethod('post')){
             $data = $request->all();
+            $container = Container::where('id', $id)->first();
+            if ($request->hasFile('images')) {
+                $files = [];
+                foreach ($request->file('images') as $key => $value) {
+                    $file = $value;
+                    $filename = Storage::disk("s3")->putFile('container/images/'.$container->id, $file);
+                    
+                    $image = new ContainerImage;
+                    $image->container_id = $container->id;
+                    $image->filesize = $value->getSize();
+                    $image->title = 'images';
+                    $image->owner_id = Auth::user()->id;
+                    $image->filename = $filename;
+                    $image->filepath = 'storage/app/';
+                    $image->save();
+                }
+            }
             if ($request->hasFile('documents')) {
                 $files = [];
                 foreach ($request->file('documents') as $key => $value) {
@@ -591,7 +637,14 @@ class HomeController extends Controller
                 }
             }
             $this->cleanData($data);
+            if ($container->container_no !== $data['container_no'] && !empty($data['container_no'])) {
+                $data['status_id'] = "2";
+            }
+            if ($container->arrival !== $data['arrival'] && !empty($data['arrival'])) {
+                $data['status_id'] = "4";
+            }
             unset($data['documents']);
+            unset($data['images']);
             $container = Container::where('id', $id)->update($data);
             $response = array('success'=>true,'msg'=>'Container is updated sucessfully.','action'=>'reload');
             return json_encode($response);
@@ -1072,8 +1125,11 @@ class HomeController extends Controller
                 }
             }
     	}
-        if (!empty($request->payment_status)) {
+        if (!empty($request->payment_status) || $request->payment_status == "0") {
             $data["all_paid"] = $request->payment_status;
+            if ($request->payment_status == "1") {
+                $data['paid_date'] = date("Y-m-d");
+            }
         }
         if (!empty($request->destination_port)) {
             $data["destination_port_id"] = $request->destination_port;
@@ -1596,18 +1652,27 @@ class HomeController extends Controller
         $vehicle_id = explode(",", $request->vehicle_id);
         $container_id = $request->container_id;
         $user_id = $request->user_id;
+        $flag = 0;
 
         foreach ($vehicle_id as $key => $value) {
             $vehicle = Vehicle::where("id", $value)->first();
             $container = Container::where("id", $container_id)->first();
             if ($vehicle->destination_port_id !== $container->destination_port_id) {
                 return json_encode(["success"=>false, "msg" => "Destination port is not same for the vehicle with this vin: ".$vehicle->vin]);
-            } else if ($vehicle->title !== "Yes") {
+            } else if ($vehicle->title !== "YES") {
                 return json_encode(["success"=>false, "msg" => 'Title is not "Yes" for the vehicle with this vin: '.$vehicle->vin]);
             }
         }
 
+        $all_vehicle = ContainerVehicle::with("vehicle")->where("container_id", $container_id)->get();
+        
         foreach ($vehicle_id as $key => $value) {
+            $vehicle = Vehicle::where("id", $value)->first();
+            foreach ($all_vehicle as $k => $v) {
+                if ($v->vehicle->fuel_type !== $vehicle->fuel_type) {
+                    $flag++;
+                }
+            }
             $save = new ContainerVehicle;
             $save->container_id = $container_id;
             $save->user_id = $user_id;
@@ -1625,7 +1690,11 @@ class HomeController extends Controller
             }
         }
 
-        return json_encode(["success"=>true, "action" => 'reload']);
+        if ($flag == "0") {
+            return json_encode(["success"=>true, "action" => 'reload']);
+        } else {
+            return json_encode(["success"=>true, "msg" => 'You are mixing up vehicles in this container!']);
+        }
     }
 
     public function send_noti($fcm_token, $type, $inside_data)

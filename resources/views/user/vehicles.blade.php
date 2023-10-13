@@ -6,6 +6,12 @@
         table th {
             font-weight: bold !important;
         }
+        .select2-selection {
+            min-height: 37px;
+        }
+        #filters-form .select2-selection__arrow {
+            display: none;
+        }
     </style>
 
     <div class="below-header-height outer-container">
@@ -33,6 +39,99 @@
                     </div>
                 </div>
                 @endif
+
+                {{-- <form method="GET" action="{{ url('user/vehicles') }}" class="row align-items-center" id="filters-form">
+                    <input type="hidden" name="page" value="{{ @$page }}">
+                    <div class="col-md-3 mb-2">
+                        <label for="buyer" class="fw-semibold">Buyer</label>
+                        <select id="buyer" name="buyer" class="selectjs form-select p-2 border border-gray-200 rounded-lg">
+                            <option value="all">All</option>
+                            @if(count(@$all_buyer) > 0)
+                            @foreach(@$all_buyer as $key => $value)
+                                @if($value->id == @$buyer)
+                                <option value="{{ @$value->id }}" selected>{{ @$value->name.' ('.@$value->surname.')' }}</option>
+                                @else
+                                <option value="{{ @$value->id }}">{{ @$value->name.' ('.@$value->surname.')' }}</option>
+                                @endif
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-2">
+                        <label for="terminal" class="fw-semibold">Terminal</label>
+                        <select id="terminal" name="terminal" class="selectjs form-select p-2">
+                            <option value="all">All</option>
+                            @if(count(@$all_terminal) > 0)
+                            @foreach(@$all_terminal as $key => $value)
+                                @if($value->id == @$terminal)
+                                <option value="{{ @$value->id }}" selected>{{ $value->name.' ('.count($value->vehicles).')' }}</option>
+                                @else
+                                <option value="{{ @$value->id }}">{{ @$value->name.' ('.count($value->vehicles).')' }}</option>
+                                @endif
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-2">
+                        <label for="status" class="fw-semibold">Status</label>
+                        <select id="status" name="status" class="selectjs form-select p-2">
+                            <option value="all">All</option>
+                            @if(count(@$all_status) > 0)
+                            @foreach(@$all_status as $key => $value)
+                                @if($value['id'] == @$status)
+                                <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                @else
+                                <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                @endif
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-2">
+                        <label for="destination" class="fw-semibold">Destination</label>
+                        <select id="destination" name="destination" class="selectjs form-select p-2 border border-gray-200 rounded-lg">
+                            <option value="all">All</option>
+                            @if(count(@$all_destination_port) > 0)
+                            @foreach(@$all_destination_port as $key => $value)
+                                @if($value->id == @$destination)
+                                <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                                @else
+                                <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                                @endif
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-2">
+                        <label for="pay_status" class="fw-semibold">Payment Status</label>
+                        <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
+                            <option value="all" @if(@$pay_status == "all") selected @endif>All</option>
+                            <option value="paid" @if(@$pay_status == "paid") selected @endif>Paid</option>
+                            <option value="partly paid" @if(@$pay_status == "partly paid") selected @endif>Partly paid</option>
+                            <option value="unpaid" @if(@$pay_status == "unpaid") selected @endif>Unpaid</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-2">
+                        <label for="fuel_type" class="fw-semibold">Fuel Type</label>
+                        <select id="fuel_type" name="fuel_type" class="selectjs form-select p-2">
+                            <option value="all" @if(@$fuel_type == "all") selected @endif>All</option>
+                            <option value="GAS" @if(@$fuel_type == "GAS") selected @endif>GAS</option>
+                            <option value="HYB" @if(@$fuel_type == "HYB") selected @endif>HYB</option>
+                            <option value="EV" @if(@$fuel_type == "EV") selected @endif>EV</option>
+                            <option value="Other" @if(@$fuel_type == "Other") selected @endif>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-2">
+                        <label for="search" class="fw-semibold">Search</label>
+                        <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-veh" placeholder="Search">
+                    </div>
+                </form> --}}
 
                 <div class="mt-5">
                     <div class="d-flex justify-content-between mt-3">
@@ -113,18 +212,22 @@
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                             <div class="items-center justify-center font-semibold flex-col">
-                                                @if(@$value->vehicle->title == '1')
+                                                @if(@$value->vehicle->title == 'NO')
                                                 <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 20px;"></i>
-                                                @else
+                                                @elseif(@$value->vehicle->title == 'YES')
                                                 <i class="fa-solid fa-circle-check text-success" style="font-size: 20px;"></i>
+                                                @else
+                                                <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000;" class="text-fs-4">
+                                                    {{ @$value->vehicle->title }}
+                                                </a>
                                                 @endif
                                             </div>
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                             <div class="items-center justify-center font-semibold flex-col">
-                                                @if(@$value->vehicle->keys == '1')
+                                                @if(@$value->vehicle->keys == 'NO')
                                                 <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 20px;"></i>
-                                                @else
+                                                @elseif(@$value->vehicle->keys == 'YES')
                                                 <i class="fa-solid fa-circle-check text-success" style="font-size: 20px;"></i>
                                                 @endif
                                             </div>
@@ -334,18 +437,22 @@
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                             <div class="items-center justify-center font-semibold flex-col">
-                                                @if(@$value->vehicle->title == '1')
+                                                @if(@$value->vehicle->title == 'NO')
                                                 <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 20px;"></i>
-                                                @else
+                                                @elseif(@$value->vehicle->title == 'YES')
                                                 <i class="fa-solid fa-circle-check text-success" style="font-size: 20px;"></i>
+                                                @else
+                                                <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000;" class="text-fs-4">
+                                                    {{ @$value->vehicle->title }}
+                                                </a>
                                                 @endif
                                             </div>
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                             <div class="items-center justify-center font-semibold flex-col">
-                                                @if(@$value->vehicle->keys == '1')
+                                                @if(@$value->vehicle->keys == 'NO')
                                                 <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 20px;"></i>
-                                                @else
+                                                @elseif(@$value->vehicle->keys == 'YES')
                                                 <i class="fa-solid fa-circle-check text-success" style="font-size: 20px;"></i>
                                                 @endif
                                             </div>
@@ -622,6 +729,10 @@
 
             $(document).on("click", ".upload-images", function () {
                 $("#images").click();
+            });
+
+            $(document).on("change", "#buyer, #terminal, #status, #destination, #search-veh, #pay_status, #fuel_type", function () {
+                $("#filters-form").submit();
             });
 
             $(document).on("submit", ".form", function (event) {

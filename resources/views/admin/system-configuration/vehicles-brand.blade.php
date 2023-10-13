@@ -69,8 +69,14 @@
                                 @php
                                     $prev = (int)$page - 1;
                                     $next = (int)$page + 1;
-                                    $pre = 'page='.$prev;
-                                    $nex = 'page='.$next;
+                                    $prev_params = ['page='.$prev];
+                                    $next_params = ['page='.$next];
+                                    if (!empty(@$search)) {
+                                        array_push($prev_params, 'search='.$search);
+                                        array_push($next_params, 'search='.$search);
+                                    }
+                                    $pre = join("&", $prev_params);
+                                    $nex = join("&", $next_params);
                                 @endphp
                                 <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/vehicles-brand?'.$pre) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -90,6 +96,14 @@
                             </div>
                         </div>
                     </div>
+
+                    <form method="GET" action="{{ url('admin/system-configuration/vehicles-brand') }}" class="row align-items-center mt-3" id="filters-form">
+                        <input type="hidden" name="page" value="{{ @$page }}">
+                        <div class="col-md-12">
+                            <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-brand" placeholder="Search brands">
+                        </div>
+                    </form>
+
                     <div class="mt-4">
                         <div class="table-responsive">
                             <table class="table">
@@ -114,6 +128,22 @@
                                                 <p class="fs-5 text-danger">
                                                     <i class="fa-solid fa-circle-xmark delete" data-url="{{ url('admin/system-configuration/vehicles-brand/delete', @$value->id) }}" style="cursor: pointer;"></i>
                                                 </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="collapse fade show" id="detail_{{ @$value->id }}">
+                                        <td colspan="2">
+                                            <div class="container">
+                                                <div class="rounded row shadow header-shipment">
+                                                    <div class="col-lg-12 text-center fw-bold py-2">Models</div>
+                                                </div>
+                                                <div class="row">
+                                                    @foreach(@$value->models as $k => $val)
+                                                    <div class="col-lg-12 mt-3 text-fs-3 shipment-details">
+                                                        {{ @$val->name }}
+                                                    </div>
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -213,6 +243,10 @@
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/vehicles-brand/add') }}");
                         
+            });
+
+            $(document).on("change", "#search-brand", function () {
+                $("#filters-form").submit();
             });
 
             $(document).on("click", ".edit", function () {

@@ -70,6 +70,37 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-md-6 mb-4">
+                                                        <!-- username -->
+                                                        <div class="row">
+                                                            <label for="" class="col-md-4">Weight</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group shadow-lg rounded-4">
+                                                                    <input type="text" name="weight" id="weight" value="" class="py-2 form-control rounded-end-4" required />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-4">
+                                                        <!-- username -->
+                                                        <div class="row">
+                                                            <label for="" class="col-md-4">Fuel Type</label>
+                                                            <div class="col-md-8">
+                                                                <div class="">
+                                                                    <input type="radio" name="fuel_type" value="GAS" class="py-2 fuel_type" id="gas" required />
+                                                                    <label for="gas">GAS</label>
+                                                                    <input type="radio" name="fuel_type" value="HYB" class="py-2 fuel_type" id="hyb" required />
+                                                                    <label for="hyb">HYB</label>
+                                                                    <input type="radio" name="fuel_type" value="EV" class="py-2 fuel_type" id="ev" required />
+                                                                    <label for="ev">EV</label>
+                                                                    <input type="radio" name="fuel_type" value="Other" class="py-2 fuel_type" id="other" required />
+                                                                    <label for="other">Other</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-4">
                                                     <button class="btn btn-primary px-5" type="submit">
@@ -87,8 +118,14 @@
                                 @php
                                     $prev = (int)$page - 1;
                                     $next = (int)$page + 1;
-                                    $pre = 'page='.$prev;
-                                    $nex = 'page='.$next;
+                                    $prev_params = ['page='.$prev];
+                                    $next_params = ['page='.$next];
+                                    if (!empty(@$search)) {
+                                        array_push($prev_params, 'search='.$search);
+                                        array_push($next_params, 'search='.$search);
+                                    }
+                                    $pre = join("&", $prev_params);
+                                    $nex = join("&", $next_params);
                                 @endphp
                                 <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/vehicles-modal?'.$pre) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -108,12 +145,22 @@
                             </div>
                         </div>
                     </div>
+
+                    <form method="GET" action="{{ url('admin/system-configuration/vehicles-modal') }}" class="row align-items-center mt-3" id="filters-form">
+                        <input type="hidden" name="page" value="{{ @$page }}">
+                        <div class="col-md-12">
+                            <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-model" placeholder="Search models">
+                        </div>
+                    </form>
+
                     <div class="mt-4">
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class="text-fs-4">
                                     <th scope="col" class="fw-bold">Name</th>
                                     <th scope="col" class="fw-bold">Vehicles Brand</th>
+                                    <th scope="col" class="fw-bold">Weight</th>
+                                    <th scope="col" class="fw-bold">Fuel Type</th>
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
@@ -128,6 +175,16 @@
                                         <td>
                                             <p class=" text-fs-3">
                                                 {{ @$value->vehicles_brand->name }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class=" text-fs-3">
+                                                {{ @$value->weight }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class=" text-fs-3">
+                                                {{ @$value->fuel_type }}
                                             </p>
                                         </td>
                                         <td>
@@ -233,7 +290,8 @@
                 
                 $("#modalLabel").text("Add New Vehicles Model");
                 $("#name").val('');
-                $("#position").val('');
+                $("#weight").val('');
+                $(".fuel_type").attr('checked', false);
                 $(".brand option[value='']").attr('selected', true);
 
                 $('.select2js').select2({
@@ -248,6 +306,10 @@
                         
             });
 
+            $(document).on("change", "#search-model", function () {
+                $("#filters-form").submit();
+            });
+
             $(document).on("click", ".edit", function () {
                 var id = $(this).attr("data-id");
 
@@ -260,7 +322,16 @@
                         if (res.success == true) {
                             $("#modalLabel").text("Edit Vehicles Model");
                             $("#name").val(res.data.name);
+                            $("#weight").val(res.data.weight);
+                            $(".fuel_type[value="+res.data.fuel_type+"]").attr('checked', true);
                             $(".brand option[value="+res.data.vehicle_brand_id+"]").attr('selected', true);
+
+                            $('.select2js').select2({
+                                dropdownParent: $('#modal')
+                            });
+                            $("#modal .select2.select2-container").css("width", "100%");
+                            $("#modal .select2-selection").css("height", "40px");
+                            $("#modal .select2-selection__arrow").css("display", "none");
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/vehicles-modal/edit') }}/"+id);

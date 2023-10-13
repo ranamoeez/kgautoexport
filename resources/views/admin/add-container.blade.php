@@ -92,9 +92,21 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Loading Request</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="loading_request" class="form-control datepicker" />
+                                </div>
+                            </div>
+                            <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Doc Cutoff</label>
                                 <div class="col-md-9">
-                                    <input type="date" name="cut_off" class="form-control" />
+                                    <input type="text" name="cut_off" class="form-control datepicker" />
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Port Cutoff</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="port_cut_off" class="form-control datepicker" />
                                 </div>
                             </div>
                         </div>
@@ -140,19 +152,27 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Destination
                                     Port</label>
                                 <div class="col-sm-9">
-                                    <select class="selectjs form-select" name="destination_port_id">
+                                    <select class="selectjs form-select destination_port" name="destination_port_id">
                                         <option value=""></option>
                                         @if(count(@$all_destination_port) > 0)
                                         @foreach(@$all_destination_port as $key => $value)
                                             @if($value['id'] == @$destination_port)
-                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            <option data-discharge="{{ $value['discharge_port'] }}" value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
                                             @else
-                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            <option data-discharge="{{ $value['discharge_port'] }}" value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
                                             @endif
                                         @endforeach
                                         @endif
                                     </select>
                                 </div>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="notes" class="fw-semibold">Notes</label>
+                                <textarea name="notes" cols="10" rows="4" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="notes" class="fw-semibold">Shipping Notes</label>
+                                <textarea name="shipping_notes" cols="10" rows="4" class="form-control"></textarea>
                             </div>
                         </div>
                     </div>
@@ -201,13 +221,13 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Departure</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="departure" class="form-control" />
+                                    <input type="text" name="departure" class="form-control datepicker" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Arrival</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="arrival" class="form-control" />
+                                    <input type="text" name="arrival" class="form-control datepicker" />
                                 </div>
                             </div>
                         </div>
@@ -241,13 +261,13 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Date for letter of
                                     intent</label>
                                 <div class="col-md-9">
-                                    <input type="date" name="date_for_letter" class="form-control" />
+                                    <input type="text" name="date_for_letter" class="form-control datepicker" />
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Discharge port</label>
                                 <div class="col-sm-9">
-                                    <select class="selectjs form-select" name="discharge_port_id">
+                                    <select class="selectjs form-select discharge_port" name="discharge_port_id">
                                         <option value=""></option>
                                         @if(count(@$all_discharge_port) > 0)
                                         @foreach(@$all_discharge_port as $key => $value)
@@ -297,6 +317,124 @@
                 </div>
             
                 <div class="row mt-4 pt-5">
+                    <div class="col-md-6">
+                        <div class="row mb-4">
+                            <label for="" class="col-md-2 col-form-label fw-semibold">Images</label>
+                            <div class="col-md-10 d-flex flex-row shadow-lg px-0">
+                                <!--end::Input group-->
+                                <input type="file" class="fbg-white border-0 form-control" name="images[]" id="images" aria-label="upload" accept=".png, .jpg, .jpeg" multiple>
+                                <button class="btn btn-primary rounded upload-images" type="button">
+                                    <div class="d-flex align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
+                                            viewBox="0 0 19 22" fill="none">
+                                            <path
+                                                d="M13.0253 0.170898H6.05884C5.10095 0.170898 4.31722 0.954626 4.31722 1.91252V15.8455C4.31722 16.8033 5.10095 17.5871 6.05884 17.5871H16.5085C17.4664 17.5871 18.2502 16.8033 18.2502 15.8455V5.39575L13.0253 0.170898ZM16.5085 15.8455H6.05884V1.91252H12.1545V6.26656H16.5085V15.8455ZM2.5756 3.65413V19.3287H16.5085V21.0703H2.5756C1.61771 21.0703 0.833984 20.2866 0.833984 19.3287V3.65413H2.5756ZM7.80046 8.87899V10.6206H14.7669V8.87899H7.80046ZM7.80046 12.3622V14.1038H12.1545V12.3622H7.80046Z"
+                                                fill="white" />
+                                        </svg>
+                                        <span class="">Choose</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-9">
+                                <div class="container container-car-image ms-5 mx-5">
+                                    <div id="thumbnail-slider" class="splide mt-2">
+                                        <div class="splide__track">
+                                            <ul class="splide__list d-flex list-unstyled gap-2 all-images">
+                                                {{-- <li>
+                                                    <img src="{{ asset('assets/carphoto.png') }}" class="w-100"
+                                                        alt="car-image" />
+                                                </li>
+                                                <li>
+                                                    <img src="{{ asset('assets/carphoto.png') }}" class="w-100"
+                                                        alt="car-image" />
+                                                </li>
+                                                <li>
+                                                    <img src="{{ asset('assets/carphoto.png') }}" class="w-100"
+                                                        alt="car-image" />
+                                                </li>
+                                                <li>
+                                                    <img src="{{ asset('assets/carphoto.png') }}" class="w-100"
+                                                        alt="car-image" />
+                                                </li> --}}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row mb-4">
+                            <label for="" class="col-md-2 col-form-label fw-semibold">Documents</label>
+                            <div class="col-md-10 d-flex flex-row shadow-lg px-0">
+                                <input type="file" class="fbg-white border-0 form-control" name="documents[]" id="documents" aria-label="upload" accept=".pdf" multiple>
+                                <button class="btn btn-primary rounded upload-documents" type="button">
+                                    <div class="d-flex align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
+                                            viewBox="0 0 19 22" fill="none">
+                                            <path
+                                                d="M13.0253 0.170898H6.05884C5.10095 0.170898 4.31722 0.954626 4.31722 1.91252V15.8455C4.31722 16.8033 5.10095 17.5871 6.05884 17.5871H16.5085C17.4664 17.5871 18.2502 16.8033 18.2502 15.8455V5.39575L13.0253 0.170898ZM16.5085 15.8455H6.05884V1.91252H12.1545V6.26656H16.5085V15.8455ZM2.5756 3.65413V19.3287H16.5085V21.0703H2.5756C1.61771 21.0703 0.833984 20.2866 0.833984 19.3287V3.65413H2.5756ZM7.80046 8.87899V10.6206H14.7669V8.87899H7.80046ZM7.80046 12.3622V14.1038H12.1545V12.3622H7.80046Z"
+                                                fill="white" />
+                                        </svg>
+                                        <span class="">Choose</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            {{-- <div class="col-md-4">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-file-pdf fa-solid fs-4 text-danger"></i>
+                                            <span class="mb-0 fs-5 fw-semibold">Third Eye</span>
+                                        </div>
+                                        <button class="btn btn-link p-0">
+                                            <i class="fas fa-ellipsis-v text-dark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-file-pdf fa-solid fs-4 text-danger"></i>
+                                            <span class="mb-0 fs-5 fw-semibold">Third Eye</span>
+                                        </div>
+                                        <button class="btn btn-link p-0">
+                                            <i class="fas fa-ellipsis-v text-dark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-file-pdf fa-solid fs-4 text-danger"></i>
+                                            <span class="mb-0 fs-5 fw-semibold">Third Eye</span>
+                                        </div>
+                                        <button class="btn btn-link p-0">
+                                            <i class="fas fa-ellipsis-v text-dark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
+                                    </div>
+                                </div>
+                            </div> --}}
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <div class="row mb-4">
                             <div class="col-md-9">
@@ -403,76 +541,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-md-6">
-                        <div class="row mb-4">
-                            <label for="" class="col-md-2 col-form-label fw-semibold">Documents</label>
-                            <div class="col-md-10 d-flex flex-row shadow-lg px-0">
-                                <input type="file" class="fbg-white border-0 form-control" name="documents[]" id="documents" aria-label="upload" accept=".pdf" multiple>
-                                <button class="btn btn-primary rounded upload-documents" type="button">
-                                    <div class="d-flex align-items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
-                                            viewBox="0 0 19 22" fill="none">
-                                            <path
-                                                d="M13.0253 0.170898H6.05884C5.10095 0.170898 4.31722 0.954626 4.31722 1.91252V15.8455C4.31722 16.8033 5.10095 17.5871 6.05884 17.5871H16.5085C17.4664 17.5871 18.2502 16.8033 18.2502 15.8455V5.39575L13.0253 0.170898ZM16.5085 15.8455H6.05884V1.91252H12.1545V6.26656H16.5085V15.8455ZM2.5756 3.65413V19.3287H16.5085V21.0703H2.5756C1.61771 21.0703 0.833984 20.2866 0.833984 19.3287V3.65413H2.5756ZM7.80046 8.87899V10.6206H14.7669V8.87899H7.80046ZM7.80046 12.3622V14.1038H12.1545V12.3622H7.80046Z"
-                                                fill="white" />
-                                        </svg>
-                                        <span class="">Choose</span>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row mb-4">
-                            {{-- <div class="col-md-4">
-                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
-                                    <div class="card-header d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-file-pdf fa-solid fs-4 text-danger"></i>
-                                            <span class="mb-0 fs-5 fw-semibold">Third Eye</span>
-                                        </div>
-                                        <button class="btn btn-link p-0">
-                                            <i class="fas fa-ellipsis-v text-dark"></i>
-                                        </button>
-                                    </div>
-                                    <div class="card-body">
-                                        <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
-                                    <div class="card-header d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-file-pdf fa-solid fs-4 text-danger"></i>
-                                            <span class="mb-0 fs-5 fw-semibold">Third Eye</span>
-                                        </div>
-                                        <button class="btn btn-link p-0">
-                                            <i class="fas fa-ellipsis-v text-dark"></i>
-                                        </button>
-                                    </div>
-                                    <div class="card-body">
-                                        <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
-                                    <div class="card-header d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-file-pdf fa-solid fs-4 text-danger"></i>
-                                            <span class="mb-0 fs-5 fw-semibold">Third Eye</span>
-                                        </div>
-                                        <button class="btn btn-link p-0">
-                                            <i class="fas fa-ellipsis-v text-dark"></i>
-                                        </button>
-                                    </div>
-                                    <div class="card-body">
-                                        <img src="{{ asset('assets/carphoto.png') }}" class="w-100 h-100" alt="" />
-                                    </div>
-                                </div>
-                            </div> --}}
-                        </div>
-                    </div>
                 </div>
             </form>
         </div>
@@ -525,6 +593,15 @@
 
         $(document).on("click", ".upload-documents", function () {
             $("#documents").click();
+        });
+
+        $(document).on("click", ".upload-images", function () {
+            $("#images").click();
+        });
+
+        $(document).on("change", ".destination_port", function () {
+            var port = $(this).find("option:selected").attr("data-discharge");
+            $(".discharge_port").val(port).trigger("change");;
         });
     </script>
     <script>

@@ -5,7 +5,12 @@
     </a>
 </div>
 <nav class="bg-primary sticky below-header-height side_menu">
-    <ul class="list-unstyled">
+    <ul class="list-unstyled" style="padding-top: 0px !important;">
+        <li class="side_menu_item">
+            <a href="javascript:void();" class="toggle-btn">
+                <i class="fas fa-bars"></i>
+            </a>
+        </li>
         @if(empty($auth_user->admin_level->access) || @in_array("2", json_decode($auth_user->admin_level->access)))
         <li class="side_menu_item">
             <a href="{{ url('admin/vehicles') }}" @if(@$type == 'vehicles') class="active" @endif>
@@ -24,7 +29,7 @@
         <li class="side_menu_item">
             <a href="{{ url('admin/containers') }}" @if(@$type == 'containers') class="active" @endif>
                 <i class="fas fa-box"></i>
-                <span>Container List</span>
+                <span style="margin-left: 5px;">Container List</span>
             </a>
         </li>
         @endif
@@ -32,7 +37,7 @@
         <li class="side_menu_item">
             <a href="{{ url('admin/containers/add') }}" @if(@$type == 'add-container') class="active" @endif>
                 <i class="fas fa-box"></i>
-                <span>Add new container</span>
+                <span style="margin-left: 5px;">Add new container</span>
             </a>
         </li>
         @endif

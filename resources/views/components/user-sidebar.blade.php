@@ -5,8 +5,12 @@
     </a>
 </div>
 <nav class="bg-primary sticky below-header-height side_menu">
-    <ul class="list-unstyled">
-
+    <ul class="list-unstyled" style="padding-top: 0px !important;">
+        <li class="side_menu_item">
+            <a href="javascript:void();" class="toggle-btn">
+                <i class="fas fa-bars"></i>
+            </a>
+        </li>
         <li class="side_menu_item">
             <a href="{{ url('/user') }}" @if(@$type == 'homepage') class="active" @endif>
                 <i class="fas fa-home"></i>
@@ -22,7 +26,7 @@
         <li class="side_menu_item">
             <a href="{{ url('user/containers') }}" @if(@$type == 'containers') class="active" @endif>
                 <i class="fas fa-box"></i>
-                <span>My Containers</span>
+                <span style="margin-left: 5px;">My Containers</span>
             </a>
         </li>
         @if(\Auth::user()->role == "2")

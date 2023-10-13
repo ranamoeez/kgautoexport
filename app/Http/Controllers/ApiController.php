@@ -16,6 +16,7 @@ use App\Models\UserLoginLog;
 use App\Models\ContainerVehicle;
 use App\Models\DestinationPort;
 use App\Models\ShippingLine;
+use App\Models\NotesHistory;
 use Validator;
 use Storage;
 
@@ -559,6 +560,7 @@ class ApiController extends Controller
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $input = $request->all();
+                $user = User::where('api_token', $token)->first();
            
                 $validator = Validator::make($input, [
                     'vehicle_id' => 'required',
@@ -573,6 +575,12 @@ class ApiController extends Controller
 
                 if (!empty($vehicle)) {
                     Vehicle::where('id', $input['vehicle_id'])->update(["notes_user" => $input['notes']]);
+                    $data = [
+                        "vehicle_id" => $input['vehicle_id'],
+                        "buyer_id" => $user->id,
+                        "notes" => $input['notes']
+                    ];
+                    NotesHistory::create($data);
                 } else {
                     return $this->sendError('Not Found.', ['error'=>'Vehicle not found.']);
                 }

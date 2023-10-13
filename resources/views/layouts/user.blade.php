@@ -122,6 +122,12 @@
                 transform: rotate(405deg);
             }
         }
+        .user-sidebar {
+            width: 35px;
+        }
+        .welcome-text {
+            margin-left: 150px;
+        }
     </style>
 </head>
 
@@ -132,7 +138,7 @@
         </div>
     </div>
     <div id="app">
-        <div class="">
+        <div class="user-sidebar">
             @include('components.user-sidebar')
         </div>
         <main class="">
@@ -171,6 +177,16 @@
             
             $(document).on("click", ".iti__country", function () {
                 $("#top_dial_code").val($(".iti__selected-dial-code").first().text().trim());
+            });
+
+            $(document).on("click", ".toggle-btn", function () {
+                if ($(".user-sidebar").css("width") == "35px") {
+                    $(".user-sidebar").css("width", "auto");
+                    $(".welcome-text").css("margin-left", "0px");
+                } else {
+                    $(".user-sidebar").css("width", "35px");
+                    $(".welcome-text").css("margin-left", "150px");
+                }
             });
         });
     </script>

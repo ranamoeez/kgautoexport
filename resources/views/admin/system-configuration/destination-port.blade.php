@@ -75,6 +75,25 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-md-6 mb-4">
+                                                        <div class="row">
+                                                            <label for="" class="col-md-4">Discharge Port</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group shadow-lg rounded-4">
+                                                                    <select class="select2js form-select discharge_port" name="discharge_port" required>
+                                                                        <option value=""></option>
+                                                                        @if(count(@$discharge_port) > 0)
+                                                                        @foreach(@$discharge_port as $key => $value)
+                                                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                                                        @endforeach
+                                                                        @endif
+                                                                    </select>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-4">
                                                     <button class="btn btn-primary px-5" type="submit">
@@ -120,6 +139,7 @@
                                     <th scope="col" class="fw-bold">Name</th>
                                     <th scope="col" class="fw-bold">Position</th>
                                     <th scope="col" class="fw-bold">Unloading Fee</th>
+                                    <th scope="col" class="fw-bold">Discharge Port</th>
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
@@ -127,18 +147,23 @@
                                     @foreach(@$destination_port as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td>
-                                            <p class=" text-fs-3">
+                                            <p class="text-fs-3">
                                                 {{ @$value->name }}
                                             </p>
                                         </td>
                                         <td>
-                                            <p class=" text-fs-3">
+                                            <p class="text-fs-3">
                                                 {{ @$value->position }}
                                             </p>
                                         </td>
                                         <td>
-                                            <p class=" text-fs-3">
+                                            <p class="text-fs-3">
                                                 ${{ @$value->unloading_fee }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="text-fs-3">
+                                                {{ @$value->discharge->name }}
                                             </p>
                                         </td>
                                         <td>
@@ -246,6 +271,14 @@
                 $("#name").val('');
                 $("#position").val('');
                 $("#unloading_fee").val('');
+                $(".discharge_port option[value='']").attr('selected', true);
+
+                $('.select2js').select2({
+                    dropdownParent: $('#modal')
+                });
+                $("#modal .select2.select2-container").css("width", "100%");
+                $("#modal .select2-selection").css("height", "40px");
+                $("#modal .select2-selection__arrow").css("display", "none");
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/destination-port/add') }}");
@@ -266,6 +299,14 @@
                             $("#name").val(res.data.name);
                             $("#position").val(res.data.position);
                             $("#unloading_fee").val(res.data.unloading_fee);
+                            $(".discharge_port option[value="+res.data.discharge_port+"]").attr('selected', true);
+
+                            $('.select2js').select2({
+                                dropdownParent: $('#modal')
+                            });
+                            $("#modal .select2.select2-container").css("width", "100%");
+                            $("#modal .select2-selection").css("height", "40px");
+                            $("#modal .select2-selection__arrow").css("display", "none");
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/destination-port/edit') }}/"+id);

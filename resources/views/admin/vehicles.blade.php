@@ -272,29 +272,29 @@
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 title" style="background-position: right; min-width: 50px;" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
-                                            <option value="NO" data-color="danger" @if(@$value->vehicle->title == "NO") selected @endif>NO</option>
-                                            <option value="YES" data-color="info" @if(@$value->vehicle->title == "YES") selected @endif>YES</option>
-                                            <option value="BOS" data-color="success" @if(@$value->vehicle->title == "BOS") selected @endif>BOS</option>
-                                            <option value="TBO" data-color="warning" @if(@$value->vehicle->title == "TBO") selected @endif>TBO</option>
+                                        <select class="form-select ps-1 pe-2 py-1 title" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}" @if(@$value->vehicle->title == "TBO") style="background-position: right; min-width: 50px; background-color: #edd4e4;" @elseif(@$value->vehicle->title == "YES") style="background-position: right; min-width: 50px; background-color: #70e790;" @elseif(@$value->vehicle->title == "BOS") style="background-position: right; min-width: 50px; background-color: #89ceff;" @else style="background-position: right; min-width: 50px; background-color: #ffa6a6;" @endif>
+                                            <option value="NO" @if(@$value->vehicle->title == "NO") selected @endif>NO</option>
+                                            <option value="YES" @if(@$value->vehicle->title == "YES") selected @endif>YES</option>
+                                            <option value="BOS" @if(@$value->vehicle->title == "BOS") selected @endif>BOS</option>
+                                            <option value="TBO" @if(@$value->vehicle->title == "TBO") selected @endif>TBO</option>
                                         </select>
                                     </div>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white ps-1 pe-2 py-1 keys" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}">
-                                            <option value="NO" data-color="danger" @if(@$value->vehicle->keys == "NO") selected @endif>NO</option>
-                                            <option value="YES" data-color="info" @if(@$value->vehicle->keys == "YES") selected @endif>YES</option>
+                                        <select class="form-select ps-1 pe-2 py-1 keys" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}" @if(@$value->vehicle->keys == "YES") style="background-position: right; min-width: 50px; background-color: #70e790;" @else style="background-position: right; min-width: 50px; background-color: #ffa6a6;" @endif>
+                                            <option value="NO" @if(@$value->vehicle->keys == "NO") selected @endif>NO</option>
+                                            <option value="YES" @if(@$value->vehicle->keys == "YES") selected @endif>YES</option>
                                         </select>
                                     </div>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
-                                    <div class="text-center text-fs-4 d-flex">
+                                    <div class="text-center text-fs-4 d-flex justify-content-between">
                                         {{-- <span style="font-size: 16px;">${{ (!empty(@$value->vehicle->auction_price)) ? @$value->vehicle->auction_price : '0.00' }}</span> --}}
                                         <span style="font-size: 18px;" class="mt-1">${{ (int)@$value->vehicle->us_towing_price + (int)@$value->vehicle->us_trans_fines }}</span>
-                                        <select class="option-select text-white ps-1 pe-2 py-1 payment-status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}" style="border-radius: 5px;">
-                                            <option value="1" data-color="success" @if(@$value->vehicle->all_paid == "1") selected @endif>Paid</option>
-                                            <option value="0" data-color="danger" @if(@$value->vehicle->all_paid == "0") selected @endif>Unpaid</option>
+                                        <select class="form-select ps-1 pe-2 py-1 payment-status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}" @if(@$value->vehicle->all_paid == "1") style="width: 80px; border-radius: 5px; background-color: #70e790;" @else style="width: 80px; border-radius: 5px; background-color: #ffa6a6;" @endif>
+                                            <option value="1" @if(@$value->vehicle->all_paid == "1") selected @endif>Paid</option>
+                                            <option value="0" @if(@$value->vehicle->all_paid == "0") selected @endif>Unpaid</option>
                                         </select>
                                     </div>
                                 </td>
@@ -427,6 +427,11 @@
             });
 
             $(document).on("change", ".payment-status", function () {
+                if ($(this).find("option:selected").val() == "0") {
+                    $(this).css("background-color", "#ffa6a6");
+                } else if ($(this).find("option:selected").val() == "1") {
+                    $(this).css("background-color", "#70e790");
+                }
                 var form = new FormData();
                 form.append("payment_status", $(this).find("option:selected").val());
                 form.append("id", $(this).attr("data-id"));
@@ -475,6 +480,15 @@
             });
 
             $(document).on("change", ".title", function () {
+                if ($(this).find("option:selected").val() == "NO") {
+                    $(this).css("background-color", "#ffa6a6");
+                } else if ($(this).find("option:selected").val() == "YES") {
+                    $(this).css("background-color", "#70e790");
+                } else if ($(this).find("option:selected").val() == "BOS") {
+                    $(this).css("background-color", "#89ceff");
+                } else if ($(this).find("option:selected").val() == "TBO") {
+                    $(this).css("background-color", "#edd4e4");
+                }
                 var form = new FormData();
                 form.append("title", $(this).find("option:selected").val());
                 form.append("id", $(this).attr("data-id"));
@@ -499,6 +513,11 @@
             });
 
             $(document).on("change", ".keys", function () {
+                if ($(this).find("option:selected").val() == "NO") {
+                    $(this).css("background-color", "#ffa6a6");
+                } else if ($(this).find("option:selected").val() == "YES") {
+                    $(this).css("background-color", "#70e790");
+                }
                 var form = new FormData();
                 form.append("keys", $(this).find("option:selected").val());
                 form.append("id", $(this).attr("data-id"));

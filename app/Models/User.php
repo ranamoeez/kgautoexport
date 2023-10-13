@@ -10,6 +10,7 @@ use Laravel\Passport\HasApiTokens;
 use App\Models\Level;
 use App\Models\AdminLevel;
 use App\Models\OperatorLevel;
+use App\Models\DestinationPort;
 
 class User extends Authenticatable
 {

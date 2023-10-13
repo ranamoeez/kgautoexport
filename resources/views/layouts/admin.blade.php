@@ -29,6 +29,8 @@
     <script type="module" src="{{ asset('build/assets/app-66e7f68a.js') }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript"  src="{{asset('/js/global-script.js')}}"></script>
     <style type="text/css">
         a.active {
@@ -120,6 +122,12 @@
                 transform: rotate(405deg);
             }
         }
+        .admin-sidebar {
+            width: 35px;
+        }
+        .welcome-text {
+            margin-left: 150px;
+        }
     </style>
 </head>
 
@@ -130,7 +138,7 @@
         </div>
     </div>
     <div id="app">
-        <div class="">
+        <div class="admin-sidebar">
             @include('components.admin-sidebar')
         </div>
         <main class="">
@@ -141,6 +149,8 @@
 </body>
     <script type="text/javascript">
         $(document).ready(function () {
+            $(".datepicker").datepicker({ dateFormat: 'yy-mm-dd' });
+
             $(document).on("submit", ".user-form", function (event) {
                 event.preventDefault();
                 $.ajax({
@@ -169,6 +179,16 @@
             
             $(document).on("click", ".iti__country", function () {
                 $("#top_dial_code").val($(".iti__selected-dial-code").first().text().trim());
+            });
+
+            $(document).on("click", ".toggle-btn", function () {
+                if ($(".admin-sidebar").css("width") == "35px") {
+                    $(".admin-sidebar").css("width", "auto");
+                    $(".welcome-text").css("margin-left", "0px");
+                } else {
+                    $(".admin-sidebar").css("width", "35px");
+                    $(".welcome-text").css("margin-left", "150px");
+                }
             });
         });
     </script>

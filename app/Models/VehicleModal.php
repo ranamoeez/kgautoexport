@@ -14,7 +14,7 @@ class VehicleModal extends Model
 
     protected $table = "vehicle_modals";
     protected $fillable = [
-        'name', 'vehicle_brand_id'
+        'name', 'vehicle_brand_id', 'weight', 'fuel_type'
     ];
 
     public function vehicles_brand(){

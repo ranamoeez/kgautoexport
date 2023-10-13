@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\VehicleModal;
 
 class VehicleBrand extends Model
 {
@@ -15,4 +16,8 @@ class VehicleBrand extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function models(){
+    	return $this->hasMany(VehicleModal::class, 'vehicle_brand_id');
+    }
 }

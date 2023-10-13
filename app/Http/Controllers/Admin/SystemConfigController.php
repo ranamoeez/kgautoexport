@@ -42,7 +42,7 @@ class SystemConfigController extends Controller
     {
     	$data['type'] = "system-configuration";
         $data['page'] = '1';
-    	$users = User::with('user_level')->where(function ($query) {
+    	$users = User::orderBy('id', 'DESC')->with('user_level')->where(function ($query) {
     		$query->where('role', '2')
     		->orWhere('role', '3');
     	});
@@ -883,7 +883,7 @@ class SystemConfigController extends Controller
     {
         $data['type'] = "system-configuration";
         $data['page'] = '1';
-        $destination_port = DestinationPort::orderBy('id', 'DESC');
+        $destination_port = DestinationPort::orderBy('id', 'DESC')->with("discharge");
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;
@@ -893,6 +893,7 @@ class SystemConfigController extends Controller
         }
         $destination_port = $destination_port->limit(10)->get();
         $data['destination_port'] = $destination_port;
+        $data['discharge_port'] = DischargePort::all();
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.system-configuration.destination-port', $data);
@@ -1393,7 +1394,11 @@ class SystemConfigController extends Controller
     {
         $data['type'] = "system-configuration";
         $data['page'] = '1';
-        $brands = VehicleBrand::orderBy('id', 'DESC');
+        $brands = VehicleBrand::orderBy('id', 'DESC')->with("models");
+        if (!empty($request->search)) {
+            $data['search'] = $request->search;
+            $brands = $brands->where('name', 'LIKE', '%'.$request->search.'%');
+        }
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;
@@ -1454,6 +1459,17 @@ class SystemConfigController extends Controller
         $data['type'] = "system-configuration";
         $data['page'] = '1';
         $modals = VehicleModal::orderBy('id', 'DESC')->with('vehicles_brand');
+        if (!empty($request->search)) {
+            $data['search'] = $request->search;
+            $search = $request->search;
+            $modals = $modals->whereHas("vehicles_brand", function ($q) use($search) {
+                $q->where('name', 'LIKE', '%'.$search.'%');
+            })->orWhere(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%'.$search.'%')
+                    ->orWhere('weight', 'LIKE', '%'.$search.'%')
+                    ->orWhere('fuel_type', 'LIKE', '%'.$search.'%');
+            });
+        }
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;

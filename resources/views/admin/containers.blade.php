@@ -222,13 +222,13 @@
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white status" aria-label="Default select example" data-id="{{ @$value->id }}">
+                                        <select class="form-select status" aria-label="Default select example" data-id="{{ @$value->id }}" @if($value->status_id == "2") style="background-color: #edd4e4;" @elseif($value->status_id == "4") style="background-color: #70e790;" @elseif($value->status_id == "3") style="background-color: #89ceff;" @else style="background-color: #ffa6a6;" @endif>
                                             @if(count(@$all_status) > 0)
                                             @foreach(@$all_status as $k => $v)
                                                 @if($value->status_id == @$v['id'])
-                                                <option value="{{ @$v['id'] }}" @if($v['name'] == "Delivered") data-color="success" @elseif($v['name'] == "Booked") data-color="warning" @else data-color="danger" @endif selected>{{ $v['name'] }}</option>
+                                                <option value="{{ @$v['id'] }}" selected>{{ $v['name'] }}</option>
                                                 @else
-                                                <option value="{{ @$v['id'] }}" @if($v['name'] == "Delivered") data-color="success" @elseif($v['name'] == "Booked") data-color="warning" @else data-color="danger" @endif>{{ @$v['name'] }}</option>
+                                                <option value="{{ @$v['id'] }}">{{ @$v['name'] }}</option>
                                                 @endif
                                             @endforeach
                                             @endif
@@ -238,25 +238,25 @@
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white payment_status" aria-label="Default select example" data-id="{{ $value->id }}">
-                                            <option value="1" data-color="info" @if(@$value->all_paid == "1") selected @endif>Paid</option>
-                                            <option value="0" data-color="danger" @if(@$value->all_paid == "0") selected @endif>Unpaid</option>
+                                        <select class="form-select payment_status" aria-label="Default select example" data-id="{{ $value->id }}" @if(@$value->all_paid == "1") style="width: 100px; border-radius: 5px; background-color: #70e790;" @else style="width: 100px; border-radius: 5px; background-color: #ffa6a6;" @endif>
+                                            <option value="1" @if(@$value->all_paid == "1") selected @endif>Paid</option>
+                                            <option value="0" @if(@$value->all_paid == "0") selected @endif>Unpaid</option>
                                         </select>
                                     </div>
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white released_status" aria-label="Default select example" data-id="{{ $value->id }}">
-                                            <option value="No" data-color="danger" @if(@$value->released_status == "No") selected @endif>No</option>
-                                            <option value="In hand" data-color="success" @if(@$value->released_status == "In hand") selected @endif>In hand</option>
+                                        <select class="form-select released_status" aria-label="Default select example" data-id="{{ $value->id }}" @if(@$value->unloaded_status == "NO") style="width: 100px; background-color: #ffa6a6;" @else style="width: 100px; background-color: #70e790;" @endif>
+                                            <option value="No" @if(@$value->released_status == "No") selected @endif>No</option>
+                                            <option value="In hand" @if(@$value->released_status == "In hand") selected @endif>In hand</option>
                                         </select>
                                     </div>
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select option-select text-white unloaded_status" aria-label="Default select example" data-id="{{ $value->id }}">
-                                            <option value="No" data-color="danger" @if(@$value->unloaded_status == "No") selected @endif>No</option>
-                                            <option value="Yes" data-color="success" @if(@$value->unloaded_status == "Yes") selected @endif>Yes</option>
+                                        <select class="form-select unloaded_status" aria-label="Default select example" data-id="{{ $value->id }}" @if(@$value->unloaded_status == "YES") style="width: 100px; background-color: #70e790;" @else style="width: 100px; background-color: #ffa6a6;" @endif>
+                                            <option value="No" @if(@$value->unloaded_status == "No") selected @endif>No</option>
+                                            <option value="Yes" @if(@$value->unloaded_status == "Yes") selected @endif>Yes</option>
                                         </select>
                                     </div>
                                 </td>
@@ -372,6 +372,15 @@
             });
 
             $(document).on("change", ".status", function () {
+                if ($(this).find("option:selected").val() == "1") {
+                    $(this).css("background-color", "#ffa6a6");
+                } else if ($(this).find("option:selected").val() == "4") {
+                    $(this).css("background-color", "#70e790");
+                } else if ($(this).find("option:selected").val() == "3") {
+                    $(this).css("background-color", "#89ceff");
+                } else if ($(this).find("option:selected").val() == "2") {
+                    $(this).css("background-color", "#edd4e4");
+                }
                 var form = new FormData();
                 form.append("status", $(this).find("option:selected").val());
                 form.append("id", $(this).attr("data-id"));
@@ -396,6 +405,11 @@
             });
 
             $(document).on("change", ".payment_status", function () {
+                if ($(this).find("option:selected").val() == "0") {
+                    $(this).css("background-color", "#ffa6a6");
+                } else if ($(this).find("option:selected").val() == "1") {
+                    $(this).css("background-color", "#70e790");
+                }
                 var form = new FormData();
                 form.append("payment_status", $(this).find("option:selected").val());
                 form.append("id", $(this).attr("data-id"));
@@ -420,6 +434,11 @@
             });
 
             $(document).on("change", ".released_status", function () {
+                if ($(this).find("option:selected").val() == "No") {
+                    $(this).css("background-color", "#ffa6a6");
+                } else if ($(this).find("option:selected").val() == "In hand") {
+                    $(this).css("background-color", "#70e790");
+                }
                 var form = new FormData();
                 form.append("released_status", $(this).find("option:selected").val());
                 form.append("id", $(this).attr("data-id"));
@@ -444,6 +463,11 @@
             });
 
             $(document).on("change", ".unloaded_status", function () {
+                if ($(this).find("option:selected").val() == "No") {
+                    $(this).css("background-color", "#ffa6a6");
+                } else if ($(this).find("option:selected").val() == "Yes") {
+                    $(this).css("background-color", "#70e790");
+                }
                 var form = new FormData();
                 form.append("unloaded_status", $(this).find("option:selected").val());
                 form.append("id", $(this).attr("data-id"));

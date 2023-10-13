@@ -28,7 +28,7 @@
 
                     <div class="col-md mb-2 mb-md-0">
                         <div class="card border-0 shadow-lg h-100">
-                            <div class="card-body p-5 d-flex flex-row">
+                            <a href="{{ url('user/vehicles') }}?status=10" class="card-body p-5 d-flex flex-row"  style="text-decoration: none;">
                                 <div class="me-3 rounded-circle home-card-icons bg-primary p-3">
                                     <img src="{{ asset('assets/cargo-ship (2).png') }}" alt="car" class="" />
                                 </div>
@@ -36,13 +36,13 @@
                                     <h2 class="card-subtitle fw-bold">{{ @$shipped_vehicles }}</h2>
                                     <p class="card-text">Shipped</p>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
 
                     <div class="col-md mb-2 mb-md-0">
                         <div class="card border-0 shadow-lg h-100">
-                            <div class="card-body p-5 d-flex flex-row">
+                            <a href="{{ url('user/vehicles') }}?status=11" class="card-body p-5 d-flex flex-row"  style="text-decoration: none;">
                                 <div class="me-3 rounded-circle home-card-icons bg-primary p-3">
                                     <img src="{{ asset('assets/check-circle.svg') }}" alt="car" class="" />
                                 </div>
@@ -50,7 +50,7 @@
                                     <h2 class="card-subtitle fw-bold">{{ @$delivered_vehicles }}</h2>
                                     <p class="card-text">Delivered</p>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
 
@@ -140,18 +140,22 @@
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="items-center justify-center font-semibold flex-col">
-                                        @if(@$value->vehicle->title == '1')
+                                        @if(@$value->vehicle->title == 'NO')
                                         <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 20px;"></i>
-                                        @else
+                                        @elseif(@$value->vehicle->title == 'YES')
                                         <i class="fa-solid fa-circle-check text-success" style="font-size: 20px;"></i>
+                                        @else
+                                        <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000;" class="text-fs-4">
+                                            {{ @$value->vehicle->title }}
+                                        </a>
                                         @endif
                                     </div>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="items-center justify-center font-semibold flex-col">
-                                        @if(@$value->vehicle->keys == '1')
+                                        @if(@$value->vehicle->keys == 'NO')
                                         <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 20px;"></i>
-                                        @else
+                                        @elseif(@$value->vehicle->keys == 'YES')
                                         <i class="fa-solid fa-circle-check text-success" style="font-size: 20px;"></i>
                                         @endif
                                     </div>

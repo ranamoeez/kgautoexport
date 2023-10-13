@@ -92,9 +92,21 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Loading Request</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="loading_request" value="{{ $container->loading_request }}" class="form-control datepicker" />
+                                </div>
+                            </div>
+                            <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Doc Cutoff</label>
                                 <div class="col-md-9">
-                                    <input type="date" name="cut_off" value="{{ $container->cut_off }}" class="form-control" />
+                                    <input type="text" name="cut_off" value="{{ $container->cut_off }}" class="form-control datepicker" />
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Port Cutoff</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="port_cut_off" value="{{ $container->port_cut_off }}" class="form-control datepicker" />
                                 </div>
                             </div>
                         </div>
@@ -154,6 +166,14 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-group mt-2">
+                                <label for="notes" class="fw-semibold">Notes</label>
+                                <textarea name="notes" cols="10" rows="4" class="form-control">{{ @$container->notes }}</textarea>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="notes" class="fw-semibold">Shipping Notes</label>
+                                <textarea name="shipping_notes" cols="10" rows="4" class="form-control">{{ @$container->shipping_notes }}</textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -201,13 +221,13 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Departure</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="departure" value="{{ $container->departure }}" class="form-control" />
+                                    <input type="text" name="departure" value="{{ $container->departure }}" class="form-control datepicker" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Arrival</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="arrival" value="{{ $container->arrival }}" class="form-control" />
+                                    <input type="text" name="arrival" value="{{ $container->arrival }}" class="form-control datepicker" />
                                 </div>
                             </div>
                         </div>
@@ -319,7 +339,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Date for letter of
                                     intent</label>
                                 <div class="col-md-9">
-                                    <input type="date" name="date_for_letter" value="{{ $container->date_for_letter }}" class="form-control" />
+                                    <input type="text" name="date_for_letter" value="{{ $container->date_for_letter }}" class="form-control datepicker" />
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -373,6 +393,113 @@
                 </div>
             
                 <div class="row mt-4 pt-5">
+                    <div class="col-md-6">
+                        <div class="row mb-4">
+                            <label for="" class="col-md-2 col-form-label fw-semibold">Image</label>
+                            <div class="col-md-10 d-flex flex-row shadow-lg px-0">
+                                <!--end::Input group-->
+                                <input type="file" class="fbg-white border-0 form-control" name="images[]" id="images" aria-label="upload" accept=".png, .jpg, .jpeg" multiple>
+                                <button class="btn btn-primary rounded upload-images" type="button">
+                                    <div class="d-flex align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
+                                            viewBox="0 0 19 22" fill="none">
+                                            <path
+                                                d="M13.0253 0.170898H6.05884C5.10095 0.170898 4.31722 0.954626 4.31722 1.91252V15.8455C4.31722 16.8033 5.10095 17.5871 6.05884 17.5871H16.5085C17.4664 17.5871 18.2502 16.8033 18.2502 15.8455V5.39575L13.0253 0.170898ZM16.5085 15.8455H6.05884V1.91252H12.1545V6.26656H16.5085V15.8455ZM2.5756 3.65413V19.3287H16.5085V21.0703H2.5756C1.61771 21.0703 0.833984 20.2866 0.833984 19.3287V3.65413H2.5756ZM7.80046 8.87899V10.6206H14.7669V8.87899H7.80046ZM7.80046 12.3622V14.1038H12.1545V12.3622H7.80046Z"
+                                                fill="white" />
+                                        </svg>
+                                        <span class="">Choose</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mb-4 container-images">
+                            @if(count(@$container->container_documents) > 0)
+                            @foreach(@$container->container_documents as $key => $value)
+                            @if($value->title == "images")
+                            <div class="col-md-4">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-image fa-solid fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-container-documents', $value->id) }}">
+                                                <i class="fas fa-trash text-danger"></i>
+                                            </button>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
+                                                <i class="fas fa-download text-dark"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                            @endforeach
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-4">
+                            <label for="" class="col-md-2 col-form-label fw-semibold">Documents</label>
+                            <div class="col-md-10 d-flex flex-row shadow-lg px-0">
+                                <input type="file" class="fbg-white border-0 form-control" name="documents[]" id="documents" aria-label="upload" accept=".pdf" multiple>
+                                <button class="btn btn-primary rounded upload-documents" type="button">
+                                    <div class="d-flex align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
+                                            viewBox="0 0 19 22" fill="none">
+                                            <path
+                                                d="M13.0253 0.170898H6.05884C5.10095 0.170898 4.31722 0.954626 4.31722 1.91252V15.8455C4.31722 16.8033 5.10095 17.5871 6.05884 17.5871H16.5085C17.4664 17.5871 18.2502 16.8033 18.2502 15.8455V5.39575L13.0253 0.170898ZM16.5085 15.8455H6.05884V1.91252H12.1545V6.26656H16.5085V15.8455ZM2.5756 3.65413V19.3287H16.5085V21.0703H2.5756C1.61771 21.0703 0.833984 20.2866 0.833984 19.3287V3.65413H2.5756ZM7.80046 8.87899V10.6206H14.7669V8.87899H7.80046ZM7.80046 12.3622V14.1038H12.1545V12.3622H7.80046Z"
+                                                fill="white" />
+                                        </svg>
+                                        <span class="">Choose</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            @if(count(@$container->container_documents) > 0)
+                            @foreach($container->container_documents as $key => $value)
+                            @if($value->title !== "images")
+                            <div class="col-md-4">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:350px;">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-file-pdf fa-solid fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-container-documents', $value->id) }}">
+                                                <i class="fas fa-trash text-danger"></i>
+                                            </button>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
+                                                <i class="fas fa-download text-dark"></i>
+                                            </a>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank">
+                                                <i class="fas fa-eye text-primary"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" style="width: 100%; height: 100% !important;">
+                                            Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}">test.pdf</a>
+                                        </object>
+                                        <div class="w-100 mt-3">
+                                            <select class="form-control" id="pdf-type" data-id="{{ $value->id }}">
+                                                <option value="BOS" @if($value->type == "BOS") selected @endif>BOS</option>
+                                                <option value="Title" @if($value->type == "Title") selected @endif>Title</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                            @endforeach
+                            @endif
+                        </div>
+                    </div>
+
                     <div class="col-md-6">
                         <div class="row mb-4">
                             <div class="col-md-9">
@@ -461,63 +588,6 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="row mb-4">
-                            <label for="" class="col-md-2 col-form-label fw-semibold">Documents</label>
-                            <div class="col-md-10 d-flex flex-row shadow-lg px-0">
-                                <input type="file" class="fbg-white border-0 form-control" name="documents[]" id="documents" aria-label="upload" accept=".pdf" multiple>
-                                <button class="btn btn-primary rounded upload-documents" type="button">
-                                    <div class="d-flex align-items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22"
-                                            viewBox="0 0 19 22" fill="none">
-                                            <path
-                                                d="M13.0253 0.170898H6.05884C5.10095 0.170898 4.31722 0.954626 4.31722 1.91252V15.8455C4.31722 16.8033 5.10095 17.5871 6.05884 17.5871H16.5085C17.4664 17.5871 18.2502 16.8033 18.2502 15.8455V5.39575L13.0253 0.170898ZM16.5085 15.8455H6.05884V1.91252H12.1545V6.26656H16.5085V15.8455ZM2.5756 3.65413V19.3287H16.5085V21.0703H2.5756C1.61771 21.0703 0.833984 20.2866 0.833984 19.3287V3.65413H2.5756ZM7.80046 8.87899V10.6206H14.7669V8.87899H7.80046ZM7.80046 12.3622V14.1038H12.1545V12.3622H7.80046Z"
-                                                fill="white" />
-                                        </svg>
-                                        <span class="">Choose</span>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row mb-4">
-                            @if(count(@$container->container_documents) > 0)
-                            @foreach($container->container_documents as $key => $value)
-                            <div class="col-md-4">
-                                <div class="card mt-3 container-header-detail-card" style="max-height:350px;">
-                                    <div class="card-header d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-file-pdf fa-solid fs-4"></i>
-                                        </div>
-                                        <div>
-                                            <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-container-documents', $value->id) }}">
-                                                <i class="fas fa-trash text-danger"></i>
-                                            </button>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
-                                                <i class="fas fa-download text-dark"></i>
-                                            </a>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank">
-                                                <i class="fas fa-eye text-primary"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" style="width: 100%; height: 100% !important;">
-                                            Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}">test.pdf</a>
-                                        </object>
-                                        <div class="w-100 mt-3">
-                                            <select class="form-control" id="pdf-type" data-id="{{ $value->id }}">
-                                                <option value="BOS" @if($value->type == "BOS") selected @endif>BOS</option>
-                                                <option value="Title" @if($value->type == "Title") selected @endif>Title</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                            @endif
-                        </div>
-                    </div>
-
                     @if(count(@$buyers) > 0)
                     @foreach($buyers as $key => $value)
                         <div class="col-md-6 card mt-3 px-0 mx-1">
@@ -533,7 +603,7 @@
                                     <div class="col text-fs-3 fw-bold text-center">Select</div>
                                 </div>
                                 @foreach($value->vehicles as $k => $v)
-                                <div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data mx-1">
+                                <div class="row shadow border rounded-5 w-100 mb-3 p-2 mx-1">
                                     <div class="col text-fs-3 text-center">{{ $v->vehicle->vin }}</div>
                                     <div class="col text-fs-3 text-center">{{ @$v->vehicle->modal.' '.@$v->vehicle->company_name.' '.@$v->vehicle->name }}</div>
                                     <div class="col d-flex justify-content-center align-items-center">
@@ -628,6 +698,10 @@
             $("#documents").click();
         });
 
+        $(document).on("click", ".upload-images", function () {
+            $("#images").click();
+        });
+
         $(document).on("click", ".add-new-buyer", function () {
             $('.select2js').select2({
                 dropdownParent: $('#addNewBuyerModal')
@@ -668,6 +742,28 @@
                     if (data.success == true) {
                         $("#addNewBuyerModal").modal('hide');
                         toastr["success"]("Container document deleted successfully!", "Completed!");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    }
+                }
+            });
+        });
+
+        $(document).on("click", ".delete-images", function () {
+            var url = $(this).attr('data-url');
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(data){
+                    data = JSON.parse(data);
+                    if (data.success == true) {
+                        $("#addNewBuyerModal").modal('hide');
+                        toastr["success"]("Container image deleted successfully!", "Completed!");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     }
                 }
             });
@@ -714,7 +810,12 @@
                 success: function(data){
                     data = JSON.parse(data);
                     if (data.success == true) {
-                        toastr["success"]("New buyer is added successfully!", "Completed!");
+                        if (data.msg !== undefined) {
+                            toastr["warning"](data.msg, "Warning!");
+                            toastr["success"]("New buyer is added successfully!", "Completed!");
+                        } else {
+                            toastr["success"]("New buyer is added successfully!", "Completed!");
+                        }
                         setTimeout(function () {
                             location.reload();
                         }, 2000);
@@ -867,6 +968,21 @@
             });
         });
     </script>
+
+    <script src="{{ asset('js/jquery.popup.lightbox.js') }}"></script>
+    <link href="{{ asset('css/popup-lightbox.css') }}" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function(){
+
+            $(".container-images").popupLightbox({
+                width: 800,
+                height: 600
+            });
+
+        });
+    </script>
+
     <script>
         var input = document.querySelector("#phone");
         window.intlTelInput(input, {

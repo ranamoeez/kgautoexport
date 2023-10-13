@@ -82,11 +82,11 @@
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="auction" value="1.10" />
                                                                         <label for="auction">Auction</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="auction_location" value="1.11" />
-                                                                        <label for="auction_location">Auction Location</label><br>
+                                                                        <label for="auction_location">Branch</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="address" value="1.12" />
                                                                         <label for="address">Address</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="location" value="1.13" />
-                                                                        <label for="location">Location</label><br>
+                                                                        <label for="location">Phone Number</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="auc_buyer" value="1.14" />
                                                                         <label for="auc_buyer">Buyer #</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="lot" value="1.15" />

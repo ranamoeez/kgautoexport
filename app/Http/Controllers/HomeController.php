@@ -20,6 +20,9 @@ use App\Models\Post;
 use App\Models\Fine;
 use App\Models\VehicleImage;
 use App\Models\EmailHistory;
+use App\Models\NotesHistory;
+use App\Models\Status;
+use App\Models\Terminal;
 use Auth;
 use Storage;
 use QuickBooksOnline\API\DataService\DataService;
@@ -201,19 +204,34 @@ class HomeController extends Controller
         return json_encode(["success" => true, "msg" => "Pickup request added successfully!"]);
     }
 
-    public function vehicles()
+    public function vehicles(Request $request)
     {
         $data['type'] = "vehicles";
         $user_id = Auth::user()->id;
         if (Auth::user()->role == "3") {
             $user_id = Auth::user()->main_user_id;
         }
-        $data['super_user'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "super_user")->where('user_id', $user_id)->orderBy("id", "DESC")->get();
-        $data['admin'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->where('user_id', $user_id)->orderBy("id", "DESC")->get();
+        $super_user = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "super_user")->where('user_id', $user_id);
+        $admin = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->where('user_id', $user_id);
+        if (!empty($request->status)) {
+            $status = $request->status;
+            $super_user = $super_user->whereHas("vehicle", function ($q) use($status) {
+                $q->where("status_id", $status);
+            });
+            $admin = $admin->whereHas("vehicle", function ($q) use($status) {
+                $q->where("status_id", $status);
+            });
+        }
         $data['sub_buyers'] = User::where("main_user_id", $user_id)->get();
         $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {
             $q->where("status_id", "11");
         })->where('user_id', $user_id)->orderBy("id", "DESC")->get();
+        $data['super_user'] = $super_user->orderBy("id", "DESC")->get();
+        $data['admin'] = $admin->orderBy("id", "DESC")->get();
+        $data['all_terminal'] = Terminal::with("vehicles")->get();
+        $data['all_status'] = Status::all();
+        $data['all_buyer'] = User::where('role', '2')->get();
+        $data['all_destination_port'] = DestinationPort::all();
         return view('user.vehicles', $data);
     }
 
@@ -268,6 +286,12 @@ class HomeController extends Controller
         $notes = $request->notes_document;
 
         Vehicle::where("id", $request->vehicle_id)->update(['notes_user' => $user_notes, "notes_document" => $notes]);
+        $data = [
+            "vehicle_id" => $request->vehicle_id,
+            "buyer_id" => \Auth::user()->id,
+            "notes" => $user_notes
+        ];
+        NotesHistory::create($data);
 
         return json_encode(["success" => true, "msg" => "Notes updated successfully!"]);
     }

@@ -810,13 +810,13 @@
         $(document).ready(function(){
 
             $(".warehouse-images").popupLightbox({
-                width: 800,
-                height: 600
+                width: 1300,
+                height: 900
             });
 
             $(".unloading-images").popupLightbox({
-                width: 800,
-                height: 600
+                width: 1300,
+                height: 900
             });
 
         });

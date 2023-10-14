@@ -1058,8 +1058,12 @@
             $(document).on("change", ".name", function () {
                 var weight = $(this).find("option:selected").attr("data-weight");
                 var fuel = $(this).find("option:selected").attr("data-fuel");
-                $("#weight").val(weight);
-                $(".fuel_type[value='"+fuel+"']").attr("checked", true);
+                if (weight !== "null" && weight !== undefined && weight !== "") {
+                    $("#weight").val(weight);
+                }
+                if (fuel !== "null" && fuel !== undefined && fuel !== "") {
+                    $(".fuel_type[value='"+fuel+"']").attr("checked", true);
+                }
             });
 
             $(document).on("click", ".submit-form", function () {
@@ -1126,33 +1130,41 @@
             });
 
             $(document).on("submit", ".form", function (event) {
+                $('.center-body').css('display', 'block');
                 event.preventDefault();
 
                 if ($(".company_name option:selected").val() == "") {
                     toastr["error"]("Description is required!", "Completed!");
+                    $('.center-body').css('display', 'none');
                 } else {
-                    $.ajax({
-                        type: $(this).attr("method"),
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        url: $(this).attr("action"),
-                        data: new FormData(this),
-                        headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
-                        success: function (res) {
-                            // res = JSON.parse(res);
-                            console.log(res);
-                            if (res.success == true) {
-                                toastr["success"](res.msg, "Completed!");
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 2000);
-                            } else {
-                                toastr["error"](res.msg, "Failed!");
+                    if ($(".fuel_type:checked").length == 0) {
+                        toastr["error"]("Fuel type is required!", "Failed!");
+                        $('.center-body').css('display', 'none');
+                    } else {
+                        $.ajax({
+                            type: $(this).attr("method"),
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            dataType: "json",
+                            url: $(this).attr("action"),
+                            data: new FormData(this),
+                            headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                            success: function (res) {
+                                // res = JSON.parse(res);
+                                console.log(res);
+                                if (res.success == true) {
+                                    toastr["success"](res.msg, "Completed!");
+                                    setTimeout(function () {
+                                        location.reload();
+                                    }, 2000);
+                                } else {
+                                    toastr["error"](res.msg, "Failed!");
+                                }
+                                $('.center-body').css('display', 'none');
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             });
 

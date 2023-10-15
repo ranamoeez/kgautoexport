@@ -10,6 +10,9 @@
             min-height: 40px;
             border-color: #dee2e6 !important;
         }
+        .select2.select2-container {
+            width: 100% !important;
+        }
         #filters-form .select2-selection__arrow {
             display: none;
         }

@@ -13,6 +13,9 @@
         .select2-selection {
             min-height: 37px;
         }
+        .select2.select2-container {
+            width: 100% !important;
+        }
     </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">

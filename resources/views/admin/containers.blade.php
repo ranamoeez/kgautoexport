@@ -10,6 +10,9 @@
         a:hover {
             color: #023e8a !important;
         }
+        .select2.select2-container {
+            width: 100% !important;
+        }
     </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">

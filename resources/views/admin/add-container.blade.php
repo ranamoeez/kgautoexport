@@ -230,6 +230,36 @@
                                     <input type="text" name="arrival" class="form-control datepicker" />
                                 </div>
                             </div>
+                            <div class="form-group row mt-5">
+                                <label for="" class="col-md-3 col-form-label fw-semibold pt-0">Released Status</label>
+                                <div class="col-md-9 d-flex flex-row gap-2">
+                                    <div class="form-check">
+                                        <input id="radio1" type="radio" name="released_status"
+                                            class="form-check-input" value="No" checked />
+                                        <label for="radio1" class="form-check-label">No</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio2" type="radio" name="released_status"
+                                            class="form-check-input" value="In hand" />
+                                        <label for="radio2" class="form-check-label">In hand</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-3">
+                                <label for="" class="col-md-3 col-form-label fw-semibold pt-0">Unloaded Status</label>
+                                <div class="col-md-9 d-flex flex-row gap-2">
+                                    <div class="form-check">
+                                        <input id="radio3" type="radio" name="unloaded_status"
+                                            class="form-check-input" value="No" checked />
+                                        <label for="radio3" class="form-check-label">No</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio4" type="radio" name="unloaded_status"
+                                            class="form-check-input" value="Yes" />
+                                        <label for="radio4" class="form-check-label">Yes</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">

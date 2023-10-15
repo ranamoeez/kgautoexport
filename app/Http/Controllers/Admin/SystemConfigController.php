@@ -57,6 +57,10 @@ class SystemConfigController extends Controller
                     ->orWhere('company', 'LIKE', '%'.$search.'%');
             });
     	}
+        if (!empty($request->users) && $request->users !== "all") {
+            $data['sel_users'] = $request->users;
+            $users = $users->where("role", $request->users);
+        }
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;

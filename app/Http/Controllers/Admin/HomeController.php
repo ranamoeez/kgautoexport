@@ -542,6 +542,9 @@ class HomeController extends Controller
                     return json_encode($response);
                 }
             }
+            if ($data['released_status'] == "In hand") {
+                $data["in_hand_date"] = date("Y-m-d");
+            }
             $container = Container::create($data);
             if ($request->hasFile('images')) {
                 $files = [];
@@ -642,6 +645,21 @@ class HomeController extends Controller
             }
             if ($container->arrival !== $data['arrival'] && !empty($data['arrival'])) {
                 $data['status_id'] = "4";
+            }
+            if (!empty($data['released_status']) && $data['released_status'] == "In hand") {
+                $data["in_hand_date"] = date("Y-m-d");
+            }
+            if (!empty($data['status_id'])) {
+                $all_vehicles = ContainerVehicle::where("container_id", $id)->get();
+                if (count($all_vehicles) > 0) {
+                    $cont_status = ContStatus::where("id", $data['status_id'])->first();
+                    $veh_status = Status::where("name", $cont_status->name)->first();
+                    if (!empty($veh_status)) {
+                        foreach ($all_vehicles as $key => $value) {
+                            Vehicle::where("id", $value->vehicle_id)->update(["status_id" => $veh_status->id]);
+                        }
+                    }
+                }
             }
             unset($data['documents']);
             unset($data['images']);
@@ -1149,9 +1167,22 @@ class HomeController extends Controller
         $data = [];
         if (!empty($request->status)) {
             $data["status_id"] = $request->status;
+            $all_vehicles = ContainerVehicle::where("container_id", $request->id)->get();
+            if (count($all_vehicles) > 0) {
+                $cont_status = ContStatus::where("id", $request->status)->first();
+                $veh_status = Status::where("name", $cont_status->name)->first();
+                if (!empty($veh_status)) {
+                    foreach ($all_vehicles as $key => $value) {
+                        Vehicle::where("id", $value->vehicle_id)->update(["status_id" => $veh_status->id]);
+                    }
+                }
+            }
         }
         if (!empty($request->released_status)) {
             $data["released_status"] = $request->released_status;
+            if ($request->released_status == "In hand") {
+                $data["in_hand_date"] = date("Y-m-d");
+            }
         }
         if (!empty($request->unloaded_status)) {
             $data["unloaded_status"] = $request->unloaded_status;
@@ -1461,12 +1492,22 @@ class HomeController extends Controller
         return json_encode(["success"=>true, "data" => $data]);
     }
 
-    public function get_vehicles($id)
+    public function get_vehicles(Request $request, $id)
     {
         if ($id == '0') {
             return json_encode(["success"=>false, "vehicles"=>array()]);
         }
-        $data = AssignVehicle::with('vehicle')->where("user_id", $id)->where("assigned_to", "0")->get();
+        $data = AssignVehicle::with('vehicle');
+        if (!empty($request->search)) {
+            $search = $request->search;
+            $data = $data->whereHas('vehicle', function ($query) use ($search) {
+                $query->where('vin', 'LIKE', '%'.$search.'%')
+                    ->orWhere('company_name', 'LIKE', '%'.$search.'%')
+                    ->orWhere('name', 'LIKE', '%'.$search.'%')
+                    ->orWhere('modal', 'LIKE', '%'.$search.'%');
+            });
+        }
+        $data = $data->where("user_id", $id)->where("assigned_to", "0")->get();
         return json_encode(["success"=>true, "vehicles" => $data]);
     }
 
@@ -1693,7 +1734,7 @@ class HomeController extends Controller
         if ($flag == "0") {
             return json_encode(["success"=>true, "action" => 'reload']);
         } else {
-            return json_encode(["success"=>true, "msg" => 'You are mixing up vehicles in this container!']);
+            return json_encode(["success"=>true, "msg" => 'You are mixing up vehicles in this container. Before the vehicles that are in this container have different fuel type.']);
         }
     }
 

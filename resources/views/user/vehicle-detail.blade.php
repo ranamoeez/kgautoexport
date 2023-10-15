@@ -2,6 +2,11 @@
 
 @section('content')
 
+    <style type="text/css">
+        .img-show img {
+            max-height: 550px !important;
+        }
+    </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
             <!-- Money transfer -->
@@ -496,6 +501,15 @@
                                     <input type="text" class="form-control" @if(@$list->container->arrival) value="{{ date("M d, Y", strtotime(@$list->container->arrival)) }}" @endif disabled />
                                 </div>
                             </div>
+                            @if(!empty(@$list->container))
+                            <div class="row mt-4">
+                                <div class="offset-md-2 col-md-10 d-flex justify-content-end">
+                                    <button class="btn btn-primary rounded-1 border border-0 fs-5 tracking" type="button" data-text="{{ @$list->container->shipping_line->name }}" data-id="{{ @$list->container->container_no }}">
+                                        Tracking
+                                    </button>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -538,17 +552,17 @@
                                                     <i class="fa-file-pdf fa-solid fs-4"></i>
                                                 </div>
                                                 <div>
-                                                    <a href="{{ url($value->filepath.$value->filename) }}" download>
+                                                    <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank" download>
                                                         <i class="fas fa-download text-dark"></i>
                                                     </a>
-                                                    <a href="{{ url($value->filepath.$value->filename) }}" target="_blank">
+                                                    <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank">
                                                         <i class="fas fa-eye text-primary"></i>
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                                <object data="{{ url($value->filepath.$value->filename) }}" style="width: 100%; height: 100% !important;">
-                                                    Alt : <a href="{{ url($value->filepath.$value->filename) }}">test.pdf</a>
+                                                <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" style="width: 100%; height: 100% !important;">
+                                                    Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}">test.pdf</a>
                                                 </object>
                                                 <div class="w-100 mt-2">
                                                     <input type="text" value="{{ @$value->type }}" class="form-control text-center" readonly>
@@ -720,6 +734,22 @@
                         }
                     }
                 });
+            });
+            
+            $(document).on("click", ".tracking", function () {
+                var data = $(this).attr('data-text');
+                var id = $(this).attr('data-id');
+                if (id == "") {
+                    toastr["error"]("Container number is empty!", "Failed!");
+                } else {
+                    if (data == "MAERSK LINE") {
+                        window.open("https://www.maersk.com/tracking/"+id);
+                    } else if (data == "HAPAG-LLOYD") {
+                        window.open("https://www.hapag-lloyd.com/en/online-business/track/track-by-container-solution.html?container="+id);
+                    } else {
+                        window.open("https://www.searates.com/container/tracking/?container="+id+"&sealine=AUTO");
+                    }
+                }
             });
         });
     </script>

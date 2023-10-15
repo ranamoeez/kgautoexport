@@ -10,6 +10,9 @@
         .select2-selection {
             min-height: 37px;
         }
+        .img-show img {
+            height: 550px !important;
+        }
     </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
@@ -228,6 +231,36 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Arrival</label>
                                 <div class="col-sm-9">
                                     <input type="text" name="arrival" value="{{ $container->arrival }}" class="form-control datepicker" />
+                                </div>
+                            </div>
+                            <div class="form-group row mt-5">
+                                <label for="" class="col-md-3 col-form-label fw-semibold pt-0">Released Status</label>
+                                <div class="col-md-9 d-flex flex-row gap-2">
+                                    <div class="form-check">
+                                        <input id="radio1" type="radio" name="released_status"
+                                            class="form-check-input" value="No" @if($container->released_status == "No") checked @endif />
+                                        <label for="radio1" class="form-check-label">No</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio2" type="radio" name="released_status"
+                                            class="form-check-input" value="In hand" @if($container->released_status == "In hand") checked @endif />
+                                        <label for="radio2" class="form-check-label">In hand</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-3">
+                                <label for="" class="col-md-3 col-form-label fw-semibold pt-0">Unloaded Status</label>
+                                <div class="col-md-9 d-flex flex-row gap-2">
+                                    <div class="form-check">
+                                        <input id="radio3" type="radio" name="unloaded_status"
+                                            class="form-check-input" value="No" @if($container->unloaded_status == "No") checked @endif />
+                                        <label for="radio3" class="form-check-label">No</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input id="radio4" type="radio" name="unloaded_status"
+                                            class="form-check-input" value="Yes" @if($container->unloaded_status == "Yes") checked @endif />
+                                        <label for="radio4" class="form-check-label">Yes</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -473,7 +506,7 @@
                                             <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-container-documents', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                             <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank">
@@ -522,7 +555,7 @@
                                 <div class="modal fade new buyer" id="addNewBuyerModal" tabindex="-1"
                                     aria-labelledby="addNewBuyerModalLabel" aria-hidden="true">
                                     <div class="modal-dialog rounded-5">
-                                        <div class="modal-content p-3">
+                                        <div class="modal-content p-3" style="min-width: 700px;">
                                             <div class="modal-header border-0">
                                                 <h1 class="modal-title fw-bold" id="addNewBuyerModalLabel"
                                                     style="font-size: 28px">
@@ -811,7 +844,7 @@
                     data = JSON.parse(data);
                     if (data.success == true) {
                         if (data.msg !== undefined) {
-                            toastr["warning"](data.msg, "Warning!");
+                            alert(data.msg);
                             toastr["success"]("New buyer is added successfully!", "Completed!");
                         } else {
                             toastr["success"]("New buyer is added successfully!", "Completed!");
@@ -842,6 +875,10 @@
                             </div>`;
                             $(".vehicles").append(html);
                         } else {
+                            var html = `<div class="row w-100 mb-3 p-2 vehicle-data">
+                                <input type="text" id="search" class="form-control shadow rounded-5 w-100" placeholder="Search vehicles">
+                            </div>`;
+                            $(".vehicles").append(html);
                             $(data.vehicles).each(function (key, value) {
                                 var description = value.vehicle.modal;
                                 if (value.vehicle.name !== null) {
@@ -859,6 +896,53 @@
                                     </div>
                                 </div>`;
                                 $(".vehicles").append(html);
+
+                                $(document).on("keyup", "#search", function (event) {
+                                    var search = $(this).val();
+                                    
+                                    $.ajax({
+                                        type: 'GET',
+                                        url: "{{ url('admin/get-vehicles') }}"+"/"+id+"?search="+search,
+                                        success: function(data){
+                                            data = JSON.parse(data);
+                                            $(".vehicle-data").remove();
+                                            if (data.success == true) {
+                                                if (data.vehicles.length == 0) {
+                                                    var html = `<div class="row w-100 mb-3 p-2 vehicle-data">
+                                                        <input type="text" id="search" class="form-control shadow rounded-5 w-100" placeholder="Search vehicles" value="`+search+`">
+                                                    </div>
+                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
+                                                        <div class="text-fs-3 text-center">No vehicle found</div>
+                                                    </div>`;
+                                                    $(".vehicles").append(html);
+                                                } else {
+                                                    var html = `<div class="row w-100 mb-3 p-2 vehicle-data">
+                                                        <input type="text" id="search" class="form-control shadow rounded-5 w-100" placeholder="Search vehicles" value="`+search+`">
+                                                    </div>`;
+                                                    $(".vehicles").append(html);
+                                                    $(data.vehicles).each(function (key, value) {
+                                                        var description = value.vehicle.modal;
+                                                        if (value.vehicle.name !== null) {
+                                                            description += " "+value.vehicle.company_name;
+                                                        }
+                                                        if (value.vehicle.modal !== null) {
+                                                            description += " "+value.vehicle.name;
+                                                        }
+                                                        var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
+                                                            <div class="col text-fs-3 text-center">`+value.vehicle.vin+`</div>
+                                                            <div class="col text-fs-3 text-center">`+description+`</div>
+                                                            <div class="col d-flex justify-content-center align-items-center">
+                                                                <input class="form-check-input vehicle_id" id="vehicle_id" name="vehicle_id" type="checkbox"
+                                                                    value="`+value.vehicle.id+`">
+                                                            </div>
+                                                        </div>`;
+                                                        $(".vehicles").append(html);
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    });
+                                });
                             });
                         }
                     }
@@ -976,8 +1060,8 @@
         $(document).ready(function(){
 
             $(".container-images").popupLightbox({
-                width: 800,
-                height: 600
+                width: 1300,
+                height: 900
             });
 
         });

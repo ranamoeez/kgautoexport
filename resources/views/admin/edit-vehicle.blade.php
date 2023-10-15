@@ -13,6 +13,9 @@
         .phone_number .iti--separate-dial-code {
             width: 100%;
         }
+        .img-show img {
+            height: 550px !important;
+        }
     </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
@@ -112,21 +115,33 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Description</label>
                                 <div class="col-md-9">
-                                    <select class="selectjs form-select company_name" name="company_name" required="">
+                                    <select class="selectjs form-select vehicle_modal" name="modal">
                                         <option value=""></option>
-                                        @if(count(@$all_vehicle_brand) > 0)
-                                        @foreach(@$all_vehicle_brand as $key => $value)
-                                            @if($value['name'] == @$list->vehicle->company_name)
-                                            <option value="{{ @$value['name'] }}" data-id="{{ @$value['id'] }}" selected>{{ @$value['name'] }}</option>
-                                            @else
-                                            <option value="{{ @$value['name'] }}" data-id="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
-                                            @endif
-                                        @endforeach
-                                        @endif
+                                        @php
+                                            $current_date = date("Y-m-d");
+                                            $year = (int)explode("-", $current_date)[0] + 1;
+                                        @endphp
+                                        @for($i=$year; $i>=1900; $i--)
+                                        <option value="{{ $i }}" @if($list->vehicle->modal == $i) selected @endif>{{ $i }}</option>
+                                        @endfor
                                     </select>
                                 </div>
                                 <div class="col-12">
                                     <div class="row mt-2">
+                                        <div class="col-md-6">
+                                            <select class="selectjs form-select company_name" name="company_name" required="">
+                                                <option value=""></option>
+                                                @if(count(@$all_vehicle_brand) > 0)
+                                                @foreach(@$all_vehicle_brand as $key => $value)
+                                                    @if($value['name'] == @$list->vehicle->company_name)
+                                                    <option value="{{ @$value['name'] }}" data-id="{{ @$value['id'] }}" selected>{{ @$value['name'] }}</option>
+                                                    @else
+                                                    <option value="{{ @$value['name'] }}" data-id="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                                    @endif
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
                                         <div class="col-md-6">
                                             <select class="selectjs form-select name" name="name" required="" disabled="">
                                                 <option value=""></option>
@@ -139,18 +154,6 @@
                                                         @endif
                                                 @endforeach
                                                 @endif
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <select class="selectjs form-select" name="modal">
-                                                <option value=""></option>
-                                                @php
-                                                    $current_date = date("Y-m-d");
-                                                    $year = (int)explode("-", $current_date)[0] + 1;
-                                                @endphp
-                                                @for($i=$year; $i>=1900; $i--)
-                                                <option value="{{ $i }}" @if($list->vehicle->modal == $i) selected @endif>{{ $i }}</option>
-                                                @endfor
                                             </select>
                                         </div>
                                     </div>
@@ -519,8 +522,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon2" style="margin-right: 3px;">$</span>
                                                 <input type="number" class="form-control transfine" min="0" placeholder="0" />
-                                                <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
                                         <div class="col-md-1 pt-2" style="padding-right: 0px; padding-left: 0px;">
@@ -584,8 +587,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon2" style="margin-right: 3px;">$</span>
                                                 <input type="number" class="form-control auctionfine" min="0" placeholder="0" />
-                                                <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
                                         <div class="col-md-1 pt-2" style="padding-right: 0px; padding-left: 0px;">
@@ -622,8 +625,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon2" style="margin-right: 3px;">$</span>
                                                 <input type="number" class="form-control expense_fine" min="0" placeholder="0" />
-                                                <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
                                         <div class="col-md-1 pt-2" style="padding-right: 0px; padding-left: 0px;">
@@ -772,7 +775,7 @@
                                             <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-vehicle-documents', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                             <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank">
@@ -836,7 +839,7 @@
                                             <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
@@ -867,7 +870,7 @@
                                             <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
@@ -1137,33 +1140,43 @@
                     toastr["error"]("Description is required!", "Completed!");
                     $('.center-body').css('display', 'none');
                 } else {
-                    if ($(".fuel_type:checked").length == 0) {
-                        toastr["error"]("Fuel type is required!", "Failed!");
+                    if ($(".name option:selected").val() == "") {
+                        toastr["error"]("Description is required!", "Failed!");
                         $('.center-body').css('display', 'none');
                     } else {
-                        $.ajax({
-                            type: $(this).attr("method"),
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            dataType: "json",
-                            url: $(this).attr("action"),
-                            data: new FormData(this),
-                            headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
-                            success: function (res) {
-                                // res = JSON.parse(res);
-                                console.log(res);
-                                if (res.success == true) {
-                                    toastr["success"](res.msg, "Completed!");
-                                    setTimeout(function () {
-                                        location.reload();
-                                    }, 2000);
-                                } else {
-                                    toastr["error"](res.msg, "Failed!");
-                                }
+                        if ($(".vehicle_modal option:selected").val() == "") {
+                            toastr["error"]("Description is required!", "Failed!");
+                            $('.center-body').css('display', 'none');
+                        } else {
+                            if ($(".fuel_type:checked").length == 0) {
+                                toastr["error"]("Fuel type is required!", "Failed!");
                                 $('.center-body').css('display', 'none');
+                            } else {
+                                $.ajax({
+                                    type: $(this).attr("method"),
+                                    contentType: false,
+                                    cache: false,
+                                    processData: false,
+                                    dataType: "json",
+                                    url: $(this).attr("action"),
+                                    data: new FormData(this),
+                                    headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                                    success: function (res) {
+                                        // res = JSON.parse(res);
+                                        console.log(res);
+                                        if (res.success == true) {
+                                            toastr["success"](res.msg, "Completed!");
+                                            setTimeout(function () {
+                                                location.reload();
+                                            }, 2000);
+                                        } else {
+                                            toastr["error"](res.msg, "Failed!");
+                                        }
+                                        $('.center-body').css('display', 'none');
+                                    }
+                                });
                             }
-                        });
+                        }
                     }
                 }
             });
@@ -1332,13 +1345,13 @@
         $(document).ready(function(){
 
             $(".warehouse-images").popupLightbox({
-                width: 800,
-                height: 600
+                width: 1300,
+                height: 900
             });
 
             $(".unloading-images").popupLightbox({
-                width: 800,
-                height: 600
+                width: 1300,
+                height: 900
             });
 
         });

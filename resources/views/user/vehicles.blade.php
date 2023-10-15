@@ -7,7 +7,8 @@
             font-weight: bold !important;
         }
         .select2-selection {
-            min-height: 37px;
+            min-height: 40px;
+            border-color: #dee2e6 !important;
         }
         #filters-form .select2-selection__arrow {
             display: none;
@@ -40,24 +41,8 @@
                 </div>
                 @endif
 
-                {{-- <form method="GET" action="{{ url('user/vehicles') }}" class="row align-items-center" id="filters-form">
+                <form method="GET" action="{{ url('user/vehicles') }}" class="row align-items-center" id="filters-form">
                     <input type="hidden" name="page" value="{{ @$page }}">
-                    <div class="col-md-3 mb-2">
-                        <label for="buyer" class="fw-semibold">Buyer</label>
-                        <select id="buyer" name="buyer" class="selectjs form-select p-2 border border-gray-200 rounded-lg">
-                            <option value="all">All</option>
-                            @if(count(@$all_buyer) > 0)
-                            @foreach(@$all_buyer as $key => $value)
-                                @if($value->id == @$buyer)
-                                <option value="{{ @$value->id }}" selected>{{ @$value->name.' ('.@$value->surname.')' }}</option>
-                                @else
-                                <option value="{{ @$value->id }}">{{ @$value->name.' ('.@$value->surname.')' }}</option>
-                                @endif
-                            @endforeach
-                            @endif
-                        </select>
-                    </div>
-
                     <div class="col-md-3 mb-2">
                         <label for="terminal" class="fw-semibold">Terminal</label>
                         <select id="terminal" name="terminal" class="selectjs form-select p-2">
@@ -131,7 +116,7 @@
                         <label for="search" class="fw-semibold">Search</label>
                         <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-veh" placeholder="Search">
                     </div>
-                </form> --}}
+                </form>
 
                 <div class="mt-5">
                     <div class="d-flex justify-content-between mt-3">

@@ -299,7 +299,14 @@
 
                     <form method="GET" action="{{ url('admin/system-configuration/users') }}" class="row align-items-center mt-3" id="filters-form">
                         <input type="hidden" name="page" value="{{ @$page }}">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
+                            <select class="form-control" name="users" id="filter-user">
+                                <option value="all" @if(@$sel_users == "all") selected @endif>All</option>
+                                <option value="2" @if(@$sel_users == "2") selected @endif>Users</option>
+                                <option value="3" @if(@$sel_users == "3") selected @endif>Sub Users</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
                             <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-user" placeholder="Search users">
                         </div>
                     </form>
@@ -674,7 +681,7 @@
                 $("#dial_code").val($(".iti__selected-dial-code").last().text().trim());
             });
 
-            $(document).on("change", "#search-user", function () {
+            $(document).on("change", "#search-user, #filter-user", function () {
                 $("#filters-form").submit();
             });
 

@@ -188,6 +188,7 @@
                             <th scope="col" class="fw-bold">Title</th>
                             <th scope="col" class="fw-bold">Keys</th>
                             <th scope="col" class="fw-bold">Payment Status</th>
+                            <th scope="col" class="fw-bold">Fuel Type</th>
                             <th scope="col" class="fw-bold">Status</th>
                             <th scope="col" class="fw-bold">Terminal</th>
                             <th scope="col" class="fw-bold">Notes</th>
@@ -297,6 +298,22 @@
                                             <option value="0" @if(@$value->vehicle->all_paid == "0") selected @endif>Unpaid</option>
                                         </select>
                                     </div>
+                                </td>
+
+                                <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
+                                    @php
+                                        $ico = "";
+                                        if (@$value->vehicle->fuel_type == "EV") {
+                                            $ico = "fa-solid fa-plug text-primary";
+                                        } elseif (@$value->vehicle->fuel_type == "HYB") {
+                                            $ico = "fa-solid fa-leaf text-success";
+                                        } elseif (@$value->vehicle->fuel_type == "GAS") {
+                                            $ico = "fa-solid fa-gas-pump text-secondary";
+                                        }
+                                    @endphp
+                                    {{-- <i class="text-fs-5 fa-solid fa-charging-station"></i> --}}
+                                    <i class="text-fs-5 {{ $ico }}"></i>
+                                    <span class="fs-5 ms-1">{{ @$value->vehicle->fuel_type }}</span>
                                 </td>
 
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>

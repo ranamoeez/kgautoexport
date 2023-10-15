@@ -213,21 +213,101 @@ class HomeController extends Controller
         }
         $super_user = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "super_user")->where('user_id', $user_id);
         $admin = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->where('user_id', $user_id);
-        if (!empty($request->status)) {
+        $filter = [];
+        if (!empty($request->terminal) && $request->terminal !== 'all') {
+            $data['terminal'] = $request->terminal;
+            $terminal = $request->terminal;
+            $filter['terminal'] = $terminal;
+        }
+        if (!empty($request->status) && $request->status !== 'all') {
+            $data['status'] = $request->status;
             $status = $request->status;
-            $super_user = $super_user->whereHas("vehicle", function ($q) use($status) {
-                $q->where("status_id", $status);
+            $filter['status'] = $status;
+        }
+        if (!empty($request->fuel_type) && $request->fuel_type !== 'all') {
+            $data['fuel_type'] = $request->fuel_type;
+            $fuel_type = $request->fuel_type;
+            $filter['fuel_type'] = $fuel_type;
+        }
+        if (!empty($request->destination) && $request->destination !== 'all') {
+            $data['destination'] = $request->destination;
+            $destination = $request->destination;
+            $filter['destination'] = $destination;
+        }
+        if (!empty($request->search)) {
+            $data['search'] = $request->search;
+            $search = $request->search;
+            $filter['search'] = $search;
+        }
+        if (!empty($filter)) {
+            $super_user = $super_user->whereHas('vehicle', function ($query) use($filter) {
+                if (!empty($filter['terminal'])) {
+                    $query->where('terminal_id', $filter['terminal']);
+                }
+                if (!empty($filter['fuel_type'])) {
+                    $query->where('fuel_type', $filter['fuel_type']);
+                }
+                if (!empty($filter['status'])) {
+                    $query->where('status_id', $filter['status']);
+                }
+                if (!empty($filter['destination'])) {
+                    $query->where('destination_port_id', $filter['destination']);
+                }
+                if (!empty($filter['search'])) {
+                    $search = $filter['search'];
+                    $query->where(function ($q) use ($search) {
+                        $q->where('delivery_date', 'LIKE', '%'.$search.'%')
+                        ->orWhere('company_name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('modal', 'LIKE', '%'.$search.'%')
+                        ->orWhere('vin', 'LIKE', '%'.$search.'%')
+                        ->orWhere('client_name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
+                        ->orWhere('notes', 'LIKE', '%'.$search.'%');
+                    });
+                }
             });
-            $admin = $admin->whereHas("vehicle", function ($q) use($status) {
-                $q->where("status_id", $status);
+            $admin = $admin->whereHas('vehicle', function ($query) use($filter) {
+                if (!empty($filter['terminal'])) {
+                    $query->where('terminal_id', $filter['terminal']);
+                }
+                if (!empty($filter['fuel_type'])) {
+                    $query->where('fuel_type', $filter['fuel_type']);
+                }
+                if (!empty($filter['status'])) {
+                    $query->where('status_id', $filter['status']);
+                }
+                if (!empty($filter['destination'])) {
+                    $query->where('destination_port_id', $filter['destination']);
+                }
+                if (!empty($filter['search'])) {
+                    $search = $filter['search'];
+                    $query->where(function ($q) use ($search) {
+                        $q->where('delivery_date', 'LIKE', '%'.$search.'%')
+                        ->orWhere('company_name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('modal', 'LIKE', '%'.$search.'%')
+                        ->orWhere('vin', 'LIKE', '%'.$search.'%')
+                        ->orWhere('client_name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
+                        ->orWhere('notes', 'LIKE', '%'.$search.'%');
+                    });
+                }
             });
         }
+        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
+            $data['pay_status'] = $request->pay_status;
+            $super_user = $super_user->where('payment_status', $request->pay_status);
+            $admin = $admin->where('payment_status', $request->pay_status);
+        }
+        
+        $data['super_user'] = $super_user->orderBy("id", "DESC")->get();
+        $data['admin'] = $admin->orderBy("id", "DESC")->get();
+
         $data['sub_buyers'] = User::where("main_user_id", $user_id)->get();
         $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {
             $q->where("status_id", "11");
         })->where('user_id', $user_id)->orderBy("id", "DESC")->get();
-        $data['super_user'] = $super_user->orderBy("id", "DESC")->get();
-        $data['admin'] = $admin->orderBy("id", "DESC")->get();
         $data['all_terminal'] = Terminal::with("vehicles")->get();
         $data['all_status'] = Status::all();
         $data['all_buyer'] = User::where('role', '2')->get();

@@ -245,16 +245,19 @@
                                     </div>
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
-                                    <div class="text-center text-fs-4">
-                                        <select class="form-select released_status" aria-label="Default select example" data-id="{{ $value->id }}" @if(@$value->unloaded_status == "NO") style="width: 100px; background-color: #ffa6a6;" @else style="width: 100px; background-color: #70e790;" @endif>
+                                    <div class="text-fs-4">
+                                        <select class="form-select released_status" aria-label="Default select example" data-id="{{ $value->id }}" @if(@$value->released_status == "No") style="width: 100px; background-color: #ffa6a6;" @else style="width: 100px; background-color: #70e790;" @endif>
                                             <option value="No" @if(@$value->released_status == "No") selected @endif>No</option>
                                             <option value="In hand" @if(@$value->released_status == "In hand") selected @endif>In hand</option>
                                         </select>
+                                        @if(!empty(@$value->in_hand_date))
+                                        <span class="text-fs-4 d-flex justify-content-start">{{ date("M d, Y", strtotime(@$value->in_hand_date)) }}</span>
+                                        @endif
                                     </div>
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4">
-                                        <select class="form-select unloaded_status" aria-label="Default select example" data-id="{{ $value->id }}" @if(@$value->unloaded_status == "YES") style="width: 100px; background-color: #70e790;" @else style="width: 100px; background-color: #ffa6a6;" @endif>
+                                        <select class="form-select unloaded_status" aria-label="Default select example" data-id="{{ $value->id }}" @if(@$value->unloaded_status == "Yes") style="width: 100px; background-color: #70e790;" @else style="width: 100px; background-color: #ffa6a6;" @endif>
                                             <option value="No" @if(@$value->unloaded_status == "No") selected @endif>No</option>
                                             <option value="Yes" @if(@$value->unloaded_status == "Yes") selected @endif>Yes</option>
                                         </select>

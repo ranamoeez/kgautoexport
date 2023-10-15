@@ -195,7 +195,7 @@
                                     @endphp
                                     {{-- <i class="text-fs-5 fa-solid fa-charging-station"></i> --}}
                                     <i class="text-fs-5 {{ $ico }}"></i>
-                                    <span class="fs-5 ms-1">{{ @$value->vehicle->fuel_type }}</span>
+                                    {{-- <span class="fs-5 ms-1">{{ @$value->vehicle->fuel_type }}</span> --}}
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold text-fs-4">

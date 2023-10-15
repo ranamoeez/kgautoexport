@@ -7,6 +7,9 @@
 @section('content')
     
     <style type="text/css">
+        body {
+            overflow-y: hidden;
+        }
         .select2-selection {
             min-height: 37px;
         }
@@ -875,8 +878,9 @@
                             </div>`;
                             $(".vehicles").append(html);
                         } else {
-                            var html = `<div class="row w-100 mb-3 p-2 vehicle-data">
-                                <input type="text" id="search" class="form-control shadow rounded-5 w-100" placeholder="Search vehicles">
+                            var html = `<div class="row shadow w-100 mb-3 p-2 vehicle-data">
+                                <input type="text" id="search-inp" class="form-control w-75" placeholder="Search vehicles">
+                                <button type="button" class="btn btn-primary w-25" id="search-btn">Search</button>
                             </div>`;
                             $(".vehicles").append(html);
                             $(data.vehicles).each(function (key, value) {
@@ -897,8 +901,8 @@
                                 </div>`;
                                 $(".vehicles").append(html);
 
-                                $(document).on("keyup", "#search", function (event) {
-                                    var search = $(this).val();
+                                $(document).on("click", "#search-btn", function (event) {
+                                    var search = $("#search-inp").val();
                                     
                                     $.ajax({
                                         type: 'GET',
@@ -908,16 +912,18 @@
                                             $(".vehicle-data").remove();
                                             if (data.success == true) {
                                                 if (data.vehicles.length == 0) {
-                                                    var html = `<div class="row w-100 mb-3 p-2 vehicle-data">
-                                                        <input type="text" id="search" class="form-control shadow rounded-5 w-100" placeholder="Search vehicles" value="`+search+`">
+                                                    var html = `<div class="row shadow w-100 mb-3 p-2 vehicle-data">
+                                                        <input type="text" id="search-inp" class="form-control w-75" placeholder="Search vehicles" value="`+search+`">
+                                                        <button type="button" class="btn btn-primary w-25" id="search-btn">Search</button>
                                                     </div>
                                                     <div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
                                                         <div class="text-fs-3 text-center">No vehicle found</div>
                                                     </div>`;
                                                     $(".vehicles").append(html);
                                                 } else {
-                                                    var html = `<div class="row w-100 mb-3 p-2 vehicle-data">
-                                                        <input type="text" id="search" class="form-control shadow rounded-5 w-100" placeholder="Search vehicles" value="`+search+`">
+                                                    var html = `<div class="row shadow w-100 mb-3 p-2 vehicle-data">
+                                                        <input type="text" id="search-inp" class="form-control w-75" placeholder="Search vehicles" value="`+search+`">
+                                                        <button type="button" class="btn btn-primary w-25" id="search-btn">Search</button>
                                                     </div>`;
                                                     $(".vehicles").append(html);
                                                     $(data.vehicles).each(function (key, value) {

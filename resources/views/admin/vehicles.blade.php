@@ -7,6 +7,9 @@
 @section('content')
 
     <style type="text/css">
+        body {
+            overflow-y: hidden;
+        }
         a:hover {
             color: #023e8a !important;
         }

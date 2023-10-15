@@ -3,6 +3,9 @@
 @section('content')
 
     <style type="text/css">
+        body {
+            overflow-y: hidden;
+        }
         .img-show img {
             max-height: 550px !important;
         }

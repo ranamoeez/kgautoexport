@@ -7,6 +7,9 @@
 @section('content')
     
     <style type="text/css">
+        body {
+            overflow-y: hidden;
+        }
         .select2-selection {
             min-height: 37px;
         }

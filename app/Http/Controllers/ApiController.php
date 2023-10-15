@@ -367,7 +367,7 @@ class ApiController extends Controller
             $check_user = User::where('api_token', $token)->count();
             if ($check_user > 0) {
                 $financial_data = [];
-                $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle')->where('user_id', $id);
+                $transaction_history = TransactionsHistory::orderBy('id', 'DESC')->with('vehicle')->where('user_id', $id)->where("type", "!=", "init");
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex > 1) {
@@ -484,6 +484,11 @@ class ApiController extends Controller
                 if($validator->fails()){
                     return $this->sendError('Validation Error.', $validator->errors());       
                 }
+
+                $check_pickup = AssignVehicle::where("user_id", $id)->where("vehicle_id", $input['vehicle_id'])->first();
+                if (empty(@$check_pickup) || @$check_pickup->pickup == "1") {
+                    return $this->sendError('Failed!', ['error'=>'Pickup request already exists for this vehicle!']);
+                }
            
                 $vehicle = Vehicle::where('id', $input['vehicle_id'])->first();
 
@@ -537,6 +542,8 @@ class ApiController extends Controller
                     $pickup_request->vehicle_id = $input['vehicle_id'];
                     $pickup_request->comments = $input['comments'];
                     $pickup_request->save();
+
+                    AssignVehicle::where("user_id", $id)->where("vehicle_id", $input['vehicle_id'])->update(["pickup" => "1"]);
                 } else {
                     return $this->sendError('Not Found.', ['error'=>'Vehicle not found.']);
                 }

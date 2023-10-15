@@ -812,11 +812,14 @@
 
             $(document).on("submit", ".form", function (event) {
                 event.preventDefault();
+                $(".save").attr("disabled", true);
 
                 if ($(".buyer option:selected").val() == "") {
                     toastr["error"]("Buyer is required!", "Completed!");
+                    $(".save").attr("disabled", false);
                 } else if ($("#pay_amount").val() == "") {
                     toastr["error"]("Amount to pay is required!", "Completed!");
+                    $(".save").attr("disabled", false);
                 } else {
                     $.ajax({
                         type: $(this).attr("method"),
@@ -837,6 +840,7 @@
                                 }, 2000);
                             } else {
                                 toastr["error"](res.msg, "Failed!");
+                                $(".save").attr("disabled", false);
                             }
                         }
                     });

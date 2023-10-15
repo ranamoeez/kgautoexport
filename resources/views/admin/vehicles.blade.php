@@ -316,7 +316,7 @@
                                     @endphp
                                     {{-- <i class="text-fs-5 fa-solid fa-charging-station"></i> --}}
                                     <i class="text-fs-5 {{ $ico }}"></i>
-                                    <span class="fs-5 ms-1">{{ @$value->vehicle->fuel_type }}</span>
+                                    {{-- <span class="fs-5 ms-1">{{ @$value->vehicle->fuel_type }}</span> --}}
                                 </td>
 
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
@@ -332,13 +332,13 @@
                                             @endforeach
                                             @endif
                                         </select>
-                                        @if(!empty(@$value->vehicle->delivered_on_date))
+                                        @if(!empty(@$value->vehicle->delivered_on_date) && @$value->vehicle->status_id == "6")
                                         @php
                                             $datetime1 = new \DateTime(@$value->vehicle->delivered_on_date);
                                             $datetime2 = new \DateTime(date("Y-m-d"));
                                             $interval = $datetime1->diff($datetime2);
                                         @endphp
-                                        <span class="text-fs-4">{{ @$interval->days }} days before</span>
+                                        <span class="text-fs-4">{{ @$interval->days }} days</span>
                                         @endif
                                     </div>
                                 </td>

@@ -1700,8 +1700,8 @@ class HomeController extends Controller
             $container = Container::where("id", $container_id)->first();
             if ($vehicle->destination_port_id !== $container->destination_port_id) {
                 return json_encode(["success"=>false, "msg" => "Destination port is not same for the vehicle with this vin: ".$vehicle->vin]);
-            } else if ($vehicle->title !== "YES") {
-                return json_encode(["success"=>false, "msg" => 'Title is not "Yes" for the vehicle with this vin: '.$vehicle->vin]);
+            } else if ($vehicle->title == "NO") {
+                return json_encode(["success"=>false, "msg" => 'Title is "NO" for the vehicle with this vin: '.$vehicle->vin]);
             }
         }
 

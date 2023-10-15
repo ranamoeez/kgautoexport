@@ -121,29 +121,25 @@
                                         @endfor
                                     </select>
                                 </div>
-                                <div class="col-12">
-                                    <div class="row mt-2">
-                                        <div class="col-md-6">
-                                            <select class="selectjs form-select company_name" name="company_name" required="">
-                                                <option value=""></option>
-                                                @if(count(@$all_vehicle_brand) > 0)
-                                                @foreach(@$all_vehicle_brand as $key => $value)
-                                                    <option value="{{ @$value['name'] }}" data-id="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
-                                                @endforeach
-                                                @endif
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <select class="selectjs form-select name" name="name" required="" disabled="">
-                                                <option value=""></option>
-                                                @if(count(@$all_vehicle_modal) > 0)
-                                                @foreach(@$all_vehicle_modal as $key => $value)
-                                                    <option value="{{ @$value['name'] }}" data-weight="{{ @$value['weight'] }}" data-fuel="{{ @$value['fuel_type'] }}">{{ @$value['name'] }}</option>
-                                                @endforeach
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
+                                <div class="offset-md-3 col-md-9 mt-2">
+                                    <select class="selectjs form-select company_name" name="company_name" required="">
+                                        <option value=""></option>
+                                        @if(count(@$all_vehicle_brand) > 0)
+                                        @foreach(@$all_vehicle_brand as $key => $value)
+                                            <option value="{{ @$value['name'] }}" data-id="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                                <div class="offset-md-3 col-md-9 mt-2">
+                                    <select class="selectjs form-select name" name="name" required="" disabled="">
+                                        <option value=""></option>
+                                        @if(count(@$all_vehicle_modal) > 0)
+                                        @foreach(@$all_vehicle_modal as $key => $value)
+                                            <option value="{{ @$value['name'] }}" data-weight="{{ @$value['weight'] }}" data-fuel="{{ @$value['fuel_type'] }}">{{ @$value['name'] }}</option>
+                                        @endforeach
+                                        @endif
+                                    </select>
                                 </div>
                             </div>
                             @if(empty($auth_user->admin_level->access) || @in_array("1.5", json_decode($auth_user->admin_level->access)))

@@ -154,6 +154,11 @@ class HomeController extends Controller
             return json_encode(["success" => false, "msg" => "Please select any vehicle first!"]);
         }
 
+        $check_pickup = AssignVehicle::where("user_id", Auth::user()->id)->where("vehicle_id", $data['vehicle_id'])->first();
+        if (empty(@$check_pickup) || @$check_pickup->pickup == "1") {
+            return json_encode(["success" => false, "msg" => "Pickup request already exists for this vehicle!"]);
+        }
+
         $previous = TransactionsHistory::where("user_id", Auth::user()->id)->sum('amount');
         $auction_price = Vehicle::where('buyer_id', Auth::user()->id)->sum('auction_price');
         $towing_price = Vehicle::where('buyer_id', Auth::user()->id)->sum('towing_price');
@@ -200,6 +205,8 @@ class HomeController extends Controller
 
         $data['user_id'] = Auth::user()->id;
         PickupRequest::create($data);
+
+        AssignVehicle::where("user_id", Auth::user()->id)->where("vehicle_id", $data['vehicle_id'])->update(["pickup" => "1"]);
 
         return json_encode(["success" => true, "msg" => "Pickup request added successfully!"]);
     }

@@ -332,6 +332,14 @@
                                             @endforeach
                                             @endif
                                         </select>
+                                        @if(!empty(@$value->vehicle->delivered_on_date))
+                                        @php
+                                            $datetime1 = new \DateTime(@$value->vehicle->delivered_on_date);
+                                            $datetime2 = new \DateTime(date("Y-m-d"));
+                                            $interval = $datetime1->diff($datetime2);
+                                        @endphp
+                                        <span class="text-fs-4">{{ @$interval->days }} days before</span>
+                                        @endif
                                     </div>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>

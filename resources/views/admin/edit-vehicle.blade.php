@@ -425,10 +425,38 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Carrier</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="carrier" value="{{ $list->vehicle->carrier }}" placeholder="John Sabestin" />
+                                    <select class="selectjs form-select carrier" name="carrier">
+                                        <option value=""></option>
+                                        @if(count(@$all_carrier) > 0)
+                                        @foreach(@$all_carrier as $key => $value)
+                                            @if($value['id'] == @$list->vehicle->carrier)
+                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                    </select>
                                 </div>
                             </div>
                             @endif
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Shipping Company</label>
+                                <div class="col-sm-9">
+                                    <select class="selectjs form-select shipping_company" name="shipping_company">
+                                        <option value=""></option>
+                                        @if(count(@$all_shipping_company) > 0)
+                                        @foreach(@$all_shipping_company as $key => $value)
+                                            @if($value['id'] == @$list->vehicle->shipping_company)
+                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
                             {{-- @if(empty($auth_user->admin_level->access) || @in_array("1.23", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup address</label>

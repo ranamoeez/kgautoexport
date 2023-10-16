@@ -123,6 +123,14 @@
                     class="fw-semibold text-dark text-decoration-none fs-6">
                     Posts for sale
                 </a>
+                <a href="{{ url('admin/system-configuration/carriers') }}"
+                    class="fw-semibold text-dark text-decoration-none fs-6">
+                    Carriers
+                </a>
+                <a href="{{ url('admin/system-configuration/shipping-company') }}"
+                    class="fw-semibold text-dark text-decoration-none fs-6">
+                    Shipping Company
+                </a>
             </div>
         </div>
     </div>

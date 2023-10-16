@@ -32,6 +32,8 @@ use App\Models\OperatorLevel;
 use App\Models\FineType;
 use App\Models\TransFineType;
 use App\Models\Post;
+use App\Models\Carrier;
+use App\Models\ShippingCompany;
 use Auth;
 
 class SystemConfigController extends Controller
@@ -1777,5 +1779,99 @@ class SystemConfigController extends Controller
     {
         OperatorLevel::find($id)->delete();
         return json_encode(["success"=>true, "msg"=>"Operator level deleted successfully!"]);
+    }
+
+    // Carriers Functions
+
+    public function carriers(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $carriers = Carrier::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $carriers = $carriers->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $carriers = $carriers->limit(10)->get();
+        $data['carriers'] = $carriers;
+        $data['user_levels'] = Level::all();
+        return view('admin.system-configuration.carriers', $data);
+    }
+
+    public function add_carriers(Request $request)
+    {
+        $data = $request->all();
+        Carrier::create($data);
+        return json_encode(["success"=>true, "msg"=>"Carrier added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_carriers(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            Carrier::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Carrier updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = Carrier::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_carriers($id)
+    {
+        Carrier::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Carrier deleted successfully!"]);
+    }
+
+    // Shipping Company Functions
+
+    public function shipping_company(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $shipping_company = ShippingCompany::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $shipping_company = $shipping_company->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $shipping_company = $shipping_company->limit(10)->get();
+        $data['shipping_company'] = $shipping_company;
+        $data['user_levels'] = Level::all();
+        return view('admin.system-configuration.shipping-company', $data);
+    }
+
+    public function add_shipping_company(Request $request)
+    {
+        $data = $request->all();
+        ShippingCompany::create($data);
+        return json_encode(["success"=>true, "msg"=>"Shipping company added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_shipping_company(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            ShippingCompany::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Shipping Company updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = ShippingCompany::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_shipping_company($id)
+    {
+        ShippingCompany::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Shipping Company deleted successfully!"]);
     }
 }

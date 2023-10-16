@@ -38,6 +38,8 @@ use App\Models\Level;
 use App\Models\MoneyTransfer;
 use App\Models\EmailHistory;
 use App\Models\NotesHistory;
+use App\Models\Carrier;
+use App\Models\ShippingCompany;
 use Auth;
 use Storage;
 use PDF;
@@ -66,6 +68,11 @@ class HomeController extends Controller
             $status = $request->status;
             $filter['status'] = $status;
         }
+        if (!empty($request->at_terminal) && $request->at_terminal !== 'all') {
+            $data['at_terminal'] = $request->at_terminal;
+            $at_terminal = $request->at_terminal;
+            $filter['at_terminal'] = $at_terminal;
+        }
         if (!empty($request->fuel_type) && $request->fuel_type !== 'all') {
             $data['fuel_type'] = $request->fuel_type;
             $fuel_type = $request->fuel_type;
@@ -91,6 +98,21 @@ class HomeController extends Controller
                 }
                 if (!empty($filter['status'])) {
                     $query->where('status_id', $filter['status']);
+                }
+                if (!empty($filter['at_terminal'])) {
+                    if ($filter['at_terminal'] == "1") {
+                        $oneMonthAgo = new \DateTime('1 month ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', ">", $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "3") {
+                        $oneMonthAgo = new \DateTime('3 month ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', ">", $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "5") {
+                        $oneMonthAgo = new \DateTime('3 month ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', "<=", $date)->where("status_id", "6");    
+                    }
                 }
                 if (!empty($filter['destination'])) {
                     $query->where('destination_port_id', $filter['destination']);
@@ -260,6 +282,8 @@ class HomeController extends Controller
         $data['all_fine_type'] = FineType::all();
         $data['all_trans_fine_type'] = TransFineType::all();
         $data['all_destination_port'] = DestinationPort::all();
+        $data['all_carrier'] = Carrier::all();
+        $data['all_shipping_company'] = ShippingCompany::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         return view('admin.add-vehicle', $data);
     }
@@ -419,6 +443,8 @@ class HomeController extends Controller
         $data['all_fine_type'] = FineType::all();
         $data['all_trans_fine_type'] = TransFineType::all();
         $data['all_destination_port'] = DestinationPort::all();
+        $data['all_carrier'] = Carrier::all();
+        $data['all_shipping_company'] = ShippingCompany::all();
         $data['templates'] = ReminderTemplate::all();
         $vid = AssignVehicle::where('id', $id)->first()->vehicle_id;
         $data['history'] = ReminderHistory::where('vehicle_id', $vid)->get();

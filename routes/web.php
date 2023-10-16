@@ -290,4 +290,16 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::get('/system-configuration/trans-fine-type/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_trans_fine_type'])->name('edit-trans-fine-type');
 	Route::post('/system-configuration/trans-fine-type/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_trans_fine_type'])->name('update-trans-fine-type');
 	Route::get('/system-configuration/trans-fine-type/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_trans_fine_type'])->name('delete-trans-fine-type');
+
+	Route::get('/system-configuration/carriers', [App\Http\Controllers\Admin\SystemConfigController::class, 'carriers'])->name('carriers');
+	Route::post('/system-configuration/carriers/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_carriers'])->name('add-carriers');
+	Route::get('/system-configuration/carriers/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_carriers'])->name('edit-carriers');
+	Route::post('/system-configuration/carriers/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_carriers'])->name('update-carriers');
+	Route::get('/system-configuration/carriers/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_carriers'])->name('delete-carriers');
+
+	Route::get('/system-configuration/shipping-company', [App\Http\Controllers\Admin\SystemConfigController::class, 'shipping_company'])->name('shipping-company');
+	Route::post('/system-configuration/shipping-company/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_shipping_company'])->name('add-shipping-company');
+	Route::get('/system-configuration/shipping-company/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_shipping_company'])->name('edit-shipping-company');
+	Route::post('/system-configuration/shipping-company/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_shipping_company'])->name('update-shipping-company');
+	Route::get('/system-configuration/shipping-company/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_shipping_company'])->name('delete-shipping-company');
 });

@@ -7,7 +7,7 @@
             overflow-y: hidden;
         }
         .img-show img {
-            max-height: 550px !important;
+            max-height: auto !important;
         }
     </style>
     <div class="below-header-height outer-container">
@@ -842,15 +842,9 @@
     <script>
         $(document).ready(function(){
 
-            $(".warehouse-images").popupLightbox({
-                width: 1300,
-                height: 900
-            });
+            $(".warehouse-images").popupLightbox();
 
-            $(".unloading-images").popupLightbox({
-                width: 1300,
-                height: 900
-            });
+            $(".unloading-images").popupLightbox();
 
         });
     </script>

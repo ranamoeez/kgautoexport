@@ -799,7 +799,7 @@
                                             <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-vehicle-documents', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank" download>
+                                            <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="download-files">
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                             <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank">
@@ -863,7 +863,7 @@
                                             <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="download-image">
+                                            <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="download-files">
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
@@ -894,7 +894,7 @@
                                             <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="download-image">
+                                            <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="download-files">
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
@@ -1127,7 +1127,7 @@
                 $("#buyer_dial_code").val($(".phone_number .iti__selected-dial-code").first().text().trim());
             });
 
-            $(document).on("click", ".download-image", function () {
+            $(document).on("click", ".download-files", function () {
                 var imageUrl = $(this).attr("data-src");
                 var name = imageUrl;
                 var filename = "";

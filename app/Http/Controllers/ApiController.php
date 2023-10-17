@@ -143,7 +143,7 @@ class ApiController extends Controller
                 }
 
                 foreach ($containers as $key => $value) {
-                    $vehicles = AssignVehicle::with('user', 'vehicle')->where('assigned_to', $value->id)->get();
+                    $vehicles = AssignVehicle::with('user', 'vehicle')->where('assigned_to', $value->id)->where("user_id", $user_id)->get();
                     $containers[$key]['vehicles'] = $vehicles;
                 }
             
@@ -381,7 +381,7 @@ class ApiController extends Controller
                 $financial_data['history'] = $transaction_history;
 
                 $financial_data['total_transactions'] = TransactionsHistory::where('user_id', $id)->sum('amount');
-                $last_transaction_amount = TransactionsHistory::orderBy('id', 'DESC')->where('user_id', $id)->first();
+                $last_transaction_amount = TransactionsHistory::orderBy('id', 'DESC')->where('user_id', $id)->where("type", "!=", "init")->first();
                 $financial_data['last_transaction_amount'] = 0;
                 if (!empty($last_transaction_amount)) {
                     $financial_data['last_transaction_amount'] = (int)$last_transaction_amount->amount;

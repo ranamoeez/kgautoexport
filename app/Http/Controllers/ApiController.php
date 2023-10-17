@@ -220,8 +220,7 @@ class ApiController extends Controller
                 $input = $request->all();
            
                 $validator = Validator::make($input, [
-                    'name' => 'string',
-                    'password' => 'min:8'
+                    'name' => 'string'
                 ]);
            
                 if($validator->fails()){

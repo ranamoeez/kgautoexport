@@ -1129,6 +1129,12 @@
 
             $(document).on("click", ".download-image", function () {
                 var imageUrl = $(this).attr("data-src");
+                var name = $(this).attr("data-name");
+                var filename = "";
+                if (name !== undefined && name !== "") {
+                    name = name.split('/');
+                    filename = name[$(name).length - 1];
+                }
 
                 fetch(imageUrl, {
                     method: 'GET',
@@ -1142,7 +1148,7 @@
                 .then(blob => {
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
-                    a.download = 'image.jpg';
+                    a.download = filename;
 
                     a.click();
 

@@ -863,7 +863,7 @@
                                             <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank" download>
+                                            <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="download-image">
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
@@ -894,7 +894,7 @@
                                             <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-vehicle-images', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank" download>
+                                            <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="download-image">
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
@@ -1125,6 +1125,25 @@
 
             $(document).on("click", ".phone_number .iti__country", function () {
                 $("#buyer_dial_code").val($(".phone_number .iti__selected-dial-code").first().text().trim());
+            });
+
+            $(document).on("click", ".download-image", function () {
+                var imageUrl = $(this).attr("data-src");
+
+                fetch(imageUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = 'image.jpg';
+
+                    a.click();
+
+                    URL.revokeObjectURL(a.href);
+                })
+                .catch(error => {
+                    console.error('Image download failed:', error);
+                });
             });
 
             $(document).on("submit", ".send-form", function (event) {

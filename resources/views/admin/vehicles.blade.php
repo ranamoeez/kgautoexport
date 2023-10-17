@@ -328,7 +328,7 @@
                                         }
                                     @endphp
                                     {{-- <i class="text-fs-5 fa-solid fa-charging-station"></i> --}}
-                                    <i class="text-fs-5 {{ $ico }}" style="font-size: 14px;"></i>
+                                    <i class="text-fs-5 {{ $ico }}"></i>
                                     {{-- <span class="fs-5 ms-1">{{ @$value->vehicle->fuel_type }}</span> --}}
                                 </td>
 

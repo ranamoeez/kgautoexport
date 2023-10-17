@@ -1130,7 +1130,14 @@
             $(document).on("click", ".download-image", function () {
                 var imageUrl = $(this).attr("data-src");
 
-                fetch(imageUrl)
+                fetch(imageUrl, {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    headers: {
+                        Origin: window.location.origin,
+                    },
+                })
                 .then(response => response.blob())
                 .then(blob => {
                     const a = document.createElement('a');

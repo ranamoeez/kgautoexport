@@ -462,7 +462,7 @@
                                             <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-container-documents', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" download>
+                                            <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="download-files">
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
@@ -764,6 +764,38 @@
                     }
                     $('.center-body').css('display', 'none');
                 }
+            });
+        });
+
+        $(document).on("click", ".download-files", function () {
+            var imageUrl = $(this).attr("data-src");
+            var name = imageUrl;
+            var filename = "";
+            if (name !== undefined && name !== "") {
+                name = name.split('/');
+                filename = name[$(name).length - 1];
+            }
+
+            fetch(imageUrl, {
+                method: 'GET',
+                mode: 'cors',
+                cache: 'no-cache',
+                headers: {
+                    Origin: window.location.origin,
+                },
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = filename;
+
+                a.click();
+
+                URL.revokeObjectURL(a.href);
+            })
+            .catch(error => {
+                console.error('Image download failed:', error);
             });
         });
 

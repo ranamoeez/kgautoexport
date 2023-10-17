@@ -47,7 +47,7 @@
                                             <i class="fa-file-pdf fa-solid fs-4"></i>
                                         </div>
                                         <div>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank" download>
+                                            <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="download-files">
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                             <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank">
@@ -276,7 +276,39 @@
                     }
                 });
             });
-        })
+
+            $(document).on("click", ".download-files", function () {
+                var imageUrl = $(this).attr("data-src");
+                var name = imageUrl;
+                var filename = "";
+                if (name !== undefined && name !== "") {
+                    name = name.split('/');
+                    filename = name[$(name).length - 1];
+                }
+
+                fetch(imageUrl, {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    headers: {
+                        Origin: window.location.origin,
+                    },
+                })
+                .then(response => response.blob())
+                .then(blob => {
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = filename;
+
+                    a.click();
+
+                    URL.revokeObjectURL(a.href);
+                })
+                .catch(error => {
+                    console.error('Image download failed:', error);
+                });
+            });
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

@@ -1129,7 +1129,7 @@
 
             $(document).on("click", ".download-image", function () {
                 var imageUrl = $(this).attr("data-src");
-                var name = $(this).attr("data-name");
+                var name = imageUrl;
                 var filename = "";
                 if (name !== undefined && name !== "") {
                     name = name.split('/');

@@ -228,16 +228,35 @@ class ApiController extends Controller
                     return $this->sendError('Validation Error.', $validator->errors());       
                 }
 
-                if (!empty($input['password'])) {
-                    $check = User::where('id', $id)->first();
-                    if (\Hash::check($input['old_password'], $check->password)) {
-                        User::where('id', $id)->update(['name' => $input['name'], 'password' => \Hash::make($input['password'])]);
-                    } else { 
-                        return $this->sendError('Old password is incorrect.', ['error' => 'Unauthorised']);
-                    }
-                } else {
-                    User::where('id', $id)->update(['name' => $input['name']]);
+                $data = [];
+                if (!empty($input['name'])) {
+                    $data['name'] = $input['name'];
                 }
+                if (!empty($input['country'])) {
+                    $data['country'] = $input['country'];
+                }
+                if (!empty($input['phone'])) {
+                    $data['phone'] = $input['phone'];
+                }
+                if (!empty($input['password'])) {
+                    $data['password'] = \Hash::make($input['password']);
+                }
+
+                if (!empty($data)) {
+                    User::where('id', $id)->update($data);
+                } else {
+                    return $this->sendError('Failed!', ['error' => 'Please add some information to update!']);
+                }
+                // if (!empty($input['password'])) {
+                //     $check = User::where('id', $id)->first();
+                //     if (\Hash::check($input['old_password'], $check->password)) {
+                //         User::where('id', $id)->update(['name' => $input['name'], 'password' => \Hash::make($input['password'])]);
+                //     } else { 
+                //         return $this->sendError('Old password is incorrect.', ['error' => 'Unauthorised']);
+                //     }
+                // } else {
+                //     User::where('id', $id)->update(['name' => $input['name'], 'country' => ]);
+                // }
 
                 $user = User::where('id', $id)->first();
            

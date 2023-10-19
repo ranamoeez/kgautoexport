@@ -273,20 +273,6 @@
 @section('script')
 
     <script>
-        $(document).ready(() => {
-            $('.selectjs').select2();
-        })
-    </script>
-        <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script>
-        var input = document.querySelector("#phone");
-        window.intlTelInput(input, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["ru", "jp", "pk", "no"]
-        });
-
         $(document).ready(function () {
             $(document).on("submit", ".form", function (event) {
                 event.preventDefault();

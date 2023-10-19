@@ -66,25 +66,11 @@
 
 @section('script')
 
-    <script>
-        $(document).ready(() => {
-            $('.selectjs').select2();
-        })
-    </script>
-        <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.22.1/ckeditor.js" integrity="sha512-F8fV4+wpHYl9zul08Soff9H9fCx6OMIFfgbQcy+2v2gV7PdbT0OgM1LFwujQmwlLGWWKNbOFZ13uWP+Cbe0Ngw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript">
         CKEDITOR.replace("editor");
     </script>
     <script>
-        var input = document.querySelector("#phone");
-        window.intlTelInput(input, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["ru", "jp", "pk", "no"]
-        });
-
         $(document).ready(function () {
             $(document).on("submit", ".form", function (event) {
                 $('.center-body').css('display', 'block');

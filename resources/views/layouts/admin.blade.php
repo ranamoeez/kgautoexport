@@ -17,9 +17,6 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdn.tutorialjinni.com/intl-tel-input/17.0.19/css/intlTelInput.css" />
-    <script src="https://cdn.tutorialjinni.com/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
-
     <!-- Scripts -->
     <link rel="preload" as="style" href="{{ asset('build/assets/bootstrap.css') }}" />
     <link rel="preload" as="style" href="{{ asset('build/assets/app-76ea0196.css') }}" />
@@ -149,6 +146,13 @@
 </body>
     <script type="text/javascript">
         $(document).ready(function () {
+            $('.select3js').select2({
+                dropdownParent: $('#add-new-user-modal')
+            });
+            $("#add-new-user-modal .select2.select2-container").css("width", "100%");
+            $("#add-new-user-modal .select2-selection").css("height", "40px");
+            $("#add-new-user-modal .select2-selection__arrow").css("display", "none");
+
             $(".datepicker").datepicker({ dateFormat: 'yy-mm-dd' });
 
             $(document).on("submit", ".user-form", function (event) {
@@ -176,10 +180,6 @@
                     }
                 });
             });
-            
-            $(document).on("click", ".iti__country", function () {
-                $("#top_dial_code").val($(".iti__selected-dial-code").first().text().trim());
-            });
 
             $(document).on("click", ".toggle-btn", function () {
                 if ($(".admin-sidebar").css("width") == "35px") {
@@ -190,15 +190,12 @@
                     $(".welcome-text").css("margin-left", "150px");
                 }
             });
+
+            $(document).on("change", ".countries", function () {
+                var selected = $(this).find("option:selected").attr('data-code');
+                $(".phone_code").val("+"+selected);
+            });
         });
     </script>
     @yield('script')
-    <script type="text/javascript">
-        var input = document.querySelector("#phone");
-        window.intlTelInput(input, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["jo", "iq"]
-        });
-    </script>
 </html>

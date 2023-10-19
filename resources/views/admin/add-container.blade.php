@@ -588,8 +588,6 @@
             $('.selectjs').select2();
         })
     </script>
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
@@ -635,14 +633,6 @@
         $(document).on("change", ".destination_port", function () {
             var port = $(this).find("option:selected").attr("data-discharge");
             $(".discharge_port").val(port).trigger("change");;
-        });
-    </script>
-    <script>
-        var input = document.querySelector("#phone");
-        window.intlTelInput(input, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["ru", "jp", "pk", "no"]
         });
     </script>
 

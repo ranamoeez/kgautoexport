@@ -10,9 +10,6 @@
         .select2-selection {
             min-height: 37px;
         }
-        .phone_number .iti--separate-dial-code {
-            width: 100%;
-        }
     </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
@@ -285,9 +282,21 @@
                             @if(empty($auth_user->admin_level->access) || @in_array("1.13", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Phone #</label>
-                                <div class="col-sm-9 phone_number">
-                                    <input type="hidden" name="dial_code" id="buyer_dial_code" value="+962">
-                                    <input type="text" class="form-control" name="phone" id="buyer-phone" placeholder="XXXXXXXXX" />
+                                <div class="col-md-9 phone_number">
+                                    <div class="input-group rounded-4">
+                                        <div class="input-group-text" style="width: 25% !important; height: 40px !important;">
+                                            <select name="phone_code" style="border: none; outline: none;">
+                                                @if(count(@$countries) > 0)
+                                                @foreach(@$countries as $key => $value)
+                                                <option value="+{{ $value->phonecode }}">+{{ $value->phonecode }}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                        <div class="input-group-text" style="width: 75% !important; height: 40px !important;">
+                                            <input name="phone" type="text" id="buyer-phone" class="form-control rounded-end-4 border-0" placeholder="XXXXXXXXXX" required />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             @endif
@@ -802,8 +811,6 @@
             $('.selectjs').select2();
         })
     </script>
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
@@ -866,10 +873,6 @@
 
             $(document).on("change", ".auction_location", function () {
                 $("#auction_address").val($(this).find("option:selected").text());
-            });
-
-            $(document).on("click", ".phone_number .iti__country", function () {
-                $("#buyer_dial_code").val($(".phone_number .iti__selected-dial-code").first().text().trim());
             });
 
             $(document).on("submit", ".form", function (event) {
@@ -1015,21 +1018,6 @@
             const numericValue = value.replace(/\D/g, "");
             event.target.value = numericValue;
         }
-    </script>
-
-    <script>
-        var input = document.querySelector("#phone");
-        var input2 = document.querySelector("#buyer-phone");
-        window.intlTelInput(input, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["ru", "jp", "pk", "no"]
-        });
-        window.intlTelInput(input2, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["jo", "iq"]
-        });
     </script>
 
 @endsection

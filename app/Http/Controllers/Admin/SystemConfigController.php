@@ -34,6 +34,7 @@ use App\Models\TransFineType;
 use App\Models\Post;
 use App\Models\Carrier;
 use App\Models\ShippingCompany;
+use App\Models\Country;
 use Auth;
 
 class SystemConfigController extends Controller
@@ -75,6 +76,7 @@ class SystemConfigController extends Controller
         $data['level'] = Level::all();
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
     	return view('admin.system-configuration.users', $data);
     }
 
@@ -91,7 +93,7 @@ class SystemConfigController extends Controller
 	                    $data['sheet_password'] = \Hash::make($data['sheet_password']);
 	                }
 	                if (!empty($data['phone'])) {
-	                    $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                    $data['phone'] = $data['phone_code']." ".$data['phone'];
 	                }
 	                User::create($data);
 
@@ -122,11 +124,11 @@ class SystemConfigController extends Controller
 	                            $data['sheet_password'] = \Hash::make($data['sheet_password']);
 	                        }
 	                        if (!empty($data['phone'])) {
-	                            $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                            $data['phone'] = $data['phone_code']." ".$data['phone'];
 	                        }
 	                        unset($data['_token']);
 	                        unset($data['cpassword']);
-	                        unset($data['dial_code']);
+	                        unset($data['phone_code']);
 	                        User::where('id', $id)->update($data);
 
 	                        return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
@@ -138,12 +140,12 @@ class SystemConfigController extends Controller
 	                        $data['sheet_password'] = \Hash::make($data['sheet_password']);
 	                    }
 	                    if (!empty($data['phone'])) {
-	                        $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                        $data['phone'] = $data['phone_code']." ".$data['phone'];
 	                    }
 	                    $data['password'] = User::where('id', $id)->first()->password;
 	                    unset($data['_token']);
 	                    unset($data['cpassword']);
-	                    unset($data['dial_code']);
+	                    unset($data['phone_code']);
 	                    User::where('id', $id)->update($data);
 
 	                    return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
@@ -185,6 +187,7 @@ class SystemConfigController extends Controller
         $data['level'] = AdminLevel::all();
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.admins', $data);
     }
 
@@ -198,7 +201,7 @@ class SystemConfigController extends Controller
 	            if ($data['password'] == $data['cpassword']) {
 	                $data['password'] = \Hash::make($data['password']);
 	                if (!empty($data['phone'])) {
-	                    $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                    $data['phone'] = $data['phone_code']." ".$data['phone'];
 	                }
 	                $data['role'] = "1";
 	                User::create($data);
@@ -227,11 +230,11 @@ class SystemConfigController extends Controller
 	                    if ($data['password'] == $data['cpassword']) {
 	                        $data['password'] = \Hash::make($data['password']);
 	                        if (!empty($data['phone'])) {
-	                            $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                            $data['phone'] = $data['phone_code']." ".$data['phone'];
 	                        }
 	                        unset($data['_token']);
 	                        unset($data['cpassword']);
-	                        unset($data['dial_code']);
+	                        unset($data['phone_code']);
 	                        User::where('id', $id)->update($data);
 
 	                        return json_encode(["success"=>true, "msg"=>"Admin updated successfully!", "action"=>"reload"]);
@@ -240,12 +243,12 @@ class SystemConfigController extends Controller
 	                    }
 	                } else {
 	                    if (!empty($data['phone'])) {
-	                        $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                        $data['phone'] = $data['phone_code']." ".$data['phone'];
 	                    }
 	                    $data['password'] = User::where('id', $id)->first()->password;
 	                    unset($data['_token']);
 	                    unset($data['cpassword']);
-	                    unset($data['dial_code']);
+	                    unset($data['phone_code']);
 	                    User::where('id', $id)->update($data);
 
 	                    return json_encode(["success"=>true, "msg"=>"User updated successfully!", "action"=>"reload"]);
@@ -288,6 +291,7 @@ class SystemConfigController extends Controller
         $data['destination'] = DestinationPort::all();
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.operators', $data);
     }
 
@@ -301,7 +305,7 @@ class SystemConfigController extends Controller
 	            if ($data['password'] == $data['cpassword']) {
 	                $data['password'] = \Hash::make($data['password']);
 	                if (!empty($data['phone'])) {
-	                    $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                    $data['phone'] = $data['phone_code']." ".$data['phone'];
 	                }
 	                $data['role'] = "4";
 	                if (!empty($data['access'])) {
@@ -333,11 +337,11 @@ class SystemConfigController extends Controller
 	                    if ($data['password'] == $data['cpassword']) {
 	                        $data['password'] = \Hash::make($data['password']);
 	                        if (!empty($data['phone'])) {
-	                            $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                            $data['phone'] = $data['phone_code']." ".$data['phone'];
 	                        }
 	                        unset($data['_token']);
 	                        unset($data['cpassword']);
-	                        unset($data['dial_code']);
+	                        unset($data['phone_code']);
 	                        if (!empty($data['access'])) {
 	                            $data['access'] = json_encode($data['access']);   
 	                        }
@@ -349,12 +353,12 @@ class SystemConfigController extends Controller
 	                    }
 	                } else {
 	                    if (!empty($data['phone'])) {
-	                        $data['phone'] = $data['dial_code']." ".$data['phone'];
+	                        $data['phone'] = $data['phone_code']." ".$data['phone'];
 	                    }
 	                    $data['password'] = User::where('id', $id)->first()->password;
 	                    unset($data['_token']);
 	                    unset($data['cpassword']);
-	                    unset($data['dial_code']);
+	                    unset($data['phone_code']);
 	                    User::where('id', $id)->update($data);
 
 	                    return json_encode(["success"=>true, "msg"=>"Operators updated successfully!", "action"=>"reload"]);
@@ -395,6 +399,7 @@ class SystemConfigController extends Controller
         $data['role'] = $role;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.admin-role', $data);
     }
 
@@ -455,6 +460,7 @@ class SystemConfigController extends Controller
         $data['group'] = $group;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.group-list', $data);
     }
 
@@ -515,6 +521,7 @@ class SystemConfigController extends Controller
         $data['history'] = $history;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.login-history', $data);
     }
 
@@ -536,6 +543,7 @@ class SystemConfigController extends Controller
         $data['status'] = $status;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
     	return view('admin.system-configuration.container-status', $data);
     }
 
@@ -603,6 +611,7 @@ class SystemConfigController extends Controller
         $data['shipper'] = $shipper;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.shipper', $data);
     }
 
@@ -652,6 +661,7 @@ class SystemConfigController extends Controller
         $data['shipper'] = Shipper::all();
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.consignee', $data);
     }
 
@@ -700,6 +710,7 @@ class SystemConfigController extends Controller
         $data['terminal'] = $terminal;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.terminal', $data);
     }
 
@@ -751,6 +762,7 @@ class SystemConfigController extends Controller
         $data['pre_carriage'] = $pre_carriage;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.pre-carriage', $data);
     }
 
@@ -802,6 +814,7 @@ class SystemConfigController extends Controller
         $data['loading_port'] = $loading_port;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.loading-port', $data);
     }
 
@@ -853,6 +866,7 @@ class SystemConfigController extends Controller
         $data['discharge_port'] = $discharge_port;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.discharge-port', $data);
     }
 
@@ -902,6 +916,7 @@ class SystemConfigController extends Controller
         $data['discharge_port'] = DischargePort::all();
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.destination-port', $data);
     }
 
@@ -950,6 +965,7 @@ class SystemConfigController extends Controller
         $data['notify_party'] = $notify_party;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.notify-party', $data);
     }
 
@@ -1001,6 +1017,7 @@ class SystemConfigController extends Controller
         $data['measurement'] = $measurement;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.measurement', $data);
     }
 
@@ -1052,6 +1069,7 @@ class SystemConfigController extends Controller
         $data['shipping_line'] = $shipping_line;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.shipping-line', $data);
     }
 
@@ -1100,6 +1118,7 @@ class SystemConfigController extends Controller
         $data['status'] = $status;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.auto-status', $data);
     }
 
@@ -1167,6 +1186,7 @@ class SystemConfigController extends Controller
         $data['auction'] = $auction;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.auction', $data);
     }
 
@@ -1219,6 +1239,7 @@ class SystemConfigController extends Controller
         $data['auction'] = Auction::all();
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.auction-location', $data);
     }
 
@@ -1266,6 +1287,7 @@ class SystemConfigController extends Controller
         $posts = $posts->limit(10)->get();
         $data['posts'] = $posts;
         $data['user_levels'] = Level::all();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.posts', $data);
     }
 
@@ -1287,6 +1309,7 @@ class SystemConfigController extends Controller
         $data['templates'] = $templates;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.mail-templates', $data);
     }
 
@@ -1324,6 +1347,7 @@ class SystemConfigController extends Controller
         $data['type'] = "system-configuration";
         $data['user_levels'] = Level::all();
         $data['templates'] = MailTemplate::all();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.send-to-all-users', $data);
     }
 
@@ -1364,6 +1388,7 @@ class SystemConfigController extends Controller
         $data['templates'] = $templates;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.reminder-templates', $data);
     }
 
@@ -1416,6 +1441,7 @@ class SystemConfigController extends Controller
         $data['brands'] = $brands;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.vehicles-brand', $data);
     }
 
@@ -1488,6 +1514,7 @@ class SystemConfigController extends Controller
         $data['brands'] = VehicleBrand::all();
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.vehicles-modal', $data);
     }
 
@@ -1547,6 +1574,7 @@ class SystemConfigController extends Controller
         $data['levels'] = $levels;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.user-levels', $data);
     }
 
@@ -1595,6 +1623,7 @@ class SystemConfigController extends Controller
         $data['fine_type'] = $fine_type;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.fine-type', $data);
     }
 
@@ -1646,6 +1675,7 @@ class SystemConfigController extends Controller
         $data['trans_fine_type'] = $trans_fine_type;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.trans-fine-type', $data);
     }
 
@@ -1697,6 +1727,7 @@ class SystemConfigController extends Controller
         $data['levels'] = $levels;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.admin-levels', $data);
     }
 
@@ -1751,6 +1782,7 @@ class SystemConfigController extends Controller
         $data['levels'] = $levels;
         $data['user_levels'] = Level::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.operator-levels', $data);
     }
 
@@ -1798,6 +1830,7 @@ class SystemConfigController extends Controller
         $carriers = $carriers->limit(10)->get();
         $data['carriers'] = $carriers;
         $data['user_levels'] = Level::all();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.carriers', $data);
     }
 
@@ -1845,6 +1878,7 @@ class SystemConfigController extends Controller
         $shipping_company = $shipping_company->limit(10)->get();
         $data['shipping_company'] = $shipping_company;
         $data['user_levels'] = Level::all();
+        $data['countries'] = Country::all();
         return view('admin.system-configuration.shipping-company', $data);
     }
 

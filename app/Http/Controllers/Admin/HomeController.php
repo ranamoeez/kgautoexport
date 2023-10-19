@@ -40,6 +40,7 @@ use App\Models\EmailHistory;
 use App\Models\NotesHistory;
 use App\Models\Carrier;
 use App\Models\ShippingCompany;
+use App\Models\Country;
 use Auth;
 use Storage;
 use PDF;
@@ -156,6 +157,7 @@ class HomeController extends Controller
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.vehicles', $data);
     }
 
@@ -181,9 +183,9 @@ class HomeController extends Controller
                 $data['purchase_date'] = date('Y-m-d');
             }
             if (!empty($data['phone'])) {
-                $data['phone'] = $data['dial_code'].' '.$data['phone'];
+                $data['phone'] = $data['phone_code'].' '.$data['phone'];
             }
-            unset($data['dial_code']);
+            unset($data['phone_code']);
             $vehicle = Vehicle::create($data);
             $assign = new AssignVehicle;
             $assign->user_id = $data['buyer_id'];
@@ -285,6 +287,7 @@ class HomeController extends Controller
         $data['all_carrier'] = Carrier::all();
         $data['all_shipping_company'] = ShippingCompany::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.add-vehicle', $data);
     }
 
@@ -381,7 +384,7 @@ class HomeController extends Controller
             }
             $this->cleanData($data);
             if (!empty($data['phone'])) {
-                $data['phone'] = $data['dial_code'].' '.$data['phone'];
+                $data['phone'] = $data['phone_code'].' '.$data['phone'];
             }
             unset($data['documents']);
             unset($data['images']);
@@ -391,7 +394,7 @@ class HomeController extends Controller
             unset($data['auction_fine']);
             unset($data['expense_type']);
             unset($data['expense_fine']);
-            unset($data['dial_code']);
+            unset($data['phone_code']);
             if ($data['status_id'] == "6") {
                 $data["delivered_on_date"] = date("Y-m-d");
             }
@@ -451,6 +454,7 @@ class HomeController extends Controller
         $data['notes_history'] = NotesHistory::where('vehicle_id', $vid)->get();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         $data['email_history'] = EmailHistory::where("vehicle_id", $vid)->where("user_id", \Auth::user()->id)->get();
+        $data['countries'] = Country::all();
         return view('admin.edit-vehicle', $data);
     }
 
@@ -546,6 +550,7 @@ class HomeController extends Controller
         $data['all_port'] = LoadingPort::all();
         $data['all_status'] = ContStatus::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.containers', $data);
     }
 
@@ -621,6 +626,7 @@ class HomeController extends Controller
         $data['all_measurement'] = Measurement::all();
         $data['all_discharge_port'] = DischargePort::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.add-container', $data);
     }
 
@@ -731,6 +737,7 @@ class HomeController extends Controller
         $data['all_discharge_port'] = DischargePort::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         $data['email_history'] = EmailHistory::where("container_id", $id)->where("user_id", \Auth::user()->id)->get();
+        $data['countries'] = Country::all();
         return view('admin.edit-container', $data);
     }
 
@@ -968,6 +975,7 @@ class HomeController extends Controller
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         $data['latest_count'] = MoneyTransfer::where('latest', '1')->count();
+        $data['countries'] = Country::all();
         return view('admin.financial-system', $data);
     }
 
@@ -1150,6 +1158,7 @@ class HomeController extends Controller
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
         return view('admin.pickup-history', $data);
     }
 
@@ -1295,6 +1304,7 @@ class HomeController extends Controller
 
         $data["list"] = $list->limit(20)->get();
         $data['user_levels'] = Level::all();
+        $data['countries'] = Country::all();
         return view("admin.money-transfer", $data);
     }
 

@@ -23,6 +23,7 @@ use App\Models\EmailHistory;
 use App\Models\NotesHistory;
 use App\Models\Status;
 use App\Models\Terminal;
+use App\Models\Country;
 use Auth;
 use Storage;
 use QuickBooksOnline\API\DataService\DataService;
@@ -93,6 +94,7 @@ class HomeController extends Controller
         })->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->get();
         $data['user_levels'] = Level::all();
         $data['sub_buyers'] = User::where("main_user_id", \Auth::user()->id)->get();
+        $data['countries'] = Country::all();
         return view('user.index', $data);
     }
 
@@ -130,7 +132,7 @@ class HomeController extends Controller
                     $data['role'] = "3";
                     $data['main_user_id'] = Auth::user()->id;
                     if (!empty($data['phone'])) {
-                        $data['phone'] = $data['dial_code']." ".$data['phone'];
+                        $data['phone'] = $data['phone_code']." ".$data['phone'];
                     }
                     User::create($data);
 
@@ -319,6 +321,7 @@ class HomeController extends Controller
         $data['all_status'] = Status::all();
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();
+        $data['countries'] = Country::all();
         return view('user.vehicles', $data);
     }
 
@@ -329,7 +332,7 @@ class HomeController extends Controller
         $data['list'] = AssignVehicle::with('vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.shipping_line', 'container.measurement')->where('id', $id)->first();
         $data['destination_port'] = DestinationPort::all();
         $data['email_history'] = EmailHistory::where("vehicle_id", $data['list']->vehicle_id)->where("user_id", \Auth::user()->id)->get();
-
+        $data['countries'] = Country::all();
         return view('user.vehicle-detail', $data);
     }
 
@@ -534,6 +537,7 @@ class HomeController extends Controller
         $data['super_user'] = $super_user;
         $data['all_port'] = LoadingPort::all();
         $data['all_status'] = ContStatus::all();
+        $data['countries'] = Country::all();
         return view('user.containers', $data);
     }
 
@@ -561,6 +565,7 @@ class HomeController extends Controller
 
         $data['container'] = $container;
         $data['email_history'] = EmailHistory::where("container_id", $id)->where("user_id", \Auth::user()->id)->get();
+        $data['countries'] = Country::all();
         return view('user.container-detail', $data);
     }
 
@@ -702,6 +707,7 @@ class HomeController extends Controller
         $data['balance'] = User::where("id", Auth::user()->id)->first()->balance;
         $data['user'] = User::with("user_level")->where("id", Auth::user()->id)->first();
         $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where('user_id', Auth::user()->id)->orderBy("id", "DESC")->get();
+        $data['countries'] = Country::all();
         return view('user.financial', $data);
     }
 

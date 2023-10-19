@@ -403,7 +403,6 @@
             $('.selectjs').select2();
         })
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         $(document).ready(() => {
             $('.details-button').click((e) => {
@@ -440,14 +439,6 @@
                     }
                 }
             });
-        });
-    </script>
-    <script>
-        var input = document.querySelector("#phone");
-        window.intlTelInput(input, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["ru", "jp", "pk", "no"]
         });
     </script>
 

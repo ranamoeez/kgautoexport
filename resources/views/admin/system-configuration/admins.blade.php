@@ -111,7 +111,7 @@
                                                             <label for="" class="col-md-4">Country</label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
-                                                                    <div class="input-group-text  rounded-start-4">
+                                                                    <div class="input-group-text rounded-start-4">
                                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                             viewBox="0 0 24 24" stroke-width="1.5"
                                                                             stroke="#194AF9" class="w-6 h-6">
@@ -119,9 +119,15 @@
                                                                                 d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
                                                                         </svg>
                                                                     </div>
-                                                                    <select class="form-select countries" id="country" name="country" aria-label="Default select example">
-
-                                                                    </select>
+                                                                    <div style="width: 82% !important;">
+                                                                        <select class="select3js form-select country" id="country" name="country" aria-label="Default select example" required>
+                                                                            @if(count(@$countries) > 0)
+                                                                            @foreach(@$countries as $key => $value)
+                                                                            <option value="{{ $value->nicename }}" data-code="{{ $value->phonecode }}">{{ $value->nicename }}</option>
+                                                                            @endforeach
+                                                                            @endif
+                                                                        </select>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -162,8 +168,12 @@
                                                             </label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
-                                                                    <input type="hidden" name="dial_code" id="dial_code" value="">
-                                                                    <input name="phone" type="text" id="user-phone" class="py-2 form-control rounded-end-4 border-0" placeholder="Enter Number" required />
+                                                                    <div class="input-group-text rounded-start-4" style="width: 20% !important; height: 40px !important;">
+                                                                        <input type="text" name="phone_code" class="p_code" value="+93" readonly style=" border: none; outline: none;" />
+                                                                    </div>
+                                                                    <div class="input-group-text rounded-end-4" style="width: 80% !important; height: 40px !important;">
+                                                                        <input name="phone" type="text" id="user-phone" class="form-control rounded-end-4 border-0" placeholder="Enter Number" required />
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -368,247 +378,6 @@
 @section('script')
 
     <script>
-        function countriesDropdown(container) {
-            var countries = {
-                IRQ: "Iraq",
-                JOR: "Jordan",
-                UAE: "United Arab Emirates",
-                AFG: "Afghanistan",
-                ALB: "Albania",
-                ALG: "Algeria",
-                AND: "Andorra",
-                ANG: "Angola",
-                ANT: "Antigua and Barbuda",
-                ARG: "Argentina",
-                ARM: "Armenia",
-                ARU: "Aruba",
-                ASA: "American Samoa",
-                AUS: "Australia",
-                AUT: "Austria",
-                AZE: "Azerbaijan",
-                BAH: "Bahamas",
-                BAN: "Bangladesh",
-                BAR: "Barbados",
-                BDI: "Burundi",
-                BEL: "Belgium",
-                BEN: "Benin",
-                BER: "Bermuda",
-                BHU: "Bhutan",
-                BIH: "Bosnia and Herzegovina",
-                BIZ: "Belize",
-                BLR: "Belarus",
-                BOL: "Bolivia",
-                BOT: "Botswana",
-                BRA: "Brazil",
-                BRN: "Bahrain",
-                BRU: "Brunei",
-                BUL: "Bulgaria",
-                BUR: "Burkina Faso",
-                CAF: "Central African Republic",
-                CAM: "Cambodia",
-                CAN: "Canada",
-                CAY: "Cayman Islands",
-                CGO: "Congo",
-                CHA: "Chad",
-                CHI: "Chile",
-                CHN: "China",
-                CIV: "Cote d'Ivoire",
-                CMR: "Cameroon",
-                COD: "DR Congo",
-                COK: "Cook Islands",
-                COL: "Colombia",
-                COM: "Comoros",
-                CPV: "Cape Verde",
-                CRC: "Costa Rica",
-                CRO: "Croatia",
-                CUB: "Cuba",
-                CYP: "Cyprus",
-                CZE: "Czech Republic",
-                DEN: "Denmark",
-                DJI: "Djibouti",
-                DMA: "Dominica",
-                DOM: "Dominican Republic",
-                ECU: "Ecuador",
-                EGY: "Egypt",
-                ERI: "Eritrea",
-                ESA: "El Salvador",
-                ESP: "Spain",
-                EST: "Estonia",
-                ETH: "Ethiopia",
-                FIJ: "Fiji",
-                FIN: "Finland",
-                FRA: "France",
-                FSM: "Micronesia",
-                GAB: "Gabon",
-                GAM: "Gambia",
-                GBR: "Great Britain",
-                GBS: "Guinea-Bissau",
-                GEO: "Georgia",
-                GEQ: "Equatorial Guinea",
-                GER: "Germany",
-                GHA: "Ghana",
-                GRE: "Greece",
-                GRN: "Grenada",
-                GUA: "Guatemala",
-                GUI: "Guinea",
-                GUM: "Guam",
-                GUY: "Guyana",
-                HAI: "Haiti",
-                HKG: "Hong Kong",
-                HON: "Honduras",
-                HUN: "Hungary",
-                INA: "Indonesia",
-                IND: "India",
-                IRI: "Iran",
-                IRL: "Ireland",
-                ISL: "Iceland",
-                ISR: "Israel",
-                ISV: "Virgin Islands",
-                ITA: "Italy",
-                IVB: "British Virgin Islands",
-                JAM: "Jamaica",
-                JPN: "Japan",
-                KAZ: "Kazakhstan",
-                KEN: "Kenya",
-                KGZ: "Kyrgyzstan",
-                KIR: "Kiribati",
-                KOR: "South Korea",
-                KOS: "Kosovo",
-                KSA: "Saudi Arabia",
-                KUW: "Kuwait",
-                LAO: "Laos",
-                LAT: "Latvia",
-                LBA: "Libya",
-                LBR: "Liberia",
-                LCA: "Saint Lucia",
-                LES: "Lesotho",
-                LIB: "Lebanon",
-                LIE: "Liechtenstein",
-                LTU: "Lithuania",
-                LUX: "Luxembourg",
-                MAD: "Madagascar",
-                MAR: "Morocco",
-                MAS: "Malaysia",
-                MAW: "Malawi",
-                MDA: "Moldova",
-                MDV: "Maldives",
-                MEX: "Mexico",
-                MGL: "Mongolia",
-                MHL: "Marshall Islands",
-                MKD: "Macedonia",
-                MLI: "Mali",
-                MLT: "Malta",
-                MNE: "Montenegro",
-                MON: "Monaco",
-                MOZ: "Mozambique",
-                MRI: "Mauritius",
-                MTN: "Mauritania",
-                MYA: "Myanmar",
-                NAM: "Namibia",
-                NCA: "Nicaragua",
-                NED: "Netherlands",
-                NEP: "Nepal",
-                NGR: "Nigeria",
-                NIG: "Niger",
-                NOR: "Norway",
-                NRU: "Nauru",
-                NZL: "New Zealand",
-                OMA: "Oman",
-                PAK: "Pakistan",
-                PAN: "Panama",
-                PAR: "Paraguay",
-                PER: "Peru",
-                PHI: "Philippines",
-                PLE: "Palestine",
-                PLW: "Palau",
-                PNG: "Papua New Guinea",
-                POL: "Poland",
-                POR: "Portugal",
-                PRK: "North Korea",
-                PUR: "Puerto Rico",
-                QAT: "Qatar",
-                ROU: "Romania",
-                RSA: "South Africa",
-                RUS: "Russia",
-                RWA: "Rwanda",
-                SAM: "Samoa",
-                SEN: "Senegal",
-                SEY: "Seychelles",
-                SIN: "Singapore",
-                SKN: "Saint Kitts and Nevis",
-                SLE: "Sierra Leone",
-                SLO: "Slovenia",
-                SMR: "San Marino",
-                SOL: "Solomon Islands",
-                SOM: "Somalia",
-                SRB: "Serbia",
-                SRI: "Sri Lanka",
-                SSD: "South Sudan",
-                STP: "Sao Tome and Principe",
-                SUD: "Sudan",
-                SUI: "Switzerland",
-                SUR: "Suriname",
-                SVK: "Slovakia",
-                SWE: "Sweden",
-                SWZ: "Swaziland",
-                SYR: "Syria",
-                TAN: "Tanzania",
-                TGA: "Tonga",
-                THA: "Thailand",
-                TJK: "Tajikistan",
-                TKM: "Turkmenistan",
-                TLS: "Timor-Leste",
-                TOG: "Togo",
-                TPE: "Chinese Taipei",
-                TTO: "Trinidad and Tobago",
-                TUN: "Tunisia",
-                TUR: "Turkey",
-                TUV: "Tuvalu",
-                UGA: "Uganda",
-                UKR: "Ukraine",
-                URU: "Uruguay",
-                USA: "United States",
-                UZB: "Uzbekistan",
-                VAN: "Vanuatu",
-                VEN: "Venezuela",
-                VIE: "Vietnam",
-                VIN: "Saint Vincent and the Grenadines",
-                YEM: "Yemen",
-                ZAM: "Zambia",
-                ZAN: "Zanzibar",
-                ZIM: "Zimbabwe"
-            }
-            var out = "<option rel='' value=''>Country</option>";
-            for (var key in countries) {
-                out += "<option rel='" + key + "' value="+countries[key]+">" + countries[key] + "</option>";
-            }
-
-            document.getElementById(container).innerHTML = out;
-        }
-        countriesDropdown("country");
-    </script>
-
-    <script>
-        $(document).ready(() => {
-            $('.selectjs').select2();
-        })
-    </script>
-        <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script>
-        var input = document.querySelector("#phone");
-        window.intlTelInput(input, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["ru", "jp", "pk", "no"]
-        });
-        var input1 = document.querySelector("#user-phone");
-        window.intlTelInput(input1, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["jo", "iq"]
-        });
-
         $(document).ready(function () {
             $(document).on("submit", ".form", function (event) {
                 event.preventDefault();
@@ -636,8 +405,9 @@
                 });
             });
 
-            $(document).on("click", ".iti__country", function () {
-                $("#dial_code").val($(".iti__selected-dial-code").last().text().trim());
+            $(document).on("change", ".country", function () {
+                var selected = $(this).find("option:selected").attr('data-code');
+                $(".p_code").val("+"+selected);
             });
 
             $(document).on("click", ".add", function () {
@@ -652,6 +422,13 @@
                 $(".level option[value='']").attr("selected", true);
                 $("#upass").attr("required", true);
                 $("#ucpass").attr("required", true);
+
+                $('.select3js').select2({
+                    dropdownParent: $('#modal')
+                });
+                $("#modal .select2.select2-container").css("width", "100%");
+                $("#modal .select2-selection").css("height", "40px");
+                $("#modal .select2-selection__arrow").css("display", "none");
 
                 $("#modal").modal("show");
                 $(".form").attr("action", "{{ url('admin/system-configuration/admins/add') }}");
@@ -677,12 +454,18 @@
                             if (res.data.phone !== "" && res.data.phone !== null) {
                                 var phone = res.data.phone.split(" ");
                                 $("#user-phone").val(phone[1]);
-                                $(".iti__selected-dial-code").text(phone[0]);
-                                $("#dial_code").text(phone[0]);
+                                $(".p_code").val(phone[0]);
                             }
                             $(".level option[value="+res.data.admin_level_id+"]").attr("selected", true);
                             $("#upass").attr("required", false);
                             $("#ucpass").attr("required", false);
+
+                            $('.select3js').select2({
+                                dropdownParent: $('#modal')
+                            });
+                            $("#modal .select2.select2-container").css("width", "100%");
+                            $("#modal .select2-selection").css("height", "40px");
+                            $("#modal .select2-selection__arrow").css("display", "none");
 
                             $("#modal").modal("show");
                             $(".form").attr("action", "{{ url('admin/system-configuration/admins/edit') }}/"+id);

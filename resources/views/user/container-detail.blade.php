@@ -246,8 +246,6 @@
 @section('script')
     <script>
         $(document).ready(() => {
-            $('.selectjs').select2();
-
             $(document).on("submit", ".form", function (event) {
                 event.preventDefault();
                 $('.center-body').css('display', 'block');
@@ -308,15 +306,6 @@
                     console.error('Image download failed:', error);
                 });
             });
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var input = document.querySelector("#phone");
-        window.intlTelInput(input, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["ru", "jp", "pk", "no"]
         });
     </script>
 

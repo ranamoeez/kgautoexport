@@ -695,7 +695,6 @@
             });
         })
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Function to update the background color (selected option)
         $(document).ready(function () {
@@ -777,14 +776,6 @@
                     }
                 });
             });
-        });
-    </script>
-    <script>
-        var input = document.querySelector("#phone");
-        window.intlTelInput(input, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["ru", "jp", "pk", "no"]
         });
     </script>
 

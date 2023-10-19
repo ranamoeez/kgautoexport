@@ -723,8 +723,6 @@
             $('.selectjs').select2();
         })
     </script>
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
@@ -1102,15 +1100,6 @@
                 height: 900
             });
 
-        });
-    </script>
-
-    <script>
-        var input = document.querySelector("#phone");
-        window.intlTelInput(input, {
-            separateDialCode: true,
-            excludeCountries: ["in", "il"],
-            preferredCountries: ["ru", "jp", "pk", "no"]
         });
     </script>
 

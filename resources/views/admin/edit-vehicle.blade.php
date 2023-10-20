@@ -442,9 +442,15 @@
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select carrier" name="carrier">
                                         <option value=""></option>
+                                        @php
+                                        $phone_numbers = "";
+                                        @endphp
                                         @if(count(@$all_carrier) > 0)
                                         @foreach(@$all_carrier as $key => $value)
                                             @if($value['id'] == @$list->vehicle->carrier)
+                                            @php
+                                            $phone_numbers = $value['phone_numbers'];
+                                            @endphp
                                             <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
                                             @else
                                             <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
@@ -452,6 +458,9 @@
                                         @endforeach
                                         @endif
                                     </select>
+                                    @if(!empty($phone_numbers))
+                                    Ph # <span class="mt-2">{{ $phone_numbers }}</span>
+                                    @endif
                                 </div>
                             </div>
                             @endif

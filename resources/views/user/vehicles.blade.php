@@ -53,9 +53,9 @@
                             @if(count(@$all_terminal) > 0)
                             @foreach(@$all_terminal as $key => $value)
                                 @if($value->id == @$terminal)
-                                <option value="{{ @$value->id }}" selected>{{ $value->name }}</option>
+                                <option value="{{ @$value->id }}" selected>{{ $value->name.' ('.$value->vehicles.')' }}</option>
                                 @else
-                                <option value="{{ @$value->id }}">{{ @$value->name }}</option>
+                                <option value="{{ @$value->id }}">{{ @$value->name.' ('.$value->vehicles.')' }}</option>
                                 @endif
                             @endforeach
                             @endif

@@ -102,15 +102,35 @@ class HomeController extends Controller
                 }
                 if (!empty($filter['at_terminal'])) {
                     if ($filter['at_terminal'] == "1") {
-                        $oneMonthAgo = new \DateTime('1 month ago');
+                        $oneMonthAgo = new \DateTime('1 day ago');
                         $date = $oneMonthAgo->format('Y-m-d');
-                        $query->where('delivered_on_date', ">", $date)->where("status_id", "6");    
+                        $query->where('delivered_on_date', ">=", $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "2") {
+                        $oneMonthAgo = new \DateTime('2 day ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', $date)->where("status_id", "6");    
                     } else if ($filter['at_terminal'] == "3") {
-                        $oneMonthAgo = new \DateTime('3 month ago');
+                        $oneMonthAgo = new \DateTime('3 day ago');
                         $date = $oneMonthAgo->format('Y-m-d');
-                        $query->where('delivered_on_date', ">", $date)->where("status_id", "6");    
+                        $query->where('delivered_on_date', $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "4") {
+                        $oneMonthAgo = new \DateTime('4 day ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', $date)->where("status_id", "6");    
                     } else if ($filter['at_terminal'] == "5") {
-                        $oneMonthAgo = new \DateTime('3 month ago');
+                        $oneMonthAgo = new \DateTime('5 day ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "1w") {
+                        $oneMonthAgo = new \DateTime('1 week ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', ">=", $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "2w") {
+                        $oneMonthAgo = new \DateTime('2 week ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', ">=", $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "m2w") {
+                        $oneMonthAgo = new \DateTime('2 week ago');
                         $date = $oneMonthAgo->format('Y-m-d');
                         $query->where('delivered_on_date', "<=", $date)->where("status_id", "6");    
                     }
@@ -1229,18 +1249,6 @@ class HomeController extends Controller
         return json_encode(["success"=>true, 'action'=>'reload']);
     }
 
-    public function update_pdf_type(Request $request)
-    {
-        $data = [];
-        if (!empty($request->type)) {
-            $data["type"] = $request->type;
-            ContainerImage::where('id', $request->id)->update($data);
-            return json_encode(["success"=>true, 'action'=>'reload']);
-        } else {
-            return json_encode(["success"=>false, 'msg'=>'Please provide pdf type.']);
-        }
-    }
-
     public function vehicle_pdf_type(Request $request)
     {
         $data = [];
@@ -1293,7 +1301,7 @@ class HomeController extends Controller
         $data['type'] = "financial-system";
         $data['page'] = "1";
 
-        $list = MoneyTransfer::with("user", "vehicle");
+        $list = MoneyTransfer::orderBy('id', 'DESC')->with("user", "vehicle");
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 20;

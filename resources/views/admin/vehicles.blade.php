@@ -83,9 +83,14 @@
                     <label for="at_terminal" class="fw-semibold">Since At Terminal</label>
                     <select id="at_terminal" name="at_terminal" class="selectjs form-select p-2">
                         <option value="all">All</option>
-                        <option value="1" @if(@$at_terminal == "1") selected @endif>Less than 1 month</option>
-                        <option value="3" @if(@$at_terminal == "3") selected @endif>Less than 3 months</option>
-                        <option value="5" @if(@$at_terminal == "5") selected @endif>More than 3 months</option>
+                        <option value="1" @if(@$at_terminal == "1") selected @endif>1 day</option>
+                        <option value="2" @if(@$at_terminal == "2") selected @endif>2 day</option>
+                        <option value="3" @if(@$at_terminal == "3") selected @endif>3 day</option>
+                        <option value="4" @if(@$at_terminal == "4") selected @endif>4 day</option>
+                        <option value="5" @if(@$at_terminal == "5") selected @endif>5 day</option>
+                        <option value="1w" @if(@$at_terminal == "1w") selected @endif>1 week</option>
+                        <option value="2w" @if(@$at_terminal == "2w") selected @endif>2 week</option>
+                        <option value="m2w" @if(@$at_terminal == "m2w") selected @endif>More than 2 week</option>
                     </select>
                 </div>
 

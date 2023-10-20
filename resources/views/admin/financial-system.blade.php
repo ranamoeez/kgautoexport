@@ -849,6 +849,7 @@
 
             $(document).on("submit", ".pay-form", function (event) {
                 event.preventDefault();
+                var button = $(this).find("button");
 
                 $.ajax({
                     type: $(this).attr("method"),
@@ -864,9 +865,7 @@
                         console.log(res);
                         if (res.success == true) {
                             toastr["success"](res.msg, "Completed!");
-                            setTimeout(function () {
-                                location.reload();
-                            }, 2000);
+                            $(button).remove();
                         } else {
                             toastr["error"](res.msg, "Failed!");
                         }

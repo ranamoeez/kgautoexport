@@ -41,7 +41,7 @@
                             @foreach($container->container_documents as $key => $value)
                             @if($value->title !== "images")
                             <div class="col-4">
-                                <div class="card mt-3 container-header-detail-card" style="max-height:350px;">
+                                <div class="card mt-3 container-header-detail-card" style="max-height:250px;">
                                     <div class="card-header d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
                                             <i class="fa-file-pdf fa-solid fs-4"></i>
@@ -59,9 +59,6 @@
                                         <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" style="width: 100%; height: 100% !important;">
                                             Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}">test.pdf</a>
                                         </object>
-                                        <div class="w-100 mt-2">
-                                            <input type="text" value="{{ @$value->type }}" class="form-control text-center" readonly>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

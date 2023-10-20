@@ -317,7 +317,15 @@ class HomeController extends Controller
         $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {
             $q->where("status_id", "11");
         })->where('user_id', $user_id)->orderBy("id", "DESC")->get();
-        $data['all_terminal'] = Terminal::with("vehicles")->get();
+        $data['all_terminal'] = Terminal::all();
+        foreach ($data['all_terminal'] as $key => $value) {
+            $terminal_id = $value->id;
+            $total_count = AssignVehicle::with("vehicle")->whereHas("vehicle", function ($q) use($terminal_id) {
+                $q->where("terminal_id", $terminal_id);
+            })->where("user_id", Auth::user()->id)->count();
+            $data['all_terminal'][$key]["vehicles"] = $total_count;
+        }
+
         $data['all_status'] = Status::all();
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();

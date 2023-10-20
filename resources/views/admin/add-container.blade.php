@@ -593,9 +593,10 @@
             $('.select2-selection--single').removeClass('select2-selection--single');
 
             $(document).on("submit", ".form", function (event) {
+                $('.center-body').css('display', 'block');
                 $('#submit-form').attr('disabled', true);
-
                 event.preventDefault();
+
                 $.ajax({
                     type: $(this).attr("method"),
                     contentType: false,
@@ -617,6 +618,7 @@
                             toastr["error"](res.msg, "Failed!");
                         }
                         $('#submit-form').attr('disabled', false);
+                        $('.center-body').css('display', 'none');
                     }
                 });
             });

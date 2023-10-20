@@ -157,9 +157,15 @@
                                                 </div>
                                                 <div style="width: 84% !important;">
                                                     <select class="select3js form-select countries" id="countries" name="country" aria-label="Default select example" required>
+                                                        <option value="Jordan" data-code="962">Jordan</option>
+                                                        <option value="Iraq" data-code="964">Iraq</option>
+                                                        <option value="United Arab Emirates" data-code="971">United Arab Emirates</option>
+                                                        <option value="United States" data-code="1">United States</option>
                                                         @if(count(@$countries) > 0)
                                                         @foreach(@$countries as $key => $value)
+                                                        @if($value->id !== 102 && $value->id !== 108 && $value->id !== 224 && $value->id !== 226)
                                                         <option value="{{ $value->nicename }}" data-code="{{ $value->phonecode }}">{{ $value->nicename }}</option>
+                                                        @endif
                                                         @endforeach
                                                         @endif
                                                     </select>

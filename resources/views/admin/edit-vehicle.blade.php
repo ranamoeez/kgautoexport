@@ -311,9 +311,15 @@
                                     <div class="input-group rounded-4">
                                         <div class="input-group-text" style="width: 25% !important; height: 40px !important;">
                                             <select name="phone_code" style="border: none; outline: none;">
+                                                <option value="+962">+962</option>
+                                                <option value="+964">+964</option>
+                                                <option value="+971">+971</option>
+                                                <option value="+1">+1</option>
                                                 @if(count(@$countries) > 0)
                                                 @foreach(@$countries as $key => $value)
+                                                @if($value->id !== 102 && $value->id !== 108 && $value->id !== 224 && $value->id !== 226)
                                                 <option value="+{{ $value->phonecode }}" @if($dial_code == $value->phonecode) selected @endif>+{{ $value->phonecode }}</option>
+                                                @endif
                                                 @endforeach
                                                 @endif
                                             </select>

@@ -384,6 +384,7 @@
                                 </div>
                             </div>
                             @endif
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.43", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Shipping Company</label>
                                 <div class="col-sm-9">
@@ -397,6 +398,7 @@
                                     </select>
                                 </div>
                             </div>
+                            @endif
                             {{-- @if(empty($auth_user->admin_level->access) || @in_array("1.23", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup address</label>
@@ -575,6 +577,7 @@
                                 </div>
                             </div>
                             @endif
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.44", json_decode($auth_user->admin_level->access)))
                             <div class="row my-3">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">US Towing price</label>
                                 <div class="col-sm-9">
@@ -582,6 +585,8 @@
                                         inputmode="numeric" />
                                 </div>
                             </div>
+                            @endif
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.45", json_decode($auth_user->admin_level->access)))
                             <div class="row my-3">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">US Trans fines</label>
                                 <div class="col-sm-9">
@@ -589,6 +594,7 @@
                                         inputmode="numeric" />
                                 </div>
                             </div>
+                            @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.42", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Ocean Freight</label>

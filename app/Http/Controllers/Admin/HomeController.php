@@ -774,9 +774,9 @@ class HomeController extends Controller
         $data = $request->all();
 
         if (!empty($data['vehicle_id'])) {
-            $vehicle = Vehicle::where('id', $data['vehicle_id'])->first();
+            $vehicle = Vehicle::with('vehicle_documents')->where('id', $data['vehicle_id'])->first();
 
-            \Mail::to($data['sent_to'])->send(new \App\Mail\SendVehicle($vehicle));
+            \Mail::to($data['sent_to'])->send(new \App\Mail\SendVehicle($vehicle, url("/").$vehicle->vehicle_documents[0]->filename));
         }
 
         if (!empty($data['container_id'])) {
@@ -1557,7 +1557,7 @@ class HomeController extends Controller
 
     public function send_to_buyer($id)
     {
-        $vehicle = Vehicle::with('buyer')->where('id', $id)->first();
+        $vehicle = Vehicle::with('vehicle_images', 'vehicle_documents', 'buyer')->where('id', $id)->first();
 
         if (!empty(@$vehicle->buyer_id)) {
             \Mail::to(@$vehicle->buyer->email)->send(new \App\Mail\SendVehicle($vehicle));
@@ -1569,7 +1569,7 @@ class HomeController extends Controller
 
     public function send_to_cont_buyer($id)
     {
-        $vehicle = ContainerVehicle::with('user', 'vehicle', 'vehicle.buyer')->where('container_id', $id)->get();
+        $vehicle = ContainerVehicle::with('user', 'vehicle', 'vehicle.buyer', 'vehicle.vehicle_images', 'vehicle.vehicle_documents')->where('container_id', $id)->get();
 
         if (count($vehicle) > 0) {
             foreach ($vehicle as $key => $value) {

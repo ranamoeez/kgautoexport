@@ -16,6 +16,7 @@ use App\Http\Controllers\ApiController;
 */
 
 Route::post('login', [ApiController::class, 'login']);
+Route::post('financial-login', [ApiController::class, 'financial_login']);
 Route::get('vehicles', [ApiController::class, 'vehicles']);
 Route::get('containers', [ApiController::class, 'containers']);
 Route::get('sub-users', [ApiController::class, 'sub_users']);

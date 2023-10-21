@@ -205,6 +205,14 @@ class HomeController extends Controller
             if (!empty($data['phone'])) {
                 $data['phone'] = $data['phone_code'].' '.$data['phone'];
             }
+            if (!empty($data['buyer_id'])) {
+                $user_levels = User::with("user_level")->where("id", $data['buyer_id'])->first();
+                $data['company_fee'] = $user_levels->user_level->company_fee;
+            }
+            if (!empty($data['destination_port_id'])) {
+                $destination = DestinationPort::where("id", $data['destination_port_id'])->first();
+                $data['unloading_fee'] = $destination->unloading_fee;
+            }
             unset($data['phone_code']);
             $vehicle = Vehicle::create($data);
             $assign = new AssignVehicle;
@@ -418,6 +426,13 @@ class HomeController extends Controller
             if ($data['status_id'] == "6") {
                 $data["delivered_on_date"] = date("Y-m-d");
             }
+            $sel_vehicle = Vehicle::where('id', $id)->first();
+            if (!empty($data['destination_port_id']) && (empty($sel_vehicle->destination_port_id) || $sel_vehicle->destination_port_id !== $data['destination_port_id'])) {
+                $destination = DestinationPort::where("id", $data['destination_port_id'])->first();
+                $data['unloading_fee'] = $destination->unloading_fee;
+            } else if ($data['destination_port_id'] == "0") {
+                $data['unloading_fee'] = 0;
+            }
             Vehicle::where('id', $id)->update($data);
 
             $total_paid = TransactionsHistory::where("vehicle_id", $id)->where("user_id", $vehicle->user_id)->sum("amount");
@@ -427,14 +442,8 @@ class HomeController extends Controller
             $occean_freight = Vehicle::where("id", $id)->first()->occean_freight;
             $fines = Fine::where("vehicle_id", $id)->sum('amount');
             $get_vehicle = Vehicle::with("buyer.user_level", "destination_port")->where("id", $id)->first();
-            $company_fee = 0;
-            $unloading_fee = 0;
-            if (!empty($get_vehicle->buyer->user_level->company_fee)) {
-                $company_fee = $get_vehicle->buyer->user_level->company_fee;
-            }
-            if (!empty($get_vehicle->destination_port->unloading_fee)) {
-                $unloading_fee = $get_vehicle->destination_port->unloading_fee;
-            }
+            $company_fee = Vehicle::where("id", $id)->first()->company_fee;
+            $unloading_fee = Vehicle::where("id", $id)->first()->unloading_fee;
 
             $total_unpaid = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
 
@@ -880,15 +889,8 @@ class HomeController extends Controller
             $towing_price = Vehicle::where("id", $value->vehicle_id)->first()->towing_price;
             $occean_freight = Vehicle::where("id", $value->vehicle_id)->first()->occean_freight;
             $fines = Fine::where("vehicle_id", $value->vehicle_id)->sum('amount');
-            $get_vehicle = Vehicle::with("buyer.user_level", "destination_port")->where("id", $value->vehicle_id)->first();
-            $company_fee = 0;
-            $unloading_fee = 0;
-            if (!empty($get_vehicle->buyer->user_level->company_fee)) {
-                $company_fee = $get_vehicle->buyer->user_level->company_fee;
-            }
-            if (!empty($get_vehicle->destination_port->unloading_fee)) {
-                $unloading_fee = $get_vehicle->destination_port->unloading_fee;
-            }
+            $company_fee = Vehicle::where("id", $value->vehicle_id)->first()->company_fee;
+            $unloading_fee = Vehicle::where("id", $value->vehicle_id)->first()->unloading_fee;
 
             $total_unpaid = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
 
@@ -942,6 +944,36 @@ class HomeController extends Controller
             $occean_freight = $occean_freight->where('created_at', '<=', $request->to);
         }
         $occean_freight = $occean_freight->sum('occean_freight');
+        $company_fee = new Vehicle;
+        if (!empty($filter['vin'])) {
+            $company_fee = $company_fee->where('vin', $filter['vin']);
+        }
+        if (!empty($filter['buyer'])) {
+            $company_fee = $company_fee->where('buyer_id', $filter['buyer']);
+        }
+        if (!empty($request->from) && !empty($request->to)) {
+            $company_fee = $company_fee->where('created_at', '<=', $request->to)->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->from)) {
+            $company_fee = $company_fee->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->to)) {
+            $company_fee = $company_fee->where('created_at', '<=', $request->to);
+        }
+        $company_fee = $company_fee->sum('company_fee');
+        $unloading_fee = new Vehicle;
+        if (!empty($filter['vin'])) {
+            $unloading_fee = $unloading_fee->where('vin', $filter['vin']);
+        }
+        if (!empty($filter['buyer'])) {
+            $unloading_fee = $unloading_fee->where('buyer_id', $filter['buyer']);
+        }
+        if (!empty($request->from) && !empty($request->to)) {
+            $unloading_fee = $unloading_fee->where('created_at', '<=', $request->to)->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->from)) {
+            $unloading_fee = $unloading_fee->where('created_at', '>=', $request->from);
+        } elseif(!empty($request->to)) {
+            $unloading_fee = $unloading_fee->where('created_at', '<=', $request->to);
+        }
+        $unloading_fee = $unloading_fee->sum('unloading_fee');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines");
         if (!empty($filter['vin'])) {
             $all_data = $all_data->where('vin', $filter['vin']);
@@ -969,19 +1001,11 @@ class HomeController extends Controller
         $balance = $balance->sum('balance');
 
         $fines = 0;
-        $company_fee = 0;
-        $unloading_fee = 0;
         foreach ($all_data as $key => $value) {
             if (!empty(@$value->fines)) {
                 foreach (@$value->fines as $k => $val) {
                     $fines += (int)$val->amount;
                 }
-            }
-            if (!empty(@$value->buyer->user_level)) {
-                $company_fee += (int)@$value->buyer->user_level->company_fee;
-            }
-            if (!empty(@$value->destination_port)) {
-                $unloading_fee += (int)@$value->destination_port->unloading_fee;
             }
         }
         $due_payments = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
@@ -1021,15 +1045,8 @@ class HomeController extends Controller
         $towing_price = Vehicle::where("id", $data['vehicle_id'])->first()->towing_price;
         $occean_freight = Vehicle::where("id", $data['vehicle_id'])->first()->occean_freight;
         $fines = Fine::where("vehicle_id", $data['vehicle_id'])->sum('amount');
-        $get_vehicle = Vehicle::with("buyer.user_level", "destination_port")->where("id", $data['vehicle_id'])->first();
-        $company_fee = 0;
-        $unloading_fee = 0;
-        if (!empty($get_vehicle->buyer->user_level->company_fee)) {
-            $company_fee = $get_vehicle->buyer->user_level->company_fee;
-        }
-        if (!empty($get_vehicle->destination_port->unloading_fee)) {
-            $unloading_fee = $get_vehicle->destination_port->unloading_fee;
-        }
+        $company_fee = Vehicle::where("id", $data['vehicle_id'])->first()->company_fee;
+        $unloading_fee = Vehicle::where("id", $data['vehicle_id'])->first()->unloading_fee;
 
         $total_unpaid = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
 
@@ -1406,21 +1423,14 @@ class HomeController extends Controller
 
     public function get_vehicle_detail($id)
     {
-        $vehicle = Vehicle::with('buyer', 'buyer.user_level', 'fines', 'destination_port')->where("id", $id)->first();
         $auction_price = Vehicle::where("id", $id)->sum('auction_price');
         $towing_price = Vehicle::where("id", $id)->sum('towing_price');
         $occean_freight = Vehicle::where("id", $id)->sum('occean_freight');
         $auction_fines = Fine::where('vehicle_id', $id)->where('type', 'auction')->sum('amount');
         $trans_fines = Fine::where('vehicle_id', $id)->where('type', 'transaction')->sum('amount');
         $draft_expenses = Fine::where('vehicle_id', $id)->where('type', 'draft_expense')->sum('amount');
-        $company_fee = @$vehicle->buyer->user_level->company_fee;
-        if (empty($company_fee)) {
-            $company_fee = '0';
-        }
-        $unloading_fee = @$vehicle->destination_port->unloading_fee;
-        if (empty($unloading_fee)) {
-            $unloading_fee = '0';
-        }
+        $company_fee = Vehicle::where("id", $id)->sum('company_fee');
+        $unloading_fee = Vehicle::where("id", $id)->sum('unloading_fee');
 
         $data['paid_ap'] = TransactionsHistory::where("vehicle_id", $id)->where("type", "auction_price")->sum("amount");
         $data['paid_tp'] = TransactionsHistory::where("vehicle_id", $id)->where("type", "towing_price")->sum("amount");
@@ -1483,6 +1493,8 @@ class HomeController extends Controller
         $auction_price = Vehicle::where('buyer_id', $id)->sum('auction_price');
         $towing_price = Vehicle::where('buyer_id', $id)->sum('towing_price');
         $occean_freight = Vehicle::where('buyer_id', $id)->sum('occean_freight');
+        $company_fee = Vehicle::where('buyer_id', $id)->sum('company_fee');
+        $unloading_fee = Vehicle::where('buyer_id', $id)->sum('unloading_fee');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $id)->get();
         $balance = User::where('id', $id)->sum('balance');
         if ($id == "0") {
@@ -1490,24 +1502,18 @@ class HomeController extends Controller
             $auction_price = Vehicle::sum('auction_price');
             $towing_price = Vehicle::sum('towing_price');
             $occean_freight = Vehicle::sum('occean_freight');
+            $company_fee = Vehicle::sum('company_fee');
+            $unloading_fee = Vehicle::sum('unloading_fee');
             $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->get();
             $balance = User::all()->sum('balance');
             $data['data'] = Vehicle::all();
         }
         $fines = 0;
-        $company_fee = 0;
-        $unloading_fee = 0;
         foreach ($all_data as $key => $value) {
             if (!empty(@$value->fines)) {
                 foreach (@$value->fines as $k => $val) {
                     $fines += (int)$val->amount;
                 }
-            }
-            if (!empty(@$value->buyer->user_level)) {
-                $company_fee += (int)@$value->buyer->user_level->company_fee;
-            }
-            if (!empty(@$value->destination_port)) {
-                $unloading_fee += (int)@$value->destination_port->unloading_fee;
             }
         }
         $due_payments = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
@@ -1526,6 +1532,8 @@ class HomeController extends Controller
         $auction_price = Vehicle::where('id', $id)->sum('auction_price');
         $towing_price = Vehicle::where('id', $id)->sum('towing_price');
         $occean_freight = Vehicle::where('id', $id)->sum('occean_freight');
+        $company_fee = Vehicle::where('id', $id)->sum('company_fee');
+        $unloading_fee = Vehicle::where('id', $id)->sum('unloading_fee');
         $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('id', $id)->get();
         $balance = User::where('id', $buyer_id)->sum('balance');
         if ($id == "0") {
@@ -1533,23 +1541,17 @@ class HomeController extends Controller
             $auction_price = Vehicle::where('buyer_id', $buyer_id)->sum('auction_price');
             $towing_price = Vehicle::where('buyer_id', $buyer_id)->sum('towing_price');
             $occean_freight = Vehicle::where('buyer_id', $buyer_id)->sum('occean_freight');
+            $company_fee = Vehicle::where('buyer_id', $buyer_id)->sum('company_fee');
+            $unloading_fee = Vehicle::where('buyer_id', $buyer_id)->sum('unloading_fee');
             $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $buyer_id)->get();
             $balance = User::all()->sum('balance');
         }
         $fines = 0;
-        $company_fee = 0;
-        $unloading_fee = 0;
         foreach ($all_data as $key => $value) {
             if (!empty(@$value->fines)) {
                 foreach (@$value->fines as $k => $val) {
                     $fines += (int)$val->amount;
                 }
-            }
-            if (!empty(@$value->buyer->user_level)) {
-                $company_fee += (int)@$value->buyer->user_level->company_fee;
-            }
-            if (!empty(@$value->destination_port)) {
-                $unloading_fee += (int)@$value->destination_port->unloading_fee;
             }
         }
         $due_payments = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;

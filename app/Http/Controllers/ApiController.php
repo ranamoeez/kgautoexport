@@ -47,6 +47,39 @@ class ApiController extends Controller
         } 
     }
 
+    public function financial_login(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        if (!empty($token)) {
+            $check_user = User::where('api_token', $token)->count();
+            if ($check_user > 0) {
+                $user = User::where('api_token', $token)->first();
+
+                $input = $request->all();
+
+                $validator = Validator::make($input, [
+                    'password' => 'required'
+                ]);
+           
+                if($validator->fails()){
+                    return $this->sendError('Validation Error.', $validator->errors());       
+                }
+
+                if (\Hash::check($input['password'], $user->sheet_password)) {
+                    $success['success'] = true;
+                    return $this->sendResponse($success, 'Password is correct!');
+                } else {
+                    return $this->sendError('Failed.', ['error'=>'Password is Incorrect!']);
+                }
+            } else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            }
+        } else {
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
     public function vehicles(Request $request)
     {
         $token = $request->bearerToken();
@@ -284,8 +317,19 @@ class ApiController extends Controller
                 if($validator->fails()){
                     return $this->sendError('Validation Error.', $validator->errors());       
                 }
-           
-                Vehicle::where('id', $id)->update(['destination_port_id' => $input['destination'], "update_destination" => "1"]);
+
+                $data = [
+                    'destination_port_id' => $input['destination'], 
+                    "update_destination" => "1"
+                ];
+                
+                $sel_vehicle = Vehicle::where('id', $id)->first();
+                if (!empty($input['destination']) && (empty($sel_vehicle->destination_port_id) || $sel_vehicle->destination_port_id !== $input['destination'])) {
+                    $destination = DestinationPort::where("id", $input['destination'])->first();
+                    $data['unloading_fee'] = $destination->unloading_fee;
+                }
+
+                Vehicle::where('id', $id)->update($data);
 
                 $vehicle = Vehicle::where('id', $id)->first();
            
@@ -416,21 +460,15 @@ class ApiController extends Controller
                 $auction_price = Vehicle::where('buyer_id', $id)->sum('auction_price');
                 $towing_price = Vehicle::where('buyer_id', $id)->sum('towing_price');
                 $occean_freight = Vehicle::where('buyer_id', $id)->sum('occean_freight');
+                $company_fee = Vehicle::where('buyer_id', $id)->sum('company_fee');
+                $unloading_fee = Vehicle::where('buyer_id', $id)->sum('unloading_fee');
                 $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $id)->get();
                 $fines = 0;
-                $company_fee = 0;
-                $unloading_fee = 0;
                 foreach ($all_data as $k => $value) {
                     if (!empty(@$value->fines)) {
                         foreach (@$value->fines as $ke => $v) {
                             $fines += (int)$v->amount;
                         }
-                    }
-                    if (!empty(@$value->buyer->user_level)) {
-                        $company_fee += (int)@$value->buyer->user_level->company_fee;
-                    }
-                    if (!empty(@$value->destination_port)) {
-                        $unloading_fee += (int)@$value->destination_port->unloading_fee;
                     }
                 }
                 $due_payments = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;
@@ -516,21 +554,15 @@ class ApiController extends Controller
                     $auction_price = Vehicle::where('buyer_id', $user->id)->sum('auction_price');
                     $towing_price = Vehicle::where('buyer_id', $user->id)->sum('towing_price');
                     $occean_freight = Vehicle::where('buyer_id', $user->id)->sum('occean_freight');
+                    $company_fee = Vehicle::where('buyer_id', $user->id)->sum('company_fee');
+                    $unloading_fee = Vehicle::where('buyer_id', $user->id)->sum('unloading_fee');
                     $all_data = Vehicle::with("buyer", "buyer.user_level", "destination_port", "fines")->where('buyer_id', $user->id)->get();
                     $fines = 0;
-                    $company_fee = 0;
-                    $unloading_fee = 0;
                     foreach ($all_data as $k => $value) {
                         if (!empty(@$value->fines)) {
                             foreach (@$value->fines as $ke => $v) {
                                 $fines += (int)$v->amount;
                             }
-                        }
-                        if (!empty(@$value->buyer->user_level)) {
-                            $company_fee += (int)@$value->buyer->user_level->company_fee;
-                        }
-                        if (!empty(@$value->destination_port)) {
-                            $unloading_fee += (int)@$value->destination_port->unloading_fee;
                         }
                     }
                     $due_payments = (int)$auction_price + (int)$towing_price + (int)$occean_freight + (int)$fines + (int)$company_fee + (int)$unloading_fee;

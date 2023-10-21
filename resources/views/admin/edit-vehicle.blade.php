@@ -353,7 +353,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Destination</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="destination_port_id">
-                                        <option value=""></option>
+                                        <option value="0"></option>
                                         @if(count(@$all_destination_port) > 0)
                                         @foreach(@$all_destination_port as $key => $value)
                                             @if($value['id'] == @$list->vehicle->destination_port_id)

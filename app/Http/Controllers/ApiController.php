@@ -378,7 +378,7 @@ class ApiController extends Controller
                     $pickup_requests = $pickup_requests->get();
 
                     foreach ($pickup_requests as $key => $value) {
-                        $transaction = AssignVehicle::where('user_id', $id)->where("vehicle_id", $value->vehicle_id)->first();
+                        $transaction = AssignVehicle::where("vehicle_id", $value->vehicle_id)->where("assigned_by", "admin")->first();
                         $pickup_requests[$key]['payment_status'] = @$transaction->payment_status;
                     }
 

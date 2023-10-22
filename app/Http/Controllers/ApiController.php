@@ -440,7 +440,25 @@ class ApiController extends Controller
 
                 $transaction_history = $transaction_history->limit(100)->get();
 
-                $financial_data['history'] = $transaction_history;
+                $history_data = [];
+                $all_vehicles = [];
+                foreach ($transaction_history as $key => $value) {
+                    if (!in_array($value->vehicle_id, $all_vehicles)) {
+                        $vehicle_arr = Vehicle::where("id", $value->vehicle_id)->first();
+                        $total_amount = TransactionsHistory::where("user_id", $id)->where("vehicle_id", $value->vehicle_id)->sum("amount");
+                        $data_arr = [
+                            "user_id" => $value->user_id,
+                            "vehicle_id" => $value->vehicle_id,
+                            "total_amount" => $total_amount,
+                            "vehicle" => $vehicle_arr
+                        ];
+
+                        array_push($history_data, $data_arr);
+                        array_push($all_vehicles, $value->vehicle_id);
+                    }
+                }
+
+                $financial_data['history'] = $history_data;
 
                 $financial_data['total_transactions'] = TransactionsHistory::where('user_id', $id)->sum('amount');
                 $last_transaction_amount = TransactionsHistory::orderBy('id', 'DESC')->where('user_id', $id)->where("type", "!=", "init")->first();

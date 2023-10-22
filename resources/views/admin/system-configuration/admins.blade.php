@@ -456,11 +456,19 @@
                             $("#user-email").val(res.data.email);
                             $("#user-surname").val(res.data.surname);
                             $("#user-company").val(res.data.company);
-                            $("#country option[value="+res.data.country+"]").attr("selected", true);
+                            if (res.data.country !== "") {
+                                $("#country option[value="+res.data.country+"]").attr("selected", true);
+                            }
                             if (res.data.phone !== "" && res.data.phone !== null) {
-                                var phone = res.data.phone.split(" ");
-                                $("#user-phone").val(phone[1]);
-                                $(".p_code").val(phone[0]);
+                                if(res.data.phone.indexOf("+") > -1) {
+                                    var phone = res.data.phone.split(" ");
+                                    $("#user-phone").val(phone[1]);
+                                    $(".p_code").val(phone[0]);
+                                } else {
+                                    $("#user-phone").val(res.data.phone);
+                                }
+                            } else {
+                                $("#user-phone").val("");
                             }
                             $(".level option[value="+res.data.admin_level_id+"]").attr("selected", true);
                             $("#upass").attr("required", false);

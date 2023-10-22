@@ -507,9 +507,13 @@
                                 $("#country option[value="+res.data.country+"]").attr("selected", true);
                             }
                             if (res.data.phone !== "" && res.data.phone !== null) {
-                                var phone = res.data.phone.split(" ");
-                                $("#user-phone").val(phone[1]);
-                                $(".p_code").val(phone[0]);
+                                if(res.data.phone.indexOf("+") > -1) {
+                                    var phone = res.data.phone.split(" ");
+                                    $("#user-phone").val(phone[1]);
+                                    $(".p_code").val(phone[0]);
+                                } else {
+                                    $("#user-phone").val(res.data.phone);
+                                }
                             } else {
                                 $("#user-phone").val("");
                             }

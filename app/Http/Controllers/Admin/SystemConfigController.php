@@ -122,7 +122,9 @@ class SystemConfigController extends Controller
 	                        $data['password'] = \Hash::make($data['password']);
 	                        if (!empty($data['sheet_password'])) {
 	                            $data['sheet_password'] = \Hash::make($data['sheet_password']);
-	                        }
+	                        } else {
+                                unset($data['sheet_password']);
+                            }
 	                        if (!empty($data['phone'])) {
 	                            $data['phone'] = $data['phone_code']." ".$data['phone'];
 	                        }
@@ -138,7 +140,9 @@ class SystemConfigController extends Controller
 	                } else {
 	                    if (!empty($data['sheet_password'])) {
 	                        $data['sheet_password'] = \Hash::make($data['sheet_password']);
-	                    }
+	                    } else {
+                            unset($data['sheet_password']);
+                        }
 	                    if (!empty($data['phone'])) {
 	                        $data['phone'] = $data['phone_code']." ".$data['phone'];
 	                    }

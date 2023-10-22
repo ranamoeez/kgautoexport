@@ -401,7 +401,7 @@
                                                         <tr>
                                                             <td>{{ @$value->notes }}</td>
                                                             <td>{{ @$value->user->surname }}</td>
-                                                            <td>@if(@$value->created_at) {{ date("M d, Y", strtotime(@$value->created_at)) }} @endif</td>
+                                                            <td>@if(@$value->created_at && @$value->created_at !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->created_at)) }} @endif</td>
                                                         </tr>
                                                         @endforeach
                                                         @else
@@ -1041,7 +1041,7 @@
                                 <div class="row shadow border rounded-5 w-100 mb-3 p-1">
                                     <p class="col text-fs-3 text-center">{{ @$v->id }}</p>
                                     <p class="col text-fs-3 text-center">{{ @$v->template->name }}</p>
-                                    <p class="col text-fs-3 text-center">@if(@$v->created_at) {{ date("M d, Y", strtotime(@$v->created_at)) }} @endif</p>
+                                    <p class="col text-fs-3 text-center">@if(@$v->created_at && @$v->created_at !== "0000-00-00") {{ date("M d, Y", strtotime(@$v->created_at)) }} @endif</p>
                                 </div>
                                 @endforeach
                                 @else

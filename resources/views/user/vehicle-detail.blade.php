@@ -385,7 +385,7 @@
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Purchase Date</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" @if(@$list->vehicle->purchase_date) value="{{ date("M d, Y", strtotime(@$list->vehicle->purchase_date)) }}" @endif disabled />
+                                    <input type="text" class="form-control" @if(@$list->vehicle->purchase_date && @$list->vehicle->purchase_date !== "0000-00-00") value="{{ date("M d, Y", strtotime(@$list->vehicle->purchase_date)) }}" @endif disabled />
                                 </div>
                             </div>
                             @if(\Auth::user()->role == "2")
@@ -433,25 +433,25 @@
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Dispatch Date</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" @if(@$list->vehicle->dispatch_date) value="{{ date("M d, Y", strtotime(@$list->vehicle->dispatch_date)) }}" @endif disabled />
+                                    <input type="text" class="form-control" @if(@$list->vehicle->dispatch_date && @$list->vehicle->dispatch_date !== "0000-00-00") value="{{ date("M d, Y", strtotime(@$list->vehicle->dispatch_date)) }}" @endif disabled />
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Est. Delivery Date</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" @if(@$list->vehicle->delivery_date) value="{{ date("M d, Y", strtotime(@$list->vehicle->delivery_date)) }}" @endif disabled />
+                                    <input type="text" class="form-control" @if(@$list->vehicle->delivery_date && @$list->vehicle->delivery_date !== "0000-00-00") value="{{ date("M d, Y", strtotime(@$list->vehicle->delivery_date)) }}" @endif disabled />
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Actual Delivery Date</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" @if(@$list->vehicle->delivered_on_date) value="{{ date("M d, Y", strtotime(@$list->vehicle->delivered_on_date)) }}" @endif disabled />
+                                    <input type="text" class="form-control" @if(@$list->vehicle->delivered_on_date && @$list->vehicle->delivered_on_date !== "0000-00-00") value="{{ date("M d, Y", strtotime(@$list->vehicle->delivered_on_date)) }}" @endif disabled />
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Pickup Date</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" @if(@$list->vehicle->pickup_date) value="{{ date("M d, Y", strtotime(@$list->vehicle->pickup_date)) }}" @endif disabled />
+                                    <input type="text" class="form-control" @if(@$list->vehicle->pickup_date && @$list->vehicle->pickup_date !== "0000-00-00") value="{{ date("M d, Y", strtotime(@$list->vehicle->pickup_date)) }}" @endif disabled />
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -501,7 +501,7 @@
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Estimated Arrival</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" @if(@$list->container->arrival) value="{{ date("M d, Y", strtotime(@$list->container->arrival)) }}" @endif disabled />
+                                    <input type="text" class="form-control" @if(@$list->container->arrival && @$list->container->arrival !== "0000-00-00") value="{{ date("M d, Y", strtotime(@$list->container->arrival)) }}" @endif disabled />
                                 </div>
                             </div>
                             @if(!empty(@$list->container))

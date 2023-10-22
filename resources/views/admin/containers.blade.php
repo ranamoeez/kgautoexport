@@ -216,11 +216,11 @@
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                        Departure : @if(@$value->departure) {{ date("M d, Y", strtotime(@$value->departure)) }} @endif
+                                        Departure : @if(@$value->departure && @$value->departure !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->departure)) }} @endif
                                     </a>
                                     <br>
                                     <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                        Arrival : @if(@$value->arrival) {{ date("M d, Y", strtotime(@$value->arrival)) }} @endif
+                                        Arrival : @if(@$value->arrival && @$value->arrival !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->arrival)) }} @endif
                                     </a>
                                 </td>
                                 <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>

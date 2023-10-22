@@ -91,7 +91,7 @@
                             @foreach(@$email_history as $key => $value)
                             <div class="row shadow border rounded-5 w-100 mb-3 py-2">
                                 <span class="col text-fs-3 text-center">{{ @$value->sent_to }}</span>
-                                <span class="col text-fs-3 text-center">@if(@$value->created_at) {{ date("M d, Y", strtotime(@$value->created_at)) }} @endif</span>
+                                <span class="col text-fs-3 text-center">@if(@$value->created_at && @$value->created_at !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->created_at)) }} @endif</span>
                             </div>
                             @endforeach
                             @else
@@ -174,13 +174,13 @@
                                 <div class="row mt-4">
                                     <label for="" class="col-md-2 fw-bold">Arrival</label>
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" @if(@$container->arrival) value="{{ date("M d, Y", strtotime(@$container->arrival)) }}" @endif disabled />
+                                        <input type="text" class="form-control" @if(@$container->arrival && @$container->arrival !== "0000-00-00") value="{{ date("M d, Y", strtotime(@$container->arrival)) }}" @endif disabled />
                                     </div>
                                 </div>
                                 <div class="row mt-4">
                                     <label for="" class="col-md-2 fw-bold">Departure</label>
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" @if(@$container->departure) value="{{ date("M d, Y", strtotime(@$container->departure)) }}" @endif disabled />
+                                        <input type="text" class="form-control" @if(@$container->departure && @$container->departure !== "0000-00-00") value="{{ date("M d, Y", strtotime(@$container->departure)) }}" @endif disabled />
                                     </div>
                                 </div>
                                 <div class="row mt-4">

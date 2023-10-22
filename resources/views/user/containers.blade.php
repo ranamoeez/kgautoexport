@@ -132,12 +132,12 @@
                                     </td>
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                         <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                            @if(@$value->departure) {{ date("M d, Y", strtotime(@$value->departure)) }} @endif
+                                            @if(@$value->departure && @$value->departure !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->departure)) }} @endif
                                         </a>
                                     </td>
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                         <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                            @if(@$value->arrival) {{ date("M d, Y", strtotime(@$value->arrival)) }} @endif
+                                            @if(@$value->arrival && @$value->arrival !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->arrival)) }} @endif
                                         </a>
                                     </td>
 

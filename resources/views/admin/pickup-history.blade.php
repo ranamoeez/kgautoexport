@@ -258,7 +258,7 @@
                                 </td>
                                 <td>
                                     <p class=" text-fs-3">
-                                        @if(@$value->created_at) {{ date("M d, Y", strtotime(@$value->created_at)) }} @endif
+                                        @if(@$value->created_at && @$value->created_at !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->created_at)) }} @endif
                                     </p>
                                 </td>
                                 <td>

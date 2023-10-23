@@ -362,7 +362,7 @@ class ApiController extends Controller
                         $client = $request->client;
                         $pickup_requests = $pickup_requests->whereHas('user', function ($q) use($client)
                         {
-                            $q->where("surname", $client);
+                            $q->where("name", $client);
                         });
                     }
                     if (!empty($request->start_date)) {
@@ -390,7 +390,7 @@ class ApiController extends Controller
                         $client = $request->client;
                         $pickup_requests = $pickup_requests->whereHas('user', function ($q) use($client)
                         {
-                            $q->where("surname", $client);
+                            $q->where("name", $client);
                         });
                     }
                     if (!empty($request->start_date)) {

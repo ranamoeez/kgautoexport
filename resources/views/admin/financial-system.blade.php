@@ -315,7 +315,7 @@
                                 </td>
                                 <td>
                                     <span class="fw-bold text-fs-3">
-                                        {{ @$value->vehicle->buyer->surname }}
+                                        {{ @$value->vehicle->buyer->name }}
                                     </span>
                                 </td>
                                 <td>

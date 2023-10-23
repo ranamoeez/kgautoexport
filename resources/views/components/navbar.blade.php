@@ -3,7 +3,7 @@
 
         <div class="w-100">
             <div class="d-flex flex-column">
-                <h4 class="d-inline fw-bold fs-3 mt-3 text-center text-md-start welcome-text">Welcome {{ \Auth::user()->surname }}!</h4>
+                <h4 class="d-inline fw-bold fs-3 mt-3 text-center text-md-start welcome-text">Welcome {{ \Auth::user()->name }}!</h4>
                 {{-- <form class="d-none d-md-flex w-auto p-1 shadow-lg me-5  bg-white" role="search">
                     <input class="form-control me-2 bg-white border-0 text-fs-5" type="search"
                         placeholder="Search" aria-label="Search">

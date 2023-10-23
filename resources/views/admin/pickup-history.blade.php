@@ -243,7 +243,7 @@
                                 </td>
                                 <td>
                                     <p class=" text-fs-3">
-                                        {{ @$value->vehicle->buyer->surname }}
+                                        {{ @$value->vehicle->buyer->name }}
                                     </p>
                                 </td>
                                 <td>
@@ -274,7 +274,7 @@
                                 @if(empty($auth_user->admin_level->access) || @in_array("6.2", json_decode($auth_user->admin_level->access)))
                                 <td>
                                     <p class="text-fs-3">
-                                        {{ @$value->admin->surname }}
+                                        {{ @$value->admin->name }}
                                     </p>
                                 </td>
                                 <td>

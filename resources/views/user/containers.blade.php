@@ -210,7 +210,7 @@
                                                         @endphp
                                                         @if(count(@$value->buyers) > 0)
                                                         @foreach(@$value->buyers as $k => $v)
-                                                        <span @if(@$v->user->id == @$user_id) style="background-color: #f2f3a1 !important;" @endif>Buyer:<span class="fw-bold"> {{ @$v->user->surname }}</span></span>
+                                                        <span @if(@$v->user->id == @$user_id) style="background-color: #f2f3a1 !important;" @endif>Buyer:<span class="fw-bold"> {{ @$v->user->name }}</span></span>
                                                         @foreach($v->vehicles as $ke => $val)
                                                         <li class="list-unstyled" @if(@$v->user->id == @$user_id) style="background-color: #f2f3a1 !important;" @endif>
                                                             » <span class="fw-bold">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name }}</span>,
@@ -350,7 +350,7 @@
                                                         @if(count(@$value->buyers) > 0)
                                                         @foreach(@$value->buyers as $k => $v)
                                                         @if(@$v->user->id == auth()->user()->id)
-                                                        Buyer:<span class="fw-bold"> {{ @$v->user->surname }}</span>
+                                                        Buyer:<span class="fw-bold"> {{ @$v->user->name }}</span>
                                                         @foreach($v->vehicles as $ke => $val)
                                                         <li class="list-unstyled">
                                                             » <span class="fw-bold">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name }}</span>,

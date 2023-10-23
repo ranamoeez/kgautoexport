@@ -63,7 +63,7 @@
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td>
                                             <p class=" text-fs-3">
-                                                {{ @$value->user->surname }}
+                                                {{ @$value->user->name }}
                                             </p>
                                         </td>
                                         <td>

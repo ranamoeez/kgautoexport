@@ -42,7 +42,7 @@
 
             <div class="card financial-card-header border border-0">
                 <div class="card-body" style="margin-bottom: 100px">
-                    <h3 class="text-white fw-bold fs-2">Great Job, {{ \Auth::user()->surname }}!</h3>
+                    <h3 class="text-white fw-bold fs-2">Great Job, {{ \Auth::user()->name }}!</h3>
                     @php
                         $whole = $user->user_level->due_payment_limit;
                         $given = $due_payments;
@@ -248,7 +248,7 @@
                                         </td>
                                         <td>
                                             <span class="fw-bold text-fs-3">
-                                                {{ @$value->vehicle->buyer->surname }}
+                                                {{ @$value->vehicle->buyer->name }}
                                             </span>
                                         </td>
                                         <td>
@@ -348,7 +348,7 @@
                                         </td>
                                         <td>
                                             <span class="fw-bold text-fs-3">
-                                                {{ @$value->vehicle->buyer->surname }}
+                                                {{ @$value->vehicle->buyer->name }}
                                             </span>
                                         </td>
                                         <td>

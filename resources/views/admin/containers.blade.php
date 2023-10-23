@@ -199,7 +199,7 @@
                                     <ul class="p-0 text-fs-3" style="font-size: 14px;">
                                         @if(count(@$value->buyers) > 0)
                                         @foreach(@$value->buyers as $k => $v)
-                                        <span class="fw-bold">Buyer : {{ @$v->user->surname }}</span>
+                                        <span class="fw-bold">Buyer : {{ @$v->user->name }}</span>
                                         @foreach($v->vehicles as $ke => $val)
                                         <li class="list-unstyled">
                                             » <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name.', VIN: '.@$val->vehicle->vin }}</a>

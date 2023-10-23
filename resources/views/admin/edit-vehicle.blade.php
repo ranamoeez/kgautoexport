@@ -400,7 +400,7 @@
                                                         @foreach(@$notes_history as $key => $value)
                                                         <tr>
                                                             <td>{{ @$value->notes }}</td>
-                                                            <td>{{ @$value->user->surname }}</td>
+                                                            <td>{{ @$value->user->name }}</td>
                                                             <td>@if(@$value->created_at && @$value->created_at !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->created_at)) }} @endif</td>
                                                         </tr>
                                                         @endforeach

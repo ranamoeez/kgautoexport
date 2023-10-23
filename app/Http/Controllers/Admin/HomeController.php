@@ -1636,7 +1636,7 @@ class HomeController extends Controller
             $template_name = str_replace("{lotnumber}", @$vehicle->lotnumber, $template_name);
         }
         if (str_contains($template_name, "{buyer}")) { 
-            $template_name = str_replace("{buyer}", @$vehicle->buyer->surname, $template_name);
+            $template_name = str_replace("{buyer}", @$vehicle->buyer->name, $template_name);
         }
         if (str_contains($template_name, "{auction_price}")) { 
             $template_name = str_replace("{auction_price}", @$vehicle->auction_price, $template_name);
@@ -1698,7 +1698,7 @@ class HomeController extends Controller
             $template_content = str_replace("{lotnumber}", @$vehicle->lotnumber, $template_content);
         }
         if (str_contains($template_content, "{buyer}")) { 
-            $template_content = str_replace("{buyer}", @$vehicle->buyer->surname, $template_content);
+            $template_content = str_replace("{buyer}", @$vehicle->buyer->name, $template_content);
         }
         if (str_contains($template_content, "{auction_price}")) { 
             $template_content = str_replace("{auction_price}", @$vehicle->auction_price, $template_content);

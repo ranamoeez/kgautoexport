@@ -51,8 +51,6 @@ class HomeController extends Controller
 
     public function vehicles(Request $request)
     {
-        ini_set('max_execution_time', 600);
-
         if (\Auth::user()->role !== "1") {
             return redirect(url("user"));
         }
@@ -60,7 +58,7 @@ class HomeController extends Controller
         $data['type'] = "vehicles";
         $data['page'] = '1';
         $filter = [];
-        $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->whereHas('vehicle');
+        $vehicles = AssignVehicle::orderBy('id', 'DESC')->limit(20)->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->whereHas('vehicle');
         if (!empty($request->terminal) && $request->terminal !== 'all') {
         	$data['terminal'] = $request->terminal;
             $terminal = $request->terminal;
@@ -92,7 +90,7 @@ class HomeController extends Controller
             $filter['search'] = $search;
         }
         if (!empty($filter)) {
-            $vehicles = AssignVehicle::orderBy('id', 'DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->whereHas('vehicle', function ($query) use($filter) {
+            $vehicles = AssignVehicle::orderBy('id', 'DESC')->limit(20)->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->whereHas('vehicle', function ($query) use($filter) {
                 if (!empty($filter['terminal'])) {
                     $query->where('terminal_id', $filter['terminal']);
                 }
@@ -173,7 +171,7 @@ class HomeController extends Controller
             }
             $data['page'] = $request->page;
         }
-        $vehicles = $vehicles->limit(20)->get();
+        $vehicles = $vehicles->get();
         $data['list'] = $vehicles;
         $data['total_vehicles'] = Vehicle::all()->count();
         $data['user_levels'] = Level::all();

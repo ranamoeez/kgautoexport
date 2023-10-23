@@ -313,7 +313,7 @@
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4 d-flex justify-content-between" style="font-size: 14px;">
                                         {{-- <span style="font-size: 14px;">${{ (!empty(@$value->vehicle->auction_price)) ? @$value->vehicle->auction_price : '0.00' }}</span> --}}
-                                        <span style="font-size: 18px;" class="mt-1">${{ (int)@$value->vehicle->us_towing_price + (int)@$value->vehicle->us_trans_fines }}</span>
+                                        <a href="{{ url('admin/vehicles/edit', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 18px;" class="mt-1">${{ (int)@$value->vehicle->us_towing_price + (int)@$value->vehicle->us_trans_fines }}</a>
                                         <select class="form-select ps-1 pe-2 py-1 payment-status" aria-label="Default select example" data-id="{{ @$value->vehicle->id }}" @if(@$value->vehicle->all_paid == "1") style="width: 80px; border-radius: 5px; background-color: #70e790;" @else style="width: 80px; border-radius: 5px; background-color: #ffa6a6;" @endif>
                                             <option value="1" @if(@$value->vehicle->all_paid == "1") selected @endif>Paid</option>
                                             <option value="0" @if(@$value->vehicle->all_paid == "0") selected @endif>Unpaid</option>

@@ -27,6 +27,7 @@ Route::get('/register', function () {
 });
 
 Route::post('/post-login', [App\Http\Controllers\HomeController::class, 'post_login'])->name('post-login');
+Route::get('/create-vehicles', [App\Http\Controllers\Admin\HomeController::class, 'create_vehicles'])->name('create-vehicles');
 
 Route::prefix('user')->middleware(['auth'])->group(function(){
 	Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('user-home');

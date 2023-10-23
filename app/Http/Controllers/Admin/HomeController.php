@@ -48,6 +48,31 @@ use PDF;
 class HomeController extends Controller
 {
     // Vehicle Functions
+    public function create_vehicles(Request $request)
+    {
+        $all_vehicles = Vehicle::all();
+        foreach ($all_vehicles as $key => $value) {
+            $des = $value['company_name'];
+            if (!empty($des)) {
+                $description = explode(" ", $des);
+                $data = [];
+                if (!empty($description[0])) {
+                    $data['modal'] = $description[0];
+                }
+                if (!empty($description[1])) {
+                    $data['company_name'] = $description[1];
+                }
+                if (!empty($description[2])) {
+                    $data['name'] = $description[2];
+                }
+                if (!empty($data)) {
+                    Vehicle::where("id", $value['id'])->update($data);
+                }
+            }
+        }
+
+        return true;
+    }
 
     public function vehicles(Request $request)
     {

@@ -174,8 +174,8 @@
                                                             </label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
-                                                                    <div class="input-group-text rounded-start-4" style="width: 20% !important; height: 40px !important;">
-                                                                        <select name="phone_code" class="p_code" style="width: 20% !important; height: 40px !important;">
+                                                                    <div class="input-group-text rounded-start-4" style="width: 25% !important; height: 40px !important;">
+                                                                        <select name="phone_code" class="p_code" style="border: none; outline: none;">
                                                                             <option value="+962">+962</option>
                                                                             <option value="+964">+964</option>
                                                                             <option value="+971">+971</option>
@@ -189,7 +189,7 @@
                                                                             @endif
                                                                         </select>
                                                                     </div>
-                                                                    <div class="input-group-text rounded-end-4" style="width: 80% !important; height: 40px !important;">
+                                                                    <div class="input-group-text rounded-end-4" style="width: 75% !important; height: 40px !important;">
                                                                         <input name="phone" type="text" id="user-phone" class="form-control rounded-end-4 border-0" placeholder="Enter Number" required />
                                                                     </div>
                                                                 </div>

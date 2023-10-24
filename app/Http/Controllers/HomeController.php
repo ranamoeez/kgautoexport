@@ -92,6 +92,18 @@ class HomeController extends Controller
         return view('user.index', $data);
     }
 
+    public function create_veh(Request $request)
+    {
+        $all = Container::all();
+        foreach ($all as $key => $value) {
+            $array = explode('"', $value->aes_block_body);
+            dump($array[3]);
+            if ($key < 20) {
+                dd("ok");
+            }
+        }
+    }
+
     public function assign_vehicle(Request $request)
     {
         $user_id = $request->user_id;

@@ -96,12 +96,15 @@ class HomeController extends Controller
     {
         $all = Container::all();
         foreach ($all as $key => $value) {
-            $array = explode('"', $value->aes_block_body);
-            dump($array[3]);
-            if ($key == 100) {
-                dd("ok");
+            if (!empty($value->aes_block_body)) {
+                $array = explode('"', $value->aes_block_body);
+                if (!empty($array[3])) {
+                    Container::where("id", $value['id'])->update(["export_reference" => $array[3]]);
+                }
             }
         }
+
+        return true;
     }
 
     public function assign_vehicle(Request $request)

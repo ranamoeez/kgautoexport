@@ -98,7 +98,7 @@ class HomeController extends Controller
         foreach ($all as $key => $value) {
             $array = explode('"', $value->aes_block_body);
             dump($array[3]);
-            if ($key == 20) {
+            if ($key == 100) {
                 dd("ok");
             }
         }

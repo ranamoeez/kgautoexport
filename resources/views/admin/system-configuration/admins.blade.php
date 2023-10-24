@@ -425,6 +425,7 @@
 
             $(document).on("change", ".country", function () {
                 var selected = $(this).find("option:selected").attr('data-code');
+                $(".p_code option").attr("selected", false);
                 $(".p_code option[value='+"+selected+"']").attr("selected", true);
             });
 
@@ -436,6 +437,7 @@
                 $("#user-surname").val('');
                 $("#user-company").val('');
                 $("#country option[value='']").attr("selected", true);
+                $(".p_code option").attr("selected", false);
                 $("#user-phone").val('');
                 $(".level option[value='']").attr("selected", true);
                 $("#upass").attr("required", true);

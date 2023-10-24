@@ -175,7 +175,19 @@
                                                             <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
                                                                     <div class="input-group-text rounded-start-4" style="width: 20% !important; height: 40px !important;">
-                                                                        <input type="text" name="phone_code" class="p_code" value="+93" readonly style=" border: none; outline: none;" />
+                                                                        <select name="phone_code" class="p_code" style="width: 20% !important; height: 40px !important;">
+                                                                            <option value="+962">+962</option>
+                                                                            <option value="+964">+964</option>
+                                                                            <option value="+971">+971</option>
+                                                                            <option value="+1">+1</option>
+                                                                            @if(count(@$countries) > 0)
+                                                                            @foreach(@$countries as $key => $value)
+                                                                            @if($value->id !== 102 && $value->id !== 108 && $value->id !== 224 && $value->id !== 226)
+                                                                            <option value="+{{ $value->phonecode }}">+{{ $value->phonecode }}</option>
+                                                                            @endif
+                                                                            @endforeach
+                                                                            @endif
+                                                                        </select>
                                                                     </div>
                                                                     <div class="input-group-text rounded-end-4" style="width: 80% !important; height: 40px !important;">
                                                                         <input name="phone" type="text" id="user-phone" class="form-control rounded-end-4 border-0" placeholder="Enter Number" required />
@@ -458,7 +470,7 @@
 
             $(document).on("change", ".country", function () {
                 var selected = $(this).find("option:selected").attr('data-code');
-                $(".p_code").val("+"+selected);
+                $(".p_code option[value='+"+selected+"']").attr("selected", true);
             });
 
             $(document).on("click", ".add", function () {
@@ -510,7 +522,7 @@
                                 if(res.data.phone.indexOf("+") > -1) {
                                     var phone = res.data.phone.split(" ");
                                     $("#user-phone").val(phone[1]);
-                                    $(".p_code").val(phone[0]);
+                                    $(".p_code option[value='"+phone[0]+"']").attr("selected", true);
                                 } else {
                                     $("#user-phone").val(res.data.phone);
                                 }

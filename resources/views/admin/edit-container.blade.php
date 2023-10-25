@@ -462,13 +462,13 @@
                                             <button class="btn btn-link p-0 delete-images" type="button" data-url="{{ url('admin/delete-container-documents', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="download-files">
+                                            <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" class="download-files">
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
+                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -509,17 +509,17 @@
                                             <button class="btn btn-link p-0 delete-documents" type="button" data-url="{{ url('admin/delete-container-documents', $value->id) }}">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank" download>
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" target="_blank" download>
                                                 <i class="fas fa-download text-dark"></i>
                                             </a>
-                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank">
+                                            <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" target="_blank">
                                                 <i class="fas fa-eye text-primary"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" style="width: 100%; height: 100% !important;">
-                                            Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}">test.pdf</a>
+                                        <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" style="width: 100%; height: 100% !important;">
+                                            Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}">test.pdf</a>
                                         </object>
                                     </div>
                                 </div>

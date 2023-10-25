@@ -24,6 +24,7 @@ use App\Models\NotesHistory;
 use App\Models\Status;
 use App\Models\Terminal;
 use App\Models\Country;
+use App\Models\VehicleDocuments;
 use Auth;
 use Storage;
 use QuickBooksOnline\API\DataService\DataService;
@@ -98,7 +99,7 @@ class HomeController extends Controller
 
         $all = Container::all();
         foreach ($all as $key => $value) {
-            if (!empty($value->export_reference)) {
+            if (!empty($value->export_reference) && $value['id'] > 8313) {
                 $vehicles = Vehicle::where("ref", $value->export_reference)->get();
                 if (!empty($vehicles)) {
                     foreach ($vehicles as $k => $v) {

@@ -242,7 +242,7 @@ class HomeController extends Controller
                 foreach ($request->file('images') as $key => $value) {
                     $file = $value;
                     $current_date = explode("-", date("Y-m-d"));
-                    $filename = Storage::disk("s3")->putFile($current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle->id, $file);
+                    $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle->id, $file);
 
                     $image = new VehicleImage;
                     $image->vehicle_id = $vehicle->id;
@@ -260,7 +260,7 @@ class HomeController extends Controller
                 foreach ($request->file('documents') as $key => $value) {
                     $file = $value;
                     $current_date = explode("-", date("Y-m-d"));
-                    $filename = Storage::disk("s3")->putFile($current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle->id, $file);
+                    $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle->id, $file);
                     
                     $image = new VehicleDocuments;
                     $image->vehicle_id = $vehicle->id;
@@ -359,7 +359,7 @@ class HomeController extends Controller
                 foreach ($request->file('images') as $key => $value) {
                     $file = $value;
                     $current_date = explode("-", date("Y-m-d"));
-                    $filename = Storage::disk("s3")->putFile($current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$id, $file);
+                    $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$id, $file);
                     
                     $image = new VehicleImage;
                     $image->vehicle_id = $id;
@@ -377,7 +377,7 @@ class HomeController extends Controller
                 foreach ($request->file('documents') as $key => $value) {
                     $file = $value;
                     $current_date = explode("-", date("Y-m-d"));
-                    $filename = Storage::disk("s3")->putFile($current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$id, $file);
+                    $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$id, $file);
                     
                     $image = new VehicleDocuments;
                     $image->vehicle_id = $id;
@@ -618,7 +618,7 @@ class HomeController extends Controller
                 foreach ($request->file('images') as $key => $value) {
                     $file = $value;
                     $current_date = explode("-", date("Y-m-d"));
-                    $filename = Storage::disk("s3")->putFile($current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/container-'.$container->id, $file);
+                    $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/container-'.$container->id, $file);
                     
                     $image = new ContainerImage;
                     $image->container_id = $container->id;
@@ -635,7 +635,7 @@ class HomeController extends Controller
                 foreach ($request->file('documents') as $key => $value) {
                     $file = $value;
                     $current_date = explode("-", date("Y-m-d"));
-                    $filename = Storage::disk("s3")->putFile($current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/container-'.$container->id, $file);
+                    $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/container-'.$container->id, $file);
                     
                     $image = new ContainerImage;
                     $image->container_id = $container->id;
@@ -682,7 +682,7 @@ class HomeController extends Controller
                 foreach ($request->file('images') as $key => $value) {
                     $file = $value;
                     $current_date = explode("-", date("Y-m-d"));
-                    $filename = Storage::disk("s3")->putFile($current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/container-'.$id, $file);
+                    $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/container-'.$id, $file);
                     
                     $image = new ContainerImage;
                     $image->container_id = $container->id;
@@ -699,7 +699,7 @@ class HomeController extends Controller
                 foreach ($request->file('documents') as $key => $value) {
                     $file = $value;
                     $current_date = explode("-", date("Y-m-d"));
-                    $filename = Storage::disk("s3")->putFile($current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/container-'.$id, $file);
+                    $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/container-'.$id, $file);
                     
                     $image = new ContainerImage;
                     $image->container_id = $id;

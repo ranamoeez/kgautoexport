@@ -94,12 +94,24 @@ class HomeController extends Controller
 
     public function create_veh(Request $request)
     {
+        ini_set('max_execution_time', 120000);
+
         $all = Container::all();
         foreach ($all as $key => $value) {
-            if (!empty($value->aes_block_body)) {
-                $array = explode('"', $value->aes_block_body);
-                if (!empty($array[3])) {
-                    Container::where("id", $value['id'])->update(["export_reference" => $array[3]]);
+            if (!empty($value->export_reference)) {
+                $vehicles = Vehicle::where("ref", $value->export_reference)->get();
+                if (!empty($vehicles)) {
+                    foreach ($vehicles as $k => $v) {
+                        $data = [
+                            "container_id" => $value['id'],
+                            "user_id" => $v->buyer_id,
+                            "vehicle_id" => $v->id,
+                            "added_by" => "admin"
+                        ];
+                        ContainerVehicle::create($data);
+
+                        AssignVehicle::where("user_id", $v->buyer_id)->where("vehicle_id", $v->id)->update(["assigned_to" => $value['id']]);
+                    }
                 }
             }
         }

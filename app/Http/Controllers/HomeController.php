@@ -541,8 +541,8 @@ class HomeController extends Controller
             $super_user = $super_user->where('all_paid', $request->pay_status);
         }
 
-        $admin = $admin->limit(20)->get();
-        $super_user = $super_user->limit(20)->get();
+        $admin = $admin->limit(10)->get();
+        $super_user = $super_user->limit(10)->get();
 
         foreach ($admin as $key => $value) {
             $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();

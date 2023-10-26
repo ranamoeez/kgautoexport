@@ -338,8 +338,8 @@ class HomeController extends Controller
             $admin = $admin->where('payment_status', $request->pay_status);
         }
         
-        $data['super_user'] = $super_user->orderBy("id", "DESC")->get();
-        $data['admin'] = $admin->orderBy("id", "DESC")->get();
+        $data['super_user'] = $super_user->orderBy("id", "DESC")->limit(20)->get();
+        $data['admin'] = $admin->orderBy("id", "DESC")->limit(20)->get();
 
         $data['sub_buyers'] = User::where("main_user_id", $user_id)->get();
         $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {
@@ -541,8 +541,8 @@ class HomeController extends Controller
             $super_user = $super_user->where('all_paid', $request->pay_status);
         }
 
-        $admin = $admin->get();
-        $super_user = $super_user->get();
+        $admin = $admin->limit(20)->get();
+        $super_user = $super_user->limit(20)->get();
 
         foreach ($admin as $key => $value) {
             $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();

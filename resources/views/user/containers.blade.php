@@ -119,6 +119,7 @@
                             <tbody>
                                 @if(count($admin) > 0)
                                 @foreach($admin as $key => $value)
+                                @if(!empty($admin->container_vehicles))
                                 <tr class="align-middle overflow-hidden shadow mb-2">
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                         <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
@@ -238,6 +239,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                @endif
                                 @endforeach
                                 @else
                                 <tr id="row" class="align-middle overflow-hidden shadow mb-2">
@@ -264,6 +266,7 @@
                             <tbody>
                                 @if(count($super_user) > 0)
                                 @foreach($super_user as $key => $value)
+                                @if(!empty($admin->container_vehicles))
                                 <tr class="align-middle overflow-hidden shadow mb-2">
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
                                         <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
@@ -379,6 +382,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                @endif
                                 @endforeach
                                 @else
                                 <tr id="row" class="align-middle overflow-hidden shadow mb-2">

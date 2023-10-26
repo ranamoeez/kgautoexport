@@ -93,32 +93,32 @@ class HomeController extends Controller
         return view('user.index', $data);
     }
 
-    public function create_veh(Request $request)
-    {
-        ini_set('max_execution_time', 120000);
+    // public function create_veh(Request $request)
+    // {
+    //     ini_set('max_execution_time', 120000);
 
-        $all = Container::all();
-        foreach ($all as $key => $value) {
-            if (!empty($value->export_reference) && $value['id'] > 8313) {
-                $vehicles = Vehicle::where("ref", $value->export_reference)->get();
-                if (!empty($vehicles)) {
-                    foreach ($vehicles as $k => $v) {
-                        $data = [
-                            "container_id" => $value['id'],
-                            "user_id" => $v->buyer_id,
-                            "vehicle_id" => $v->id,
-                            "added_by" => "admin"
-                        ];
-                        ContainerVehicle::create($data);
+    //     $all = Container::all();
+    //     foreach ($all as $key => $value) {
+    //         if (!empty($value->export_reference) && $value['id'] > 14723 && $value->export_reference !== "GA-") {
+    //             $vehicles = Vehicle::where("ref", $value->export_reference)->get();
+    //             if (!empty($vehicles)) {
+    //                 foreach ($vehicles as $k => $v) {
+    //                     $data = [
+    //                         "container_id" => $value['id'],
+    //                         "user_id" => $v->buyer_id,
+    //                         "vehicle_id" => $v->id,
+    //                         "added_by" => "admin"
+    //                     ];
+    //                     ContainerVehicle::create($data);
 
-                        AssignVehicle::where("user_id", $v->buyer_id)->where("vehicle_id", $v->id)->update(["assigned_to" => $value['id']]);
-                    }
-                }
-            }
-        }
+    //                     AssignVehicle::where("user_id", $v->buyer_id)->where("vehicle_id", $v->id)->update(["assigned_to" => $value['id']]);
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 
     public function assign_vehicle(Request $request)
     {
@@ -338,8 +338,8 @@ class HomeController extends Controller
             $admin = $admin->where('payment_status', $request->pay_status);
         }
         
-        $data['super_user'] = $super_user->orderBy("id", "DESC")->limit(20)->get();
-        $data['admin'] = $admin->orderBy("id", "DESC")->limit(20)->get();
+        $data['super_user'] = $super_user->orderBy("id", "DESC")->get();
+        $data['admin'] = $admin->orderBy("id", "DESC")->get();
 
         $data['sub_buyers'] = User::where("main_user_id", $user_id)->get();
         $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {

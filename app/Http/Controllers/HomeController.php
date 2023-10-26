@@ -544,52 +544,44 @@ class HomeController extends Controller
         $admin = $admin->get();
         $super_user = $super_user->get();
 
-        $admin_arr = [];
         foreach ($admin as $key => $value) {
-            if (!empty($admin->container_vehicle)) {
-                $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();
-                $unique = [];
-                $buyers = [];
-                foreach ($buyer as $k => $v) {
-                    $user_id = $v->user_id;
-                    if (!in_array($user_id, $unique)) {
-                        array_push($unique, $user_id);
-                        $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value->id)->get();
-                        if (count($vehicles) > 0) {
-                            $v->vehicles = $vehicles;
-                            array_push($buyers, $v);
-                        }
+            $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();
+            $unique = [];
+            $buyers = [];
+            foreach ($buyer as $k => $v) {
+                $user_id = $v->user_id;
+                if (!in_array($user_id, $unique)) {
+                    array_push($unique, $user_id);
+                    $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value->id)->get();
+                    if (count($vehicles) > 0) {
+                        $v->vehicles = $vehicles;
+                        array_push($buyers, $v);
                     }
                 }
-                $value->buyers = $buyers;
-                array_push($admin_arr, $value);
             }
+            $admin[$key]->buyers = $buyers;
         }
 
-        $super_user_arr = [];
         foreach ($super_user as $key => $value) {
-            if (!empty($admin->container_vehicle)) {
-                $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();
-                $unique = [];
-                $buyers = [];
-                foreach ($buyer as $k => $v) {
-                    $user_id = $v->user_id;
-                    if (!in_array($user_id, $unique)) {
-                        array_push($unique, $user_id);
-                        $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value->id)->get();
-                        if (count($vehicles) > 0) {
-                            $v->vehicles = $vehicles;
-                            array_push($buyers, $v);
-                        }
+            $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();
+            $unique = [];
+            $buyers = [];
+            foreach ($buyer as $k => $v) {
+                $user_id = $v->user_id;
+                if (!in_array($user_id, $unique)) {
+                    array_push($unique, $user_id);
+                    $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value->id)->get();
+                    if (count($vehicles) > 0) {
+                        $v->vehicles = $vehicles;
+                        array_push($buyers, $v);
                     }
                 }
-                $value->buyers = $buyers;
-                array_push($super_user_arr, $value);
             }
+            $super_user[$key]->buyers = $buyers;
         }
 
-        $data['admin'] = $admin_arr;
-        $data['super_user'] = $super_user_arr;
+        $data['admin'] = $admin;
+        $data['super_user'] = $super_user;
         $data['all_port'] = LoadingPort::all();
         $data['all_status'] = ContStatus::all();
         $data['countries'] = Country::all();

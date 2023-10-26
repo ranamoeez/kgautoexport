@@ -176,7 +176,7 @@
                                                 @foreach($list->vehicle->vehicle_images as $key => $value)
                                                 @if($value->type == "warehouse")
                                                 <li class="splide__slide">
-                                                    <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="image w-100" alt="Vehicle Image" style="max-height: 400px;" />
+                                                    <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" class="image w-100" alt="Vehicle Image" style="max-height: 400px;" />
                                                 </li>
                                                 @endif
                                                 @endforeach
@@ -217,7 +217,7 @@
                                         @foreach($list->vehicle->vehicle_images as $key => $value)
                                         @if($value->type == "warehouse")
                                         <li class="splide__slide">
-                                            <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="image vehicle-image w-100" alt="Vehicle Image" />
+                                            <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" class="image vehicle-image w-100" alt="Vehicle Image" />
                                         </li>
                                         @endif
                                         @endforeach
@@ -239,7 +239,7 @@
                                                 @foreach($list->vehicle->vehicle_images as $key => $value)
                                                 @if($value->type == "unloading")
                                                 <li class="splide__slide">
-                                                    <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="image w-100" alt="Vehicle Image" style="max-height: 400px;" />
+                                                    <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" class="image w-100" alt="Vehicle Image" style="max-height: 400px;" />
                                                 </li>
                                                 @endif
                                                 @endforeach
@@ -281,7 +281,7 @@
                                         @foreach($list->vehicle->vehicle_images as $key => $value)
                                         @if($value->type == "unloading")
                                         <li class="splide__slide">
-                                            <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="image vehicle-image w-100" alt="Vehicle Image" />
+                                            <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" class="image vehicle-image w-100" alt="Vehicle Image" />
                                         </li>
                                         @endif
                                         @endforeach
@@ -555,17 +555,17 @@
                                                     <i class="fa-file-pdf fa-solid fs-4"></i>
                                                 </div>
                                                 <div>
-                                                    <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" class="download-files">
+                                                    <a href="javascript:void();" data-src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" class="download-files">
                                                         <i class="fas fa-download text-dark"></i>
                                                     </a>
-                                                    <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" target="_blank">
+                                                    <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" target="_blank">
                                                         <i class="fas fa-eye text-primary"></i>
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                                <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}" style="width: 100%; height: 100% !important;">
-                                                    Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filename }}">test.pdf</a>
+                                                <object data="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" style="width: 100%; height: 100% !important;">
+                                                    Alt : <a href="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}">test.pdf</a>
                                                 </object>
                                                 <div class="w-100 mt-2">
                                                     <input type="text" value="{{ @$value->type }}" class="form-control text-center" readonly>

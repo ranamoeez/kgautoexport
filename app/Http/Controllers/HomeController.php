@@ -501,14 +501,14 @@ class HomeController extends Controller
         if (Auth::user()->role == "3") {
             $user_id = Auth::user()->main_user_id;
         }
-        $admin = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
+        $admin = Container::orderBy('id', 'DESC')->with(['container_vehicle' => function ($q) use($user_id) {
             $q->where("user_id", $user_id);
             $q->where("added_by", "admin");
-        });
-        $super_user = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
+        }, 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement']);
+        $super_user = Container::orderBy('id', 'DESC')->with(['container_vehicle' => function ($q) use($user_id) {
             $q->where("user_id", $user_id);
-            $q->where("added_by", "super_user");
-        });
+            $q->where("added_by", "admin");
+        }, 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement']);
         if (!empty($request->port) && $request->port !== 'all') {
             $data['port'] = $request->port;
             $admin = $admin->where('loading_port_id', $request->port);
@@ -541,8 +541,8 @@ class HomeController extends Controller
             $super_user = $super_user->where('all_paid', $request->pay_status);
         }
 
-        $admin = $admin->limit(10)->get();
-        $super_user = $super_user->limit(10)->get();
+        $admin = $admin->get();
+        $super_user = $super_user->get();
 
         foreach ($admin as $key => $value) {
             $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();

@@ -251,7 +251,7 @@
                     </div>
                     <div class="table-responsive tab-pane fade" id="super-admin">
                         <table class="table">
-                            <thead class="fs-4">
+                            <thead class="fs-4" style="font-size: 16px !important;">
                                 <th scope="col">Booking No.</th>
                                 <th scope="col">Container No.</th>
                                 <th scope="col">Departure</th>
@@ -266,22 +266,22 @@
                                 @foreach($super_user as $key => $value)
                                 <tr class="align-middle overflow-hidden shadow mb-2">
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
+                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
                                             {{ @$value->booking_no }}
                                         </a>
                                     </td>
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
+                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
                                             {{ @$value->container_no }}
                                         </a>
                                     </td>
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
+                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
                                             @if(@$value->departure) {{ date("M d, Y", strtotime(@$value->departure)) }} @endif
                                         </a>
                                     </td>
                                     <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000;" class="fw-bold mb-2 text-fs-3">
+                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
                                             @if(@$value->arrival) {{ date("M d, Y", strtotime(@$value->arrival)) }} @endif
                                         </a>
                                     </td>
@@ -308,7 +308,7 @@
                                                     }
                                                 @endphp
                                                 <img src="{{ asset('assets/icons/'.$icon.'.png') }}" style="width: 25px;">
-                                                <span class="fs-5 ms-1">{{ @$value->status->name }}</span>
+                                                <span class="fs-5 ms-1" style="font-size: 14px !important;">{{ @$value->status->name }}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -354,7 +354,7 @@
                                                         @foreach($v->vehicles as $ke => $val)
                                                         <li class="list-unstyled">
                                                             » <span class="fw-bold">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name }}</span>,
-                                                            VIN: <span class="fw-bold fs-5"><a
+                                                            VIN: <span class="fw-bold fs-5" style="font-size: 14px !important;"><a
                                                                     href="{{ url('user/containers/1') }}"
                                                                     class="text-dark text-decoration-none">{{ @$val->vehicle->vin }}</a></span>
                                                         </li>

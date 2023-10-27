@@ -122,13 +122,15 @@ class HomeController extends Controller
             $buyers = [];
             $all_buyers = [];
             $all_vehicles = ContainerVehicle::where("container_id", $value->id)->get();
-            foreach ($all_vehicles as $key => $value) {
-                if (!in_array($value->user_id, $all_buyers)) {
-                    array_push($buyers, "-".$value->user_id."-");
-                    array_push($all_buyers, $value->user_id);
+            foreach ($all_vehicles as $k => $v) {
+                if (!in_array($v->user_id, $all_buyers)) {
+                    array_push($buyers, "-".$v->user_id."-");
+                    array_push($all_buyers, $v->user_id);
                 }
             }
-            Container::where("id", $value->id)->update(["buyers" => $buyers]);
+            if (!empty($buyers)) {
+                Container::where("id", $value->id)->update(["buyers" => implode(",", $buyers)]);
+            }
         }
 
         return true;

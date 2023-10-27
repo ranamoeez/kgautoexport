@@ -1409,6 +1409,11 @@ class HomeController extends Controller
         AssignVehicle::where('user_id', $u_id)->where('assigned_to', $c_id)->update(['assigned_to'=>'0']);
         $buyer = ContainerVehicle::where('container_id', $c_id)->where('user_id', $u_id);
         $buyer->delete();
+        $container = Container::where("id", $c_id)->first();
+        if (!empty($container->buyers)) {
+            $buyers = str_replace("-".$u_id."-", "", $container->buyers);
+            Container::where("id", $c_id)->update(["buyers" => $buyers]);
+        }
         return json_encode(["success"=>true, 'action'=>'reload']);
     }
 
@@ -1417,6 +1422,14 @@ class HomeController extends Controller
         AssignVehicle::where('user_id', $u_id)->where('vehicle_id', $v_id)->where('assigned_to', $c_id)->update(['assigned_to'=>'0']);
         $vehicle = ContainerVehicle::where('container_id', $c_id)->where('user_id', $u_id)->where('vehicle_id', $v_id);
         $vehicle->delete();
+        $count = ContainerVehicle::where('container_id', $c_id)->where('user_id', $u_id)->count();
+        if ($count == 0) {
+            $container = Container::where("id", $c_id)->first();
+            if (!empty($container->buyers)) {
+                $buyers = str_replace("-".$u_id."-", "", $container->buyers);
+                Container::where("id", $c_id)->update(["buyers" => $buyers]);
+            }
+        }
         return json_encode(["success"=>true, 'action'=>'reload']);
     }
 
@@ -1804,6 +1817,15 @@ class HomeController extends Controller
             $save->added_by = "admin";
             $save->save();
             AssignVehicle::where("vehicle_id", $value)->where('user_id', $user_id)->update(["assigned_to"=>$container_id]);
+            $container = Container::where("id", $container_id)->first();
+            if (!empty($container) && !str_contains(@$container->buyers, "-".$user_id."-")) {
+                if (!empty($container->buyers)) {
+                    $buyers = $container->buyers.", -".$user_id."-";
+                } else {
+                    $buyers = "-".$user_id."-";
+                }
+                Container::where("id", $container_id)->update(["buyers" => $buyers]);
+            }
 
             if ($user_id !== "1") {
                 $fcm_token = User::where("id", $user_id)->first()->fcm_token;

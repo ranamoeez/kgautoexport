@@ -122,10 +122,59 @@
                 </form>
 
                 <div class="mt-5">
-                    <div class="d-flex justify-content-between mt-3">
+                    <div class="d-flex justify-content-between mt-3 align-items-center">
                         <h4 class="fw-bold fs-md-13 fs-lg-25">
                             List of Vehicles
                         </h4>
+                        <div class="d-flex gap-2 align-items-center page-icon">
+                            @php
+                                $prev = (int)$page - 1;
+                                $next = (int)$page + 1;
+                                $prev_params = ['page='.$prev];
+                                $next_params = ['page='.$next];
+                                if (!empty(@$terminal)) {
+                                    array_push($prev_params, 'terminal='.$terminal);
+                                    array_push($next_params, 'terminal='.$terminal);
+                                }
+                                if (!empty(@$status)) {
+                                    array_push($prev_params, 'status='.$status);
+                                    array_push($next_params, 'status='.$status);
+                                }
+                                if (!empty(@$fuel_type)) {
+                                    array_push($prev_params, 'fuel_type='.$fuel_type);
+                                    array_push($next_params, 'fuel_type='.$fuel_type);
+                                }
+                                if (!empty(@$search)) {
+                                    array_push($prev_params, 'search='.$search);
+                                    array_push($next_params, 'search='.$search);
+                                }
+                                if (!empty(@$destination)) {
+                                    array_push($prev_params, 'destination='.$destination);
+                                    array_push($next_params, 'destination='.$destination);
+                                }
+                                if (!empty(@$pay_status)) {
+                                    array_push($prev_params, 'pay_status='.$pay_status);
+                                    array_push($next_params, 'pay_status='.$pay_status);
+                                }
+                                $pre = join("&", $prev_params);
+                                $nex = join("&", $next_params);
+                            @endphp
+                            <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('user/vehicles?'.$pre) }}" @endif>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                </svg>
+                            </a>
+                            <p class="text-fs-4 m-0">Page {{ @$page }}</p>
+                            <a class="btn" @if(count($admin) < 20) href="javascript:void();" @else href="{{ url('user/vehicles?'.$nex) }}" @endif>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                </svg>
+                            </a>
+                        </div>
                     </div>
                     <div class="tab-content" id="pills-tabContent">
                         <div class="table-responsive tab-pane fade show active" data-bs-toggle="tab" id="admin">
@@ -366,7 +415,7 @@
                                     <th scope="col">Title</th>
                                     <th scope="col">Keys</th>
                                     <th scope="col">Status</th>
-                                    <th scope="col">Fuel</th>
+                                    <th scope="col">Fuel Type</th>
                                     <th scope="col">Terminal</th>
                                     <th scope="col">Comment</th>
                                     <th scope="col"></th>

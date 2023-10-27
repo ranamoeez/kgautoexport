@@ -93,9 +93,9 @@ class HomeController extends Controller
         return view('user.index', $data);
     }
 
-    public function create_veh(Request $request)
-    {
-        ini_set('max_execution_time', 120000000);
+    // public function create_veh(Request $request)
+    // {
+    //     ini_set('max_execution_time', 120000000);
 
     //     $all = Container::all();
     //     foreach ($all as $key => $value) {
@@ -117,24 +117,24 @@ class HomeController extends Controller
     //         }
     //     }
 
-        $all = Container::all();
-        foreach ($all as $key => $value) {
-            $buyers = [];
-            $all_buyers = [];
-            $all_vehicles = ContainerVehicle::where("container_id", $value->id)->get();
-            foreach ($all_vehicles as $k => $v) {
-                if (!in_array($v->user_id, $all_buyers)) {
-                    array_push($buyers, "-".$v->user_id."-");
-                    array_push($all_buyers, $v->user_id);
-                }
-            }
-            if (!empty($buyers)) {
-                Container::where("id", $value->id)->update(["buyers" => implode(",", $buyers)]);
-            }
-        }
+    //     $all = Container::all();
+    //     foreach ($all as $key => $value) {
+    //         $buyers = [];
+    //         $all_buyers = [];
+    //         $all_vehicles = ContainerVehicle::where("container_id", $value->id)->get();
+    //         foreach ($all_vehicles as $k => $v) {
+    //             if (!in_array($v->user_id, $all_buyers)) {
+    //                 array_push($buyers, "-".$v->user_id."-");
+    //                 array_push($all_buyers, $v->user_id);
+    //             }
+    //         }
+    //         if (!empty($buyers)) {
+    //             Container::where("id", $value->id)->update(["buyers" => implode(",", $buyers)]);
+    //         }
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 
     public function assign_vehicle(Request $request)
     {
@@ -260,12 +260,13 @@ class HomeController extends Controller
     public function vehicles(Request $request)
     {
         $data['type'] = "vehicles";
+        $data['page'] = "1";
         $user_id = Auth::user()->id;
         if (Auth::user()->role == "3") {
             $user_id = Auth::user()->main_user_id;
         }
-        $super_user = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "super_user")->where('user_id', $user_id);
-        $admin = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->where('user_id', $user_id);
+        $super_user = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "super_user")->where('user_id', $user_id);
+        $admin = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "admin")->where('user_id', $user_id);
         $filter = [];
         if (!empty($request->terminal) && $request->terminal !== 'all') {
             $data['terminal'] = $request->terminal;
@@ -352,6 +353,18 @@ class HomeController extends Controller
             $data['pay_status'] = $request->pay_status;
             $super_user = $super_user->where('payment_status', $request->pay_status);
             $admin = $admin->where('payment_status', $request->pay_status);
+        }
+
+        if (!empty($request->page)) {
+            if (!empty($request->search)) {
+                $request->page = 1;
+            }
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 20;
+                $super_user = $super_user->offset((int)$offset);
+                $admin = $admin->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
         }
         
         $data['super_user'] = $super_user->orderBy("id", "DESC")->get();
@@ -512,12 +525,13 @@ class HomeController extends Controller
     public function containers(Request $request)
     {
         $data['type'] = "containers";
+        $data['page'] = "1";
 
         $user_id = Auth::user()->id;
         if (Auth::user()->role == "3") {
             $user_id = Auth::user()->main_user_id;
         }
-        $admin = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipping_line', 'loading_port', 'discharge_port', 'destination_port', 'measurement')->where("buyers", "LIKE", "%-".$user_id."-%");
+        $admin = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipping_line', 'loading_port', 'discharge_port', 'destination_port', 'measurement')->limit(20)->where("buyers", "LIKE", "%-".$user_id."-%");
 
         if (!empty($request->port) && $request->port !== 'all') {
             $data['port'] = $request->port;
@@ -540,6 +554,17 @@ class HomeController extends Controller
         if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == '0') {
             $data['pay_status'] = $request->pay_status;
             $admin = $admin->where('all_paid', $request->pay_status);
+        }
+
+        if (!empty($request->page)) {
+            if (!empty($request->search)) {
+                $request->page = 1;
+            }
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 20;
+                $admin = $admin->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
         }
 
         $admin = $admin->get();

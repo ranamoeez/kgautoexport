@@ -86,7 +86,7 @@
                     <div class="col-md-2">
                         <label for="pay_status" class="fw-semibold">Payment Status</label>
                         <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
-                            <option value="all" @if(@$paystatus == "all") selected @endif>All</option>
+                            <option value="all" @if(@$pay_status == "all") selected @endif>All</option>
                             <option value="1" @if(@$pay_status == "1") selected @endif>Paid</option>
                             <option value="0" @if(@$pay_status == "0") selected @endif>Unpaid</option>
                         </select>
@@ -96,10 +96,51 @@
 
             <!-- shipment details list -->
             <div class="mt-5">
-                <div class="d-flex justify-content-between mt-3">
-                    <h4 class="fw-bold fs-md-13 text-fs-5">
+                <div class="d-flex justify-content-between mt-3 align-items-center">
+                    <h4 class="fw-bold fs-md-13 fs-lg-25">
                         Containers List
                     </h4>
+                    <div class="d-flex gap-2 align-items-center page-icon">
+                        @php
+                            $prev = (int)$page - 1;
+                            $next = (int)$page + 1;
+                            $prev_params = ['page='.$prev];
+                            $next_params = ['page='.$next];
+                            if (!empty(@$port)) {
+                                array_push($prev_params, 'port='.$port);
+                                array_push($next_params, 'port='.$port);
+                            }
+                            if (!empty(@$status)) {
+                                array_push($prev_params, 'status='.$status);
+                                array_push($next_params, 'status='.$status);
+                            }
+                            if (!empty(@$search)) {
+                                array_push($prev_params, 'search='.$search);
+                                array_push($next_params, 'search='.$search);
+                            }
+                            if (!empty(@$pay_status)) {
+                                array_push($prev_params, 'pay_status='.$pay_status);
+                                array_push($next_params, 'pay_status='.$pay_status);
+                            }
+                            $pre = join("&", $prev_params);
+                            $nex = join("&", $next_params);
+                        @endphp
+                        <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('user/containers?'.$pre) }}" @endif>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15.75 19.5L8.25 12l7.5-7.5" />
+                            </svg>
+                        </a>
+                        <p class="text-fs-4 m-0">Page {{ @$page }}</p>
+                        <a class="btn" @if(count($admin) < 20) href="javascript:void();" @else href="{{ url('user/containers?'.$nex) }}" @endif>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="tab-content" id="pills-tabContent">

@@ -93,9 +93,9 @@ class HomeController extends Controller
         return view('user.index', $data);
     }
 
-    // public function create_veh(Request $request)
-    // {
-    //     ini_set('max_execution_time', 120000);
+    public function create_veh(Request $request)
+    {
+        ini_set('max_execution_time', 120000000);
 
     //     $all = Container::all();
     //     foreach ($all as $key => $value) {
@@ -117,8 +117,22 @@ class HomeController extends Controller
     //         }
     //     }
 
-    //     return true;
-    // }
+        $all = Container::all();
+        foreach ($all as $key => $value) {
+            $buyers = [];
+            $all_buyers = [];
+            $all_vehicles = ContainerVehicle::where("container_id", $value->id)->get();
+            foreach ($all_vehicles as $key => $value) {
+                if (!in_array($value->user_id, $all_buyers)) {
+                    array_push($buyers, "-".$value->user_id."-");
+                    array_push($all_buyers, $value->user_id);
+                }
+            }
+            Container::where("id", $value->id)->update(["buyers" => $buyers]);
+        }
+
+        return true;
+    }
 
     public function assign_vehicle(Request $request)
     {
@@ -501,23 +515,15 @@ class HomeController extends Controller
         if (Auth::user()->role == "3") {
             $user_id = Auth::user()->main_user_id;
         }
-        $admin = Container::orderBy('id', 'DESC')->with(['container_vehicle' => function ($q) use($user_id) {
-            $q->where("user_id", $user_id);
-            $q->where("added_by", "admin");
-        }, 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement']);
-        $super_user = Container::orderBy('id', 'DESC')->with(['container_vehicle' => function ($q) use($user_id) {
-            $q->where("user_id", $user_id);
-            $q->where("added_by", "super_user");
-        }, 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement']);
+        $admin = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipping_line', 'loading_port', 'discharge_port', 'destination_port', 'measurement')->where("buyers", "LIKE", "%-".$user_id."-%");
+
         if (!empty($request->port) && $request->port !== 'all') {
             $data['port'] = $request->port;
             $admin = $admin->where('loading_port_id', $request->port);
-            $super_user = $super_user->where('loading_port_id', $request->port);
         }
         if (!empty($request->status) && $request->status !== 'all') {
             $data['status'] = $request->status;
             $admin = $admin->where('status_id', $request->status);
-            $super_user = $super_user->where('status_id', $request->status);
         }
         if (!empty($request->search)) {
             $data['search'] = $request->search;
@@ -528,21 +534,13 @@ class HomeController extends Controller
                     ->orWhere('departure', 'LIKE', '%'.$search.'%')
                     ->orWhere('arrival', 'LIKE', '%'.$search.'%');
             });
-            $super_user = $super_user->where(function ($query) use ($search) {
-                $query->where('booking_no', 'LIKE', '%'.$search.'%')
-                    ->orWhere('container_no', 'LIKE', '%'.$search.'%')
-                    ->orWhere('departure', 'LIKE', '%'.$search.'%')
-                    ->orWhere('arrival', 'LIKE', '%'.$search.'%');
-            });
         }
         if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == '0') {
             $data['pay_status'] = $request->pay_status;
             $admin = $admin->where('all_paid', $request->pay_status);
-            $super_user = $super_user->where('all_paid', $request->pay_status);
         }
 
         $admin = $admin->get();
-        $super_user = $super_user->get();
 
         foreach ($admin as $key => $value) {
             $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();
@@ -562,26 +560,8 @@ class HomeController extends Controller
             $admin[$key]->buyers = $buyers;
         }
 
-        foreach ($super_user as $key => $value) {
-            $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();
-            $unique = [];
-            $buyers = [];
-            foreach ($buyer as $k => $v) {
-                $user_id = $v->user_id;
-                if (!in_array($user_id, $unique)) {
-                    array_push($unique, $user_id);
-                    $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value->id)->get();
-                    if (count($vehicles) > 0) {
-                        $v->vehicles = $vehicles;
-                        array_push($buyers, $v);
-                    }
-                }
-            }
-            $super_user[$key]->buyers = $buyers;
-        }
-
         $data['admin'] = $admin;
-        $data['super_user'] = $super_user;
+        $data['super_user'] = [];
         $data['all_port'] = LoadingPort::all();
         $data['all_status'] = ContStatus::all();
         $data['countries'] = Country::all();

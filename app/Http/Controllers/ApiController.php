@@ -117,12 +117,12 @@ class ApiController extends Controller
 
                 if (!empty($request->PageIndex)) {
                     if ($request->PageIndex > 1) {
-                        $offset = ($request->PageIndex - 1) * 100;
+                        $offset = ($request->PageIndex - 1) * 50;
                         $vehicles = $vehicles->offset((int)$offset);
                     }
                 }
 
-                $vehicles = $vehicles->limit(100)->get();
+                $vehicles = $vehicles->limit(50)->get();
             
                 return $this->sendResponse($vehicles, 'Vehicles retrieved successfully.');
             } else {
@@ -146,31 +146,25 @@ class ApiController extends Controller
                 if ($user->role == "4") {
                     $destination_id = $user->destination_id;
 
-                    $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $destination_id)->limit(100)->get();
+                    $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $destination_id)->limit(50)->get();
 
                     if (!empty($request->PageIndex)) {
                         if ($request->PageIndex == 1) {
-                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $destination_id)->limit(100)->get();
+                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $destination_id)->limit(50)->get();
                         } else {
-                            $offset = ($request->PageIndex - 1) * 100;
-                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $destination_id)->limit(100)->offset((int)$offset)->get();
+                            $offset = ($request->PageIndex - 1) * 50;
+                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $destination_id)->limit(50)->offset((int)$offset)->get();
                         }
                     }
                 } else {
-                    $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
-                        $q->where("user_id", $user_id);
-                    })->limit(100)->get();
+                    $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("buyers", "LIKE", "%-".$user_id."-%")->limit(50)->get();
 
                     if (!empty($request->PageIndex)) {
                         if ($request->PageIndex == 1) {
-                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
-                                $q->where("user_id", $user_id);
-                            })->limit(100)->get();
+                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("buyers", "LIKE", "%-".$user_id."-%")->limit(50)->get();
                         } else {
-                            $offset = ($request->PageIndex - 1) * 100;
-                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->whereHas("container_vehicle", function ($q) use($user_id) {
-                                $q->where("user_id", $user_id);
-                            })->limit(100)->offset((int)$offset)->get();
+                            $offset = ($request->PageIndex - 1) * 50;
+                            $containers = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("buyers", "LIKE", "%-".$user_id."-%")->limit(50)->offset((int)$offset)->get();
                         }
                     }
                 }

@@ -33,20 +33,20 @@ class SendVehicle extends Mailable
         $data = $this->subject("Vehicle | K&G Auto Export")->view('email.send-vehicle');
         if (!empty($this->data->vehicle_documents)) {
             foreach ($this->data->vehicle_documents as $key => $value) {
-                $data = $data->attach("http://kgautoexport.s3-website.eu-north-1.amazonaws.com/".$value->filename);
+                $data = $data->attach("http://kgautoexport.s3-website.eu-north-1.amazonaws.com/".$value->filepath.$value->filename);
             }
         } else if (!empty($this->data->vehicle->vehicle_documents)) {
             foreach ($this->data->vehicle->vehicle_documents as $key => $value) {
-                $data = $data->attach("http://kgautoexport.s3-website.eu-north-1.amazonaws.com/".$value->filename);
+                $data = $data->attach("http://kgautoexport.s3-website.eu-north-1.amazonaws.com/".$value->filepath.$value->filename);
             }
         }
         if (!empty($this->data->vehicle_images)) {
             foreach ($this->data->vehicle_images as $key => $value) {
-                $data = $data->attach("http://kgautoexport.s3-website.eu-north-1.amazonaws.com/".$value->filename);
+                $data = $data->attach("http://kgautoexport.s3-website.eu-north-1.amazonaws.com/".$value->filepath.$value->filename);
             }
         } else if (!empty($this->data->vehicle->vehicle_images)) {
             foreach ($this->data->vehicle->vehicle_images as $key => $value) {
-                $data = $data->attach("http://kgautoexport.s3-website.eu-north-1.amazonaws.com/".$value->filename);
+                $data = $data->attach("http://kgautoexport.s3-website.eu-north-1.amazonaws.com/".$value->filepath.$value->filename);
             }
         }
         return $data;

@@ -1057,7 +1057,7 @@
             <div class="modal fade" id="imageSliderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
-                        <div class="modal-header d-flex justify-content-between">
+                        <div class="modal-header d-flex justify-content-end">
                             {{-- <div>
                                 <button type="button" class="btn btn-secondary" id="zoomIn">+</button>
                                 <button type="button" class="btn btn-secondary" id="zoomOut">-</button>
@@ -1075,7 +1075,7 @@
                                     @if(count(@$list->vehicle->vehicle_images) > 0)
                                     @foreach($list->vehicle->vehicle_images as $key => $value)
                                     <div @if($key == "0") class="carousel-item active" @else class="carousel-item" @endif data-code="{{ $value->id }}">
-                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" alt="Image {{ $key+1 }}" style="transform: scale(1.8); transform-origin: 0px 0px;">
+                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" alt="Image {{ $key+1 }}" style="width: 100%; height: 500px;">
                                     </div>
                                     @endforeach
                                     @endif

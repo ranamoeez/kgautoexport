@@ -971,11 +971,11 @@
                                     description += " "+value.vehicle.name;
                                 }
                                 var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
-                                    <div class="col text-fs-3 text-center">`+value.vehicle.vin+`</div>
-                                    <div class="col text-fs-3 text-center">`+description+`</div>
+                                    <div class="col text-fs-3 text-center">${value.vehicle.vin}</div>
+                                    <div class="col text-fs-3 text-center">${description}</div>
                                     <div class="col d-flex justify-content-center align-items-center">
                                         <input class="form-check-input vehicle_id" id="vehicle_id" name="vehicle_id" type="checkbox"
-                                            value="`+value.vehicle.id+`">
+                                            value="${value.vehicle.id}">
                                     </div>
                                 </div>`;
                                 $(".vehicles").append(html);
@@ -992,7 +992,7 @@
                                             if (data.success == true) {
                                                 if (data.vehicles.length == 0) {
                                                     var html = `<div class="row shadow w-100 mb-3 p-2 vehicle-data">
-                                                        <input type="text" id="search-inp" class="form-control w-75" placeholder="Search vehicles" value="`+search+`">
+                                                        <input type="text" id="search-inp" class="form-control w-75" placeholder="Search vehicles" value="${search}">
                                                         <button type="button" class="btn btn-primary w-25" id="search-btn">Search</button>
                                                     </div>
                                                     <div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
@@ -1001,7 +1001,7 @@
                                                     $(".vehicles").append(html);
                                                 } else {
                                                     var html = `<div class="row shadow w-100 mb-3 p-2 vehicle-data">
-                                                        <input type="text" id="search-inp" class="form-control w-75" placeholder="Search vehicles" value="`+search+`">
+                                                        <input type="text" id="search-inp" class="form-control w-75" placeholder="Search vehicles" value="${search}">
                                                         <button type="button" class="btn btn-primary w-25" id="search-btn">Search</button>
                                                     </div>`;
                                                     $(".vehicles").append(html);
@@ -1014,11 +1014,11 @@
                                                             description += " "+value.vehicle.name;
                                                         }
                                                         var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
-                                                            <div class="col text-fs-3 text-center">`+value.vehicle.vin+`</div>
-                                                            <div class="col text-fs-3 text-center">`+description+`</div>
+                                                            <div class="col text-fs-3 text-center">${value.vehicle.vin}</div>
+                                                            <div class="col text-fs-3 text-center">${description}</div>
                                                             <div class="col d-flex justify-content-center align-items-center">
                                                                 <input class="form-check-input vehicle_id" id="vehicle_id" name="vehicle_id" type="checkbox"
-                                                                    value="`+value.vehicle.id+`">
+                                                                    value="${value.vehicle.id}">
                                                             </div>
                                                         </div>`;
                                                         $(".vehicles").append(html);

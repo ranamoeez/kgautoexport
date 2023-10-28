@@ -839,7 +839,7 @@
                     if (response.success == true) {
                         $(".auction_location").html("");
                         $(response.data).each(function (key, value) {
-                            option = "<option value="+value.id+">"+value.name+"</option>";
+                            option = `<option value="${value.id}">${value.name}</option>`;
                             $(".auction_location").append(option);
                         });
                         $(".auction_location").attr("disabled", false);
@@ -861,7 +861,7 @@
                         option = "<option value=''></option>";
                         $(".name").append(option);
                         $(response.data).each(function (key, value) {
-                            option = "<option value="+value.name+" data-weight="+value.weight+" data-fuel="+value.fuel_type+">"+value.name+"</option>";
+                            option = `<option value="${value.name}" data-weight="${value.weight}" data-fuel="${value.fuel_type}">${value.name}</option>`;
                             $(".name").append(option);
                         });
                         $(".name").attr("disabled", false);
@@ -956,10 +956,10 @@
 
                 var html = `<div class="col-12 mt-2">
                     <span class="row align-items-center">
-                        <input type="hidden" name="trans_type[]" value="`+type+`">
-                        <input type="hidden" name="trans_fine[]" value="`+fine+`">
-                        <div class="col-md-6">`+type+`</div>
-                        <div class="col-md-3">`+fine+` $</div>
+                        <input type="hidden" name="trans_type[]" value="${type}">
+                        <input type="hidden" name="trans_fine[]" value="${fine}">
+                        <div class="col-md-6">${type}</div>
+                        <div class="col-md-3">$ ${fine}</div>
                         <div class="col-md-3">
                             <div class="d-flex justify-content-center items-center message-icon">
                                 <i class="fa-circle-minus fa-solid text-danger delete-trans" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal"></i>
@@ -977,10 +977,10 @@
 
                 var html = `<div class="col-12 mt-2">
                     <span class="row align-items-center">
-                        <input type="hidden" name="auction_type[]" value="`+type+`">
-                        <input type="hidden" name="auction_fine[]" value="`+fine+`">
-                        <div class="col-md-6">`+type+`</div>
-                        <div class="col-md-3">`+fine+` $</div>
+                        <input type="hidden" name="auction_type[]" value="${type}">
+                        <input type="hidden" name="auction_fine[]" value="${fine}">
+                        <div class="col-md-6">${type}</div>
+                        <div class="col-md-3">$ ${fine}</div>
                         <div class="col-md-3">
                             <div class="d-flex justify-content-center items-center message-icon">
                                 <i class="fa-circle-minus fa-solid text-danger delete-trans" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal"></i>
@@ -999,10 +999,10 @@
 
                     var html = `<div class="col-12 mt-2">
                         <span class="row align-items-center">
-                            <input type="hidden" name="expense_type[]" value="`+type+`">
-                            <input type="hidden" name="expense_fine[]" value="`+fine+`">
-                            <div class="col-md-6">`+type+`</div>
-                            <div class="col-md-3">`+fine+` $</div>
+                            <input type="hidden" name="expense_type[]" value="${type}">
+                            <input type="hidden" name="expense_fine[]" value="${fine}">
+                            <div class="col-md-6">${type}</div>
+                            <div class="col-md-3">$ ${fine}</div>
                             <div class="col-md-3">
                                 <div class="d-flex justify-content-center items-center message-icon">
                                     <i class="fa-circle-minus fa-solid text-danger delete-trans" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal"></i>

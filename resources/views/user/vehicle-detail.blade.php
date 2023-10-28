@@ -311,7 +311,7 @@
                             <div class="row mt-4">
                                 <label for="" class="col-md-2 fw-bold">Description</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" value="{{ @$list->vehicle->modal.' '.@$list->vehicle->company_name.' '.@$list->vehicle->name }}" disabled />
+                                    <input type="text" class="form-control" value="{{ trim(@$list->vehicle->modal).' '.trim(@$list->vehicle->company_name).' '.trim(@$list->vehicle->name) }}" disabled />
                                 </div>
                             </div>
                             <div class="row mt-4">

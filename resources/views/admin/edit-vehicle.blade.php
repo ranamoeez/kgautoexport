@@ -1070,12 +1070,12 @@
                             <!-- Image slider container -->
                             <div id="imageSlider" class="carousel slide" data-ride="carousel">
                                 <!-- Images will be dynamically loaded here -->
-                                <div class="carousel-inner" style="max-height: 700px;">
+                                <div class="carousel-inner">
                                     <!-- Add your images here -->
                                     @if(count(@$list->vehicle->vehicle_images) > 0)
                                     @foreach($list->vehicle->vehicle_images as $key => $value)
                                     <div @if($key == "0") class="carousel-item active" @else class="carousel-item" @endif data-code="{{ $value->id }}">
-                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" alt="Image {{ $key+1 }}" style="width: 100%; height: 500px;">
+                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" alt="Image {{ $key+1 }}" style="width: 100%; height: 100%;">
                                     </div>
                                     @endforeach
                                     @endif

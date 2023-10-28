@@ -210,7 +210,9 @@ class HomeController extends Controller
             }
             if (!empty($data['buyer_id'])) {
                 $user_levels = User::with("user_level")->where("id", $data['buyer_id'])->first();
-                $data['company_fee'] = $user_levels->user_level->company_fee;
+                if (!empty($user_levels->user_level)) {
+                    $data['company_fee'] = @$user_levels->user_level->company_fee;
+                }
             }
             if (!empty($data['destination_port_id'])) {
                 $destination = DestinationPort::where("id", $data['destination_port_id'])->first();

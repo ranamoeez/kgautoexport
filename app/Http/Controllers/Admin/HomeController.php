@@ -266,7 +266,7 @@ class HomeController extends Controller
                     $image->vehicle_id = $vehicle->id;
                     $image->filesize = $value->getSize();
                     $image->filename = $filename;
-                    $image->filepath = 'storage/app/';
+                    $image->filepath = '';
                     $image->save();
                 }
             }
@@ -367,7 +367,7 @@ class HomeController extends Controller
                     $image->owner_id = $vehicle->user_id;
                     $image->title = '';
                     $image->filename = $filename;
-                    $image->filepath = 'storage/app/';
+                    $image->filepath = '';
                     $image->type = 'warehouse';
                     $image->save();
                 }
@@ -383,7 +383,7 @@ class HomeController extends Controller
                     $image->vehicle_id = $id;
                     $image->filesize = $value->getSize();
                     $image->filename = $filename;
-                    $image->filepath = 'storage/app/';
+                    $image->filepath = '';
                     $image->save();
                 }
             }
@@ -626,7 +626,7 @@ class HomeController extends Controller
                     $image->title = 'images';
                     $image->owner_id = Auth::user()->id;
                     $image->filename = $filename;
-                    $image->filepath = 'storage/app/';
+                    $image->filepath = '';
                     $image->save();
                 }
             }
@@ -643,7 +643,7 @@ class HomeController extends Controller
                     $image->title = '';
                     $image->owner_id = Auth::user()->id;
                     $image->filename = $filename;
-                    $image->filepath = 'storage/app/';
+                    $image->filepath = '';
                     $image->save();
                 }
             }
@@ -690,7 +690,7 @@ class HomeController extends Controller
                     $image->title = 'images';
                     $image->owner_id = Auth::user()->id;
                     $image->filename = $filename;
-                    $image->filepath = 'storage/app/';
+                    $image->filepath = '';
                     $image->save();
                 }
             }
@@ -707,7 +707,7 @@ class HomeController extends Controller
                     $image->title = '';
                     $image->owner_id = Auth::user()->id;
                     $image->filename = $filename;
-                    $image->filepath = 'storage/app/';
+                    $image->filepath = '';
                     $image->save();
                 }
             }
@@ -735,6 +735,9 @@ class HomeController extends Controller
             }
             unset($data['documents']);
             unset($data['images']);
+            if (!empty($data['cut_off']) && $data['cut_off'] == "0000-00-00") {
+                unset($data['cut_off']);
+            }
             $container = Container::where('id', $id)->update($data);
             $response = array('success'=>true,'msg'=>'Container is updated sucessfully.','action'=>'reload');
             return json_encode($response);

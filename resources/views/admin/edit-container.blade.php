@@ -468,7 +468,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" class="w-100 rounded-4" style="height: 160px;" alt="" />
+                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" class="w-100 rounded-4 veh_img" style="height: 160px;" alt="" data-code="{{ $value->id }}" />
                                     </div>
                                 </div>
                             </div>
@@ -705,6 +705,49 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="imageSliderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-between">
+                            <div>
+                                <button type="button" class="btn btn-secondary" id="zoomIn">+</button>
+                                <button type="button" class="btn btn-secondary" id="zoomOut">-</button>
+                            </div>
+                            <div class="close" style="cursor: pointer;">
+                                <span aria-hidden="true" style="font-size: 20px;">&times;</span>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Image slider container -->
+                            <div id="imageSlider" class="carousel slide" data-ride="carousel">
+                                <!-- Images will be dynamically loaded here -->
+                                <div class="carousel-inner">
+                                    <!-- Add your images here -->
+                                    @if(count(@$container->container_documents) > 0)
+                                    @foreach(@$container->container_documents as $key => $value)
+                                    @if($value->title == "images")
+                                    <div @if($key == "0") class="carousel-item active" @else class="carousel-item" @endif data-code="{{ $value->id }}">
+                                        <img src="http://kgautoexport.s3-website.eu-north-1.amazonaws.com/{{ $value->filepath.$value->filename }}" alt="Image {{ $key+1 }}" style="transform: scale(1.8); transform-origin: 0px 0px;">
+                                    </div>
+                                    @endif
+                                    @endforeach
+                                    @endif
+                                    <!-- Add more images as needed -->
+                                </div>
+                                <!-- Left and right arrows for navigation -->
+                                <a class="carousel-control-prev" href="#imageSlider" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#imageSlider" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -757,6 +800,18 @@
                     $('.center-body').css('display', 'none');
                 }
             });
+        });
+
+        $(document).on("click", ".veh_img", function () {
+            var data_code = $(this).attr("data-code");
+            console.log(data_code);
+            $(".carousel-item").removeClass("active");
+            $(".carousel-item[data-code='"+data_code+"']").addClass("active");
+            $("#imageSliderModal").modal("show");
+        });
+
+        $(document).on("click", ".close", function () {
+            $("#imageSliderModal").modal("hide");
         });
 
         $(document).on("click", ".download-files", function () {
@@ -1059,7 +1114,7 @@
         });
     </script>
 
-    <script src="{{ asset('js/jquery.popup.lightbox.js') }}"></script>
+    {{-- <script src="{{ asset('js/jquery.popup.lightbox.js') }}"></script>
     <link href="{{ asset('css/popup-lightbox.css') }}" rel="stylesheet" />
 
     <script>
@@ -1070,6 +1125,41 @@
                 height: 900
             });
 
+        });
+    </script> --}}
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var currentZoom = 1.0; // Initial zoom level
+            var zoomIncrement = 0.1; // Zoom level change on each click
+
+            // Initialize the modal with the image slider
+            $('#imageSliderModal').on('show.bs.modal', function () {
+                $('#imageSlider').carousel({
+                    interval: false, // Prevent auto sliding
+                    autoPlay: false
+                });
+            });
+
+            // Zoom In button click event
+            $('#zoomIn').click(function () {
+                currentZoom += zoomIncrement;
+                updateZoom();
+            });
+
+            // Zoom Out button click event
+            $('#zoomOut').click(function () {
+                currentZoom -= zoomIncrement;
+                updateZoom();
+            });
+
+            // Function to update the zoom level
+            function updateZoom() {
+                var image = $('.carousel-item.active img');
+                image.css('transform', 'scale(' + currentZoom + ')');
+                image.css('transform-origin', '0 0'); // Set the transform origin to the top-left corner
+            }
         });
     </script>
 

@@ -721,7 +721,7 @@
                             <!-- Image slider container -->
                             <div id="imageSlider" class="carousel slide" data-ride="carousel">
                                 <!-- Images will be dynamically loaded here -->
-                                <div class="carousel-inner">
+                                <div class="carousel-inner" style="max-height: 700px;">
                                     <!-- Add your images here -->
                                     @if(count(@$container->container_documents) > 0)
                                     @foreach(@$container->container_documents as $key => $value)

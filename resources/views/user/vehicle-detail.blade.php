@@ -632,7 +632,7 @@
                             <!-- Image slider container -->
                             <div id="imageSlider" class="carousel slide" data-ride="carousel">
                                 <!-- Images will be dynamically loaded here -->
-                                <div class="carousel-inner">
+                                <div class="carousel-inner" style="max-height: 700px;">
                                     <!-- Add your images here -->
                                     @if(count(@$list->vehicle->vehicle_images) > 0)
                                     @foreach($list->vehicle->vehicle_images as $key => $value)

@@ -138,7 +138,7 @@
                                     </select>
                                 </div>
                                 <div class="offset-md-3 col-md-9 mt-2">
-                                    <select class="selectjs form-select name" name="name" required="" disabled="">
+                                    <select class="selectjs form-select name" name="name" required="">
                                         <option value=""></option>
                                         @if(count(@$all_vehicle_modal) > 0)
                                         @foreach(@$all_vehicle_modal as $key => $value)

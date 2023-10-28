@@ -620,10 +620,10 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header d-flex justify-content-between">
-                            <div>
+                            {{-- <div>
                                 <button type="button" class="btn btn-secondary" id="zoomIn">+</button>
                                 <button type="button" class="btn btn-secondary" id="zoomOut">-</button>
-                            </div>
+                            </div> --}}
                             <div class="close" style="cursor: pointer;">
                                 <span aria-hidden="true" style="font-size: 20px;">&times;</span>
                             </div>

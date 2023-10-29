@@ -44,7 +44,11 @@
                 <div class="card-body" style="margin-bottom: 100px">
                     <h3 class="text-white fw-bold fs-2">Great Job, {{ \Auth::user()->name }}!</h3>
                     @php
-                        $whole = $user->user_level->due_payment_limit;
+                        if (!empty($user->user_level)) {
+                            $whole = $user->user_level->due_payment_limit;
+                        } else {
+                            $whole = 0;
+                        }
                         $given = $due_payments;
                         $percentage = ($given / $whole) * 100;
                     @endphp

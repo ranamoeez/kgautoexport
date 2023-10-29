@@ -58,7 +58,7 @@ class HomeController extends Controller
         $data['type'] = "vehicles";
         $data['page'] = '1';
         $filter = [];
-        $vehicles = AssignVehicle::orderBy('id', 'DESC')->limit(20)->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->whereHas('vehicle');
+        $vehicles = AssignVehicle::orderBy('id', 'DESC')->limit(20)->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin");
         if (!empty($request->terminal) && $request->terminal !== 'all') {
         	$data['terminal'] = $request->terminal;
             $terminal = $request->terminal;
@@ -90,7 +90,7 @@ class HomeController extends Controller
             $filter['search'] = $search;
         }
         if (!empty($filter)) {
-            $vehicles = AssignVehicle::orderBy('id', 'DESC')->limit(20)->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->whereHas('vehicle', function ($query) use($filter) {
+            $vehicles = $vehicles->whereHas('vehicle', function ($query) use($filter) {
                 if (!empty($filter['terminal'])) {
                     $query->where('terminal_id', $filter['terminal']);
                 }

@@ -90,7 +90,6 @@ class HomeController extends Controller
             $filter['search'] = $search;
         }
         if (!empty($filter)) {
-            $request->page = 1;
             $vehicles = $vehicles->whereHas('vehicle', function ($query) use($filter) {
                 if (!empty($filter['terminal'])) {
                     $query->where('terminal_id', $filter['terminal']);
@@ -157,17 +156,19 @@ class HomeController extends Controller
         if (!empty($request->buyer) && $request->buyer !== 'all') {
             $data['buyer'] = $request->buyer;
             $vehicles = $vehicles->where('user_id', $request->buyer);
-            $request->page = 1;
         }
         if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
             $data['pay_status'] = $request->pay_status;
             $vehicles = $vehicles->where('payment_status', $request->pay_status);
-            $request->page = 1;
         }
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 20;
                 $vehicles = $vehicles->offset((int)$offset);
+                if (count($vehicles->get()) == 0) {
+                    $vehicles = $vehicles->offset(0);
+                    $request->page = 1;
+                }
             }
             $data['page'] = $request->page;
         }
@@ -519,12 +520,10 @@ class HomeController extends Controller
         if (!empty($request->port) && $request->port !== 'all') {
         	$data['port'] = $request->port;
         	$containers = $containers->where('loading_port_id', $request->port);
-            $request->page = 1;
         }
         if (!empty($request->status) && $request->status !== 'all') {
         	$data['status'] = $request->status;
         	$containers = $containers->where('status_id', $request->status);
-            $request->page = 1;
         }
         if (!empty($request->search)) {
         	$data['search'] = $request->search;
@@ -536,41 +535,38 @@ class HomeController extends Controller
 			        ->orWhere('departure', 'LIKE', '%'.$search.'%')
 			        ->orWhere('arrival', 'LIKE', '%'.$search.'%');
 			});
-            $request->page = 1;
         }
         if (!empty($request->fromDate) && !empty($request->toDate)) {
         	$data['fromDate'] = $request->fromDate;
         	$data['toDate'] = $request->toDate;
         	$containers = $containers->where('arrival', '<=', $request->toDate)->where('arrival', '>=', $request->fromDate);
-            $request->page = 1;
         } elseif(!empty($request->fromDate)) {
         	$data['fromDate'] = $request->fromDate;
         	$containers = $containers->where('arrival', '>=', $request->fromDate);
-            $request->page = 1;
         } elseif(!empty($request->toDate)) {
         	$data['toDate'] = $request->toDate;
         	$containers = $containers->where('arrival', '<=', $request->toDate);
-            $request->page = 1;
         }
         if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == '0') {
         	$data['pay_status'] = $request->pay_status;
         	$containers = $containers->where('all_paid', $request->pay_status);
-            $request->page = 1;
         }
         if (!empty($request->released_status) && $request->released_status !== 'all') {
             $data['released_status'] = $request->released_status;
             $containers = $containers->where('released_status', $request->released_status);
-            $request->page = 1;
         }
         if (!empty($request->unloaded_status) && $request->unloaded_status !== 'all') {
             $data['unloaded_status'] = $request->unloaded_status;
             $containers = $containers->where('unloaded_status', $request->unloaded_status);
-            $request->page = 1;
         }
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 20;
                 $containers = $containers->offset((int)$offset);
+                if (count($containers->limit(20)->get()) == 0) {
+                    $containers = $containers->offset(0);
+                    $request->page = 1;
+                }
             }
             $data['page'] = $request->page;
         }

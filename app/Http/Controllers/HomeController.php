@@ -294,7 +294,6 @@ class HomeController extends Controller
             $filter['search'] = $search;
         }
         if (!empty($filter)) {
-            $request->page = 1;
             $super_user = $super_user->whereHas('vehicle', function ($query) use($filter) {
                 if (!empty($filter['terminal'])) {
                     $query->where('terminal_id', $filter['terminal']);
@@ -354,7 +353,6 @@ class HomeController extends Controller
             $data['pay_status'] = $request->pay_status;
             $super_user = $super_user->where('payment_status', $request->pay_status);
             $admin = $admin->where('payment_status', $request->pay_status);
-            $request->page = 1;
         }
 
         if (!empty($request->page)) {
@@ -362,6 +360,14 @@ class HomeController extends Controller
                 $offset = ($request->page - 1) * 20;
                 $super_user = $super_user->offset((int)$offset);
                 $admin = $admin->offset((int)$offset);
+                if (count($super_user->get()) == 0) {
+                    $super_user = $super_user->offset(0);
+                    $request->page = 1;
+                }
+                if (count($admin->get()) == 0) {
+                    $admin = $admin->offset(0);
+                    $request->page = 1;
+                }
             }
             $data['page'] = $request->page;
         }
@@ -535,12 +541,10 @@ class HomeController extends Controller
         if (!empty($request->port) && $request->port !== 'all') {
             $data['port'] = $request->port;
             $admin = $admin->where('loading_port_id', $request->port);
-            $request->page = 1;
         }
         if (!empty($request->status) && $request->status !== 'all') {
             $data['status'] = $request->status;
             $admin = $admin->where('status_id', $request->status);
-            $request->page = 1;
         }
         if (!empty($request->search)) {
             $data['search'] = $request->search;
@@ -551,18 +555,20 @@ class HomeController extends Controller
                     ->orWhere('departure', 'LIKE', '%'.$search.'%')
                     ->orWhere('arrival', 'LIKE', '%'.$search.'%');
             });
-            $request->page = 1;
         }
         if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == '0') {
             $data['pay_status'] = $request->pay_status;
             $admin = $admin->where('all_paid', $request->pay_status);
-            $request->page = 1;
         }
 
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 20;
                 $admin = $admin->offset((int)$offset);
+                if (count($admin->get()) == 0) {
+                    $admin = $admin->offset(0);
+                    $request->page = 1;
+                }
             }
             $data['page'] = $request->page;
         }

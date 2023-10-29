@@ -48,7 +48,7 @@
                 <form method="GET" action="{{ url('user/containers') }}" class="row align-items-center" id="filters-form">
                     <div class="col-md-2">
                         <label for="port" class="fw-semibold">Port</label>
-                        <select class="selectjs form-select p-2 border border-gray-200 rounded-lg" id="port" name="port">
+                        <select class="selectjs form-select p-2 border border-gray-200 rounded-lg filter" id="port" name="port">
                         <option value="all" selected>All</option>
                         @if(count(@$all_port) > 0)
                         @foreach(@$all_port as $key => $value)
@@ -64,7 +64,7 @@
 
                     <div class="col-md-2">
                         <label for="status" class="fw-semibold">Status</label>
-                        <select id="status" name="status" class="selectjs form-select p-2">
+                        <select id="status" name="status" class="selectjs form-select p-2 filter">
                             <option value="all" selected>All</option>
                             @if(count(@$all_status) > 0)
                             @foreach(@$all_status as $key => $value)
@@ -80,12 +80,12 @@
 
                     <div class="col-md-2">
                         <label for="search" class="fw-semibold">Search</label>
-                        <input type="text" class="form-control p-2" placeholder="Search" name="search" value="{{ @$search }}" id="search-cont">
+                        <input type="text" class="form-control p-2 filter" placeholder="Search" name="search" value="{{ @$search }}" id="search-cont">
                     </div>
 
                     <div class="col-md-2">
                         <label for="pay_status" class="fw-semibold">Payment Status</label>
-                        <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
+                        <select id="pay_status" name="pay_status" class="selectjs form-select p-2 filter">
                             <option value="all" @if(@$pay_status == "all") selected @endif>All</option>
                             <option value="1" @if(@$pay_status == "1") selected @endif>Paid</option>
                             <option value="0" @if(@$pay_status == "0") selected @endif>Unpaid</option>
@@ -462,6 +462,7 @@
             $('.select2-selection--single').removeClass('select2-selection--single');
 
             $(document).on("change", "#port, #status, #search-cont, #pay_status", function () {
+                $(".filter").attr("disabled", true);
                 $("#filters-form").submit();
             });
 

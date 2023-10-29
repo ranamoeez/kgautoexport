@@ -27,7 +27,7 @@
                 <input type="hidden" name="page" value="{{ @$page }}">
                 <div class="col-md-3 mb-2">
                     <label for="port" class="fw-semibold">Port</label>
-                    <select class="selectjs form-select p-2 border border-gray-200 rounded-lg" id="port" name="port">
+                    <select class="selectjs form-select p-2 border border-gray-200 rounded-lg filter" id="port" name="port">
                         <option value="all" selected>All</option>
                         @if(count(@$all_port) > 0)
                         @foreach(@$all_port as $key => $value)
@@ -43,7 +43,7 @@
 
                 <div class="col-md-3 mb-2">
                     <label for="status" class="fw-semibold">Status</label>
-                    <select id="status" name="status" class="selectjs form-select p-2">
+                    <select id="status" name="status" class="selectjs form-select p-2 filter">
                         <option value="all" selected>All</option>
                         @if(count(@$all_status) > 0)
                         @foreach(@$all_status as $key => $value)
@@ -61,16 +61,16 @@
                     <label for="Date" class="fw-semibold">Date</label>
                     <div class="d-flex gap-4 align-items-center">
                         <div class="d-flex align-items-center">
-                            <input type="date" id="fromDate" name="fromDate" value="{{ @$fromDate }}" class="form-control" style="width: 150px;">
+                            <input type="date" id="fromDate" name="fromDate" value="{{ @$fromDate }}" class="form-control filter" style="width: 150px;">
                             <span class="mx-2">To</span>
-                            <input type="date" class="form-control mx-2" name="toDate" value="{{ @$toDate }}" id="toDate" style="width: 150px;">
+                            <input type="date" class="form-control mx-2 filter" name="toDate" value="{{ @$toDate }}" id="toDate" style="width: 150px;">
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-3 mb-2">
                     <label for="pay_status" class="fw-semibold">Payment Status</label>
-                    <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
+                    <select id="pay_status" name="pay_status" class="selectjs form-select p-2 filter">
                         <option value="all" @if(@$pay_status == "all") selected @endif>All</option>
                         <option value="1" @if(@$pay_status == "1") selected @endif>Paid</option>
                         <option value="0" @if(@$pay_status == "0") selected @endif>Unpaid</option>
@@ -79,7 +79,7 @@
 
                 <div class="col-md-3 mb-2">
                     <label for="released_status" class="fw-semibold">Released Status</label>
-                    <select id="released_status" name="released_status" class="selectjs form-select p-2">
+                    <select id="released_status" name="released_status" class="selectjs form-select p-2 filter">
                         <option value="all" @if(@$released_status == "all") selected @endif>All</option>
                         <option value="No" @if(@$released_status == "No") selected @endif>No</option>
                         <option value="In hand" @if(@$released_status == "In hand") selected @endif>In hand</option>
@@ -88,7 +88,7 @@
 
                 <div class="col-md-3 mb-2">
                     <label for="unloaded_status" class="fw-semibold">Unloaded Status</label>
-                    <select id="unloaded_status" name="unloaded_status" class="selectjs form-select p-2">
+                    <select id="unloaded_status" name="unloaded_status" class="selectjs form-select p-2 filter">
                         <option value="all" @if(@$unloaded_status == "all") selected @endif>All</option>
                         <option value="No" @if(@$unloaded_status == "No") selected @endif>No</option>
                         <option value="Yes" @if(@$unloaded_status == "Yes") selected @endif>Yes</option>
@@ -97,7 +97,7 @@
 
                 <div class="col-md-3 mb-2">
                     <label for="search" class="fw-semibold">Search</label>
-                    <input type="text" class="form-control p-2" placeholder="Search" name="search" value="{{ @$search }}" id="search-cont">
+                    <input type="text" class="form-control p-2 filter" placeholder="Search" name="search" value="{{ @$search }}" id="search-cont">
                 </div>
             </form>
 
@@ -353,6 +353,7 @@
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
             $(document).on("change", "#port, #status, #search-cont, #fromDate, #toDate, #pay_status, #released_status, #unloaded_status", function () {
+                $(".filter").attr("disabled", true);
                 $("#filters-form").submit();
             });
             $(document).on("click", ".delete", function () {

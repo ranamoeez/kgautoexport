@@ -48,7 +48,7 @@
                     <input type="hidden" name="page" value="{{ @$page }}">
                     <div class="col-md-3 mb-2">
                         <label for="terminal" class="fw-semibold">Terminal</label>
-                        <select id="terminal" name="terminal" class="selectjs form-select p-2">
+                        <select id="terminal" name="terminal" class="selectjs form-select p-2 filter">
                             <option value="all">All</option>
                             @if(count(@$all_terminal) > 0)
                             @foreach(@$all_terminal as $key => $value)
@@ -64,7 +64,7 @@
 
                     <div class="col-md-3 mb-2">
                         <label for="status" class="fw-semibold">Status</label>
-                        <select id="status" name="status" class="selectjs form-select p-2">
+                        <select id="status" name="status" class="selectjs form-select p-2 filter">
                             <option value="all">All</option>
                             @if(count(@$all_status) > 0)
                             @foreach(@$all_status as $key => $value)
@@ -80,7 +80,7 @@
 
                     <div class="col-md-3 mb-2">
                         <label for="destination" class="fw-semibold">Destination</label>
-                        <select id="destination" name="destination" class="selectjs form-select p-2 border border-gray-200 rounded-lg">
+                        <select id="destination" name="destination" class="selectjs form-select p-2 border border-gray-200 rounded-lg filter">
                             <option value="all">All</option>
                             @if(count(@$all_destination_port) > 0)
                             @foreach(@$all_destination_port as $key => $value)
@@ -96,7 +96,7 @@
 
                     <div class="col-md-3 mb-2">
                         <label for="pay_status" class="fw-semibold">Payment Status</label>
-                        <select id="pay_status" name="pay_status" class="selectjs form-select p-2">
+                        <select id="pay_status" name="pay_status" class="selectjs form-select p-2 filter">
                             <option value="all" @if(@$pay_status == "all") selected @endif>All</option>
                             <option value="paid" @if(@$pay_status == "paid") selected @endif>Paid</option>
                             <option value="partly paid" @if(@$pay_status == "partly paid") selected @endif>Partly paid</option>
@@ -106,7 +106,7 @@
 
                     <div class="col-md-3 mb-2">
                         <label for="fuel_type" class="fw-semibold">Fuel Type</label>
-                        <select id="fuel_type" name="fuel_type" class="selectjs form-select p-2">
+                        <select id="fuel_type" name="fuel_type" class="selectjs form-select p-2 filter">
                             <option value="all" @if(@$fuel_type == "all") selected @endif>All</option>
                             <option value="GAS" @if(@$fuel_type == "GAS") selected @endif>GAS</option>
                             <option value="HYB" @if(@$fuel_type == "HYB") selected @endif>HYB</option>
@@ -117,7 +117,7 @@
 
                     <div class="col-md-3 mb-2">
                         <label for="search" class="fw-semibold">Search</label>
-                        <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-veh" placeholder="Search">
+                        <input type="text" class="form-control p-2 filter" name="search" value="{{ @$search }}" id="search-veh" placeholder="Search">
                     </div>
                 </form>
 
@@ -768,6 +768,7 @@
             });
 
             $(document).on("change", "#buyer, #terminal, #status, #destination, #search-veh, #pay_status, #fuel_type", function () {
+                $(".filter").attr("disabled", true);
                 $("#filters-form").submit();
             });
 

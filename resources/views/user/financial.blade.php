@@ -46,11 +46,11 @@
                     @php
                         if (!empty($user->user_level)) {
                             $whole = $user->user_level->due_payment_limit;
+                            $given = $due_payments;
+                            $percentage = ($given / $whole) * 100;
                         } else {
-                            $whole = 0;
+                            $percentage = 0;
                         }
-                        $given = $due_payments;
-                        $percentage = ($given / $whole) * 100;
                     @endphp
                     <h4 class="text-white px-5 text-fs-5 fw-bold">
                         Your Account Health is

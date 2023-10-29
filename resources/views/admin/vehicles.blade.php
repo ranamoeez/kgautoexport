@@ -591,8 +591,8 @@
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
             $(document).on("change", "#buyer, #terminal, #status, #at_terminal, #destination, #search-veh, #pay_status, #fuel_type", function () {
-                $(".filter").attr("disabled", true);
                 $("#filters-form").submit();
+                $(".filter").attr("disabled", true);
             });
             $(document).on("click", ".delete", function () {
                 $("#delete-link").attr("data-url", $(this).attr('data-url'));

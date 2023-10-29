@@ -353,8 +353,8 @@
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
             $(document).on("change", "#port, #status, #search-cont, #fromDate, #toDate, #pay_status, #released_status, #unloaded_status", function () {
-                $(".filter").attr("disabled", true);
                 $("#filters-form").submit();
+                $(".filter").attr("disabled", true);
             });
             $(document).on("click", ".delete", function () {
                 $("#delete-link").attr("data-url", $(this).attr('data-url'));

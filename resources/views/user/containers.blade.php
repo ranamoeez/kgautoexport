@@ -462,8 +462,8 @@
             $('.select2-selection--single').removeClass('select2-selection--single');
 
             $(document).on("change", "#port, #status, #search-cont, #pay_status", function () {
-                $(".filter").attr("disabled", true);
                 $("#filters-form").submit();
+                $(".filter").attr("disabled", true);
             });
 
             $(document).on("click", ".tracking", function () {

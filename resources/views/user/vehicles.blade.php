@@ -768,8 +768,8 @@
             });
 
             $(document).on("change", "#buyer, #terminal, #status, #destination, #search-veh, #pay_status, #fuel_type", function () {
-                $(".filter").attr("disabled", true);
                 $("#filters-form").submit();
+                $(".filter").attr("disabled", true);
             });
 
             $(document).on("submit", ".form", function (event) {

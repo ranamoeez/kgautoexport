@@ -1,7 +1,7 @@
 <div class="header-height d-flex">
 
     <a class="navbar-brand m-auto me-md-5" href="{{ url('/user') }}">
-        <img src="{{ asset('assets/symble_logo.png') }}" style="" alt="Logo" />
+        <img src="{{ asset('assets/symbol_logo.jpeg') }}" style="" alt="Logo" />
     </a>
 </div>
 <nav class="bg-primary sticky below-header-height side_menu">

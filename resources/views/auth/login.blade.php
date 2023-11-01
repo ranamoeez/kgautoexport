@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="2hG9Onhipd8gQW4CzEzxhVefjZEvTRg2u0ecrBLT">
 
     <title>Login</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('img/mini-logo.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/mini-logo.jpeg') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Scripts -->
     <link rel="preload" as="style" href="{{ asset('build/assets/bootstrap.css') }}" /><link rel="preload" as="style" href="{{ asset('build/assets/app-76ea0196.css') }}" /><link rel="modulepreload" href="{{ asset('build/assets/app-66e7f68a.js') }}" /><link rel="stylesheet" href="{{ asset('build/assets/bootstrap.css') }}" /><link rel="stylesheet" href="{{ asset('build/assets/app-76ea0196.css') }}" /><script type="module" src="{{ asset('build/assets/app-66e7f68a.js') }}"></script>
@@ -39,7 +39,7 @@
                 <div class="px-5">
                     <!-- logo -->
                     <div class="text-center mb-4">
-                        <img src="{{ asset('assets/logo.png') }}" alt="" class="w-50 mb-4" />
+                        <img src="{{ asset('assets/logo.png') }}" alt="" class="w-100" />
                     </div>
                     <h2 class="fw-bold mb-4">Log in</h2>
                     <!-- login information -->

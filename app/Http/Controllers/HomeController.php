@@ -365,12 +365,8 @@ class HomeController extends Controller
                 $offset = ($request->page - 1) * 20;
                 $super_user = $super_user->offset((int)$offset);
                 $admin = $admin->offset((int)$offset);
-                if (count($super_user->get()) == 0) {
+                if (count($super_user->get()) == 0 && count($admin->get()) == 0) {
                     $super_user = $super_user->offset(0);
-                    $request->page = 1;
-                }
-                if (count($admin->get()) == 0) {
-                    $admin = $admin->offset(0);
                     $request->page = 1;
                 }
             }

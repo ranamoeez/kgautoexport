@@ -130,7 +130,7 @@
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>
                                     <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000;" class="fw-medium text-fs-3">
-                                        @if(@$value->vehicle->delivery_date) {{ date("M d, Y", strtotime(@$value->vehicle->delivery_date)) }} @endif
+                                        @if(@$value->vehicle->delivery_date && @$value->vehicle->delivery_date !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->vehicle->delivery_date)) }} @endif
                                     </a>
                                 </td>
                                 <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #f2f3a1 !important;" @endif>

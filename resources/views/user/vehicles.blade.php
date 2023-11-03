@@ -369,7 +369,7 @@
                                                                 <div class="my-2">
                                                                     <form method="POST" action="{{ url("user/assign-vehicle") }}" class="d-flex shadow bg-white rounded-5 rounded assign-form" role="upload">
                                                                         <input type="hidden" name="vehicle_id" value="{{ @$value->vehicle->id }}">
-                                                                        <input type="hidden" name="user_id" value="{{ @$v->id }}">
+                                                                        <input type="hidden" name="user_id" value="{{ \Auth::user()->id }}">
                                                                         <input class="form-control me-2 bg-white border-0 fs-5" placeholder="{{ @$v->name }}" disabled aria-label="upload">
                                                                         <button class="btn btn-primary ded" type="submit">
                                                                             <div class="d-flex align-items-center">

@@ -267,9 +267,9 @@ class HomeController extends Controller
         $data['type'] = "vehicles";
         $data['page'] = "1";
         $user_id = Auth::user()->id;
-        if (Auth::user()->role == "3") {
-            $user_id = Auth::user()->main_user_id;
-        }
+        // if (Auth::user()->role == "3") {
+        //     $user_id = Auth::user()->main_user_id;
+        // }
         $super_user = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "super_user")->where('user_id', $user_id);
         $admin = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "admin")->where('user_id', $user_id);
         $filter = [];
@@ -534,9 +534,9 @@ class HomeController extends Controller
         $data['page'] = "1";
 
         $user_id = Auth::user()->id;
-        if (Auth::user()->role == "3") {
-            $user_id = Auth::user()->main_user_id;
-        }
+        // if (Auth::user()->role == "3") {
+        //     $user_id = Auth::user()->main_user_id;
+        // }
         $admin = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipping_line', 'loading_port', 'discharge_port', 'destination_port', 'measurement')->limit(20)->where("buyers", "LIKE", "%-".$user_id."-%");
 
         if (!empty($request->port) && $request->port !== 'all') {

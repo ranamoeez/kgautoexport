@@ -698,7 +698,8 @@ class ApiController extends Controller
                         if (is_array($request->file('images'))) {
                             foreach ($request->file('images') as $key => $value) {
                                 $file = $value;
-                                $filename = Storage::disk("s3")->putFile('vehicle/images/'.$vehicle_id, $file);
+                                $current_date = explode("-", date("Y-m-d"));
+                                $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle->id, $file);
                                 
                                 $image = new VehicleImage;
                                 $image->vehicle_id = $vehicle_id;
@@ -706,13 +707,14 @@ class ApiController extends Controller
                                 $image->owner_id = $buyer_id;
                                 $image->title = '';
                                 $image->filename = $filename;
-                                $image->filepath = 'storage/app/';
+                                $image->filepath = '';
                                 $image->type = 'unloading';
                                 $image->save();
                             }
                         } else {
                             $file = $request->file('images');
-                            $filename = Storage::disk("s3")->putFile('vehicle/images/'.$vehicle_id, $file);
+                            $current_date = explode("-", date("Y-m-d"));
+                            $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle->id.$vehicle_id, $file);
                             
                             $image = new VehicleImage;
                             $image->vehicle_id = $vehicle_id;
@@ -720,7 +722,7 @@ class ApiController extends Controller
                             $image->owner_id = $buyer_id;
                             $image->title = '';
                             $image->filename = $filename;
-                            $image->filepath = 'storage/app/';
+                            $image->filepath = '';
                             $image->type = 'unloading';
                             $image->save();
                         }

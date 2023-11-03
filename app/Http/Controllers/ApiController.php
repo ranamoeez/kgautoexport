@@ -699,7 +699,7 @@ class ApiController extends Controller
                             foreach ($request->file('images') as $key => $value) {
                                 $file = $value;
                                 $current_date = explode("-", date("Y-m-d"));
-                                $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle->id, $file);
+                                $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle_id, $file);
                                 
                                 $image = new VehicleImage;
                                 $image->vehicle_id = $vehicle_id;
@@ -714,7 +714,7 @@ class ApiController extends Controller
                         } else {
                             $file = $request->file('images');
                             $current_date = explode("-", date("Y-m-d"));
-                            $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle->id.$vehicle_id, $file);
+                            $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle_id, $file);
                             
                             $image = new VehicleImage;
                             $image->vehicle_id = $vehicle_id;

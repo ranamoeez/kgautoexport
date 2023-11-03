@@ -179,17 +179,17 @@ class HomeController extends Controller
                     }
                     $user = User::create($data);
 
-                    $all_vehicles = AssignVehicle::where("user_id", Auth::user()->id)->get();
-                    foreach ($all_vehicles as $key => $value) {
-                        $data = [
-                            "user_id" => $user->id,
-                            "vehicle_id" => $value->id,
-                            "payment_status" => "unpaid",
-                            "assigned_by" => "super_user"
-                        ];
+                    // $all_vehicles = AssignVehicle::where("user_id", Auth::user()->id)->get();
+                    // foreach ($all_vehicles as $key => $value) {
+                    //     $data = [
+                    //         "user_id" => $user->id,
+                    //         "vehicle_id" => $value->id,
+                    //         "payment_status" => "unpaid",
+                    //         "assigned_by" => "super_user"
+                    //     ];
 
-                        AssignVehicle::create($data);
-                    }
+                    //     AssignVehicle::create($data);
+                    // }
 
                     return json_encode(["success"=>true, "msg"=>"Sub user added successfully!", "action"=>"reload"]);
                 } else {

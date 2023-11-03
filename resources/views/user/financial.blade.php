@@ -133,13 +133,13 @@
                                                 <div class="row mt-4">
                                                     <label for="amount" class="col-md-4 fs-5 fw-bold">Amount</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" name="amount" class="form-control shadow" />
+                                                        <input type="text" name="amount" class="form-control shadow" required />
                                                     </div>
                                                 </div>
                                                 <div class="row mt-4">
                                                     <label for="vehicle_id" class="col-md-4 fs-5 fw-bold">Vehicle</label>
                                                     <div class="col-md-8">
-                                                        <select class="form-select shadow select2js" aria-label="Default select example" name="vehicle_id">
+                                                        <select class="form-select shadow select2js" aria-label="Default select example" name="vehicle_id" required>
                                                             <option selected>Choose vehicle</option>
                                                             @if(count(@$vehicles) > 0)
                                                             @foreach(@$vehicles as $key => $value)
@@ -153,20 +153,20 @@
                                                     <label for="exchange_company" class="col-md-4 fs-5 fw-bold">Exchange
                                                         Company</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" name="exchange_company" class="form-control shadow" />
+                                                        <input type="text" name="exchange_company" class="form-control shadow" required />
                                                     </div>
                                                 </div>
                                                 <div class="row mt-4">
                                                     <label for="transfer_no" class="col-md-4 fs-5 fw-bold">Transfer
                                                         No.</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" name="transfer_no" class="form-control shadow" />
+                                                        <input type="text" name="transfer_no" class="form-control shadow" required />
                                                     </div>
                                                 </div>
                                                 <div class="row mt-4">
                                                     <label for="comment" class="col-md-4 fs-5 fw-bold">Comment</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" name="comment" class="form-control shadow text-fs-4 rounded pb-4" />
+                                                        <input type="text" name="comment" class="form-control shadow text-fs-4 rounded pb-4" required />
                                                     </div>
                                                 </div>
 

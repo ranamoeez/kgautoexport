@@ -695,7 +695,7 @@ class ApiController extends Controller
                     foreach ($all_vehicles as $k => $v) {
                         $vehicle_id = $v->vehicle_id;
                         $buyer_id = $v->user_id;
-                        echo is_array($request->file('images')); die();
+                        echo "<pre>"; print_r(is_array($request->file('images')); die();
                         if (is_array($request->file('images'))) {
                             foreach ($request->file('images') as $key => $value) {
                                 $file = $value;

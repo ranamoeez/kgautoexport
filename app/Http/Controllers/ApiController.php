@@ -691,11 +691,11 @@ class ApiController extends Controller
 
             if (!empty($container)) {
                 $all_vehicles = ContainerVehicle::where('container_id', $container->id)->whereHas('vehicle')->get();
+                echo "<pre>"; print_r($request->file('images')); die();
                 if ($request->hasFile('images')) {
                     foreach ($all_vehicles as $k => $v) {
                         $vehicle_id = $v->vehicle_id;
                         $buyer_id = $v->user_id;
-                        echo "<pre>"; print_r($request->file('images')); die();
                         if (is_array($request->file('images'))) {
                             foreach ($request->file('images') as $key => $value) {
                                 $file = $value;

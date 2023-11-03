@@ -20,7 +20,7 @@
                 </h4>
                 <div class="d-flex justify-content-between">
                     <div class="financial-btn">
-                        @if(empty($auth_user->admin_level->access) || @in_array("1.40", json_decode($auth_user->admin_level->access)))
+                        @if(empty($auth_user->admin_level->access) || @in_array("1.40", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                         <button class="btn btn-primary border border-1 fs-5" disabled>
                             Send to Buyer
                         </button>
@@ -39,7 +39,7 @@
                     <div class="col-md-3">
                         <h3 class="fw-bold text-fs-4">Vehicle information</h3>
                         <div class="mt-4">
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.1", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.1", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Status</label>
                                 <div class="col-md-9">
@@ -58,7 +58,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.2", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.2", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Terminal</label>
                                 <div class="col-md-9">
@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.3", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.3", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Buyer</label>
                                 <div class="col-md-9">
@@ -96,7 +96,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.4", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.4", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">VIN</label>
                                 <div class="col-md-9">
@@ -139,7 +139,7 @@
                                     </select>
                                 </div>
                             </div>
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.5", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.5", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Client name</label>
                                 <div class="col-md-9">
@@ -147,7 +147,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.6", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.6", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Title</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
@@ -171,7 +171,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.7", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.7", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Keys</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
@@ -188,7 +188,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.8", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.8", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Operable</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
@@ -205,7 +205,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.9", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.9", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Fuel Type</label>
                                 <div class="col-md-9 d-flex flex-row gap-2">
@@ -233,7 +233,7 @@
                     <div class="col-md-3">
                         <h3 class="fw-bold text-fs-4">Auction details</h3>
                         <div class="mt-4">
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.10", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.10", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction</label>
                                 <div class="col-sm-9">
@@ -252,7 +252,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.11", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.11", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Branch</label>
                                 <div class="col-sm-9">
@@ -271,7 +271,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.12", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.12", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
                                 <div class="col-sm-9">
@@ -279,7 +279,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.13", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.13", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Phone #</label>
                                 <div class="col-md-9 phone_number">
@@ -306,7 +306,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.14", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.14", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Buyer #</label>
                                 <div class="col-sm-9">
@@ -314,7 +314,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.15", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.15", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Lot #</label>
                                 <div class="col-sm-9">
@@ -323,7 +323,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.17", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.17", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Destination</label>
                                 <div class="col-sm-9">
@@ -342,14 +342,14 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.18", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.18", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group mt-4">
                                 <label for="notes" class="fw-semibold">Notes</label>
                                 <textarea name="notes_user" cols="10" rows="4" value="Title received on 12 / 18r"
                                     class="form-control"></textarea>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.19", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.19", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group mt-4">
                                 <label for="notes" class="fw-semibold">Admin Notes</label>
                                 <textarea name="notes" cols="10" rows="4" value="Title received on 12 / 18r"
@@ -361,7 +361,7 @@
                     <div class="col-md-3">
                         <h3 class="fw-bold text-fs-4">Transportation info</h3>
                         <div class="mt-4">
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.20", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.20", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
                                 <div class="col-sm-9">
@@ -369,7 +369,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.21", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.21", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Carrier</label>
                                 <div class="col-sm-9">
@@ -384,7 +384,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.43", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.43", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Shipping Company</label>
                                 <div class="col-sm-9">
@@ -407,7 +407,7 @@
                                 </div>
                             </div>
                             @endif --}}
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.24", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.24", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Delivery
                                     address</label>
@@ -416,7 +416,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.22", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.22", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Paid date</label>
                                 <div class="col-sm-9">
@@ -424,7 +424,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.25", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.25", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Due date</label>
                                 <div class="col-sm-9">
@@ -432,7 +432,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.26", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.26", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Dispatch</label>
                                 <div class="col-sm-9">
@@ -440,7 +440,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.27", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.27", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup</label>
                                 <div class="col-sm-9">
@@ -448,7 +448,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.16", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.16", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase</label>
                                 <div class="col-sm-9">
@@ -456,7 +456,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.29", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.29", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Actual del.</label>
                                 <div class="col-sm-9">
@@ -464,7 +464,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.28", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.28", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated delivery</label>
                                 <div class="col-sm-9">
@@ -472,7 +472,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.31", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.31", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Trans. Fines</label>
                                 <div class="col-sm-9">
@@ -499,7 +499,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.32", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.32", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group mt-4">
                                 <label for="notes" class="fw-semibold">Trans. Notes</label>
                                 <textarea name="transportation_notes" cols="10" rows="4" value="Title received on 12 / 18r"
@@ -511,7 +511,7 @@
                     <div class="col-md-3">
                         <h3 class="fw-bold text-fs-4">Pricing details</h3>
                         <div class="mt-4">
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.33", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.33", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction price</label>
                                 <div class="col-sm-9">
@@ -520,7 +520,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.34", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.34", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Auction Fines</label>
                                 <div class="col-md-9">
@@ -547,7 +547,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.35", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.35", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Draft Expenses</label>
                                 <div class="col-md-9">
@@ -568,7 +568,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.41", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.41", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row my-3">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Towing price</label>
                                 <div class="col-sm-9">
@@ -577,7 +577,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.44", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.44", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row my-3">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">US Towing price</label>
                                 <div class="col-sm-9">
@@ -586,7 +586,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.45", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.45", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="row my-3">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">US Trans fines</label>
                                 <div class="col-sm-9">
@@ -595,7 +595,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.42", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.42", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Ocean Freight</label>
                                 <div class="col-sm-9">
@@ -608,7 +608,7 @@
                                 <label for="notes" class="fw-semibold">Container info</label>
                                 <input name="notes" class="form-control p-4" disabled>
                             </div>
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.36", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.36", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Weight (LB)</label>
                                 <div class="col-sm-9">
@@ -616,7 +616,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.39", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.39", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group mt-4">
                                 <button data-bs-toggle="modal" data-bs-target="#sendReminderModal" type='button'
                                     class="btn btn-primary col-md-6 float-end border border-1  fs-5" disabled="">
@@ -688,7 +688,7 @@
             
                 <div class="row mt-4 pt-5">
                     <div class="col-md-6">
-                        @if(empty($auth_user->admin_level->access) || @in_array("1.37", json_decode($auth_user->admin_level->access)))
+                        @if(empty($auth_user->admin_level->access) || @in_array("1.37", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                         <div class="row mb-4">
                             <label class="col-md-2 col-form-label fw-semibold">Document</label>
                             <div class="col-md-10 d-flex flex-row shadow-lg px-0">
@@ -760,7 +760,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        @if(empty($auth_user->admin_level->access) || @in_array("1.38", json_decode($auth_user->admin_level->access)))
+                        @if(empty($auth_user->admin_level->access) || @in_array("1.38", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                         <div class="row mb-4">
                             <label for="" class="col-md-2 col-form-label fw-semibold">Image</label>
                             <div class="col-md-10 d-flex flex-row shadow-lg px-0">

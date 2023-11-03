@@ -682,6 +682,7 @@ class ApiController extends Controller
                 'container_number' => 'required',
                 'images' => 'required'
             ]);
+            print_r($request->file('images')); die();
        
             if($validator->fails()){
                 return $this->sendError('Validation Error.', $validator->errors());       

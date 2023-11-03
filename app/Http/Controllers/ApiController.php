@@ -691,12 +691,11 @@ class ApiController extends Controller
 
             if (!empty($container)) {
                 $all_vehicles = ContainerVehicle::where('container_id', $container->id)->whereHas('vehicle')->get();
-                echo "<pre>"; print_r($request->file('images')); die();
                 if ($request->hasFile('images')) {
                     foreach ($all_vehicles as $k => $v) {
                         $vehicle_id = $v->vehicle_id;
                         $buyer_id = $v->user_id;
-                        if (is_array($request->file('images'))) {
+                        // if (is_array($request->file('images'))) {
                             foreach ($request->file('images') as $key => $value) {
                                 $file = $value;
                                 $current_date = explode("-", date("Y-m-d"));
@@ -712,21 +711,21 @@ class ApiController extends Controller
                                 $image->type = 'unloading';
                                 $image->save();
                             }
-                        } else {
-                            $file = $request->file('images');
-                            $current_date = explode("-", date("Y-m-d"));
-                            $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle_id, $file);
+                        // } else {
+                        //     $file = $request->file('images');
+                        //     $current_date = explode("-", date("Y-m-d"));
+                        //     $filename = Storage::disk("s3")->putFile('storage/'.$current_date[0].'y/'.$current_date[1].'/'.$current_date[2].'/vehicle-'.$vehicle_id, $file);
                             
-                            $image = new VehicleImage;
-                            $image->vehicle_id = $vehicle_id;
-                            $image->filesize = $file->getSize();
-                            $image->owner_id = $buyer_id;
-                            $image->title = '';
-                            $image->filename = $filename;
-                            $image->filepath = '';
-                            $image->type = 'unloading';
-                            $image->save();
-                        }
+                        //     $image = new VehicleImage;
+                        //     $image->vehicle_id = $vehicle_id;
+                        //     $image->filesize = $file->getSize();
+                        //     $image->owner_id = $buyer_id;
+                        //     $image->title = '';
+                        //     $image->filename = $filename;
+                        //     $image->filepath = '';
+                        //     $image->type = 'unloading';
+                        //     $image->save();
+                        // }
                     }
                 }
             } else {

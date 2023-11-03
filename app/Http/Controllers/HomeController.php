@@ -148,14 +148,25 @@ class HomeController extends Controller
 
         $check = AssignVehicle::where("user_id", $user_id)->where("vehicle_id", $vehicle_id)->count();
         if ($check == 0) {
+            $user = AssignVehicle::where("user_id", Auth::user()->id)->where("vehicle_id", $vehicle_id)->first();
             $data = [
                 "user_id" => $user_id,
                 "vehicle_id" => $vehicle_id,
+                "assigned_to" => $user->assigned_to,
                 "payment_status" => "unpaid",
                 "assigned_by" => "super_user"
             ];
 
             AssignVehicle::create($data);
+            $container = Container::where("id", $user->assigned_to)->first();
+            if (!empty($container) && !str_contains(@$container->buyers, "-".$user_id."-")) {
+                if (!empty($container->buyers)) {
+                    $buyers = $container->buyers.", -".$user_id."-";
+                } else {
+                    $buyers = "-".$user_id."-";
+                }
+                Container::where("id", $user->assigned_to)->update(["buyers" => $buyers]);
+            }
 
             return json_encode(["success" => true, "msg" => "Vehicle assigned successfully!"]);
         } else {
@@ -267,114 +278,190 @@ class HomeController extends Controller
         $data['type'] = "vehicles";
         $data['page'] = "1";
         $user_id = Auth::user()->id;
-        // if (Auth::user()->role == "3") {
-        //     $user_id = Auth::user()->main_user_id;
-        // }
-        $super_user = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "super_user")->where('user_id', $user_id);
-        $admin = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "admin")->where('user_id', $user_id);
-        $filter = [];
-        if (!empty($request->terminal) && $request->terminal !== 'all') {
-            $data['terminal'] = $request->terminal;
-            $terminal = $request->terminal;
-            $filter['terminal'] = $terminal;
-        }
-        if (!empty($request->status) && $request->status !== 'all') {
-            $data['status'] = $request->status;
-            $status = $request->status;
-            $filter['status'] = $status;
-        }
-        if (!empty($request->fuel_type) && $request->fuel_type !== 'all') {
-            $data['fuel_type'] = $request->fuel_type;
-            $fuel_type = $request->fuel_type;
-            $filter['fuel_type'] = $fuel_type;
-        }
-        if (!empty($request->destination) && $request->destination !== 'all') {
-            $data['destination'] = $request->destination;
-            $destination = $request->destination;
-            $filter['destination'] = $destination;
-        }
-        if (!empty($request->search)) {
-            $data['search'] = $request->search;
-            $search = $request->search;
-            $filter['search'] = $search;
-        }
-        if (!empty($filter)) {
-            $super_user = $super_user->whereHas('vehicle', function ($query) use($filter) {
-                if (!empty($filter['terminal'])) {
-                    $query->where('terminal_id', $filter['terminal']);
-                }
-                if (!empty($filter['fuel_type'])) {
-                    $query->where('fuel_type', $filter['fuel_type']);
-                }
-                if (!empty($filter['status'])) {
-                    $query->where('status_id', $filter['status']);
-                }
-                if (!empty($filter['destination'])) {
-                    $query->where('destination_port_id', $filter['destination']);
-                }
-                if (!empty($filter['search'])) {
-                    $search = $filter['search'];
-                    $query->where(function ($q) use ($search) {
-                        $q->where('delivery_date', 'LIKE', '%'.$search.'%')
-                        ->orWhere('company_name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('modal', 'LIKE', '%'.$search.'%')
-                        ->orWhere('vin', 'LIKE', '%'.$search.'%')
-                        ->orWhere('client_name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
-                        ->orWhere('notes', 'LIKE', '%'.$search.'%');
-                    });
-                }
-            });
-            $admin = $admin->whereHas('vehicle', function ($query) use($filter) {
-                if (!empty($filter['terminal'])) {
-                    $query->where('terminal_id', $filter['terminal']);
-                }
-                if (!empty($filter['fuel_type'])) {
-                    $query->where('fuel_type', $filter['fuel_type']);
-                }
-                if (!empty($filter['status'])) {
-                    $query->where('status_id', $filter['status']);
-                }
-                if (!empty($filter['destination'])) {
-                    $query->where('destination_port_id', $filter['destination']);
-                }
-                if (!empty($filter['search'])) {
-                    $search = $filter['search'];
-                    $query->where(function ($q) use ($search) {
-                        $q->where('delivery_date', 'LIKE', '%'.$search.'%')
-                        ->orWhere('company_name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('modal', 'LIKE', '%'.$search.'%')
-                        ->orWhere('vin', 'LIKE', '%'.$search.'%')
-                        ->orWhere('client_name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
-                        ->orWhere('notes', 'LIKE', '%'.$search.'%');
-                    });
-                }
-            });
-        }
-        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
-            $data['pay_status'] = $request->pay_status;
-            $super_user = $super_user->where('payment_status', $request->pay_status);
-            $admin = $admin->where('payment_status', $request->pay_status);
-        }
-
-        if (!empty($request->page)) {
-            if ($request->page > 1) {
-                $offset = ($request->page - 1) * 20;
-                $super_user = $super_user->offset((int)$offset);
-                $admin = $admin->offset((int)$offset);
-                if (count($super_user->get()) < 20 && count($admin->get()) < 20) {
-                    $super_user = $super_user->offset(0);
-                    $request->page = 1;
-                }
+        if (Auth::user()->role == "3") {
+            $admin = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "super_user")->where('user_id', $user_id);
+            $filter = [];
+            if (!empty($request->terminal) && $request->terminal !== 'all') {
+                $data['terminal'] = $request->terminal;
+                $terminal = $request->terminal;
+                $filter['terminal'] = $terminal;
             }
-            $data['page'] = $request->page;
+            if (!empty($request->status) && $request->status !== 'all') {
+                $data['status'] = $request->status;
+                $status = $request->status;
+                $filter['status'] = $status;
+            }
+            if (!empty($request->fuel_type) && $request->fuel_type !== 'all') {
+                $data['fuel_type'] = $request->fuel_type;
+                $fuel_type = $request->fuel_type;
+                $filter['fuel_type'] = $fuel_type;
+            }
+            if (!empty($request->destination) && $request->destination !== 'all') {
+                $data['destination'] = $request->destination;
+                $destination = $request->destination;
+                $filter['destination'] = $destination;
+            }
+            if (!empty($request->search)) {
+                $data['search'] = $request->search;
+                $search = $request->search;
+                $filter['search'] = $search;
+            }
+            if (!empty($filter)) {
+                $admin = $admin->whereHas('vehicle', function ($query) use($filter) {
+                    if (!empty($filter['terminal'])) {
+                        $query->where('terminal_id', $filter['terminal']);
+                    }
+                    if (!empty($filter['fuel_type'])) {
+                        $query->where('fuel_type', $filter['fuel_type']);
+                    }
+                    if (!empty($filter['status'])) {
+                        $query->where('status_id', $filter['status']);
+                    }
+                    if (!empty($filter['destination'])) {
+                        $query->where('destination_port_id', $filter['destination']);
+                    }
+                    if (!empty($filter['search'])) {
+                        $search = $filter['search'];
+                        $query->where(function ($q) use ($search) {
+                            $q->where('delivery_date', 'LIKE', '%'.$search.'%')
+                            ->orWhere('company_name', 'LIKE', '%'.$search.'%')
+                            ->orWhere('name', 'LIKE', '%'.$search.'%')
+                            ->orWhere('modal', 'LIKE', '%'.$search.'%')
+                            ->orWhere('vin', 'LIKE', '%'.$search.'%')
+                            ->orWhere('client_name', 'LIKE', '%'.$search.'%')
+                            ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
+                            ->orWhere('notes', 'LIKE', '%'.$search.'%');
+                        });
+                    }
+                });
+            }
+            if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
+                $data['pay_status'] = $request->pay_status;
+                $admin = $admin->where('payment_status', $request->pay_status);
+            }
+
+            if (!empty($request->page)) {
+                if ($request->page > 1) {
+                    $offset = ($request->page - 1) * 20;
+                    $admin = $admin->offset((int)$offset);
+                    if (count($admin->get()) < 20) {
+                        $admin = $admin->offset(0);
+                        $request->page = 1;
+                    }
+                }
+                $data['page'] = $request->page;
+            }
+            
+            $data['super_user'] = [];
+            $data['admin'] = $admin->orderBy("id", "DESC")->get();
+        } else {
+            $super_user = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "super_user")->where('user_id', $user_id);
+            $admin = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "admin")->where('user_id', $user_id);
+            $filter = [];
+            if (!empty($request->terminal) && $request->terminal !== 'all') {
+                $data['terminal'] = $request->terminal;
+                $terminal = $request->terminal;
+                $filter['terminal'] = $terminal;
+            }
+            if (!empty($request->status) && $request->status !== 'all') {
+                $data['status'] = $request->status;
+                $status = $request->status;
+                $filter['status'] = $status;
+            }
+            if (!empty($request->fuel_type) && $request->fuel_type !== 'all') {
+                $data['fuel_type'] = $request->fuel_type;
+                $fuel_type = $request->fuel_type;
+                $filter['fuel_type'] = $fuel_type;
+            }
+            if (!empty($request->destination) && $request->destination !== 'all') {
+                $data['destination'] = $request->destination;
+                $destination = $request->destination;
+                $filter['destination'] = $destination;
+            }
+            if (!empty($request->search)) {
+                $data['search'] = $request->search;
+                $search = $request->search;
+                $filter['search'] = $search;
+            }
+            if (!empty($filter)) {
+                $super_user = $super_user->whereHas('vehicle', function ($query) use($filter) {
+                    if (!empty($filter['terminal'])) {
+                        $query->where('terminal_id', $filter['terminal']);
+                    }
+                    if (!empty($filter['fuel_type'])) {
+                        $query->where('fuel_type', $filter['fuel_type']);
+                    }
+                    if (!empty($filter['status'])) {
+                        $query->where('status_id', $filter['status']);
+                    }
+                    if (!empty($filter['destination'])) {
+                        $query->where('destination_port_id', $filter['destination']);
+                    }
+                    if (!empty($filter['search'])) {
+                        $search = $filter['search'];
+                        $query->where(function ($q) use ($search) {
+                            $q->where('delivery_date', 'LIKE', '%'.$search.'%')
+                            ->orWhere('company_name', 'LIKE', '%'.$search.'%')
+                            ->orWhere('name', 'LIKE', '%'.$search.'%')
+                            ->orWhere('modal', 'LIKE', '%'.$search.'%')
+                            ->orWhere('vin', 'LIKE', '%'.$search.'%')
+                            ->orWhere('client_name', 'LIKE', '%'.$search.'%')
+                            ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
+                            ->orWhere('notes', 'LIKE', '%'.$search.'%');
+                        });
+                    }
+                });
+                $admin = $admin->whereHas('vehicle', function ($query) use($filter) {
+                    if (!empty($filter['terminal'])) {
+                        $query->where('terminal_id', $filter['terminal']);
+                    }
+                    if (!empty($filter['fuel_type'])) {
+                        $query->where('fuel_type', $filter['fuel_type']);
+                    }
+                    if (!empty($filter['status'])) {
+                        $query->where('status_id', $filter['status']);
+                    }
+                    if (!empty($filter['destination'])) {
+                        $query->where('destination_port_id', $filter['destination']);
+                    }
+                    if (!empty($filter['search'])) {
+                        $search = $filter['search'];
+                        $query->where(function ($q) use ($search) {
+                            $q->where('delivery_date', 'LIKE', '%'.$search.'%')
+                            ->orWhere('company_name', 'LIKE', '%'.$search.'%')
+                            ->orWhere('name', 'LIKE', '%'.$search.'%')
+                            ->orWhere('modal', 'LIKE', '%'.$search.'%')
+                            ->orWhere('vin', 'LIKE', '%'.$search.'%')
+                            ->orWhere('client_name', 'LIKE', '%'.$search.'%')
+                            ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
+                            ->orWhere('notes', 'LIKE', '%'.$search.'%');
+                        });
+                    }
+                });
+            }
+            if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
+                $data['pay_status'] = $request->pay_status;
+                $super_user = $super_user->where('payment_status', $request->pay_status);
+                $admin = $admin->where('payment_status', $request->pay_status);
+            }
+
+            if (!empty($request->page)) {
+                if ($request->page > 1) {
+                    $offset = ($request->page - 1) * 20;
+                    $super_user = $super_user->offset((int)$offset);
+                    $admin = $admin->offset((int)$offset);
+                    if (count($super_user->get()) < 20 && count($admin->get()) < 20) {
+                        $admin = $admin->offset(0);
+                        $super_user = $super_user->offset(0);
+                        $request->page = 1;
+                    }
+                }
+                $data['page'] = $request->page;
+            }
+            
+            $data['super_user'] = $super_user->orderBy("id", "DESC")->get();
+            $data['admin'] = $admin->orderBy("id", "DESC")->get();
         }
-        
-        $data['super_user'] = $super_user->orderBy("id", "DESC")->get();
-        $data['admin'] = $admin->orderBy("id", "DESC")->get();
 
         $data['sub_buyers'] = User::where("main_user_id", $user_id)->get();
         $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {

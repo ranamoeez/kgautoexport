@@ -165,7 +165,7 @@ class HomeController extends Controller
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 20;
                 $vehicles = $vehicles->offset((int)$offset);
-                if (count($vehicles->get()) == 0) {
+                if (count($vehicles->get()) < 20) {
                     $vehicles = $vehicles->offset(0);
                     $request->page = 1;
                 }
@@ -563,7 +563,7 @@ class HomeController extends Controller
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 20;
                 $containers = $containers->offset((int)$offset);
-                if (count($containers->limit(20)->get()) == 0) {
+                if (count($containers->limit(20)->get()) < 20) {
                     $containers = $containers->offset(0);
                     $request->page = 1;
                 }

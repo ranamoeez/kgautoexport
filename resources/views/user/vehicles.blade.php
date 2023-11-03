@@ -159,7 +159,7 @@
                                 $pre = join("&", $prev_params);
                                 $nex = join("&", $next_params);
                             @endphp
-                            <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('user/vehicles?'.$pre) }}" @endif>
+                            <a class="btn paginate" href="javascript:void();" @if(@$page == 1) data-href="0" @else data-href="{{ url('user/vehicles?'.$pre) }}" @endif>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -167,7 +167,7 @@
                                 </svg>
                             </a>
                             <p class="text-fs-4 m-0">Page {{ @$page }}</p>
-                            <a class="btn" @if(count($admin) < 20) href="javascript:void();" @else href="{{ url('user/vehicles?'.$nex) }}" @endif>
+                            <a class="btn paginate" href="javascript:void();" @if(count($admin) < 20) data-href="0" @else data-href="{{ url('user/vehicles?'.$nex) }}" @endif>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -757,6 +757,14 @@
 
             $("select.option-select").on("change", function () {
                 updateBackgroundColor(this);
+            });
+
+            $(document).on("click", ".paginate", function () {
+                $(this).attr('disabled', true);
+                if ($(this).attr('data-href') !== "0") {
+                    window.location.href = $(this).attr('data-href');
+                    $(this).attr('data-href', '0');
+                }
             });
 
             $("select.option-select").each(function () {

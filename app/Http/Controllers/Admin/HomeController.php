@@ -47,25 +47,33 @@ use PDF;
 
 class HomeController extends Controller
 {
+    private $perpage = 20;
+
     // Vehicle Functions
 
-    public function vehicles(Request $request)
-    {
-        if (\Auth::user()->role !== "1") {
-            return redirect(url("user"));
+    public function search($records,$request,&$data) {
+        /*
+        SET DEFAULT VALUES
+        */
+        if($request->perpage)
+            $this->perpage = $request->perpage;
+        $data['sindex'] = ($request->page != NULL)?($this->perpage*$request->page - $this->perpage+1):1;
+        /*
+        FILTER THE DATA
+        */
+        $params = [];
+        if($request->is_active) {
+            $params['is_active'] = $request->is_active;
+            $records = $records->where("is_active",$params['is_active']);
         }
-
-        $data['type'] = "vehicles";
-        $data['page'] = '1';
         $filter = [];
-        $vehicles = AssignVehicle::orderBy('id', 'DESC')->limit(20)->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin");
         if (!empty($request->terminal) && $request->terminal !== 'all') {
-        	$data['terminal'] = $request->terminal;
+            $data['terminal'] = $request->terminal;
             $terminal = $request->terminal;
             $filter['terminal'] = $terminal;
         }
         if (!empty($request->status) && $request->status !== 'all') {
-        	$data['status'] = $request->status;
+            $data['status'] = $request->status;
             $status = $request->status;
             $filter['status'] = $status;
         }
@@ -80,17 +88,17 @@ class HomeController extends Controller
             $filter['fuel_type'] = $fuel_type;
         }
         if (!empty($request->destination) && $request->destination !== 'all') {
-        	$data['destination'] = $request->destination;
+            $data['destination'] = $request->destination;
             $destination = $request->destination;
             $filter['destination'] = $destination;
         }
         if (!empty($request->search)) {
-        	$data['search'] = $request->search;
-        	$search = $request->search;
+            $data['search'] = $request->search;
+            $search = $request->search;
             $filter['search'] = $search;
         }
         if (!empty($filter)) {
-            $vehicles = $vehicles->whereHas('vehicle', function ($query) use($filter) {
+            $records = $records->whereHas('vehicle', function ($query) use($filter) {
                 if (!empty($filter['terminal'])) {
                     $query->where('terminal_id', $filter['terminal']);
                 }
@@ -155,25 +163,22 @@ class HomeController extends Controller
         }
         if (!empty($request->buyer) && $request->buyer !== 'all') {
             $data['buyer'] = $request->buyer;
-            $vehicles = $vehicles->where('user_id', $request->buyer);
+            $records = $records->where('user_id', $request->buyer);
         }
         if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
             $data['pay_status'] = $request->pay_status;
-            $vehicles = $vehicles->where('payment_status', $request->pay_status);
+            $records = $records->where('payment_status', $request->pay_status);
         }
-        if (!empty($request->page)) {
-            if ($request->page > 1) {
-                $offset = ($request->page - 1) * 20;
-                $vehicles = $vehicles->offset((int)$offset);
-                if (count($vehicles->get()) < 20) {
-                    $vehicles = $vehicles->offset(0);
-                    $request->page = 1;
-                }
-            }
-            $data['page'] = $request->page;
+        $data['request'] = $params;
+        return $records;    
+    }
+    public function vehicles(Request $request)
+    {
+        if (\Auth::user()->role !== "1") {
+            return redirect(url("user"));
         }
-        $vehicles = $vehicles->get();
-        $data['list'] = $vehicles;
+        $data['type'] = "vehicles";
+        $data['page'] = '1';
         $data['total_vehicles'] = Vehicle::all()->count();
         $data['user_levels'] = Level::all();
         $data['all_terminal'] = Terminal::with("vehicles")->get();
@@ -182,6 +187,30 @@ class HomeController extends Controller
         $data['all_destination_port'] = DestinationPort::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         $data['countries'] = Country::all();
+        /*
+        GET RECORDS
+        */
+        $records = new AssignVehicle;
+        $records = $records->orderBy('id','DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer');
+        $records = $this->search($records,$request,$data);
+        /*
+        GET TOTAL RECORD BEFORE BEFORE PAGINATE
+        */
+        $data['count'] = $records->count();
+        /*
+        PAGINATE THE RECORDS
+        */
+        $records = $records->paginate($this->perpage);
+        $records->appends($request->all())->links();
+        $links = $records->links();
+
+        $records = $records->toArray();
+        $records['pagination'] = $links;
+        $data['list'] = $records;
+
+        /*
+        ASSIGN DATA FOR VIEW
+        */
         return view('admin.vehicles', $data);
     }
 

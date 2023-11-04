@@ -141,7 +141,7 @@
                 <div class="d-flex justify-content-between mt-3 align-items-center">
                     <p class="text-fs-4 m-0">Total vehicles: <b>{{ @$total_vehicles }}</b></p>
                 </div>
-                
+
                 <div class="table-responsive">
                     <table class="table">
                         <thead class="text-fs-4" style="font-size: 16px;">
@@ -552,6 +552,10 @@
             $(document).on("click", ".delete", function () {
                 $("#delete-link").attr("data-url", $(this).attr('data-url'));
                 $("#removeRowModal").modal("show");
+            });
+            $(document).on("click", ".page-link", function () {
+                $(".page-item").addClass("disabled");
+                $(".page-link").attr("aria-disabled", true);
             });
             $(document).on("click", "#delete-link", function () {
                 $.ajax({

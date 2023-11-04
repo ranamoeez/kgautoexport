@@ -191,7 +191,7 @@ class HomeController extends Controller
         GET RECORDS
         */
         $records = new AssignVehicle;
-        $records = $records->orderBy('id','DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer');
+        $records = $records->orderBy('id','DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin");
         $records = $this->search($records,$request,$data);
         /*
         GET TOTAL RECORD BEFORE BEFORE PAGINATE

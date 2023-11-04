@@ -918,29 +918,29 @@ class HomeController extends Controller
         if (!empty($container) && count($container) > 0) {
             $dataService = DataService::Configure([
                 'auth_mode' => 'oauth2',
-                'ClientID' => "ABIdJb32v3epesMWXz0y5xokrQDirpjHrEKa0n39mLIvUGbN9t",
-                'ClientSecret' => "40uEBRLODbAQgmVu5vs6X38Bbt8Kv45Bp3P0znfs",
+                'ClientID' => "AB3dxRPE8re9a18VJzPHTmjkbDSfvXkVPB6rN5OGvckDbYNpav",
+                'ClientSecret' => "2hwgy4HHP7nzLyriDrvBfm2YoJPuuJIatlzd6FDf",
                 'RedirectURI' => "https://developer.intuit.com/v2/OAuth2Playground/RedirectUrl",
-                'accessTokenKey' => "eyJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiZGlyIn0..j5qRkd0nNpSXsHOzxMAGMg.re4y2eX85Z1z7LruDIWk7ZH9wRmUCMQ2GrcTZayDCKS742Zp6hLDthbvPslls3kZtJCRo_UzbYBhMiPK0MHerUL1I2tzZotpE2nJ5zdQJgNKjbxCMGx9B14yVCVU6i5gPd18ehcwfbKnyXO1BYKym4pCA6ZCS_RltkcE2eH65eON4YMVzdMLKUKG1mDBuwSVUMgSyKthytrT-cS5eVtS7iF58E1rAICYrPWoXi4HpU7fxwYnT551K2pajCeqj_aG2whkeLd7DNlJ1p8a9zNb4t11a8DAOfKdjso9zUpgmuHIOydx36T0pNoAMxM9rsdsSWhxDLIGskNmQPplShPKykhQRzeQIisqpyZcTZpcxMrtVEyvLBb-iR2CEErF6SzaH14zKxR4c44TNWn_cPRRdpCmzptin38KgBT43wH9EK6zgfJ-Z1_O9BJEVJ5hqOexFXuMyoTM5stIYawVsDN6twcF8XihjtaduOiW2gj1RHc5M1t3rk3CBsmuBH1Z4ApUk0G2kewtY0Iofnz-Xf3T6DbJo3ek1K7yprwg5Ojyuo4tZQnBBVCnRUScNGT8YZqDmnJ8Exuu0YzPyUzzrgggFDjl3fi1lokD81GX91toz32KRzaW7HjvjxPNxKw6swFLsnYiP2diiBNqOcjIsAUZyJFusoWryVQI5Lz4OL5tF7ZRx_mVDjSp0NrYlNOtY5Qc1SvkBOOs__Q-yJ1fv56RgO8v-0Uoa18mZZ7mHyIg2ac8CvSEtqOnJu_sCjSzxUN6.s-YzU6TlZBfG3qtT12_beQ",
-                'refreshTokenKey' => "AB11703026428IX6DG4nTcBseXi1K5oYMN5hJ6X6JtBXr9CiFa",
-                'QBORealmID' => "9130357402864616",
-                'baseUrl' => "production"
+                'accessTokenKey' => "eyJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiZGlyIn0..ibn8Cb0a2QCQrP530_2f9g.7xlNuObjWb4LOq6pj0O9u5gRBYBEj8FWm0pyIaHI3QF9W0VOkZyl7FSNV84r9Ns-S293Gi1x64ImSbRhaUNtVG4kyIahD7aF2Jp-uUmjhDLM1RvqaX--jTzWZB3AIc71JB_pwRNQmVlpBYJdQhRFT66lPYBPcBjvS9AEksU-sIJbcZaaL5_28iVjpA-VatyUJmoeWEfVMe2IlzmBU6UY4zAUfoheA4mCcQ2VfCfz6TlYXJJAiblgG7LVcwN67bs17hpSDyWpbsAaxjkgYE5fkB6nUw1-TE9Sq4XLHmsEVw1SjRbG4XVCY-i91rb92rb8kycnziBDNTRjoAYRN4Lo0j2hKttjWE4zhtR1dl9ZyUk9USsxmKsKIpvNVcDuqJbzdNFm31zSem9NsJyuKrRQeWGYbGKlXNQejAWhvV34RUnenfZBHN-kFwZDsOazLrKlQNpUlkEyK03IobSmJqXWmjBTJm4E2mVPbEeLrrzeDyhz7lkq0BUXkYOJqIuvfR2GlUdjmWE6Yi7rSTTuVaxMd17r1LElDVHzdgjpYasGFy9s9TVT63oUK6_4z3QeP8QU5DCA6WKa5d9CltilTLzd3Fyt6jx6kpRiV4g3erC6uKbYpbvVQE8sE5uYLIx4xMJLgh88TRG6WYB4ZXHr2ikIvkA6ySKC41it9Emy_00bgHBILpB5tq_L7JFIwyvMKcCrnXxxqmpHRrK8Z3xzx6ujV17_FHPP137dvhJ5H-R-hzM.Bsx7PjYGXjHuvnQ6ftXK0w",
+                'refreshTokenKey' => "AB117078409407Ey5Zaq8f0WcUHj7O9l0WNqm3fmUdeTWxY36E",
+                'QBORealmID' => "4620816365327675980",
+                'baseUrl' => "development"
             ]);
 
             $OAuth2LoginHelper = $dataService->getOAuth2LoginHelper();
-            $accessTokenObj = $OAuth2LoginHelper->refreshAccessTokenWithRefreshToken("AB11703026428IX6DG4nTcBseXi1K5oYMN5hJ6X6JtBXr9CiFa");
+            $accessTokenObj = $OAuth2LoginHelper->refreshAccessTokenWithRefreshToken("AB117078409407Ey5Zaq8f0WcUHj7O9l0WNqm3fmUdeTWxY36E");
             $accessTokenValue = $accessTokenObj->getAccessToken();
             $refreshTokenValue = $accessTokenObj->getRefreshToken();
 
             $dataService = DataService::Configure([
                 'auth_mode' => 'oauth2',
-                'ClientID' => "ABIdJb32v3epesMWXz0y5xokrQDirpjHrEKa0n39mLIvUGbN9t",
-                'ClientSecret' => "40uEBRLODbAQgmVu5vs6X38Bbt8Kv45Bp3P0znfs",
+                'ClientID' => "AB3dxRPE8re9a18VJzPHTmjkbDSfvXkVPB6rN5OGvckDbYNpav",
+                'ClientSecret' => "2hwgy4HHP7nzLyriDrvBfm2YoJPuuJIatlzd6FDf",
                 'RedirectURI' => "https://developer.intuit.com/v2/OAuth2Playground/RedirectUrl",
                 'accessTokenKey' => $accessTokenValue,
                 'refreshTokenKey' => $refreshTokenValue,
-                'QBORealmID' => "9130357402864616",
-                'baseUrl' => "production"
+                'QBORealmID' => "4620816365327675980",
+                'baseUrl' => "development"
             ]);
 
             $total_users = [];
@@ -1022,6 +1022,8 @@ class HomeController extends Controller
                 $resultObj = $dataService->Add($invoiceToCreate);
 
             }
+
+            dd($resultObj);
 
             if (!empty($resultObj->Id)) {
                 return json_encode(["flag" => true, "msg" => "Invoice created successfully!"]);

@@ -172,7 +172,7 @@ class HomeController extends Controller
         $data['request'] = $params;
         return $records;    
     }
-    
+
     public function vehicles(Request $request)
     {
         if (\Auth::user()->role !== "1") {
@@ -538,6 +538,67 @@ class HomeController extends Controller
 
     // Container Functions
 
+    public function cont_search($records,$request,&$data) {
+        /*
+        SET DEFAULT VALUES
+        */
+        if($request->perpage)
+            $this->perpage = $request->perpage;
+        $data['sindex'] = ($request->page != NULL)?($this->perpage*$request->page - $this->perpage+1):1;
+        /*
+        FILTER THE DATA
+        */
+        $params = [];
+        if($request->is_active) {
+            $params['is_active'] = $request->is_active;
+            $records = $records->where("is_active",$params['is_active']);
+        }
+        if (!empty($request->port) && $request->port !== 'all') {
+            $data['port'] = $request->port;
+            $records = $records->where('loading_port_id', $request->port);
+        }
+        if (!empty($request->status) && $request->status !== 'all') {
+            $data['status'] = $request->status;
+            $records = $records->where('status_id', $request->status);
+        }
+        if (!empty($request->search)) {
+            $data['search'] = $request->search;
+            $search = $request->search;
+            $records = $records->where(function ($query) use ($search) {
+                $query->where('booking_no', 'LIKE', '%'.$search.'%')
+                    ->orWhere('container_no', 'LIKE', '%'.$search.'%')
+                    ->orWhere('export_reference', 'LIKE', '%'.$search.'%')
+                    ->orWhere('departure', 'LIKE', '%'.$search.'%')
+                    ->orWhere('arrival', 'LIKE', '%'.$search.'%');
+            });
+        }
+        if (!empty($request->fromDate) && !empty($request->toDate)) {
+            $data['fromDate'] = $request->fromDate;
+            $data['toDate'] = $request->toDate;
+            $records = $records->where('arrival', '<=', $request->toDate)->where('arrival', '>=', $request->fromDate);
+        } elseif(!empty($request->fromDate)) {
+            $data['fromDate'] = $request->fromDate;
+            $records = $records->where('arrival', '>=', $request->fromDate);
+        } elseif(!empty($request->toDate)) {
+            $data['toDate'] = $request->toDate;
+            $records = $records->where('arrival', '<=', $request->toDate);
+        }
+        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == '0') {
+            $data['pay_status'] = $request->pay_status;
+            $records = $records->where('all_paid', $request->pay_status);
+        }
+        if (!empty($request->released_status) && $request->released_status !== 'all') {
+            $data['released_status'] = $request->released_status;
+            $records = $records->where('released_status', $request->released_status);
+        }
+        if (!empty($request->unloaded_status) && $request->unloaded_status !== 'all') {
+            $data['unloaded_status'] = $request->unloaded_status;
+            $records = $records->where('unloaded_status', $request->unloaded_status);
+        }
+        $data['request'] = $params;
+        return $records;    
+    }
+
     public function containers(Request $request)
     {
         if (\Auth::user()->role !== "1") {
@@ -546,84 +607,50 @@ class HomeController extends Controller
 
         $data['type'] = "containers";
         $data['page'] = '1';
-        $containers = Container::orderBy('id', 'DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement');
-        if (!empty($request->port) && $request->port !== 'all') {
-        	$data['port'] = $request->port;
-        	$containers = $containers->where('loading_port_id', $request->port);
-        }
-        if (!empty($request->status) && $request->status !== 'all') {
-        	$data['status'] = $request->status;
-        	$containers = $containers->where('status_id', $request->status);
-        }
-        if (!empty($request->search)) {
-        	$data['search'] = $request->search;
-        	$search = $request->search;
-        	$containers = $containers->where(function ($query) use ($search) {
-			    $query->where('booking_no', 'LIKE', '%'.$search.'%')
-			        ->orWhere('container_no', 'LIKE', '%'.$search.'%')
-			        ->orWhere('export_reference', 'LIKE', '%'.$search.'%')
-			        ->orWhere('departure', 'LIKE', '%'.$search.'%')
-			        ->orWhere('arrival', 'LIKE', '%'.$search.'%');
-			});
-        }
-        if (!empty($request->fromDate) && !empty($request->toDate)) {
-        	$data['fromDate'] = $request->fromDate;
-        	$data['toDate'] = $request->toDate;
-        	$containers = $containers->where('arrival', '<=', $request->toDate)->where('arrival', '>=', $request->fromDate);
-        } elseif(!empty($request->fromDate)) {
-        	$data['fromDate'] = $request->fromDate;
-        	$containers = $containers->where('arrival', '>=', $request->fromDate);
-        } elseif(!empty($request->toDate)) {
-        	$data['toDate'] = $request->toDate;
-        	$containers = $containers->where('arrival', '<=', $request->toDate);
-        }
-        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == '0') {
-        	$data['pay_status'] = $request->pay_status;
-        	$containers = $containers->where('all_paid', $request->pay_status);
-        }
-        if (!empty($request->released_status) && $request->released_status !== 'all') {
-            $data['released_status'] = $request->released_status;
-            $containers = $containers->where('released_status', $request->released_status);
-        }
-        if (!empty($request->unloaded_status) && $request->unloaded_status !== 'all') {
-            $data['unloaded_status'] = $request->unloaded_status;
-            $containers = $containers->where('unloaded_status', $request->unloaded_status);
-        }
-        if (!empty($request->page)) {
-            if ($request->page > 1) {
-                $offset = ($request->page - 1) * 20;
-                $containers = $containers->offset((int)$offset);
-                if (count($containers->limit(20)->get()) < 20) {
-                    $containers = $containers->offset(0);
-                    $request->page = 1;
-                }
-            }
-            $data['page'] = $request->page;
-        }
-        $containers = $containers->limit(20)->get();
-        foreach ($containers as $key => $value) {
-            $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();
+        $data['user_levels'] = Level::all();
+        $data['all_port'] = LoadingPort::all();
+        $data['all_status'] = ContStatus::all();
+        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
+        /*
+        GET RECORDS
+        */
+        $records = new Container;
+        $records = $records->orderBy('id','DESC')->with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement');
+        $records = $this->cont_search($records,$request,$data);
+        /*
+        GET TOTAL RECORD BEFORE BEFORE PAGINATE
+        */
+        $data['count'] = $records->count();
+        /*
+        PAGINATE THE RECORDS
+        */
+        $records = $records->paginate($this->perpage);
+        $records->appends($request->all())->links();
+        $links = $records->links();
+
+        $records = $records->toArray();
+        $records['pagination'] = $links;
+
+        foreach ($records['data'] as $key => $value) {
+            $buyer = ContainerVehicle::with("user")->where("container_id", $value['id'])->get();
             $unique = [];
             $buyers = [];
             foreach ($buyer as $k => $v) {
                 $user_id = $v->user_id;
                 if (!in_array($user_id, $unique)) {
                     array_push($unique, $user_id);
-                    $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value->id)->get();
+                    $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value['id'])->get();
                     if (count($vehicles) > 0) {
                         $v->vehicles = $vehicles;
                         array_push($buyers, $v);
                     }
                 }
             }
-            $containers[$key]->buyers = $buyers;
+            $records['data'][$key]['buyers'] = $buyers;
         }
-        $data['list'] = $containers;
-        $data['user_levels'] = Level::all();
-        $data['all_port'] = LoadingPort::all();
-        $data['all_status'] = ContStatus::all();
-        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
-        $data['countries'] = Country::all();
+        $data['list'] = $records;     
+        
         return view('admin.containers', $data);
     }
 

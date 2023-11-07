@@ -103,67 +103,6 @@
 
 
             <div class="">
-                <div class="d-flex justify-content-between mt-3 align-items-center justify-content-lg-end">
-
-                    <div class="d-flex gap-2 align-items-center page-icon">
-                        @php
-                            $prev = (int)$page - 1;
-                            $next = (int)$page + 1;
-                            $prev_params = ['page='.$prev];
-                            $next_params = ['page='.$next];
-                            if (!empty(@$port)) {
-                                array_push($prev_params, 'port='.$port);
-                                array_push($next_params, 'port='.$port);
-                            }
-                            if (!empty(@$status)) {
-                                array_push($prev_params, 'status='.$status);
-                                array_push($next_params, 'status='.$status);
-                            }
-                            if (!empty(@$search)) {
-                                array_push($prev_params, 'search='.$search);
-                                array_push($next_params, 'search='.$search);
-                            }
-                            if (!empty(@$toDate)) {
-                                array_push($prev_params, 'toDate='.$toDate);
-                                array_push($next_params, 'toDate='.$toDate);
-                            }
-                            if (!empty(@$fromDate)) {
-                                array_push($prev_params, 'fromDate='.$fromDate);
-                                array_push($next_params, 'fromDate='.$fromDate);
-                            }
-                            if (!empty(@$pay_status)) {
-                                array_push($prev_params, 'pay_status='.$pay_status);
-                                array_push($next_params, 'pay_status='.$pay_status);
-                            }
-                            if (!empty(@$released_status)) {
-                                array_push($prev_params, 'released_status='.$released_status);
-                                array_push($next_params, 'released_status='.$released_status);
-                            }
-                            if (!empty(@$unloaded_status)) {
-                                array_push($prev_params, 'unloaded_status='.$unloaded_status);
-                                array_push($next_params, 'unloaded_status='.$unloaded_status);
-                            }
-                            $pre = join("&", $prev_params);
-                            $nex = join("&", $next_params);
-                        @endphp
-                        <a class="btn paginate" href="javascript:void();" @if(@$page == 1) data-href="0" @else data-href="{{ url('admin/containers?'.$pre) }}" @endif>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15.75 19.5L8.25 12l7.5-7.5" />
-                            </svg>
-                        </a>
-                        <p class="text-fs-4 m-0">Page {{ @$page }}</p>
-                        <a class="btn paginate" href="javascript:void();" @if(count($list) < 20) data-href="0" @else data-href="{{ url('admin/containers?'.$nex) }}" @endif>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
                 <div class="table-responsive">
                     <table class="table">
                         <thead class="text-fs-4" style="font-size: 16px;">
@@ -179,56 +118,56 @@
                             <th scope="col" class="fw-bold"></th>
                         </thead>
                         <tbody>
-                            @if(count($list) > 0)
-                            @foreach($list as $key => $value)
+                            @if(count($list['data']) > 0)
+                            @foreach($list['data'] as $key => $value)
                             <tr class="align-middle overflow-hidden shadow mb-2">
-                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                        Booking : {{ $value->booking_no }}
+                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value['id']) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
+                                        Booking : {{ $value['booking_no'] }}
                                     </a>
                                     <br>
-                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                        Container : {{ $value->container_no }}
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value['id']) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
+                                        Container : {{ $value['container_no'] }}
                                     </a>
                                     <br>
-                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                        REF : {{ $value->export_reference }}
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value['id']) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
+                                        REF : {{ $value['export_reference'] }}
                                     </a>
                                 </td>
-                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <ul class="p-0 text-fs-3" style="font-size: 14px;">
-                                        @if(count(@$value->buyers) > 0)
-                                        @foreach(@$value->buyers as $k => $v)
+                                        @if(count(@$value['buyers']) > 0)
+                                        @foreach(@$value['buyers'] as $k => $v)
                                         <span class="fw-bold">Buyer : {{ @$v->user->name }}</span>
                                         @foreach($v->vehicles as $ke => $val)
                                         <li class="list-unstyled">
-                                            » <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name.', VIN: '.@$val->vehicle->vin }}</a>
+                                            » <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value['id']) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name.', VIN: '.@$val->vehicle->vin }}</a>
                                         </li>
                                         @endforeach
                                         @endforeach
                                         @endif
                                     </ul>
                                 </td>
-                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                        {{ @$value->shipping_line->name }}
+                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value['id']) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
+                                        {{ @$value['shipping_line']['name'] }}
                                     </a>
                                 </td>
-                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
-                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                        Departure : @if(@$value->departure && @$value->departure !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->departure)) }} @endif
+                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value['id']) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
+                                        Departure : @if(@$value['departure'] && @$value['departure'] !== "0000-00-00") {{ date("M d, Y", strtotime(@$value['departure'])) }} @endif
                                     </a>
                                     <br>
-                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value->id) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                        Arrival : @if(@$value->arrival && @$value->arrival !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->arrival)) }} @endif
+                                    <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value['id']) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
+                                        Arrival : @if(@$value['arrival'] && @$value['arrival'] !== "0000-00-00") {{ date("M d, Y", strtotime(@$value['arrival'])) }} @endif
                                     </a>
                                 </td>
-                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4" style="font-size: 14px;">
-                                        <select class="form-select status" aria-label="Default select example" data-id="{{ @$value->id }}" @if($value->status_id == "2") style="background-color: #edd4e4;" @elseif($value->status_id == "4") style="background-color: #70e790;" @elseif($value->status_id == "3") style="background-color: #89ceff;" @else style="background-color: #ffa6a6;" @endif>
+                                        <select class="form-select status" aria-label="Default select example" data-id="{{ @$value['id'] }}" @if($value['status_id'] == "2") style="background-color: #edd4e4;" @elseif($value['status_id'] == "4") style="background-color: #70e790;" @elseif($value['status_id'] == "3") style="background-color: #89ceff;" @else style="background-color: #ffa6a6;" @endif>
                                             @if(count(@$all_status) > 0)
                                             @foreach(@$all_status as $k => $v)
-                                                @if($value->status_id == @$v['id'])
+                                                @if($value['status_id'] == @$v['id'])
                                                 <option value="{{ @$v['id'] }}" selected>{{ $v['name'] }}</option>
                                                 @else
                                                 <option value="{{ @$v['id'] }}">{{ @$v['name'] }}</option>
@@ -239,43 +178,43 @@
 
                                     </div>
                                 </td>
-                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4" style="font-size: 14px;">
-                                        <select class="form-select payment_status" aria-label="Default select example" data-id="{{ $value->id }}" @if(@$value->all_paid == "1") style="width: 100px; border-radius: 5px; background-color: #70e790;" @else style="width: 100px; border-radius: 5px; background-color: #ffa6a6;" @endif>
-                                            <option value="1" @if(@$value->all_paid == "1") selected @endif>Paid</option>
-                                            <option value="0" @if(@$value->all_paid == "0") selected @endif>Unpaid</option>
+                                        <select class="form-select payment_status" aria-label="Default select example" data-id="{{ $value['id'] }}" @if(@$value['all_paid'] == "1") style="width: 100px; border-radius: 5px; background-color: #70e790;" @else style="width: 100px; border-radius: 5px; background-color: #ffa6a6;" @endif>
+                                            <option value="1" @if(@$value['all_paid'] == "1") selected @endif>Paid</option>
+                                            <option value="0" @if(@$value['all_paid'] == "0") selected @endif>Unpaid</option>
                                         </select>
                                     </div>
                                 </td>
-                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-fs-4" style="font-size: 14px;">
-                                        <select class="form-select released_status" aria-label="Default select example" data-id="{{ $value->id }}" @if(@$value->released_status == "No") style="width: 100px; background-color: #ffa6a6;" @else style="width: 100px; background-color: #70e790;" @endif>
-                                            <option value="No" @if(@$value->released_status == "No") selected @endif>No</option>
-                                            <option value="In hand" @if(@$value->released_status == "In hand") selected @endif>In hand</option>
+                                        <select class="form-select released_status" aria-label="Default select example" data-id="{{ $value['id'] }}" @if(@$value['released_status'] == "No") style="width: 100px; background-color: #ffa6a6;" @else style="width: 100px; background-color: #70e790;" @endif>
+                                            <option value="No" @if(@$value['released_status'] == "No") selected @endif>No</option>
+                                            <option value="In hand" @if(@$value['released_status'] == "In hand") selected @endif>In hand</option>
                                         </select>
-                                        @if(!empty(@$value->in_hand_date))
-                                        <span class="text-fs-4 d-flex justify-content-start" style="font-size: 14px;">{{ date("M d, Y", strtotime(@$value->in_hand_date)) }}</span>
+                                        @if(!empty(@$value['in_hand_date']))
+                                        <span class="text-fs-4 d-flex justify-content-start" style="font-size: 14px;">{{ date("M d, Y", strtotime(@$value['in_hand_date'])) }}</span>
                                         @endif
                                     </div>
                                 </td>
-                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4" style="font-size: 14px;">
-                                        <select class="form-select unloaded_status" aria-label="Default select example" data-id="{{ $value->id }}" @if(@$value->unloaded_status == "Yes") style="width: 100px; background-color: #70e790;" @else style="width: 100px; background-color: #ffa6a6;" @endif>
-                                            <option value="No" @if(@$value->unloaded_status == "No") selected @endif>No</option>
-                                            <option value="Yes" @if(@$value->unloaded_status == "Yes") selected @endif>Yes</option>
+                                        <select class="form-select unloaded_status" aria-label="Default select example" data-id="{{ $value['id'] }}" @if(@$value['unloaded_status'] == "Yes") style="width: 100px; background-color: #70e790;" @else style="width: 100px; background-color: #ffa6a6;" @endif>
+                                            <option value="No" @if(@$value['unloaded_status'] == "No") selected @endif>No</option>
+                                            <option value="Yes" @if(@$value['unloaded_status'] == "Yes") selected @endif>Yes</option>
                                         </select>
                                     </div>
                                 </td>
-                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4" style="font-size: 14px;">
-                                        <button class="btn btn-primary text-fs-4 border-0 tracking" style="font-size: 14px;" type="button" data-text="{{ @$value->shipping_line->name }}" data-id="{{ @$value->container_no }}">
+                                        <button class="btn btn-primary text-fs-4 border-0 tracking" style="font-size: 14px;" type="button" data-text="{{ @$value['shipping_line']['name'] }}" data-id="{{ @$value['container_no'] }}">
                                             Tracking
                                         </button>
                                     </div>
                                 </td>
-                                <td @if(@$value->status_id == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
                                     <div class="d-flex justify-content-center items-center message-icon">
-                                        <i class="fa-solid fa-circle-xmark fs-3 text-danger delete" data-url="{{ url('admin/containers/delete', $value->id) }}" style="cursor: pointer;"></i>
+                                        <i class="fa-solid fa-circle-xmark fs-3 text-danger delete" data-url="{{ url('admin/containers/delete', $value['id']) }}" style="cursor: pointer;"></i>
                                     </div>
                                 </td>
                             </tr>
@@ -289,6 +228,7 @@
                             @endif
                         </tbody>
                     </table>
+                    {!! $list['pagination'] !!}
                 </div>
             </div>
             <!-- Modal -->

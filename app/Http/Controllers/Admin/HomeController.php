@@ -172,6 +172,7 @@ class HomeController extends Controller
         $data['request'] = $params;
         return $records;    
     }
+    
     public function vehicles(Request $request)
     {
         if (\Auth::user()->role !== "1") {
@@ -1287,7 +1288,7 @@ class HomeController extends Controller
             if ($vehicle->buyer_id !== "1") {
                 $fcm_token = User::where("id", $vehicle->buyer_id)->first()->fcm_token;
                 if (!empty($fcm_token)) {
-                    $this->send_noti($fcm_token, "status_changed", $vehicle);
+                    $this->send_noti($fcm_token, "status-changed", $vehicle);
                 }
             }
     	}

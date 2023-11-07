@@ -282,7 +282,7 @@
                                         <select class="form-select option-select text-white ps-1 pe-2 py-1 status" style="background-position: right; min-width: 50px" aria-label="Default select example" data-id="{{ @$value->id }}">
                                             <option value="waiting" data-color="warning" @if(@$value->status == "waiting") selected @endif>Waiting</option>
                                             <option value="approved" data-color="success" @if(@$value->status == "approved") selected @endif>Approved</option>
-                                            <option value="rejected" data-color="danger" @if(@$value->status == "rejected") selected @endif>Rejected</option>
+                                            <option value="reject" data-color="danger" @if(@$value->status == "reject") selected @endif>Rejected</option>
                                         </select>
                                     </div>
                                 </td>

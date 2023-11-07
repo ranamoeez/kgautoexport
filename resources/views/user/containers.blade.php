@@ -79,17 +79,17 @@
                     </div>
 
                     <div class="col-md-2">
-                        <label for="search" class="fw-semibold">Search</label>
-                        <input type="text" class="form-control p-2 filter" placeholder="Search" name="search" value="{{ @$search }}" id="search-cont">
-                    </div>
-
-                    <div class="col-md-2">
                         <label for="pay_status" class="fw-semibold">Payment Status</label>
                         <select id="pay_status" name="pay_status" class="selectjs form-select p-2 filter">
                             <option value="all" @if(@$pay_status == "all") selected @endif>All</option>
                             <option value="1" @if(@$pay_status == "1") selected @endif>Paid</option>
                             <option value="0" @if(@$pay_status == "0") selected @endif>Unpaid</option>
                         </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="search" class="fw-semibold">Search</label>
+                        <input type="text" class="form-control p-2 filter" placeholder="Search" name="search" value="{{ @$search }}" id="search-cont">
                     </div>
                 </form>
             </div>

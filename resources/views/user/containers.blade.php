@@ -256,7 +256,7 @@
                                                         <li class="list-unstyled" @if(@$v->user->id == @$user_id) style="background-color: #f2f3a1 !important;" @endif>
                                                             » <span class="fw-bold">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name }}</span>,
                                                             VIN: <span class="fw-bold fs-5" style="font-size: 14px !important;"><a
-                                                                    href="{{ url('user/containers/1') }}"
+                                                                    href="{{ url('user/containers', $value->id) }}"
                                                                     class="text-dark text-decoration-none">{{ @$val->vehicle->vin }}</a></span>
                                                         </li>
                                                         @endforeach

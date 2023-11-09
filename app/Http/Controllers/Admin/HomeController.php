@@ -1979,6 +1979,8 @@ class HomeController extends Controller
 
         $response = curl_exec($curl);
 
+        dd(json_decode($response));
+
         curl_close($curl);
         
         return $response;

@@ -1873,7 +1873,7 @@ class HomeController extends Controller
         foreach ($vehicle_id as $key => $value) {
             $vehicle = Vehicle::where("id", $value)->first();
             foreach ($all_vehicle as $k => $v) {
-                if ($v->vehicle->fuel_type !== $vehicle->fuel_type) {
+                if (@$v->vehicle->fuel_type !== @$vehicle->fuel_type) {
                     $flag++;
                 }
             }

@@ -260,8 +260,7 @@ class HomeController extends Controller
             if ($data['buyer_id'] !== "1") {
                 $fcm_token = User::where("id", $data['buyer_id'])->first()->fcm_token;
                 if (!empty($fcm_token)) {
-                    $assign_vehicle = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.destination_port', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer', 'container.container_documents', 'container.status', 'container.shipper', 'container.shipping_line', 'container.consignee', 'container.pre_carriage', 'container.loading_port', 'container.discharge_port', 'container.destination_port', 'container.notify_party', 'container.pier_terminal', 'container.measurement')->where("id", $assign->id)->first();
-                    $this->send_noti($fcm_token, "add-vehicle", $assign_vehicle);
+                    $this->send_noti($fcm_token, "add-vehicle", $vehicle->vin);
                 }
             }
             $transaction_history = new TransactionsHistory;

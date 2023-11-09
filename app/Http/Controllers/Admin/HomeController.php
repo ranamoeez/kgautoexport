@@ -1897,7 +1897,7 @@ class HomeController extends Controller
             if ($user_id !== "1") {
                 $fcm_token = User::where("id", $user_id)->first()->fcm_token;
                 if (!empty($fcm_token)) {
-                    $data = Container::with('container_vehicle', 'container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("id", $container_id)->first();
+                    $data = Container::where("id", $container_id)->first();
                     $this->send_noti($fcm_token, "added-to-container", $data);
                 }
             }
@@ -1978,8 +1978,6 @@ class HomeController extends Controller
         ));
 
         $response = curl_exec($curl);
-
-        dd(json_decode($response));
 
         curl_close($curl);
         

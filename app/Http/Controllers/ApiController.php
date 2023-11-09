@@ -751,7 +751,15 @@ class ApiController extends Controller
                 $operator = User::where('id', $id)->first();
 
                 if (!empty($operator)) {
-                    $containers = Container::with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $operator->destination_id)->get();
+                    $containers = Container::with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where("destination_port_id", $operator->destination_id);
+                    if (!empty($request->PageIndex)) {
+                        if ($request->PageIndex > 1) {
+                            $offset = ($request->PageIndex - 1) * 20;
+                            $containers = $containers->offset((int)$offset);
+                        }
+                    }
+
+                    $containers = $containers->limit(20)->get();
                 } else {
                     return $this->sendError('Not Found.', ['error'=>'Operator not found.']);
                 }

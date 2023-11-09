@@ -249,6 +249,9 @@ class HomeController extends Controller
                 $destination = DestinationPort::where("id", $data['destination_port_id'])->first();
                 $data['unloading_fee'] = $destination->unloading_fee;
             }
+            if (!empty($data['weight'])) {
+                $data['weight'] = (int)$data['weight'];
+            }
             unset($data['phone_code']);
             $vehicle = Vehicle::create($data);
             $assign = new AssignVehicle;
@@ -464,6 +467,9 @@ class HomeController extends Controller
             unset($data['phone_code']);
             if ($data['status_id'] == "6") {
                 $data["delivered_on_date"] = date("Y-m-d");
+            }
+            if (!empty($data['weight'])) {
+                $data['weight'] = (int)$data['weight'];
             }
             $sel_vehicle = Vehicle::where('id', $id)->first();
             if (!empty($data['destination_port_id']) && (empty($sel_vehicle->destination_port_id) || $sel_vehicle->destination_port_id !== $data['destination_port_id'])) {

@@ -133,7 +133,12 @@
 
                 <div class="col-md-3 mb-2">
                     <label for="search" class="fw-semibold">Search</label>
-                    <input type="text" class="form-control p-2 filter" name="search" value="{{ @$search }}" id="search-veh" placeholder="Search">
+                    <div class="input-group">
+                        <input type="text" class="form-control p-2 filter" name="search" value="{{ @$search }}" placeholder="Search" style="border: 1px solid #dee2e6;">
+                        <div class="input-group-text">
+                            <i class="fa-solid fa-magnifying-glass" style="font-size: 20px; cursor: pointer;" id="search-btn"></i>
+                        </div>
+                    </div>
                 </div>
             </form>
 
@@ -539,6 +544,10 @@
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
             $(document).on("change", "#buyer, #terminal, #status, #at_terminal, #destination, #search-veh, #pay_status, #fuel_type", function () {
+                $("#filters-form").submit();
+                $(".filter").attr("disabled", true);
+            });
+            $(document).on("click", "#search-btn", function () {
                 $("#filters-form").submit();
                 $(".filter").attr("disabled", true);
             });

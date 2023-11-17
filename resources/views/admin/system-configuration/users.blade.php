@@ -54,8 +54,7 @@
                                                                         </svg>
                                                                     </div>
                                                                     <input type="text" name="name" id="user-username" value=""
-                                                                        class="py-2 form-control rounded-end-4"
-                                                                        placeholder="John Sabestin" required />
+                                                                        class="py-2 form-control rounded-end-4" required />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -98,8 +97,7 @@
                                                                         </svg>
                                                                     </div>
                                                                     <input type="text" name="surname" id="user-surname" 
-                                                                        class="py-2 form-control rounded-end-4"
-                                                                        placeholder="John Sabestin" />
+                                                                        class="py-2 form-control rounded-end-4" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -299,6 +297,10 @@
                                     $next = (int)$page + 1;
                                     $prev_params = ['page='.$prev];
                                     $next_params = ['page='.$next];
+                                    if (!empty(@$sel_users)) {
+                                        array_push($prev_params, 'users='.$sel_users);
+                                        array_push($next_params, 'users='.$sel_users);
+                                    }
                                     if (!empty(@$search)) {
                                         array_push($prev_params, 'search='.$search);
                                         array_push($next_params, 'search='.$search);

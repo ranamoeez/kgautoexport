@@ -140,7 +140,7 @@
                                                 <div class="row">
                                                     @foreach(@$value->models as $k => $val)
                                                     <div class="col-lg-12 mt-3 text-fs-3 shipment-details">
-                                                        {{ @$val->name }}
+                                                        {{ @$value->name.' '.@$val->name }}
                                                     </div>
                                                     @endforeach
                                                 </div>

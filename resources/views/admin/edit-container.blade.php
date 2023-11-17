@@ -43,7 +43,7 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Booking No.</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" name="booking_no" value="{{ $container->booking_no }}" placeholder="John Sabestin" required="" />
+                                    <input type="text" class="form-control" name="booking_no" value="{{ $container->booking_no }}" required="" />
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -122,7 +122,7 @@
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Container No.</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="container_no" value="{{ $container->container_no }}" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="container_no" value="{{ $container->container_no }}" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
@@ -145,13 +145,13 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Vessel Name</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="vessel_name" value="{{ $container->vessel_name }}" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="vessel_name" value="{{ $container->vessel_name }}" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Location</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="location" value="{{ $container->location }}" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="location" value="{{ $container->location }}" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
@@ -368,7 +368,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Export
                                     reference</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="export_reference" value="{{ $container->export_reference }}" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="export_reference" value="{{ $container->export_reference }}" class="form-control" />
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -584,9 +584,8 @@
                                                         </p>
                                                     </div>
                                                     <div class="row shadow border rounded-5 w-100 mb-3">
+                                                        <p class="col text-fs-3 fw-bold text-center">Description</p>
                                                         <p class="col text-fs-3 fw-bold text-center">VIN</p>
-                                                        <p class="col text-fs-3 fw-bold text-center">Description
-                                                        </p>
                                                         <p class="col text-fs-3 fw-bold text-center">Select</p>
                                                     </div>
                                                 </div>
@@ -627,15 +626,14 @@
                             </div>
                             <div class="card-body pt-3">
                                 <div class="row shadow border rounded-5 w-100 mb-3 p-2 mx-1">
+                                    <div class="col text-fs-3 fw-bold text-center">Description</div>
                                     <div class="col text-fs-3 fw-bold text-center">VIN</div>
-                                    <div class="col text-fs-3 fw-bold text-center">Description
-                                    </div>
                                     <div class="col text-fs-3 fw-bold text-center">Select</div>
                                 </div>
                                 @foreach($value->vehicles as $k => $v)
                                 <div class="row shadow border rounded-5 w-100 mb-3 p-2 mx-1">
-                                    <div class="col text-fs-3 text-center">{{ $v->vehicle->vin }}</div>
                                     <div class="col text-fs-3 text-center">{{ @$v->vehicle->modal.' '.@$v->vehicle->company_name.' '.@$v->vehicle->name }}</div>
+                                    <div class="col text-fs-3 text-center">{{ $v->vehicle->vin }}</div>
                                     <div class="col d-flex justify-content-center align-items-center">
                                         <i class="fa-solid fa-circle-minus text-danger fs-3 delete-buyer" data-url="{{ url('admin/delete-buyer-vehicle/'.@$container->id.'/'.@$value->user->id.'/'.@$v->vehicle->id) }}" style="cursor: pointer;"></i>
                                     </div>
@@ -884,6 +882,18 @@
             });
         });
 
+        $(document).on("click", "input[type='radio']", function () {
+            if ($(this).attr('checked') == "checked") {
+                $(this).prop('checked', false);
+                $(this).attr('checked', false);
+                $(this).parent().parent().find("input[type='radio']").attr("checked", false);
+            } else {
+                $(this).parent().parent().find("input[type='radio']").attr("checked", false);
+                $(this).prop('checked', true);
+                $(this).attr('checked', true);
+            }
+        });
+
         $(document).on("click", "#send-buyer", function () {
             $('.center-body').css('display', 'block');
             $.ajax({
@@ -971,66 +981,65 @@
                                     description += " "+value.vehicle.name;
                                 }
                                 var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
-                                    <div class="col text-fs-3 text-center">${value.vehicle.vin}</div>
                                     <div class="col text-fs-3 text-center">${description}</div>
+                                    <div class="col text-fs-3 text-center">${value.vehicle.vin}</div>
                                     <div class="col d-flex justify-content-center align-items-center">
                                         <input class="form-check-input vehicle_id" id="vehicle_id" name="vehicle_id" type="checkbox"
                                             value="${value.vehicle.id}">
                                     </div>
                                 </div>`;
                                 $(".vehicles").append(html);
-
-                                $(document).on("click", "#search-btn", function (event) {
-                                    var search = $("#search-inp").val();
-                                    
-                                    $.ajax({
-                                        type: 'GET',
-                                        url: "{{ url('admin/get-vehicles') }}"+"/"+id+"?search="+search,
-                                        success: function(data){
-                                            data = JSON.parse(data);
-                                            $(".vehicle-data").remove();
-                                            if (data.success == true) {
-                                                if (data.vehicles.length == 0) {
-                                                    var html = `<div class="row shadow w-100 mb-3 p-2 vehicle-data">
-                                                        <input type="text" id="search-inp" class="form-control w-75" placeholder="Search vehicles" value="${search}">
-                                                        <button type="button" class="btn btn-primary w-25" id="search-btn">Search</button>
-                                                    </div>
-                                                    <div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
-                                                        <div class="text-fs-3 text-center">No vehicle found</div>
-                                                    </div>`;
-                                                    $(".vehicles").append(html);
-                                                } else {
-                                                    var html = `<div class="row shadow w-100 mb-3 p-2 vehicle-data">
-                                                        <input type="text" id="search-inp" class="form-control w-75" placeholder="Search vehicles" value="${search}">
-                                                        <button type="button" class="btn btn-primary w-25" id="search-btn">Search</button>
-                                                    </div>`;
-                                                    $(".vehicles").append(html);
-                                                    $(data.vehicles).each(function (key, value) {
-                                                        var description = value.vehicle.modal;
-                                                        if (value.vehicle.name !== null) {
-                                                            description += " "+value.vehicle.company_name;
-                                                        }
-                                                        if (value.vehicle.modal !== null) {
-                                                            description += " "+value.vehicle.name;
-                                                        }
-                                                        var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
-                                                            <div class="col text-fs-3 text-center">${value.vehicle.vin}</div>
-                                                            <div class="col text-fs-3 text-center">${description}</div>
-                                                            <div class="col d-flex justify-content-center align-items-center">
-                                                                <input class="form-check-input vehicle_id" id="vehicle_id" name="vehicle_id" type="checkbox"
-                                                                    value="${value.vehicle.id}">
-                                                            </div>
-                                                        </div>`;
-                                                        $(".vehicles").append(html);
-                                                    });
-                                                }
-                                            }
-                                        }
-                                    });
-                                });
                             });
                         }
                     }
+                    $(document).on("click", "#search-btn", function (event) {
+                        var search = $("#search-inp").val();
+                        
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ url('admin/get-vehicles') }}"+"/"+id+"?search="+search,
+                            success: function(data){
+                                data = JSON.parse(data);
+                                $(".vehicle-data").remove();
+                                if (data.success == true) {
+                                    if (data.vehicles.length == 0) {
+                                        var html = `<div class="row shadow w-100 mb-3 p-2 vehicle-data">
+                                            <input type="text" id="search-inp" class="form-control w-75" placeholder="Search vehicles" value="${search}">
+                                            <button type="button" class="btn btn-primary w-25" id="search-btn">Search</button>
+                                        </div>
+                                        <div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
+                                            <div class="text-fs-3 text-center">No vehicle found</div>
+                                        </div>`;
+                                        $(".vehicles").append(html);
+                                    } else {
+                                        var html = `<div class="row shadow w-100 mb-3 p-2 vehicle-data">
+                                            <input type="text" id="search-inp" class="form-control w-75" placeholder="Search vehicles" value="${search}">
+                                            <button type="button" class="btn btn-primary w-25" id="search-btn">Search</button>
+                                        </div>`;
+                                        $(".vehicles").append(html);
+                                        $(data.vehicles).each(function (key, value) {
+                                            var description = value.vehicle.modal;
+                                            if (value.vehicle.name !== null) {
+                                                description += " "+value.vehicle.company_name;
+                                            }
+                                            if (value.vehicle.modal !== null) {
+                                                description += " "+value.vehicle.name;
+                                            }
+                                            var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
+                                                <div class="col text-fs-3 text-center">${description}</div>
+                                                <div class="col text-fs-3 text-center">${value.vehicle.vin}</div>
+                                                <div class="col d-flex justify-content-center align-items-center">
+                                                    <input class="form-check-input vehicle_id" id="vehicle_id" name="vehicle_id" type="checkbox"
+                                                        value="${value.vehicle.id}">
+                                                </div>
+                                            </div>`;
+                                            $(".vehicles").append(html);
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                    });
                 }
             });
         });

@@ -54,8 +54,7 @@
                                                                         </svg>
                                                                     </div>
                                                                     <input type="text" name="name" id="user-username" value=""
-                                                                        class="py-2 form-control rounded-end-4"
-                                                                        placeholder="John Sabestin" required />
+                                                                        class="py-2 form-control rounded-end-4" required />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -98,8 +97,7 @@
                                                                         </svg>
                                                                     </div>
                                                                     <input type="text" name="surname" id="user-surname" 
-                                                                        class="py-2 form-control rounded-end-4"
-                                                                        placeholder="John Sabestin" />
+                                                                        class="py-2 form-control rounded-end-4" />
                                                                 </div>
                                                             </div>
                                                         </div>

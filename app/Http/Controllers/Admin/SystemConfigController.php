@@ -1231,6 +1231,14 @@ class SystemConfigController extends Controller
         $data['type'] = "system-configuration";
         $data['page'] = '1';
         $auction_location = AuctionLocation::orderBy('id', 'DESC')->with('auction');
+        if (!empty($request->search)) {
+            $data['search'] = $request->search;
+            $search = $request->search;
+            $auction_location = $auction_location->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%'.$search.'%')
+                    ->orWhere('position', 'LIKE', '%'.$search.'%');
+            });
+        }
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;
@@ -1824,6 +1832,14 @@ class SystemConfigController extends Controller
         $data['type'] = "system-configuration";
         $data['page'] = '1';
         $carriers = Carrier::orderBy('id', 'DESC');
+        if (!empty($request->search)) {
+            $data['search'] = $request->search;
+            $search = $request->search;
+            $carriers = $carriers->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%'.$search.'%')
+                    ->orWhere('phone_numbers', 'LIKE', '%'.$search.'%');
+            });
+        }
         if (!empty($request->page)) {
             if ($request->page > 1) {
                 $offset = ($request->page - 1) * 10;

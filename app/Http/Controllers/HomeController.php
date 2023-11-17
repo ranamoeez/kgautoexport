@@ -57,7 +57,9 @@ class HomeController extends Controller
     public function index()
     {
         $data['type'] = "homepage";
-        $data['total_vehicles'] = AssignVehicle::where('user_id', Auth::user()->id)->count();
+        $data['at_terminal_vehicles'] = AssignVehicle::whereHas("vehicle", function ($q) {
+            $q->where("status_id", "6");
+        })->where('user_id', Auth::user()->id)->count();
         $data['shipped_vehicles'] = AssignVehicle::whereHas("vehicle", function ($q) {
             $q->where("status_id", "10");
         })->where('user_id', Auth::user()->id)->count();
@@ -477,6 +479,14 @@ class HomeController extends Controller
         }
 
         $data['all_status'] = Status::all();
+        foreach ($data['all_status'] as $key => $value) {
+            $status_id = $value->id;
+            $total_count = AssignVehicle::with("vehicle")->whereHas("vehicle", function ($q) use($status_id) {
+                $q->where("status_id", $status_id);
+            })->where("user_id", Auth::user()->id)->count();
+            $data['all_status'][$key]["vehicles"] = $total_count;
+        }
+
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();
         $data['countries'] = Country::all();
@@ -685,6 +695,11 @@ class HomeController extends Controller
         $data['super_user'] = [];
         $data['all_port'] = LoadingPort::all();
         $data['all_status'] = ContStatus::all();
+        foreach ($data['all_status'] as $key => $value) {
+            $total_count = Container::where("status_id", $value->id)->where("buyers", "LIKE", "%-".Auth::user()->id."-%")->count();
+            $data['all_status'][$key]["containers"] = $total_count;
+        }
+
         $data['countries'] = Country::all();
         return view('user.containers', $data);
     }

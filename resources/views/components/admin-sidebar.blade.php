@@ -60,7 +60,8 @@
         @if(empty($auth_user->admin_level->access) || @in_array("6.1", json_decode($auth_user->admin_level->access)))
         <li class="side_menu_item">
             <a href="{{ url('admin/pickup-history') }}" @if(@$type == 'pickup-history') class="active" @endif>
-                <i class="fa-solid fa-list" style="margin-left: 6px; margin-right: 15px;"></i>
+                {{-- <img src="{{ asset('assets/request_car.png') }}" style="margin-left: 2px; margin-right: 15px; width: 35px; height: 29px;"></i> --}}
+                <i class="fa-solid fa-hand-holding-dollar" style="margin-left: 6px; margin-right: 15px;"></i>
                 <span>Pickup History</span>
             </a>
         </li>

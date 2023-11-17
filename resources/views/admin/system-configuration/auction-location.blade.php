@@ -99,8 +99,14 @@
                                 @php
                                     $prev = (int)$page - 1;
                                     $next = (int)$page + 1;
-                                    $pre = 'page='.$prev;
-                                    $nex = 'page='.$next;
+                                    $prev_params = ['page='.$prev];
+                                    $next_params = ['page='.$next];
+                                    if (!empty(@$search)) {
+                                        array_push($prev_params, 'search='.$search);
+                                        array_push($next_params, 'search='.$search);
+                                    }
+                                    $pre = join("&", $prev_params);
+                                    $nex = join("&", $next_params);
                                 @endphp
                                 <a class="btn" @if(@$page == 1) href="javascript:void();" @else href="{{ url('admin/system-configuration/auction-location?'.$pre) }}" @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -120,6 +126,14 @@
                             </div>
                         </div>
                     </div>
+
+                    <form method="GET" action="{{ url('admin/system-configuration/auction-location') }}" class="row align-items-center mt-3" id="filters-form">
+                        <input type="hidden" name="page" value="{{ @$page }}">
+                        <div class="col-md-12">
+                            <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-user" placeholder="Search auction locations">
+                        </div>
+                    </form>
+
                     <div class="mt-4">
                         <div class="table-responsive">
                             <table class="table">
@@ -231,6 +245,10 @@
                         }
                     }
                 });
+            });
+
+            $(document).on("change", "#search-user, #filter-user", function () {
+                $("#filters-form").submit();
             });
 
             $(document).on("click", ".add", function () {

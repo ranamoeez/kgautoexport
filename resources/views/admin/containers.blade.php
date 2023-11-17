@@ -13,6 +13,9 @@
         .select2.select2-container {
             width: 100% !important;
         }
+        .table td {
+            text-align: left !important;
+        }
     </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
@@ -48,9 +51,9 @@
                         @if(count(@$all_status) > 0)
                         @foreach(@$all_status as $key => $value)
                             @if($value['id'] == @$status)
-                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                            <option value="{{ @$value->id }}" selected>{{ $value->name.' ('.count($value->containers).')' }}</option>
                             @else
-                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                            <option value="{{ @$value->id }}">{{ @$value->name.' ('.count($value->containers).')' }}</option>
                             @endif
                         @endforeach
                         @endif
@@ -97,7 +100,12 @@
 
                 <div class="col-md-3 mb-2">
                     <label for="search" class="fw-semibold">Search</label>
-                    <input type="text" class="form-control p-2 filter" placeholder="Search" name="search" value="{{ @$search }}" id="search-cont">
+                    <div class="input-group">
+                        <input type="text" class="form-control p-2 filter" name="search" value="{{ @$search }}" placeholder="Search" style="border: 1px solid #dee2e6;">
+                        <div class="input-group-text">
+                            <i class="fa-solid fa-magnifying-glass" style="font-size: 20px; cursor: pointer;" id="search-btn"></i>
+                        </div>
+                    </div>
                 </div>
             </form>
 
@@ -121,7 +129,7 @@
                             @if(count($list['data']) > 0)
                             @foreach($list['data'] as $key => $value)
                             <tr class="align-middle overflow-hidden shadow mb-2">
-                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td class="text-left" @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>
                                     <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value['id']) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
                                         Booking : {{ $value['booking_no'] }}
                                     </a>
@@ -134,13 +142,13 @@
                                         REF : {{ $value['export_reference'] }}
                                     </a>
                                 </td>
-                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>
                                     <ul class="p-0 text-fs-3" style="font-size: 14px;">
                                         @if(count(@$value['buyers']) > 0)
                                         @foreach(@$value['buyers'] as $k => $v)
                                         <span class="fw-bold">Buyer : {{ @$v->user->name }}</span>
                                         @foreach($v->vehicles as $ke => $val)
-                                        <li class="list-unstyled">
+                                        <li class="list-unstyled" style="padding-left: 10px;">
                                             » <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value['id']) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000;">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name.', VIN: '.@$val->vehicle->vin }}</a>
                                         </li>
                                         @endforeach
@@ -148,12 +156,12 @@
                                         @endif
                                     </ul>
                                 </td>
-                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important; text-align: center !important;" @else style="text-align: center !important;" @endif>
                                     <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value['id']) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
                                         {{ @$value['shipping_line']['name'] }}
                                     </a>
                                 </td>
-                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>
                                     <a @if(empty(\Auth::user()->access) || \Auth::user()->access == 'all' || @in_array("2.2", json_decode(\Auth::user()->access))) href="{{ url('admin/containers/edit', $value['id']) }}" @else href="javascript:void;" @endif style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
                                         Departure : @if(@$value['departure'] && @$value['departure'] !== "0000-00-00") {{ date("M d, Y", strtotime(@$value['departure'])) }} @endif
                                     </a>
@@ -162,7 +170,7 @@
                                         Arrival : @if(@$value['arrival'] && @$value['arrival'] !== "0000-00-00") {{ date("M d, Y", strtotime(@$value['arrival'])) }} @endif
                                     </a>
                                 </td>
-                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4" style="font-size: 14px;">
                                         <select class="form-select status" aria-label="Default select example" data-id="{{ @$value['id'] }}" @if($value['status_id'] == "2") style="background-color: #edd4e4;" @elseif($value['status_id'] == "4") style="background-color: #70e790;" @elseif($value['status_id'] == "3") style="background-color: #89ceff;" @else style="background-color: #ffa6a6;" @endif>
                                             @if(count(@$all_status) > 0)
@@ -178,7 +186,7 @@
 
                                     </div>
                                 </td>
-                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4" style="font-size: 14px;">
                                         <select class="form-select payment_status" aria-label="Default select example" data-id="{{ $value['id'] }}" @if(@$value['all_paid'] == "1") style="width: 100px; border-radius: 5px; background-color: #70e790;" @else style="width: 100px; border-radius: 5px; background-color: #ffa6a6;" @endif>
                                             <option value="1" @if(@$value['all_paid'] == "1") selected @endif>Paid</option>
@@ -186,7 +194,7 @@
                                         </select>
                                     </div>
                                 </td>
-                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>
                                     <div class="text-fs-4" style="font-size: 14px;">
                                         <select class="form-select released_status" aria-label="Default select example" data-id="{{ $value['id'] }}" @if(@$value['released_status'] == "No") style="width: 100px; background-color: #ffa6a6;" @else style="width: 100px; background-color: #70e790;" @endif>
                                             <option value="No" @if(@$value['released_status'] == "No") selected @endif>No</option>
@@ -197,7 +205,7 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4" style="font-size: 14px;">
                                         <select class="form-select unloaded_status" aria-label="Default select example" data-id="{{ $value['id'] }}" @if(@$value['unloaded_status'] == "Yes") style="width: 100px; background-color: #70e790;" @else style="width: 100px; background-color: #ffa6a6;" @endif>
                                             <option value="No" @if(@$value['unloaded_status'] == "No") selected @endif>No</option>
@@ -205,14 +213,14 @@
                                         </select>
                                     </div>
                                 </td>
-                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>
                                     <div class="text-center text-fs-4" style="font-size: 14px;">
                                         <button class="btn btn-primary text-fs-4 border-0 tracking" style="font-size: 14px;" type="button" data-text="{{ @$value['shipping_line']['name'] }}" data-id="{{ @$value['container_no'] }}">
                                             Tracking
                                         </button>
                                     </div>
                                 </td>
-                                <td @if(@$value['status_id'] == '4') style="background-color: #f2f3a1 !important;" @endif>
+                                <td @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>
                                     <div class="d-flex justify-content-center items-center message-icon">
                                         <i class="fa-solid fa-circle-xmark fs-3 text-danger delete" data-url="{{ url('admin/containers/delete', $value['id']) }}" style="cursor: pointer;"></i>
                                     </div>
@@ -300,7 +308,11 @@
     <script>
         $(document).ready(function () {
             $('.select2-selection--single').removeClass('select2-selection--single');
-            $(document).on("change", "#port, #status, #search-cont, #fromDate, #toDate, #pay_status, #released_status, #unloaded_status", function () {
+            $(document).on("change", "#port, #status, #fromDate, #toDate, #pay_status, #released_status, #unloaded_status", function () {
+                $("#filters-form").submit();
+                $(".filter").attr("disabled", true);
+            });
+            $(document).on("click", "#search-btn", function () {
                 $("#filters-form").submit();
                 $(".filter").attr("disabled", true);
             });

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Container;
 
 class ContStatus extends Model
 {
@@ -15,4 +16,8 @@ class ContStatus extends Model
     protected $fillable = [
         'name', 'position'
     ];
+
+    public function containers(){
+    	return $this->hasMany(Container::class, 'status_id');
+    }
 }

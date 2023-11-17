@@ -40,7 +40,7 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Booking No.</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" name="booking_no" placeholder="John Sabestin" required="" />
+                                    <input type="text" class="form-control" name="booking_no" required="" />
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -119,7 +119,7 @@
                             <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Container No.</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="container_no" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="container_no" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
@@ -142,13 +142,13 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Vessel Name</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="vessel_name" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="vessel_name" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Location</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="location" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="location" />
                                 </div>
                             </div>
                             <div class="form-group row mt-4">
@@ -287,7 +287,7 @@
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Export
                                     reference</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="export_reference" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="export_reference" class="form-control" />
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -626,6 +626,18 @@
 
         $(document).on("click", ".upload-documents", function () {
             $("#documents").click();
+        });
+
+        $(document).on("click", "input[type='radio']", function () {
+            if ($(this).attr('checked') == "checked") {
+                $(this).prop('checked', false);
+                $(this).attr('checked', false);
+                $(this).parent().parent().find("input[type='radio']").attr("checked", false);
+            } else {
+                $(this).parent().parent().find("input[type='radio']").attr("checked", false);
+                $(this).prop('checked', true);
+                $(this).attr('checked', true);
+            }
         });
 
         $(document).on("click", ".upload-images", function () {

@@ -180,10 +180,9 @@ class HomeController extends Controller
         }
         $data['type'] = "vehicles";
         $data['page'] = '1';
-        $data['total_vehicles'] = Vehicle::all()->count();
         $data['user_levels'] = Level::all();
         $data['all_terminal'] = Terminal::with("vehicles")->get();
-        $data['all_status'] = Status::all();
+        $data['all_status'] = Status::with("vehicles")->get();
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
@@ -197,7 +196,7 @@ class HomeController extends Controller
         /*
         GET TOTAL RECORD BEFORE BEFORE PAGINATE
         */
-        $data['count'] = $records->count();
+        $data['total_vehicles'] = $records->count();
         /*
         PAGINATE THE RECORDS
         */
@@ -385,7 +384,7 @@ class HomeController extends Controller
             //         $this->send_noti($fcm_token, "add-vehicle");
             //     }
             // }
-            if ($data['destination_port_id'] == '') {
+            if ($data['destination_port_id'] == "0") {
                 $data['update_destination'] = 0; 
             }
             $id = AssignVehicle::where('id', $id)->first()->vehicle_id;
@@ -614,7 +613,7 @@ class HomeController extends Controller
         $data['page'] = '1';
         $data['user_levels'] = Level::all();
         $data['all_port'] = LoadingPort::all();
-        $data['all_status'] = ContStatus::all();
+        $data['all_status'] = ContStatus::with("containers")->get();
         $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
         $data['countries'] = Country::all();
         /*
@@ -671,10 +670,10 @@ class HomeController extends Controller
             $data['owner_id'] = Auth::user()->id;
             $data['request_type'] = '2';
             $data['date_created'] = time();
-            if (!empty($data['container_no'])) {
-                $check = Container::where("container_no", $data['container_no'])->count();
+            if (!empty($data['booking_no'])) {
+                $check = Container::where("booking_no", $data['booking_no'])->count();
                 if ($check > 0) {
-                    $response = array('success'=>false,'msg'=>'Container number already exists!','action'=>'reload');
+                    $response = array('success'=>false,'msg'=>'Booking number already exists!','action'=>'reload');
                     return json_encode($response);
                 }
             }
@@ -1330,7 +1329,10 @@ class HomeController extends Controller
                 $data['paid_date'] = date("Y-m-d");
             }
         }
-        if (!empty($request->destination_port)) {
+        if (!empty($request->destination_port) || $request->destination_port == "0") {
+            if ($request->destination_port == "0") {
+                $data['update_destination'] = 0; 
+            }
             $data["destination_port_id"] = $request->destination_port;
         }
     	if (!empty($request->title)) {

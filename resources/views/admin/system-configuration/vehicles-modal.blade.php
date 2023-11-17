@@ -41,7 +41,7 @@
                                                     <div class="col-md-6 mb-4">
                                                         <!-- username -->
                                                         <div class="row">
-                                                            <label for="" class="col-md-4">Name</label>
+                                                            <label for="" class="col-md-4">Model</label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
                                                                     <input type="text" name="name" id="name" value=""
@@ -77,7 +77,7 @@
                                                             <label for="" class="col-md-4">Weight</label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group shadow-lg rounded-4">
-                                                                    <input type="text" name="weight" id="weight" value="" class="py-2 form-control rounded-end-4" required />
+                                                                    <input type="text" name="weight" id="weight" value="" class="py-2 form-control rounded-end-4" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -89,13 +89,13 @@
                                                             <label for="" class="col-md-4">Fuel Type</label>
                                                             <div class="col-md-8">
                                                                 <div class="">
-                                                                    <input type="radio" name="fuel_type" value="GAS" class="py-2 fuel_type" id="gas" required />
+                                                                    <input type="radio" name="fuel_type" value="GAS" class="py-2 fuel_type" id="gas" />
                                                                     <label for="gas">GAS</label>
-                                                                    <input type="radio" name="fuel_type" value="HYB" class="py-2 fuel_type" id="hyb" required />
+                                                                    <input type="radio" name="fuel_type" value="HYB" class="py-2 fuel_type" id="hyb" />
                                                                     <label for="hyb">HYB</label>
-                                                                    <input type="radio" name="fuel_type" value="EV" class="py-2 fuel_type" id="ev" required />
+                                                                    <input type="radio" name="fuel_type" value="EV" class="py-2 fuel_type" id="ev" />
                                                                     <label for="ev">EV</label>
-                                                                    <input type="radio" name="fuel_type" value="Other" class="py-2 fuel_type" id="other" required />
+                                                                    <input type="radio" name="fuel_type" value="Other" class="py-2 fuel_type" id="other" />
                                                                     <label for="other">Other</label>
                                                                 </div>
                                                             </div>
@@ -157,8 +157,8 @@
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class="text-fs-4">
-                                    <th scope="col" class="fw-bold">Name</th>
                                     <th scope="col" class="fw-bold">Vehicles Brand</th>
+                                    <th scope="col" class="fw-bold">Model</th>
                                     <th scope="col" class="fw-bold">Weight</th>
                                     <th scope="col" class="fw-bold">Fuel Type</th>
                                     <th scope="col"></th>
@@ -169,12 +169,12 @@
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td>
                                             <p class=" text-fs-3">
-                                                {{ @$value->name }}
+                                                {{ @$value->vehicles_brand->name }}
                                             </p>
                                         </td>
                                         <td>
                                             <p class=" text-fs-3">
-                                                {{ @$value->vehicles_brand->name }}
+                                                {{ @$value->name }}
                                             </p>
                                         </td>
                                         <td>

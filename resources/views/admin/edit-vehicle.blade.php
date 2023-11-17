@@ -13,6 +13,13 @@
         .img-show img {
             height: 550px !important;
         }
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            margin: 0; 
+        }
     </style>
     <div class="below-header-height outer-container">
         <div class="inner-container">
@@ -105,12 +112,12 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">VIN</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="vin" value="{{ $list->vehicle->vin }}" class="form-control" placeholder="John Sabestin" required />
+                                    <input type="text" name="vin" value="{{ $list->vehicle->vin }}" class="form-control" required />
                                 </div>
                             </div>
                             @endif
                             <div class="row mb-4">
-                                <label for="" class="col-md-3 col-form-label fw-semibold">Description</label>
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Year</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select vehicle_modal" name="modal">
                                         <option value=""></option>
@@ -123,7 +130,8 @@
                                         @endfor
                                     </select>
                                 </div>
-                                <div class="offset-md-3 col-md-9 mt-2">
+                                <label for="" class="col-md-3 mt-2 col-form-label fw-semibold">Make</label>
+                                <div class="col-md-9 mt-2">
                                     <select class="selectjs form-select company_name" name="company_name" required="">
                                         <option value=""></option>
                                         @if(count(@$all_vehicle_brand) > 0)
@@ -137,7 +145,8 @@
                                         @endif
                                     </select>
                                 </div>
-                                <div class="offset-md-3 col-md-9 mt-2">
+                                <label for="" class="col-md-3 mt-2 col-form-label fw-semibold">Model</label>
+                                <div class="col-md-9 mt-2">
                                     <select class="selectjs form-select name" name="name" required="">
                                         <option value=""></option>
                                         @if(count(@$all_vehicle_modal) > 0)
@@ -156,7 +165,7 @@
                             <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Client name</label>
                                 <div class="col-md-9">
-                                    <input type="text" name="client_name" value="{{ $list->vehicle->client_name }}" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="client_name" value="{{ $list->vehicle->client_name }}" class="form-control" />
                                 </div>
                             </div>
                             @endif
@@ -242,6 +251,14 @@
                                 </div>
                             </div>
                             @endif
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.46", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
+                            <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Color</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="color" class="form-control" value="{{ @$list->vehicle->color }}" />
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -289,7 +306,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="address" id="auction_address" value="{{ $list->vehicle->address }}" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="address" id="auction_address" value="{{ $list->vehicle->address }}" />
                                 </div>
                             </div>
                             @endif
@@ -311,10 +328,10 @@
                                     <div class="input-group rounded-4">
                                         <div class="input-group-text" style="width: 25% !important; height: 40px !important;">
                                             <select name="phone_code" style="border: none; outline: none;">
+                                                <option value="+1">+1</option>
                                                 <option value="+962">+962</option>
                                                 <option value="+964">+964</option>
                                                 <option value="+971">+971</option>
-                                                <option value="+1">+1</option>
                                                 @if(count(@$countries) > 0)
                                                 @foreach(@$countries as $key => $value)
                                                 @if($value->id !== 102 && $value->id !== 108 && $value->id !== 224 && $value->id !== 226)
@@ -335,7 +352,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Buyer #</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="auction_buyer" value="{{ $list->vehicle->auction_buyer }}" placeholder="John Sabestin" />
+                                    <input type="text" class="form-control" name="auction_buyer" value="{{ $list->vehicle->auction_buyer }}" />
                                 </div>
                             </div>
                             @endif
@@ -353,7 +370,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Destination</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select" name="destination_port_id">
-                                        <option value="0"></option>
+                                        <option value="0">Select Destination</option>
                                         @if(count(@$all_destination_port) > 0)
                                         @foreach(@$all_destination_port as $key => $value)
                                             @if($value['id'] == @$list->vehicle->destination_port_id)
@@ -428,16 +445,8 @@
                     <div class="col-md-3">
                         <h3 class="fw-bold text-fs-4">Transportation info</h3>
                         <div class="mt-4">
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.20", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
-                            <div class="form-group row">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="transportation_address" value="{{ $list->vehicle->transportation_address }}" placeholder="John Sabestin" />
-                                </div>
-                            </div>
-                            @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.21", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
-                            <div class="form-group row mt-4">
+                            <div class="form-group row">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Carrier</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select carrier" name="carrier">
@@ -464,6 +473,14 @@
                                 </div>
                             </div>
                             @endif
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.20", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Address</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="transportation_address" value="{{ $list->vehicle->transportation_address }}" />
+                                </div>
+                            </div>
+                            @endif
                             @if(empty($auth_user->admin_level->access) || @in_array("1.43", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Shipping Company</label>
@@ -487,7 +504,7 @@
                             <div class="form-group row mt-4">
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Pickup address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="pickup_address" value="{{ $list->vehicle->pickup_address }}" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="pickup_address" value="{{ $list->vehicle->pickup_address }}" class="form-control" />
                                 </div>
                             </div>
                             @endif --}}
@@ -496,7 +513,15 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Delivery
                                     address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="delivery_address" value="{{ $list->vehicle->delivery_address }}" class="form-control" placeholder="John Sabestin" />
+                                    <input type="text" name="delivery_address" value="{{ $list->vehicle->delivery_address }}" class="form-control" />
+                                </div>
+                            </div>
+                            @endif
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.16", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
+                            <div class="form-group row mt-4">
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="purchase_date" value="{{ $list->vehicle->purchase_date }}" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
@@ -532,11 +557,11 @@
                                 </div>
                             </div>
                             @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.16", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
+                            @if(empty($auth_user->admin_level->access) || @in_array("1.28", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
                             <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Purchase</label>
+                                <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated delivery</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="purchase_date" value="{{ $list->vehicle->purchase_date }}" class="form-control datepicker" />
+                                    <input type="text" name="delivery_date" value="{{ $list->vehicle->delivery_date }}" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
@@ -545,14 +570,6 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Actual del.</label>
                                 <div class="col-sm-9">
                                     <input type="text" name="delivered_on_date" value="{{ $list->vehicle->delivered_on_date }}" class="form-control datepicker" />
-                                </div>
-                            </div>
-                            @endif
-                            @if(empty($auth_user->admin_level->access) || @in_array("1.28", json_decode($auth_user->admin_level->access)) || @in_array("1", json_decode($auth_user->admin_level->access)))
-                            <div class="form-group row mt-4">
-                                <label for="" class="col-sm-3 col-form-label fw-semibold">Estimated delivery</label>
-                                <div class="col-sm-9">
-                                    <input type="text" name="delivery_date" value="{{ $list->vehicle->delivery_date }}" class="form-control datepicker" />
                                 </div>
                             </div>
                             @endif
@@ -1159,6 +1176,18 @@
                 }
                 if (fuel !== "null" && fuel !== undefined && fuel !== "") {
                     $(".fuel_type[value='"+fuel+"']").attr("checked", true);
+                }
+            });
+
+            $(document).on("click", "input[type='radio']", function () {
+                if ($(this).attr('checked') == "checked") {
+                    $(this).prop('checked', false);
+                    $(this).attr('checked', false);
+                    $(this).parent().parent().find("input[type='radio']").attr("checked", false);
+                } else {
+                    $(this).parent().parent().find("input[type='radio']").attr("checked", false);
+                    $(this).prop('checked', true);
+                    $(this).attr('checked', true);
                 }
             });
 

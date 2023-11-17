@@ -79,6 +79,8 @@
                                                                         <label for="operable">Operable</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="fuel" value="1.9" />
                                                                         <label for="fuel">Fuel Type</label><br>
+                                                                        <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="color" value="1.46" />
+                                                                        <label for="color">Color</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="auction" value="1.10" />
                                                                         <label for="auction">Auction</label><br>
                                                                         <input type="checkbox" name="access[]" class="py-2 rounded-end-4 access add-vehicle" id="auction_location" value="1.11" />

@@ -124,11 +124,6 @@
                 </div>
 
                 <div class="col-md-2">
-                    <label for="search" class="fw-semibold">Search</label>
-                    <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-veh" placeholder="Search">
-                </div>
-
-                <div class="col-md-2">
                     <label for="destination" class="fw-semibold">Destination</label>
                     <select id="destination" name="destination" class="selectjs form-select p-2 border border-gray-200 rounded-lg">
                         <option value="all">All</option>
@@ -152,6 +147,11 @@
                         <option value="approved" @if(@$status == "approved") selected @endif>Approved</option>
                         <option value="rejected" @if(@$status == "rejected") selected @endif>Rejected</option>
                     </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="search" class="fw-semibold">Search</label>
+                    <input type="text" class="form-control p-2" name="search" value="{{ @$search }}" id="search-veh" placeholder="Search">
                 </div>
             </form>
 

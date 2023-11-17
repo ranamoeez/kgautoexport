@@ -383,13 +383,14 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Carrier</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select carrier" name="carrier">
-                                        <option value=""></option>
+                                        <option value="" data-phone=""></option>
                                         @if(count(@$all_carrier) > 0)
                                         @foreach(@$all_carrier as $key => $value)
-                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            <option value="{{ @$value['id'] }}" data-phone="{{ @$value['phone_numbers'] }}">{{ @$value['name'] }}</option>
                                         @endforeach
                                         @endif
                                     </select>
+                                    <span class="mt-2" id="phone_numbers"></span>
                                 </div>
                             </div>
                             @endif
@@ -894,6 +895,11 @@
                 if (fuel !== "null" && fuel !== undefined && fuel !== "") {
                     $(".fuel_type[value='"+fuel+"']").attr("checked", true);
                 }
+            });
+
+            $(document).on("change", ".carrier", function () {
+                var phone_numbers = $(this).find("option:selected").attr("data-phone");
+                $("#phone_numbers").text(phone_numbers);
             });
 
             $(document).on("click", ".submit-form", function () {

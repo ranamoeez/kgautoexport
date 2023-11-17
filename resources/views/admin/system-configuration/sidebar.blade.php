@@ -52,6 +52,10 @@
                     class="fw-semibold text-dark text-decoration-none">
                     Shipper
                 </a>
+                <a href="{{ url('admin/system-configuration/forwarding-agent') }}"
+                    class="fw-semibold text-dark text-decoration-none">
+                    Forwarding Agent
+                </a>
                 <a href="{{ url('admin/system-configuration/consignee') }}"
                     class="fw-semibold text-dark text-decoration-none">
                     Consignee

@@ -153,6 +153,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 	Route::post('/system-configuration/shipper/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_shipper'])->name('update-shipper');
 	Route::get('/system-configuration/shipper/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_shipper'])->name('delete-shipper');
 
+	Route::get('/system-configuration/forwarding-agent', [App\Http\Controllers\Admin\SystemConfigController::class, 'forwarding_agent'])->name('forwarding-agent');
+	Route::post('/system-configuration/forwarding-agent/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_forwarding_agent'])->name('add-forwarding-agent');
+	Route::get('/system-configuration/forwarding-agent/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_forwarding_agent'])->name('edit-forwarding-agent');
+	Route::post('/system-configuration/forwarding-agent/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_forwarding_agent'])->name('update-forwarding-agent');
+	Route::get('/system-configuration/forwarding-agent/delete/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'delete_forwarding_agent'])->name('delete-forwarding-agent');
+
 	Route::get('/system-configuration/consignee', [App\Http\Controllers\Admin\SystemConfigController::class, 'consignee'])->name('consignee');
 	Route::post('/system-configuration/consignee/add', [App\Http\Controllers\Admin\SystemConfigController::class, 'add_consignee'])->name('add-consignee');
 	Route::get('/system-configuration/consignee/edit/{id}', [App\Http\Controllers\Admin\SystemConfigController::class, 'edit_consignee'])->name('edit-consignee');

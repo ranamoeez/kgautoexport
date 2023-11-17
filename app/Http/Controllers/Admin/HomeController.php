@@ -18,6 +18,7 @@ use App\Models\DischargePort;
 use App\Models\Consignee;
 use App\Models\ShippingLine;
 use App\Models\Shipper;
+use App\Models\ForwardingAgent;
 use App\Models\Auction;
 use App\Models\AuctionLocation;
 use App\Models\VehicleImage;
@@ -723,6 +724,7 @@ class HomeController extends Controller
         $data['action'] = url('admin/containers/add');
         $data['user_levels'] = Level::all();
         $data['all_shipper'] = Shipper::all();
+        $data['all_fowarding_agent'] = ForwardingAgent::all();
         $data['all_shipping_line'] = ShippingLine::all();
         $data['all_loading_port'] = LoadingPort::all();
         $data['all_consignee'] = Consignee::all();
@@ -835,9 +837,10 @@ class HomeController extends Controller
         $data['type'] = 'containers';
         $data['action'] = url('admin/containers/edit/'.$id);
         $data['user_levels'] = Level::all();
-        $data['container'] = Container::with('container_documents', 'status', 'shipper', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('id', $id)->first();
+        $data['container'] = Container::with('container_documents', 'status', 'shipper', 'forwarding_agent', 'shipping_line', 'consignee', 'pre_carriage', 'loading_port', 'discharge_port', 'destination_port', 'notify_party', 'pier_terminal', 'measurement')->where('id', $id)->first();
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_shipper'] = Shipper::all();
+        $data['all_fowarding_agent'] = ForwardingAgent::all();
         $data['all_shipping_line'] = ShippingLine::all();
         $data['all_loading_port'] = LoadingPort::all();
         $data['all_consignee'] = Consignee::all();

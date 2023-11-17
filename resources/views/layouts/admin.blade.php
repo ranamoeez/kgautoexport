@@ -10,7 +10,7 @@
 
     <title>@yield('title')</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('img/mini-logo.jpeg') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -153,7 +153,7 @@
             $("#add-new-user-modal .select2-selection").css("height", "40px");
             $("#add-new-user-modal .select2-selection__arrow").css("display", "none");
 
-            $(".datepicker").datepicker({ dateFormat: 'yy-mm-dd' });
+            $(".datepicker").datepicker({ dateFormat: 'mm-dd-yy' });
 
             $(document).on("submit", ".user-form", function (event) {
                 event.preventDefault();

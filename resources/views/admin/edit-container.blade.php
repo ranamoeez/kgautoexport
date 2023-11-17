@@ -64,6 +64,23 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Forwarding Agent</label>
+                                <div class="col-md-9">
+                                    <select class="selectjs form-select" name="fowarding_agent_id">
+                                        <option value=""></option>
+                                        @if(count(@$all_fowarding_agent) > 0)
+                                        @foreach(@$all_fowarding_agent as $key => $value)
+                                            @if($value['id'] == @$container->fowarding_agent_id)
+                                            <option value="{{ @$value['id'] }}" selected>{{ $value['company_name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['id'] }}">{{ @$value['company_name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Shipping Line</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="shipping_line_id">
@@ -250,6 +267,10 @@
                                         <label for="radio2" class="form-check-label">In hand</label>
                                     </div>
                                 </div>
+                                @if(!empty(@$container->in_hand_date))
+                                <label for="" class="col-md-3 col-form-label fw-semibold pt-0">Released Date</label>
+                                <span class="text-fs-4 col-md-9" style="font-size: 14px;">{{ date("M d, Y", strtotime(@$container->in_hand_date)) }}</span>
+                                @endif
                             </div>
                             <div class="form-group row mt-3">
                                 <label for="" class="col-md-3 col-form-label fw-semibold pt-0">Unloaded Status</label>
@@ -310,6 +331,49 @@
                                     </div>
                                     <div class="col-md-8">
                                         <p class="mb-0">{{ $container->shipper->contact_person }}</p>
+                                    </div>
+                                @endif
+                                </div>
+                            </div>
+                            <div class="form-group mt-4 row px-4">
+                                <label for="notes" class="fw-semibold">Forwarding agent information</label>
+                                <div class="forwarding-agent-info p-3 row mt-2" style="border: 1px solid black; border-radius: 10px;">
+                                @if(!empty(@$container->forwarding_agent))
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Company Name:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->forwarding_agent->company_name }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Address:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->forwarding_agent->address }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Phone Number:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->forwarding_agent->phone_number }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">Fax:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->forwarding_agent->fax }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1">E-mail:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-1">{{ $container->forwarding_agent->email }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-0">Contact Person:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="mb-0">{{ $container->forwarding_agent->contact_person }}</p>
                                     </div>
                                 @endif
                                 </div>
@@ -584,9 +648,9 @@
                                                         </p>
                                                     </div>
                                                     <div class="row shadow border rounded-5 w-100 mb-3">
-                                                        <p class="col text-fs-3 fw-bold text-center">Description</p>
-                                                        <p class="col text-fs-3 fw-bold text-center">VIN</p>
-                                                        <p class="col text-fs-3 fw-bold text-center">Select</p>
+                                                        <p class="col-lg-6 text-fs-3 fw-bold">Description</p>
+                                                        <p class="col-lg-4 text-fs-3 fw-bold">VIN</p>
+                                                        <p class="col-lg-2 text-fs-3 fw-bold text-center">Select</p>
                                                     </div>
                                                 </div>
                                                 <button class="btn w-auto btn-primary border-0 mt-2 col-md-12 rounded-3 fs-6 add-vehicles" data-id="{{ $container->id }}" type="button">Add</button>
@@ -981,9 +1045,9 @@
                                     description += " "+value.vehicle.name;
                                 }
                                 var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
-                                    <div class="col text-fs-3 text-center">${description}</div>
-                                    <div class="col text-fs-3 text-center">${value.vehicle.vin}</div>
-                                    <div class="col d-flex justify-content-center align-items-center">
+                                    <div class="col-lg-6 text-fs-3">${description}</div>
+                                    <div class="col-lg-4 text-fs-3">${value.vehicle.vin}</div>
+                                    <div class="col-lg-2 d-flex justify-content-center align-items-center">
                                         <input class="form-check-input vehicle_id" id="vehicle_id" name="vehicle_id" type="checkbox"
                                             value="${value.vehicle.id}">
                                     </div>
@@ -1026,9 +1090,9 @@
                                                 description += " "+value.vehicle.name;
                                             }
                                             var html = `<div class="row shadow border rounded-5 w-100 mb-3 p-2 vehicle-data">
-                                                <div class="col text-fs-3 text-center">${description}</div>
-                                                <div class="col text-fs-3 text-center">${value.vehicle.vin}</div>
-                                                <div class="col d-flex justify-content-center align-items-center">
+                                                <div class="col-lg-6 text-fs-3">${description}</div>
+                                                <div class="col-lg-4 text-fs-3">${value.vehicle.vin}</div>
+                                                <div class="col-lg-2 d-flex justify-content-center align-items-center">
                                                     <input class="form-check-input vehicle_id" id="vehicle_id" name="vehicle_id" type="checkbox"
                                                         value="${value.vehicle.id}">
                                                 </div>

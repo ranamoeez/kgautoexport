@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\ContainerImage;
 use App\Models\ContStatus;
 use App\Models\Shipper;
+use App\Models\ForwardingAgent;
 use App\Models\ShippingLine;
 use App\Models\Consignee;
 use App\Models\PreCarriage;
@@ -41,6 +42,10 @@ class Container extends Model
 
     public function shipper(){
     	return $this->belongsTo(Shipper::class, 'shipper_id');
+    }
+
+    public function forwarding_agent(){
+        return $this->belongsTo(ForwardingAgent::class, 'fowarding_agent_id');
     }
 
     public function shipping_line(){

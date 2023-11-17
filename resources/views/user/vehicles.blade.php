@@ -185,17 +185,16 @@
                         <div class="table-responsive tab-pane fade show active" data-bs-toggle="tab" id="admin">
                             <table class="table">
                                 <thead class="text-fs-4" style="font-size: 16px;">
-                                    <th scope="col"></th>
-                                    <th scope="col">Delivery Date</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">VIN</th>
-                                    <th scope="col">Destination</th>
+                                    <th scope="col" style="text-align: left !important;">Delivery Date</th>
+                                    <th scope="col" style="text-align: left !important;">Description</th>
+                                    <th scope="col" style="text-align: left !important;">VIN</th>
+                                    <th scope="col" style="text-align: left !important;">Destination</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Keys</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Fuel Type</th>
-                                    <th scope="col">Terminal</th>
-                                    <th scope="col">Comment</th>
+                                    <th scope="col" style="text-align: left !important;">Terminal</th>
+                                    <th scope="col" style="text-align: left !important;">Comment</th>
                                     @if(\Auth::user()->role == "2")
                                     <th scope="col"></th>
                                     @endif
@@ -204,34 +203,6 @@
                                     @if(count(@$admin) > 0)
                                     @foreach(@$admin as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
-                                        <td @if(@$value->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important;" @endif>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                @if(!empty(@$value->vehicle->vehicle_documents))
-                                                    @if(count(@$value->vehicle->vehicle_documents) > 0)
-                                                    <a href="javascript:void();" class="text-link text-center">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="1.5"
-                                                            stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                                        </svg>
-                                                    </a>
-                                                    @endif
-                                                @endif
-                                                @if(!empty(@$value->vehicle->vehicle_images))
-                                                    @if(count(@$value->vehicle->vehicle_images) > 0)
-                                                    <a href="javascript:void();" class="text-link text-center">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="1.5"
-                                                            stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                                                        </svg>
-                                                    </a>
-                                                    @endif
-                                                @endif
-                                            </div>
-                                        </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important; text-align: left !important;" @else style="text-align: left !important;" @endif>
                                             <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
                                                 @if(@$value->vehicle->delivery_date && @$value->vehicle->delivery_date !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->vehicle->delivery_date)) }} @endif
@@ -244,7 +215,7 @@
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important; text-align: left !important;" @else style="text-align: left !important;" @endif>
                                             <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                                {{ @$value->vehicle->vin }}
+                                                <i class="fa-solid fa-camera" style="font-size: 16px; margin-right: 5px;"></i> {{ @$value->vehicle->vin }}
                                             </a>
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important; text-align: left !important;" @else style="text-align: left !important;" @endif>
@@ -275,7 +246,7 @@
                                             </div>
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important;" @endif>
-                                            <div class="p-2 rounded-pill align-items-center shadow">
+                                            <div class="p-2 rounded-pill align-items-center shadow" @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #e4ffed !important;" @endif>
                                                 @php
                                                     $icon = "new";
                                                     if (@$value->vehicle->status_id == "6") {
@@ -317,11 +288,11 @@
                                                 {{ @$value->vehicle->terminal->name }}
                                             </a>
                                         </td>
-                                        <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important;" @endif>
+                                        <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important; text-align: left !important;" @else style="text-align: left !important;" @endif>
                                             <div class="flex items-center justify-center flex-col comment"
                                                 style="width:250px; border-radius:3px">
                                                 <div class="border border-1 d-flex flex-column align-items-end">
-                                                    <p class="text-fs-3" style="font-size: 14px;">
+                                                    <p class="text-fs-3 p-3" style="font-size: 14px;">
                                                         {{ @$value->vehicle->notes_user }}
                                                     </p>
                                                     <button class="btn btn-sm btn-primary comment-btn fs-6 border-0" data-bs-toggle="modal" data-bs-target="#fullNoteModel1_{{ $key }}">
@@ -412,51 +383,22 @@
                         <div class="table-responsive tab-pane fade" data-bs-toggle="tab" id="super-admin">
                             <table class="table">
                                 <thead class="text-fs-4" style="font-size: 16px;">
-                                    <th scope="col"></th>
-                                    <th scope="col">Delivery Date</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">VIN</th>
-                                    <th scope="col">Destination</th>
+                                    <th scope="col" style="text-align: left !important;">Delivery Date</th>
+                                    <th scope="col" style="text-align: left !important;">Description</th>
+                                    <th scope="col" style="text-align: left !important;">VIN</th>
+                                    <th scope="col" style="text-align: left !important;">Destination</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Keys</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Fuel Type</th>
-                                    <th scope="col">Terminal</th>
-                                    <th scope="col">Comment</th>
+                                    <th scope="col" style="text-align: left !important;">Terminal</th>
+                                    <th scope="col" style="text-align: left !important;">Comment</th>
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
                                     @if(count(@$super_user) > 0)
                                     @foreach(@$super_user as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
-                                        <td @if(@$value->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important;" @endif>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                @if(!empty(@$value->vehicle->vehicle_documents))
-                                                    @if(count(@$value->vehicle->vehicle_documents) > 0)
-                                                    <a href="javascript:void();" class="text-link text-center">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="1.5"
-                                                            stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                                        </svg>
-                                                    </a>
-                                                    @endif
-                                                @endif
-                                                @if(!empty(@$value->vehicle->vehicle_images))
-                                                    @if(count(@$value->vehicle->vehicle_images) > 0)
-                                                    <a href="javascript:void();" class="text-link text-center">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="1.5"
-                                                            stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                                                        </svg>
-                                                    </a>
-                                                    @endif
-                                                @endif
-                                            </div>
-                                        </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important; text-align: left !important;" @else style="text-align: left !important;" @endif>
                                             <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
                                                 @if(@$value->vehicle->delivery_date && @$value->vehicle->departure !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->vehicle->delivery_date)) }} @endif
@@ -469,7 +411,7 @@
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important; text-align: left !important;" @else style="text-align: left !important;" @endif>
                                             <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                                {{ @$value->vehicle->vin }}
+                                                <i class="fa-solid fa-camera" style="font-size: 16px; margin-right: 5px;"></i> {{ @$value->vehicle->vin }}
                                             </a>
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important; text-align: left !important;" @else style="text-align: left !important;" @endif>
@@ -500,7 +442,7 @@
                                             </div>
                                         </td>
                                         <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important;" @endif>
-                                            <div class="p-2 rounded-pill align-items-center shadow">
+                                            <div class="p-2 rounded-pill align-items-center shadow" @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #e4ffed !important;" @endif>
                                                 @php
                                                     $icon = "new";
                                                     if (@$value->vehicle->status_id == "6") {
@@ -531,11 +473,11 @@
                                                 {{ @$value->vehicle->terminal->name }}
                                             </a>
                                         </td>
-                                        <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important;" @endif>
+                                        <td @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important; text-align: left !important;" @else style="text-align: left !important;" @endif>
                                             <div class="flex items-center justify-center flex-col comment"
                                                 style="width:250px; border-radius:3px">
                                                 <div class="border border-1 d-flex flex-column align-items-end">
-                                                    <p class="text-fs-3" style="font-size: 14px;">
+                                                    <p class="text-fs-3 p-3" style="font-size: 14px;">
                                                         {{ @$value->vehicle->notes_user }}
                                                     </p>
                                                     <button class="btn btn-sm btn-primary comment-btn fs-6 border-0" data-bs-toggle="modal" data-bs-target="#fullNoteModel_{{ $key }}">

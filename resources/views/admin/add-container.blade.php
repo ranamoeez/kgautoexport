@@ -61,6 +61,23 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
+                                <label for="" class="col-md-3 col-form-label fw-semibold">Forwarding Agent</label>
+                                <div class="col-md-9">
+                                    <select class="selectjs form-select" name="fowarding_agent_id">
+                                        <option value=""></option>
+                                        @if(count(@$all_fowarding_agent) > 0)
+                                        @foreach(@$all_fowarding_agent as $key => $value)
+                                            @if($value['id'] == @$fowarding_agent)
+                                            <option value="{{ @$value['id'] }}" selected>{{ $value['company_name'] }}</option>
+                                            @else
+                                            <option value="{{ @$value['id'] }}">{{ @$value['company_name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
                                 <label for="" class="col-md-3 col-form-label fw-semibold">Shipping Line</label>
                                 <div class="col-md-9">
                                     <select class="selectjs form-select" name="shipping_line_id">
@@ -270,6 +287,10 @@
                         <div class="mt-4">
                             <div class="form-group row">
                                 <label for="notes" class="fw-semibold">Shipper information</label>
+                                <textarea name="notes" cols="10" rows="8" class="form-control shadow-lg bg-white" disabled></textarea>
+                            </div>
+                            <div class="form-group mt-4 row">
+                                <label for="notes" class="fw-semibold">Forwarding agent information</label>
                                 <textarea name="notes" cols="10" rows="8" class="form-control shadow-lg bg-white" disabled></textarea>
                             </div>
                             <div class="form-group mt-4 row">

@@ -200,9 +200,6 @@
                                             <option value="No" @if(@$value['released_status'] == "No") selected @endif>No</option>
                                             <option value="In hand" @if(@$value['released_status'] == "In hand") selected @endif>In hand</option>
                                         </select>
-                                        @if(!empty(@$value['in_hand_date']))
-                                        <span class="text-fs-4 d-flex justify-content-start" style="font-size: 14px;">{{ date("M d, Y", strtotime(@$value['in_hand_date'])) }}</span>
-                                        @endif
                                     </div>
                                 </td>
                                 <td @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>

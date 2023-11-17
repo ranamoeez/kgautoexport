@@ -35,6 +35,7 @@ use App\Models\Post;
 use App\Models\Carrier;
 use App\Models\ShippingCompany;
 use App\Models\Country;
+use App\Models\ForwardingAgent;
 use Auth;
 
 class SystemConfigController extends Controller
@@ -644,6 +645,55 @@ class SystemConfigController extends Controller
     {
         Shipper::find($id)->delete();
         return json_encode(["success"=>true, "msg"=>"Shipper deleted successfully!"]);
+    }
+
+    // Forwarding Agent Functions
+
+    public function forwarding_agent(Request $request)
+    {
+        $data['type'] = "system-configuration";
+        $data['page'] = '1';
+        $forwarding_agent = ForwardingAgent::orderBy('id', 'DESC');
+        if (!empty($request->page)) {
+            if ($request->page > 1) {
+                $offset = ($request->page - 1) * 10;
+                $forwarding_agent = $forwarding_agent->offset((int)$offset);
+            }
+            $data['page'] = $request->page;
+        }
+        $forwarding_agent = $forwarding_agent->limit(10)->get();
+        $data['forwarding_agent'] = $forwarding_agent;
+        $data['user_levels'] = Level::all();
+        $data['auth_user'] = User::with('admin_level')->where('id', Auth::user()->id)->first();
+        $data['countries'] = Country::all();
+        return view('admin.system-configuration.forwarding-agent', $data);
+    }
+
+    public function add_forwarding_agent(Request $request)
+    {
+        $data = $request->all();
+        ForwardingAgent::create($data);
+        return json_encode(["success"=>true, "msg"=>"Forwarding agent added successfully!", "action"=>"reload"]);
+    }
+
+    public function edit_forwarding_agent(Request $request, $id)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            unset($data['_token']);
+            ForwardingAgent::where('id', $id)->update($data);
+            return json_encode(["success"=>true, "msg"=>"Forwarding agent updated successfully!", "action"=>"reload"]);
+        }
+
+        $data = ForwardingAgent::where('id', $id)->first(); 
+        return json_encode(["success"=>true, "data"=>$data]);
+    }
+
+    public function delete_forwarding_agent($id)
+    {
+        ForwardingAgent::find($id)->delete();
+        return json_encode(["success"=>true, "msg"=>"Forwarding agent deleted successfully!"]);
     }
 
     // Consignee Functions

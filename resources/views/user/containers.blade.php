@@ -189,7 +189,7 @@
 
                                     <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
                                         <div class="d-flex justify-content-center">
-                                            <div class="text-center px-3 py-2 rounded-pill shadow">
+                                            <div class="text-center px-3 py-2 rounded-pill shadow" @if(@$value->status_id == '4') style="background-color: #e4ffed !important;" @endif>
                                                 <span class="fs-5 ms-1" style="font-size: 16px !important;">{{ @$value->destination_port->name }}</span>
                                             </div>
                                         </div>
@@ -197,7 +197,7 @@
 
                                     <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
                                         <div class="d-flex justify-content-center">
-                                            <div class="d-flex px-3 py-2 rounded-pill shadow">
+                                            <div class="d-flex px-3 py-2 rounded-pill shadow" @if(@$value->status_id == '4') style="background-color: #e4ffed !important;" @endif>
                                                 @php
                                                     $icon = "booked";
                                                     if (@$value->status_id == "2") {

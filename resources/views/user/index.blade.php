@@ -16,7 +16,7 @@
                         <div class="card border-0 shadow-lg h-100">
                             <a href="{{ url('user/vehicles') }}?status=6" class="card-body p-5 d-flex flex-row" style="text-decoration: none;">
                                 <div class="me-3 rounded-circle home-card-icons bg-primary p-3">
-                                    <img src="{{ asset('assets/new-car (1).png') }}" alt="car" class="" />
+                                    <img src="{{ asset('assets/at_terminal.png') }}" alt="car" class="" />
                                 </div>
                                 <div class="align-self-center">
                                     <h2 class="card-subtitle fw-bold">{{ @$at_terminal_vehicles }}</h2>

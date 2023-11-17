@@ -344,6 +344,12 @@
                                     <input type="text" class="form-control" value="{{ @$list->vehicle->fuel_type }}" disabled />
                                 </div>
                             </div>
+                            <div class="row mt-4">
+                                <label for="" class="col-md-2 fw-bold">Color</label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" value="{{ @$list->vehicle->color }}" disabled />
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-md-6">

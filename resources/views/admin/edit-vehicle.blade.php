@@ -450,7 +450,7 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Carrier</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select carrier" name="carrier">
-                                        <option value=""></option>
+                                        <option value="" data-phone=""></option>
                                         @php
                                         $phone_numbers = "";
                                         @endphp
@@ -460,16 +460,25 @@
                                             @php
                                             $phone_numbers = $value['phone_numbers'];
                                             @endphp
-                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            <option value="{{ @$value['id'] }}" data-phone="{{ @$value['phone_numbers'] }}" selected>{{ $value['name'] }}</option>
                                             @else
-                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            <option value="{{ @$value['id'] }}" data-phone="{{ @$value['phone_numbers'] }}">{{ @$value['name'] }}</option>
                                             @endif
                                         @endforeach
                                         @endif
                                     </select>
-                                    @if(!empty($phone_numbers))
-                                    Ph # <span class="mt-2">{{ $phone_numbers }}</span>
-                                    @endif
+                                    <span class="mt-2" id="phone_numbers">
+                                    @php
+                                        if (str_contains($phone_numbers, ",")) {
+                                            $phone_numbers = explode(",", $phone_numbers);
+                                            foreach ($phone_numbers as $key => $value) {
+                                                echo '<p class="mt-1 mb-0">'.$value.'</p>';
+                                            }
+                                        } else {
+                                            echo '<p class="mt-1 mb-0">'.$phone_numbers.'</p>';
+                                        }
+                                    @endphp
+                                    </span>
                                 </div>
                             </div>
                             @endif
@@ -486,17 +495,26 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Shipping Company</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select shipping_company" name="shipping_company">
-                                        <option value=""></option>
+                                        <option value="" data-address=""></option>
+                                        @php
+                                        $shipping_address = "";
+                                        @endphp
                                         @if(count(@$all_shipping_company) > 0)
                                         @foreach(@$all_shipping_company as $key => $value)
                                             @if($value['id'] == @$list->vehicle->shipping_company)
-                                            <option value="{{ @$value['id'] }}" selected>{{ $value['name'] }}</option>
+                                            @php
+                                            $shipping_address = $value['address'];
+                                            @endphp
+                                            <option value="{{ @$value['id'] }}" data-address="{{ @$value['address'] }}" selected>{{ $value['name'] }}</option>
                                             @else
-                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            <option value="{{ @$value['id'] }}" data-address="{{ @$value['address'] }}">{{ @$value['name'] }}</option>
                                             @endif
                                         @endforeach
                                         @endif
                                     </select>
+                                    <span class="mt-2" id="shipping_address">
+                                        <p class="mt-1 mb-0">{{ @$shipping_address }}</p>
+                                    </span>
                                 </div>
                             </div>
                             @endif
@@ -1177,6 +1195,23 @@
                 if (fuel !== "null" && fuel !== undefined && fuel !== "") {
                     $(".fuel_type[value='"+fuel+"']").attr("checked", true);
                 }
+            });
+
+            $(document).on("change", ".carrier", function () {
+                $("#phone_numbers").html("");
+                var phone_numbers = $(this).find("option:selected").attr("data-phone");
+                if (phone_numbers.indexOf(",") > -1) {
+                    var phone_numbers = phone_numbers.split(",");
+                    $(phone_numbers).each(function (key, value) {
+                        $("#phone_numbers").append(`<p class="mt-1 mb-0">${value}</p>`);
+                    });
+                }
+            });
+
+            $(document).on("change", ".shipping_company", function () {
+                $("#shipping_address").html("");
+                var address = $(this).find("option:selected").attr("data-address");
+                $("#shipping_address").append(`<p class="mt-1 mb-0">${address}</p>`);
             });
 
             $(document).on("click", "input[type='radio']", function () {

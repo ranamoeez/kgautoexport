@@ -407,13 +407,14 @@
                                 <label for="" class="col-sm-3 col-form-label fw-semibold">Shipping Company</label>
                                 <div class="col-sm-9">
                                     <select class="selectjs form-select shipping_company" name="shipping_company">
-                                        <option value=""></option>
+                                        <option value="" data-address=""></option>
                                         @if(count(@$all_shipping_company) > 0)
                                         @foreach(@$all_shipping_company as $key => $value)
-                                            <option value="{{ @$value['id'] }}">{{ @$value['name'] }}</option>
+                                            <option value="{{ @$value['id'] }}" data-address="{{ @$value['address'] }}">{{ @$value['name'] }}</option>
                                         @endforeach
                                         @endif
                                     </select>
+                                    <span class="mt-2" id="shipping_address"></span>
                                 </div>
                             </div>
                             @endif
@@ -898,6 +899,7 @@
             });
 
             $(document).on("change", ".carrier", function () {
+                $("#phone_numbers").html("");
                 var phone_numbers = $(this).find("option:selected").attr("data-phone");
                 if (phone_numbers.indexOf(",") > -1) {
                     var phone_numbers = phone_numbers.split(",");
@@ -905,6 +907,11 @@
                         $("#phone_numbers").append(`<p class="mt-1 mb-0">${value}</p>`);
                     });
                 }
+            });
+
+            $(document).on("change", ".shipping_company", function () {
+                var address = $(this).find("option:selected").attr("data-address");
+                $("#shipping_address").html(`<p class="mt-1 mb-0">${address}</p>`);
             });
 
             $(document).on("click", ".submit-form", function () {

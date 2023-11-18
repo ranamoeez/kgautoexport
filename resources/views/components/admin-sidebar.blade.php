@@ -20,22 +20,25 @@
         @if(empty($auth_user->admin_level->access) || @in_array("2", json_decode($auth_user->admin_level->access)))
         <li class="side_menu_item">
             <a href="{{ url('admin/vehicles') }}" @if(@$type == 'vehicles') class="active" @endif>
-                <i class="fas fa-car" style="margin-left: 6px; margin-right: 15px;"></i>
+                <img src="{{ asset('assets/car.png') }}" style="margin-left: 2px; margin-right: 15px; width: 30px; height: 30px;"></i>
+                {{-- <i class="fas fa-car" style="margin-left: 6px; margin-right: 15px;"></i> --}}
                 <span>Vehicles List</span>
             </a>
         </li>
         @endif
         <li class="side_menu_item">
             <a href="{{ url('admin/vehicles/add') }}" @if(@$type == 'add-vehicle') class="active" @endif>
-                <i class="fas fa-plus" style="font-size: 14px; margin-right: 3px; margin-top: 5px;"></i>
-                <i class="fas fa-car"></i>
+                <img src="{{ asset('assets/add_car.png') }}" style="margin-left: 2px; margin-right: 15px; width: 30px; height: 30px;"></i>
+                {{-- <i class="fas fa-plus" style="font-size: 14px; margin-right: 3px; margin-top: 5px;"></i>
+                <i class="fas fa-car"></i> --}}
                 <span>Add New Vehicle</span>
             </a>
         </li>
         @if(empty($auth_user->admin_level->access) || @in_array("3", json_decode($auth_user->admin_level->access)))
         <li class="side_menu_item">
             <a href="{{ url('admin/containers') }}" @if(@$type == 'containers') class="active" @endif>
-                <i class="fas fa-box" style="margin-left: 7px; margin-right: 16px;"></i>
+                <img src="{{ asset('assets/container.png') }}" style="margin-left: 2px; margin-right: 15px; width: 33px; height: 30px;"></i>
+                {{-- <i class="fas fa-box" style="margin-left: 7px; margin-right: 16px;"></i> --}}
                 <span>Container List</span>
             </a>
         </li>
@@ -43,8 +46,8 @@
         @if(empty($auth_user->admin_level->access) || @in_array("4", json_decode($auth_user->admin_level->access)))
         <li class="side_menu_item">
             <a href="{{ url('admin/containers/add') }}" @if(@$type == 'add-container') class="active" @endif>
-                <i class="fas fa-plus" style="font-size: 14px; margin-right: 3px; margin-top: 5px;"></i>
-                <i class="fas fa-box"></i>
+                <img src="{{ asset('assets/add_container.png') }}" style="margin-left: 2px; margin-right: 15px; width: 33px; height: 30px;"></i>
+                {{-- <i class="fas fa-box"></i> --}}
                 <span>Add new container</span>
             </a>
         </li>
@@ -52,7 +55,7 @@
         @if(empty($auth_user->admin_level->access) || @in_array("5.1", json_decode($auth_user->admin_level->access)))
         <li class="side_menu_item">
             <a href="{{ url('admin/financial-system') }}" @if(@$type == 'financial-system') class="active" @endif>
-                <i class="fas fa-money-bill" style="margin-left: 6px; margin-right: 15px;"></i>
+                <i class="fas fa-money-bill" style="margin-left: 4px; margin-right: 15px;"></i>
                 <span>Financial System</span>
             </a>
         </li>
@@ -60,9 +63,9 @@
         @if(empty($auth_user->admin_level->access) || @in_array("6.1", json_decode($auth_user->admin_level->access)))
         <li class="side_menu_item">
             <a href="{{ url('admin/pickup-history') }}" @if(@$type == 'pickup-history') class="active" @endif>
-                {{-- <img src="{{ asset('assets/request_car.png') }}" style="margin-left: 2px; margin-right: 15px; width: 35px; height: 29px;"></i> --}}
-                <i class="fa-solid fa-hand-holding-dollar" style="margin-left: 6px; margin-right: 15px;"></i>
-                <span>Pickup History</span>
+                <img src="{{ asset('assets/request_car.png') }}" style="margin-left: 2px; margin-right: 15px; width: 35px; height: 40px;"></i>
+                {{-- <i class="fa-solid fa-hand-holding-dollar" style="margin-left: 6px; margin-right: 15px;"></i> --}}
+                <span class="mt-2">Pickup History</span>
             </a>
         </li>
         @endif

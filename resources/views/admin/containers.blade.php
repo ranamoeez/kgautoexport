@@ -396,6 +396,11 @@
                 });
             });
 
+            $(document).on("click", ".page-link", function () {
+                $(".page-item").addClass("disabled");
+                $(".page-link").attr("aria-disabled", true);
+            });
+
             $(document).on("change", ".released_status", function () {
                 if ($(this).find("option:selected").val() == "No") {
                     $(this).css("background-color", "#ffa6a6");

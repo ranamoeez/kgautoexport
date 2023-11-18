@@ -131,55 +131,6 @@
                         <h4 class="fw-bold fs-md-13 fs-lg-25">
                             List of Vehicles
                         </h4>
-                        <div class="d-flex gap-2 align-items-center page-icon">
-                            @php
-                                $prev = (int)$page - 1;
-                                $next = (int)$page + 1;
-                                $prev_params = ['page='.$prev];
-                                $next_params = ['page='.$next];
-                                if (!empty(@$terminal)) {
-                                    array_push($prev_params, 'terminal='.$terminal);
-                                    array_push($next_params, 'terminal='.$terminal);
-                                }
-                                if (!empty(@$status)) {
-                                    array_push($prev_params, 'status='.$status);
-                                    array_push($next_params, 'status='.$status);
-                                }
-                                if (!empty(@$fuel_type)) {
-                                    array_push($prev_params, 'fuel_type='.$fuel_type);
-                                    array_push($next_params, 'fuel_type='.$fuel_type);
-                                }
-                                if (!empty(@$search)) {
-                                    array_push($prev_params, 'search='.$search);
-                                    array_push($next_params, 'search='.$search);
-                                }
-                                if (!empty(@$destination)) {
-                                    array_push($prev_params, 'destination='.$destination);
-                                    array_push($next_params, 'destination='.$destination);
-                                }
-                                if (!empty(@$pay_status)) {
-                                    array_push($prev_params, 'pay_status='.$pay_status);
-                                    array_push($next_params, 'pay_status='.$pay_status);
-                                }
-                                $pre = join("&", $prev_params);
-                                $nex = join("&", $next_params);
-                            @endphp
-                            <a class="btn paginate" href="javascript:void();" @if(@$page == 1) data-href="0" @else data-href="{{ url('user/vehicles?'.$pre) }}" @endif>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15.75 19.5L8.25 12l7.5-7.5" />
-                                </svg>
-                            </a>
-                            <p class="text-fs-4 m-0">Page {{ @$page }}</p>
-                            <a class="btn paginate" href="javascript:void();" @if(count($admin) < 20) data-href="0" @else data-href="{{ url('user/vehicles?'.$nex) }}" @endif>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                                </svg>
-                            </a>
-                        </div>
                     </div>
                     <div class="tab-content" id="pills-tabContent">
                         <div class="table-responsive tab-pane fade show active" data-bs-toggle="tab" id="admin">
@@ -200,92 +151,92 @@
                                     @endif
                                 </thead>
                                 <tbody>
-                                    @if(count(@$admin) > 0)
-                                    @foreach(@$admin as $key => $value)
+                                    @if(count(@$admin['data']) > 0)
+                                    @foreach(@$admin['data'] as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td style="text-align: left !important;">
-                                            <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                                @if(@$value->vehicle->delivered_on_date && @$value->vehicle->delivered_on_date !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->vehicle->delivered_on_date)) }} @endif
+                                            <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
+                                                @if(@$value['vehicle']['delivered_on_date'] && @$value['vehicle']['delivered_on_date'] !== "0000-00-00") {{ date("M d, Y", strtotime(@$value['vehicle']['delivered_on_date'])) }} @endif
                                             </a>
                                         </td>
                                         <td style="text-align: left !important;">
-                                            <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                                {{ @$value->vehicle->modal.' '.@$value->vehicle->company_name.' '.@$value->vehicle->name }}
+                                            <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
+                                                {{ @$value['vehicle']['modal'].' '.@$value['vehicle']['company_name'].' '.@$value['vehicle']['name'] }}
                                             </a>
                                         </td>
                                         <td style="text-align: left !important;">
-                                            <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                                <i class="fa-solid fa-camera" style="font-size: 16px; margin-right: 5px;"></i> {{ @$value->vehicle->vin }}
+                                            <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
+                                                <i class="fa-solid fa-camera" style="font-size: 16px; margin-right: 5px;"></i> {{ @$value['vehicle']['vin'] }}
                                             </a>
                                         </td>
                                         <td style="text-align: left !important;">
-                                            <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                                {{ @$value->vehicle->destination_port->name }}
+                                            <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
+                                                {{ @$value['vehicle']['destination_port']['name'] }}
                                             </a>
                                         </td>
                                         <td>
                                             <div class="items-center justify-center font-semibold flex-col">
-                                                @if(@$value->vehicle->title == 'NO')
+                                                @if(@$value['vehicle']['title'] == 'NO')
                                                 <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 20px;"></i>
-                                                @elseif(@$value->vehicle->title == 'YES')
+                                                @elseif(@$value['vehicle']['title'] == 'YES')
                                                 <i class="fa-solid fa-circle-check text-success" style="font-size: 20px;"></i>
                                                 @else
-                                                <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="text-fs-4">
-                                                    <b>{{ @$value->vehicle->title }}</b>
+                                                <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="text-fs-4">
+                                                    <b>{{ @$value['vehicle']['title'] }}</b>
                                                 </a>
                                                 @endif
                                             </div>
                                         </td>
                                         <td>
                                             <div class="items-center justify-center font-semibold flex-col">
-                                                @if(@$value->vehicle->keys == 'NO')
+                                                @if(@$value['vehicle']['keys'] == 'NO')
                                                 <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 20px;"></i>
-                                                @elseif(@$value->vehicle->keys == 'YES')
+                                                @elseif(@$value['vehicle']['keys'] == 'YES')
                                                 <i class="fa-solid fa-circle-check text-success" style="font-size: 20px;"></i>
                                                 @endif
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="p-2 rounded-pill align-items-center shadow" @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important;" @endif>
+                                            <div class="p-2 rounded-pill align-items-center shadow" @if(@$value['vehicle']['status_id'] == '8' || @$value['vehicle']['status_id'] == '10' || @$value['vehicle']['status_id'] == '11') style="background-color: #c8f3a1 !important;" @endif>
                                                 @php
                                                     $icon = "new";
-                                                    if (@$value->vehicle->status_id == "6") {
+                                                    if (@$value['vehicle']['status_id'] == "6") {
                                                         $icon = "terminal";
-                                                    } elseif (@$value->vehicle->status_id == "7") {
+                                                    } elseif (@$value['vehicle']['status_id'] == "7") {
                                                         $icon = "booked";
-                                                    } elseif (@$value->vehicle->status_id == "8") {
+                                                    } elseif (@$value['vehicle']['status_id'] == "8") {
                                                         $icon = "loaded";
-                                                    } elseif (@$value->vehicle->status_id == "10") {
+                                                    } elseif (@$value['vehicle']['status_id'] == "10") {
                                                         $icon = "shipped";
-                                                    } elseif (@$value->vehicle->status_id == "11") {
+                                                    } elseif (@$value['vehicle']['status_id'] == "11") {
                                                         $icon = "delivered";
-                                                    } elseif (@$value->vehicle->status_id == "12") {
+                                                    } elseif (@$value['vehicle']['status_id'] == "12") {
                                                         $icon = "released";
                                                     }
                                                 @endphp
                                                 <img src="{{ asset('assets/icons/'.$icon.'.png') }}" style="width: 25px;">
-                                                <span class="text-fs-4 ms-2" style="font-size: 16px;">{{ @$value->vehicle->status->name }}</span>
+                                                <span class="text-fs-4 ms-2" style="font-size: 16px;">{{ @$value['vehicle']['status']['name'] }}</span>
                                             </div>
                                         </td>
 
                                         <td class="text-center">
                                             @php
                                                 $ico = "";
-                                                if (@$value->vehicle->fuel_type == "EV") {
+                                                if (@$value['vehicle']['fuel_type'] == "EV") {
                                                     $ico = "fa-solid fa-plug text-primary";
-                                                } elseif (@$value->vehicle->fuel_type == "HYB") {
+                                                } elseif (@$value['vehicle']['fuel_type'] == "HYB") {
                                                     $ico = "fa-solid fa-leaf text-success";
-                                                } elseif (@$value->vehicle->fuel_type == "GAS") {
+                                                } elseif (@$value['vehicle']['fuel_type'] == "GAS") {
                                                     $ico = "fa-solid fa-gas-pump text-secondary";
                                                 }
                                             @endphp
                                             {{-- <i class="text-fs-5 fa-solid fa-charging-station"></i> --}}
                                             <i class="text-fs-5 {{ $ico }}"></i>
-                                            {{-- <span class="fs-5 ms-1">{{ @$value->vehicle->fuel_type }}</span> --}}
+                                            {{-- <span class="fs-5 ms-1">{{ @$value['vehicle']['fuel_type'] }}</span> --}}
                                         </td>
                                         <td style="text-align: left !important;">
-                                            <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold text-fs-4">
-                                                {{ @$value->vehicle->terminal->name }}
+                                            <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold text-fs-4">
+                                                {{ @$value['vehicle']['terminal']['name'] }}
                                             </a>
                                         </td>
                                         <td style="text-align: left !important;">
@@ -293,7 +244,7 @@
                                                 style="width:250px; border-radius:3px">
                                                 <div class="border border-1 d-flex flex-column align-items-end">
                                                     <p class="text-fs-3 p-3" style="font-size: 14px;">
-                                                        {{ @$value->vehicle->notes_user }}
+                                                        {{ @$value['vehicle']['notes_user'] }}
                                                     </p>
                                                     <button class="btn btn-sm btn-primary comment-btn fs-6 border-0" data-bs-toggle="modal" data-bs-target="#fullNoteModel1_{{ $key }}">
                                                         Full Note
@@ -310,7 +261,7 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="card-body">
-                                                                        <input type="text" class="form-control text-fs-5 rounded pb-4" value="{{ @$value->vehicle->notes_user }}" readonly />
+                                                                        <input type="text" class="form-control text-fs-5 rounded pb-4" value="{{ @$value['vehicle']['notes_user'] }}" readonly />
                                                                     </div>
                                                                     <a href="#" data-bs-dismiss="modal"
                                                                         class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>
@@ -344,9 +295,9 @@
                                                                 @foreach(@$sub_buyers as $k => $v)
                                                                 <div class="my-2">
                                                                     <form method="POST" action="{{ url("user/assign-vehicle") }}" class="d-flex shadow bg-white rounded-5 rounded assign-form" role="upload">
-                                                                        <input type="hidden" name="vehicle_id" value="{{ @$value->vehicle->id }}">
-                                                                        <input type="hidden" name="user_id" value="{{ @$v->id }}">
-                                                                        <input class="form-control me-2 bg-white border-0 fs-5" placeholder="{{ @$v->name }}" disabled aria-label="upload">
+                                                                        <input type="hidden" name="vehicle_id" value="{{ @$value['vehicle']['id'] }}">
+                                                                        <input type="hidden" name="user_id" value="{{ @$v['id'] }}">
+                                                                        <input class="form-control me-2 bg-white border-0 fs-5" placeholder="{{ @$v['name'] }}" disabled aria-label="upload">
                                                                         <button class="btn btn-primary ded" type="submit">
                                                                             <div class="d-flex align-items-center">
                                                                                 <span class="ms-2">Send</span>
@@ -378,6 +329,7 @@
                                     @endif
                                 </tbody>
                             </table>
+                            {!! $admin['pagination'] !!}
                         </div>
 
                         <div class="table-responsive tab-pane fade" data-bs-toggle="tab" id="super-admin">
@@ -396,81 +348,81 @@
                                     <th scope="col"></th>
                                 </thead>
                                 <tbody>
-                                    @if(count(@$super_user) > 0)
-                                    @foreach(@$super_user as $key => $value)
+                                    @if(count(@$user['data']) > 0)
+                                    @foreach(@$user['data'] as $key => $value)
                                     <tr class="align-middle overflow-hidden shadow mb-2">
                                         <td style="text-align: left !important;">
-                                            <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                                @if(@$value->vehicle->delivery_date && @$value->vehicle->departure !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->vehicle->delivery_date)) }} @endif
+                                            <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
+                                                @if(@$value['vehicle']['delivered_on_date'] && @$value['vehicle']['departure'] !== "0000-00-00") {{ date("M d, Y", strtotime(@$value['vehicle']['delivered_on_date'])) }} @endif
                                             </a>
                                         </td>
                                         <td style="text-align: left !important;">
-                                            <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                                {{ @$value->vehicle->modal.' '.@$value->vehicle->company_name.' '.@$value->vehicle->name }}
+                                            <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
+                                                {{ @$value['vehicle']['modal'].' '.@$value['vehicle']['company_name'].' '.@$value['vehicle']['name'] }}
                                             </a>
                                         </td>
                                         <td style="text-align: left !important;">
-                                            <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                                <i class="fa-solid fa-camera" style="font-size: 16px; margin-right: 5px;"></i> {{ @$value->vehicle->vin }}
+                                            <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
+                                                <i class="fa-solid fa-camera" style="font-size: 16px; margin-right: 5px;"></i> {{ @$value['vehicle']['vin'] }}
                                             </a>
                                         </td>
                                         <td style="text-align: left !important;">
-                                            <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
-                                                {{ @$value->vehicle->destination_port->name }}
+                                            <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-medium text-fs-3">
+                                                {{ @$value['vehicle']['destination_port']['name'] }}
                                             </a>
                                         </td>
                                         <td>
                                             <div class="items-center justify-center font-semibold flex-col">
-                                                @if(@$value->vehicle->title == 'NO')
+                                                @if(@$value['vehicle']['title'] == 'NO')
                                                 <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 20px;"></i>
-                                                @elseif(@$value->vehicle->title == 'YES')
+                                                @elseif(@$value['vehicle']['title'] == 'YES')
                                                 <i class="fa-solid fa-circle-check text-success" style="font-size: 20px;"></i>
                                                 @else
-                                                <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="text-fs-4">
-                                                    <b>{{ @$value->vehicle->title }}</b>
+                                                <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="text-fs-4">
+                                                    <b>{{ @$value['vehicle']['title'] }}</b>
                                                 </a>
                                                 @endif
                                             </div>
                                         </td>
                                         <td>
                                             <div class="items-center justify-center font-semibold flex-col">
-                                                @if(@$value->vehicle->keys == 'NO')
+                                                @if(@$value['vehicle']['keys'] == 'NO')
                                                 <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 20px;"></i>
-                                                @elseif(@$value->vehicle->keys == 'YES')
+                                                @elseif(@$value['vehicle']['keys'] == 'YES')
                                                 <i class="fa-solid fa-circle-check text-success" style="font-size: 20px;"></i>
                                                 @endif
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="p-2 rounded-pill align-items-center shadow" @if(@$value->vehicle->status_id == '8' || @$value->vehicle->status_id == '10' || @$value->vehicle->status_id == '11') style="background-color: #c8f3a1 !important;" @endif>
+                                            <div class="p-2 rounded-pill align-items-center shadow" @if(@$value['vehicle']['status_id'] == '8' || @$value['vehicle']['status_id'] == '10' || @$value['vehicle']['status_id'] == '11') style="background-color: #c8f3a1 !important;" @endif>
                                                 @php
                                                     $icon = "new";
-                                                    if (@$value->vehicle->status_id == "6") {
+                                                    if (@$value['vehicle']['status_id'] == "6") {
                                                         $icon = "terminal";
-                                                    } elseif (@$value->vehicle->status_id == "7") {
+                                                    } elseif (@$value['vehicle']['status_id'] == "7") {
                                                         $icon = "booked";
-                                                    } elseif (@$value->vehicle->status_id == "8") {
+                                                    } elseif (@$value['vehicle']['status_id'] == "8") {
                                                         $icon = "loaded";
-                                                    } elseif (@$value->vehicle->status_id == "10") {
+                                                    } elseif (@$value['vehicle']['status_id'] == "10") {
                                                         $icon = "shipped";
-                                                    } elseif (@$value->vehicle->status_id == "11") {
+                                                    } elseif (@$value['vehicle']['status_id'] == "11") {
                                                         $icon = "delivered";
-                                                    } elseif (@$value->vehicle->status_id == "12") {
+                                                    } elseif (@$value['vehicle']['status_id'] == "12") {
                                                         $icon = "released";
                                                     }
                                                 @endphp
                                                 <img src="{{ asset('assets/icons/'.$icon.'.png') }}" style="width: 25px;">
-                                                <span class="text-fs-4 ms-2" style="font-size: 16px;">{{ @$value->vehicle->status->name }}</span>
+                                                <span class="text-fs-4 ms-2" style="font-size: 16px;">{{ @$value['vehicle']['status']['name'] }}</span>
                                             </div>
                                         </td>
 
                                         <td class="text-center">
                                             <i class="text-fs-5 fa-solid fa-charging-station"></i>
-                                            {{-- <span class="fs-5 ms-1">{{ @$value->vehicle->fuel_type }}</span> --}}
+                                            {{-- <span class="fs-5 ms-1">{{ @$value['vehicle']['fuel_type'] }}</span> --}}
                                         </td>
                                         <td style="text-align: left !important;">
-                                            <a href="{{ url('user/vehicles', @$value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold text-fs-4">
-                                                {{ @$value->vehicle->terminal->name }}
+                                            <a href="{{ url('user/vehicles', @$value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold text-fs-4">
+                                                {{ @$value['vehicle']['terminal']['name'] }}
                                             </a>
                                         </td>
                                         <td style="text-align: left !important;">
@@ -478,7 +430,7 @@
                                                 style="width:250px; border-radius:3px">
                                                 <div class="border border-1 d-flex flex-column align-items-end">
                                                     <p class="text-fs-3 p-3" style="font-size: 14px;">
-                                                        {{ @$value->vehicle->notes_user }}
+                                                        {{ @$value['vehicle']['notes_user'] }}
                                                     </p>
                                                     <button class="btn btn-sm btn-primary comment-btn fs-6 border-0" data-bs-toggle="modal" data-bs-target="#fullNoteModel_{{ $key }}">
                                                         Full Note
@@ -500,7 +452,7 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="card-body">
-                                                                        <input type="text" class="form-control text-fs-5 rounded pb-4" value="{{ @$value->vehicle->notes_user }}" readonly />
+                                                                        <input type="text" class="form-control text-fs-5 rounded pb-4" value="{{ @$value['vehicle']['notes_user'] }}" readonly />
                                                                     </div>
                                                                     <a href="#" data-bs-dismiss="modal"
                                                                         class="btn btn-primary border-0 mt-4 col-md-12 w-auto rounded-3 fs-5">Close</a>
@@ -533,9 +485,9 @@
                                                                 @foreach(@$sub_buyers as $k => $v)
                                                                 <div class="my-2">
                                                                     <form method="POST" action="{{ url("user/assign-vehicle") }}" class="d-flex shadow bg-white rounded-5 rounded assign-form" role="upload">
-                                                                        <input type="hidden" name="vehicle_id" value="{{ @$value->vehicle->id }}">
-                                                                        <input type="hidden" name="user_id" value="{{ @$v->id }}">
-                                                                        <input class="form-control me-2 bg-white border-0 fs-5" placeholder="{{ @$v->name }}" disabled aria-label="upload">
+                                                                        <input type="hidden" name="vehicle_id" value="{{ @$value['vehicle']['id'] }}">
+                                                                        <input type="hidden" name="user_id" value="{{ @$v['id'] }}">
+                                                                        <input class="form-control me-2 bg-white border-0 fs-5" placeholder="{{ @$v['name'] }}" disabled aria-label="upload">
                                                                         <button class="btn btn-primary ded" type="submit">
                                                                             <div class="d-flex align-items-center">
                                                                                 <span class="ms-2">Send</span>
@@ -566,6 +518,7 @@
                                     @endif
                                 </tbody>
                             </table>
+                            {!! $user['pagination'] !!}
                         </div>
                     </div>
                 </div>
@@ -704,6 +657,11 @@
 
             $("select.option-select").on("change", function () {
                 updateBackgroundColor(this);
+            });
+
+            $(document).on("click", ".page-link", function () {
+                $(".page-item").addClass("disabled");
+                $(".page-link").attr("aria-disabled", true);
             });
 
             $(document).on("click", ".paginate", function () {

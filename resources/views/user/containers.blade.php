@@ -105,47 +105,6 @@
                     <h4 class="fw-bold fs-md-13 fs-lg-25">
                         Containers List
                     </h4>
-                    <div class="d-flex gap-2 align-items-center page-icon">
-                        @php
-                            $prev = (int)$page - 1;
-                            $next = (int)$page + 1;
-                            $prev_params = ['page='.$prev];
-                            $next_params = ['page='.$next];
-                            if (!empty(@$port)) {
-                                array_push($prev_params, 'port='.$port);
-                                array_push($next_params, 'port='.$port);
-                            }
-                            if (!empty(@$status)) {
-                                array_push($prev_params, 'status='.$status);
-                                array_push($next_params, 'status='.$status);
-                            }
-                            if (!empty(@$search)) {
-                                array_push($prev_params, 'search='.$search);
-                                array_push($next_params, 'search='.$search);
-                            }
-                            if (!empty(@$pay_status)) {
-                                array_push($prev_params, 'pay_status='.$pay_status);
-                                array_push($next_params, 'pay_status='.$pay_status);
-                            }
-                            $pre = join("&", $prev_params);
-                            $nex = join("&", $next_params);
-                        @endphp
-                        <a class="btn paginate" href="javascript:void();" @if(@$page == 1) data-href="0" @else data-href="{{ url('user/containers?'.$pre) }}" @endif>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15.75 19.5L8.25 12l7.5-7.5" />
-                            </svg>
-                        </a>
-                        <p class="text-fs-4 m-0">Page {{ @$page }}</p>
-                        <a class="btn paginate" href="javascript:void();" @if(count($admin) < 20) data-href="0" @else data-href="{{ url('user/containers?'.$nex) }}" @endif>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-fs-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                            </svg>
-                        </a>
-                    </div>
                 </div>
 
                 <div class="tab-content" id="pills-tabContent">
@@ -163,69 +122,69 @@
                                 <th scope="col"></th>
                             </thead>
                             <tbody>
-                                @if(count($admin) > 0)
-                                @foreach($admin as $key => $value)
+                                @if(count($admin['data']) > 0)
+                                @foreach($admin['data'] as $key => $value)
                                 <tr class="align-middle overflow-hidden shadow mb-2">
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                            {{ @$value->booking_no }}
+                                    <td>
+                                        <a href="{{ url('user/containers', $value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
+                                            {{ @$value['booking_no'] }}
                                         </a>
                                     </td>
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                            {{ @$value->container_no }}
+                                    <td>
+                                        <a href="{{ url('user/containers', $value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
+                                            {{ @$value['container_no'] }}
                                         </a>
                                     </td>
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                            @if(@$value->departure && @$value->departure !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->departure)) }} @endif
+                                    <td>
+                                        <a href="{{ url('user/containers', $value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
+                                            @if(@$value['departure'] && @$value['departure'] !== "0000-00-00") {{ date("M d, Y", strtotime(@$value['departure'])) }} @endif
                                         </a>
                                     </td>
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                            @if(@$value->arrival && @$value->arrival !== "0000-00-00") {{ date("M d, Y", strtotime(@$value->arrival)) }} @endif
+                                    <td>
+                                        <a href="{{ url('user/containers', $value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
+                                            @if(@$value['arrival'] && @$value['arrival'] !== "0000-00-00") {{ date("M d, Y", strtotime(@$value['arrival'])) }} @endif
                                         </a>
                                     </td>
 
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
+                                    <td>
                                         <div class="d-flex justify-content-center">
-                                            <div class="text-center px-3 py-2 rounded-pill shadow" @if(@$value->status_id == '4') style="background-color: #e4ffed !important;" @endif>
-                                                <span class="fs-5 ms-1" style="font-size: 16px !important;">{{ @$value->destination_port->name }}</span>
+                                            <div class="text-center px-3 py-2 rounded-pill shadow">
+                                                <span class="fs-5 ms-1" style="font-size: 16px !important;">{{ @$value['destination_port']['name'] }}</span>
                                             </div>
                                         </div>
                                     </td>
 
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
+                                    <td>
                                         <div class="d-flex justify-content-center">
-                                            <div class="d-flex px-3 py-2 rounded-pill shadow" @if(@$value->status_id == '4') style="background-color: #e4ffed !important;" @endif>
+                                            <div class="d-flex px-3 py-2 rounded-pill shadow" @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>
                                                 @php
                                                     $icon = "booked";
-                                                    if (@$value->status_id == "2") {
+                                                    if (@$value['status_id'] == "2") {
                                                         $icon = "loaded";
-                                                    } elseif (@$value->status_id == "3") {
+                                                    } elseif (@$value['status_id'] == "3") {
                                                         $icon = "shipped";
-                                                    } elseif (@$value->status_id == "4") {
+                                                    } elseif (@$value['status_id'] == "4") {
                                                         $icon = "delivered";
                                                     }
                                                 @endphp
                                                 <img src="{{ asset('assets/icons/'.$icon.'.png') }}" style="width: 25px;">
-                                                <span class="fs-5 ms-1" style="font-size: 16px !important;">{{ @$value->status->name }}</span>
+                                                <span class="fs-5 ms-1" style="font-size: 16px !important;">{{ @$value['status']['name'] }}</span>
                                             </div>
                                         </div>
                                     </td>
 
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
+                                    <td>
                                         <div class="py-2 flex items-center justify-content-center flex-column">
                                             <div class="px-0.5 py-1">
-                                                <button class="btn btn-primary rounded-1 border border-0 fs-5 tracking" type="button" data-text="{{ @$value->shipping_line->name }}" data-id="{{ @$value->container_no }}">
+                                                <button class="btn btn-primary rounded-1 border border-0 fs-5 tracking" type="button" data-text="{{ @$value['shipping_line']['name'] }}" data-id="{{ @$value['container_no'] }}">
                                                     Tracking
                                                 </button>
                                             </div>
                                         </div>
                                     </td>
 
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
-                                        <button data-target="#detail_{{ @$value->id }}"
+                                    <td>
+                                        <button data-target="#detail_{{ @$value['id'] }}"
                                             class="details-button rounded-circle bg-primary p-1 user-icon"
                                             style="transition: all 0.2s linear;">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -237,7 +196,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                                <tr class="collapse fade show" id="detail_{{ @$value->id }}">
+                                <tr class="collapse fade show" id="detail_{{ @$value['id'] }}">
                                     <td colspan="8" style="text-align: left !important;">
                                         <div class="container">
                                             <div class="rounded row shadow header-shipment">
@@ -254,14 +213,14 @@
                                                                 $user_id = auth()->user()->main_user_id;
                                                             }
                                                         @endphp
-                                                        @if(count(@$value->buyers) > 0)
-                                                        @foreach(@$value->buyers as $k => $v)
+                                                        @if(count(@$value['buyers']) > 0)
+                                                        @foreach(@$value['buyers'] as $k => $v)
                                                         <span @if(@$v->user->id == @$user_id) style="background-color: #c8f3a1 !important;" @endif>Buyer:<span class="fw-bold"> {{ @$v->user->name }}</span></span>
                                                         @foreach($v->vehicles as $ke => $val)
                                                         <li class="list-unstyled" @if(@$v->user->id == @$user_id) style="background-color: #c8f3a1 !important; padding-left: 10px;" @else style="padding-left: 10px;" @endif>
                                                             » <span class="fw-bold">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name }}</span>,
                                                             VIN: <span class="fw-bold fs-5" style="font-size: 14px !important;"><a
-                                                                    href="{{ url('user/containers', $value->id) }}"
+                                                                    href="{{ url('user/containers', $value['id']) }}"
                                                                     class="text-dark text-decoration-none">{{ @$val->vehicle->vin }}</a></span>
                                                         </li>
                                                         @endforeach
@@ -272,13 +231,13 @@
 
                                                 <div
                                                     class="col d-flex align-items-center justify-content-center">
-                                                    <button class="@if(@$value->all_paid == "1") bg-success @elseif(@$value->all_paid == "0") bg-danger @endif rounded-1 text-white fs-5 px-4 py-1 border border-0">
-                                                        @if(@$value->all_paid == "1") Paid @elseif(@$value->all_paid == "0") Unpaid @endif
+                                                    <button class="@if(@$value['all_paid'] == "1") bg-success @elseif(@$value['all_paid'] == "0") bg-danger @endif rounded-1 text-white fs-5 px-4 py-1 border border-0">
+                                                        @if(@$value['all_paid'] == "1") Paid @elseif(@$value['all_paid'] == "0") Unpaid @endif
                                                     </button>
                                                 </div>
 
                                                 <div class="col d-flex align-items-center justify-content-center text-fs-4 fw-medium" style="font-size: 14px;">
-                                                    {{ @$value->shipping_line->name }}
+                                                    {{ @$value['shipping_line']['name'] }}
                                                 </div>
                                             </div>
                                         </div>
@@ -294,6 +253,7 @@
                                 @endif
                             </tbody>
                         </table>
+                        {!! $admin['pagination'] !!}
                     </div>
                     <div class="table-responsive tab-pane fade" id="super-admin">
                         <table class="table">
@@ -308,69 +268,69 @@
                                 <th scope="col"></th>
                             </thead>
                             <tbody>
-                                @if(count($super_user) > 0)
-                                @foreach($super_user as $key => $value)
+                                @if(count($user['data']) > 0)
+                                @foreach($user['data'] as $key => $value)
                                 <tr class="align-middle overflow-hidden shadow mb-2">
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                            {{ @$value->booking_no }}
+                                    <td>
+                                        <a href="{{ url('user/containers', $value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
+                                            {{ @$value['booking_no'] }}
                                         </a>
                                     </td>
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                            {{ @$value->container_no }}
+                                    <td>
+                                        <a href="{{ url('user/containers', $value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
+                                            {{ @$value['container_no'] }}
                                         </a>
                                     </td>
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                            @if(@$value->departure) {{ date("M d, Y", strtotime(@$value->departure)) }} @endif
+                                    <td>
+                                        <a href="{{ url('user/containers', $value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
+                                            @if(@$value['departure']) {{ date("M d, Y", strtotime(@$value['departure'])) }} @endif
                                         </a>
                                     </td>
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
-                                        <a href="{{ url('user/containers', $value->id) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
-                                            @if(@$value->arrival) {{ date("M d, Y", strtotime(@$value->arrival)) }} @endif
+                                    <td>
+                                        <a href="{{ url('user/containers', $value['id']) }}" style="text-decoration: none; color: #000000; font-size: 14px;" class="fw-bold mb-2 text-fs-3">
+                                            @if(@$value['arrival']) {{ date("M d, Y", strtotime(@$value['arrival'])) }} @endif
                                         </a>
                                     </td>
 
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
+                                    <td>
                                         <div class="d-flex justify-content-center">
                                             <div class="text-center px-3 py-2 rounded-pill shadow">
-                                                <span class="fs-5 ms-1" style="font-size: 16px;">{{ @$value->destination_port->name }}</span>
+                                                <span class="fs-5 ms-1" style="font-size: 16px;">{{ @$value['destination_port']['name'] }}</span>
                                             </div>
                                         </div>
                                     </td>
 
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
+                                    <td>
                                         <div class="d-flex justify-content-center">
-                                            <div class="d-flex px-3 py-2 rounded-pill shadow">
+                                            <div class="d-flex px-3 py-2 rounded-pill shadow" @if(@$value['status_id'] == '4') style="background-color: #c8f3a1 !important;" @endif>
                                                 @php
                                                     $icon = "booked";
-                                                    if (@$value->status_id == "2") {
+                                                    if (@$value['status_id'] == "2") {
                                                         $icon = "loaded";
-                                                    } elseif (@$value->status_id == "3") {
+                                                    } elseif (@$value['status_id'] == "3") {
                                                         $icon = "shipped";
-                                                    } elseif (@$value->status_id == "4") {
+                                                    } elseif (@$value['status_id'] == "4") {
                                                         $icon = "delivered";
                                                     }
                                                 @endphp
                                                 <img src="{{ asset('assets/icons/'.$icon.'.png') }}" style="width: 25px;">
-                                                <span class="fs-5 ms-1" style="font-size: 16px !important;">{{ @$value->status->name }}</span>
+                                                <span class="fs-5 ms-1" style="font-size: 16px !important;">{{ @$value['status']['name'] }}</span>
                                             </div>
                                         </div>
                                     </td>
 
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
+                                    <td>
                                         <div class="py-2 flex items-center justify-content-center flex-column">
                                             <div class="px-0.5 py-1">
-                                                <button class="btn btn-primary rounded-1 border border-0 fs-5 tracking" type="button" data-text="{{ @$value->shipping_line->name }}" data-id="{{ @$value->container_no }}">
+                                                <button class="btn btn-primary rounded-1 border border-0 fs-5 tracking" type="button" data-text="{{ @$value['shipping_line']['name'] }}" data-id="{{ @$value['container_no'] }}">
                                                     Tracking
                                                 </button>
                                             </div>
                                         </div>
                                     </td>
 
-                                    <td @if(@$value->status_id == '4') style="background-color: #c8f3a1 !important;" @endif>
-                                        <button data-target="#detail1_{{ @$value->id }}"
+                                    <td>
+                                        <button data-target="#detail1_{{ @$value['id'] }}"
                                             class="details-button rounded-circle bg-primary p-1 user-icon"
                                             style="transition: all 0.2s linear;">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -382,7 +342,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                                <tr class="collapse fade show" id="detail1_{{ @$value->id }}">
+                                <tr class="collapse fade show" id="detail1_{{ @$value['id'] }}">
                                     <td colspan="8" style="text-align: left !important;">
                                         <div class="container">
                                             <div class="rounded row shadow header-shipment">
@@ -393,15 +353,15 @@
                                             <div class="row">
                                                 <div class="col mt-3 text-fs-3 shipment-details">
                                                     <ul>
-                                                        @if(count(@$value->buyers) > 0)
-                                                        @foreach(@$value->buyers as $k => $v)
+                                                        @if(count(@$value['buyers']) > 0)
+                                                        @foreach(@$value['buyers'] as $k => $v)
                                                         @if(@$v->user->id == auth()->user()->id)
                                                         Buyer:<span class="fw-bold"> {{ @$v->user->name }}</span>
                                                         @foreach($v->vehicles as $ke => $val)
                                                         <li class="list-unstyled" @if(@$v->user->id == @$user_id) style="background-color: #c8f3a1 !important; padding-left: 10px;" @else style="padding-left: 10px;" @endif>
                                                             » <span class="fw-bold">{{ @$val->vehicle->modal.' '.@$val->vehicle->company_name.' '.@$val->vehicle->name }}</span>,
                                                             VIN: <span class="fw-bold fs-5" style="font-size: 14px !important;"><a
-                                                                    href="{{ url('user/containers/1') }}"
+                                                                    href="{{ url('user/containers', $value['id']) }}"
                                                                     class="text-dark text-decoration-none">{{ @$val->vehicle->vin }}</a></span>
                                                         </li>
                                                         @endforeach
@@ -413,13 +373,13 @@
 
                                                 <div
                                                     class="col d-flex align-items-center justify-content-center">
-                                                    <button class="@if(@$value->all_paid == "1") bg-success @elseif(@$value->all_paid == "0") bg-danger @endif rounded-1 text-white fs-5 px-4 py-1 border border-0">
-                                                        @if(@$value->all_paid == "1") Paid @elseif(@$value->all_paid == "0") Unpaid @endif
+                                                    <button class="@if(@$value['all_paid'] == "1") bg-success @elseif(@$value['all_paid'] == "0") bg-danger @endif rounded-1 text-white fs-5 px-4 py-1 border border-0">
+                                                        @if(@$value['all_paid'] == "1") Paid @elseif(@$value['all_paid'] == "0") Unpaid @endif
                                                     </button>
                                                 </div>
 
                                                 <div class="col d-flex align-items-center justify-content-center text-fs-4 fw-medium">
-                                                    {{ @$value->shipping_line->name }}
+                                                    {{ @$value['shipping_line']['name'] }}
                                                 </div>
                                             </div>
                                         </div>
@@ -435,6 +395,7 @@
                                 @endif
                             </tbody>
                         </table>
+                        {{-- {!! $user['pagination'] !!} --}}
                     </div>
                 </div>
             </div>
@@ -482,6 +443,11 @@
                     window.location.href = $(this).attr('data-href');
                     $(this).attr('data-href', '0');
                 }
+            });
+
+            $(document).on("click", ".page-link", function () {
+                $(".page-item").addClass("disabled");
+                $(".page-link").attr("aria-disabled", true);
             });
 
             $(document).on("click", ".tracking", function () {

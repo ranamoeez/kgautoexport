@@ -34,6 +34,7 @@ use QuickBooksOnline\API\Facades\Invoice;
 
 class HomeController extends Controller
 {
+    private $perpage = 15;
     /**
      * Create a new controller instance.
      *
@@ -275,196 +276,124 @@ class HomeController extends Controller
         return json_encode(["success" => true, "msg" => "Pickup request added successfully!"]);
     }
 
+    public function search($records,$request,&$data) {
+        /*
+        SET DEFAULT VALUES
+        */
+        if($request->perpage)
+            $this->perpage = $request->perpage;
+        $data['sindex'] = ($request->page != NULL)?($this->perpage*$request->page - $this->perpage+1):1;
+        /*
+        FILTER THE DATA
+        */
+        $params = [];
+        if($request->is_active) {
+            $params['is_active'] = $request->is_active;
+            $records = $records->where("is_active",$params['is_active']);
+        }
+        $filter = [];
+        if (!empty($request->terminal) && $request->terminal !== 'all') {
+            $data['terminal'] = $request->terminal;
+            $terminal = $request->terminal;
+            $filter['terminal'] = $terminal;
+        }
+        if (!empty($request->status) && $request->status !== 'all') {
+            $data['status'] = $request->status;
+            $status = $request->status;
+            $filter['status'] = $status;
+        }
+        if (!empty($request->fuel_type) && $request->fuel_type !== 'all') {
+            $data['fuel_type'] = $request->fuel_type;
+            $fuel_type = $request->fuel_type;
+            $filter['fuel_type'] = $fuel_type;
+        }
+        if (!empty($request->destination) && $request->destination !== 'all') {
+            $data['destination'] = $request->destination;
+            $destination = $request->destination;
+            $filter['destination'] = $destination;
+        }
+        if (!empty($request->search)) {
+            $data['search'] = $request->search;
+            $search = $request->search;
+            $filter['search'] = $search;
+        }
+        if (!empty($filter)) {
+            $records = $records->whereHas('vehicle', function ($query) use($filter) {
+                if (!empty($filter['terminal'])) {
+                    $query->where('terminal_id', $filter['terminal']);
+                }
+                if (!empty($filter['fuel_type'])) {
+                    $query->where('fuel_type', $filter['fuel_type']);
+                }
+                if (!empty($filter['status'])) {
+                    $query->where('status_id', $filter['status']);
+                }
+                if (!empty($filter['at_terminal'])) {
+                    if ($filter['at_terminal'] == "1") {
+                        $oneMonthAgo = new \DateTime('1 day ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', ">=", $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "2") {
+                        $oneMonthAgo = new \DateTime('2 day ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "3") {
+                        $oneMonthAgo = new \DateTime('3 day ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "4") {
+                        $oneMonthAgo = new \DateTime('4 day ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "5") {
+                        $oneMonthAgo = new \DateTime('5 day ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "1w") {
+                        $oneMonthAgo = new \DateTime('1 week ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', ">=", $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "2w") {
+                        $oneMonthAgo = new \DateTime('2 week ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', ">=", $date)->where("status_id", "6");    
+                    } else if ($filter['at_terminal'] == "m2w") {
+                        $oneMonthAgo = new \DateTime('2 week ago');
+                        $date = $oneMonthAgo->format('Y-m-d');
+                        $query->where('delivered_on_date', "<=", $date)->where("status_id", "6");    
+                    }
+                }
+                if (!empty($filter['destination'])) {
+                    $query->where('destination_port_id', $filter['destination']);
+                }
+                if (!empty($filter['search'])) {
+                    $search = $filter['search'];
+                    $query->where(function ($q) use ($search) {
+                        $q->where('delivery_date', 'LIKE', '%'.$search.'%')
+                        ->orWhere('company_name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('modal', 'LIKE', '%'.$search.'%')
+                        ->orWhere('vin', 'LIKE', '%'.$search.'%')
+                        ->orWhere('client_name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
+                        ->orWhere('notes', 'LIKE', '%'.$search.'%');
+                    });
+                }
+            });
+        }
+        if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
+            $data['pay_status'] = $request->pay_status;
+            $records = $records->where('payment_status', $request->pay_status);
+        }
+        $data['request'] = $params;
+        return $records;    
+    }
+
     public function vehicles(Request $request)
     {
+        $user_id = \Auth::user()->id;
         $data['type'] = "vehicles";
-        $data['page'] = "1";
-        $user_id = Auth::user()->id;
-        if (Auth::user()->role == "3") {
-            $admin = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "super_user")->where('user_id', $user_id);
-            $filter = [];
-            if (!empty($request->terminal) && $request->terminal !== 'all') {
-                $data['terminal'] = $request->terminal;
-                $terminal = $request->terminal;
-                $filter['terminal'] = $terminal;
-            }
-            if (!empty($request->status) && $request->status !== 'all') {
-                $data['status'] = $request->status;
-                $status = $request->status;
-                $filter['status'] = $status;
-            }
-            if (!empty($request->fuel_type) && $request->fuel_type !== 'all') {
-                $data['fuel_type'] = $request->fuel_type;
-                $fuel_type = $request->fuel_type;
-                $filter['fuel_type'] = $fuel_type;
-            }
-            if (!empty($request->destination) && $request->destination !== 'all') {
-                $data['destination'] = $request->destination;
-                $destination = $request->destination;
-                $filter['destination'] = $destination;
-            }
-            if (!empty($request->search)) {
-                $data['search'] = $request->search;
-                $search = $request->search;
-                $filter['search'] = $search;
-            }
-            if (!empty($filter)) {
-                $admin = $admin->whereHas('vehicle', function ($query) use($filter) {
-                    if (!empty($filter['terminal'])) {
-                        $query->where('terminal_id', $filter['terminal']);
-                    }
-                    if (!empty($filter['fuel_type'])) {
-                        $query->where('fuel_type', $filter['fuel_type']);
-                    }
-                    if (!empty($filter['status'])) {
-                        $query->where('status_id', $filter['status']);
-                    }
-                    if (!empty($filter['destination'])) {
-                        $query->where('destination_port_id', $filter['destination']);
-                    }
-                    if (!empty($filter['search'])) {
-                        $search = $filter['search'];
-                        $query->where(function ($q) use ($search) {
-                            $q->where('delivery_date', 'LIKE', '%'.$search.'%')
-                            ->orWhere('company_name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('modal', 'LIKE', '%'.$search.'%')
-                            ->orWhere('vin', 'LIKE', '%'.$search.'%')
-                            ->orWhere('client_name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
-                            ->orWhere('notes', 'LIKE', '%'.$search.'%');
-                        });
-                    }
-                });
-            }
-            if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
-                $data['pay_status'] = $request->pay_status;
-                $admin = $admin->where('payment_status', $request->pay_status);
-            }
-
-            if (!empty($request->page)) {
-                if ($request->page > 1) {
-                    $offset = ($request->page - 1) * 20;
-                    $admin = $admin->offset((int)$offset);
-                    if (count($admin->get()) < 20) {
-                        $admin = $admin->offset(0);
-                        $request->page = 1;
-                    }
-                }
-                $data['page'] = $request->page;
-            }
-            
-            $data['super_user'] = [];
-            $data['admin'] = $admin->orderBy("id", "DESC")->get();
-        } else {
-            $super_user = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "super_user")->where('user_id', $user_id);
-            $admin = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->limit(20)->where("assigned_by", "admin")->where('user_id', $user_id);
-            $filter = [];
-            if (!empty($request->terminal) && $request->terminal !== 'all') {
-                $data['terminal'] = $request->terminal;
-                $terminal = $request->terminal;
-                $filter['terminal'] = $terminal;
-            }
-            if (!empty($request->status) && $request->status !== 'all') {
-                $data['status'] = $request->status;
-                $status = $request->status;
-                $filter['status'] = $status;
-            }
-            if (!empty($request->fuel_type) && $request->fuel_type !== 'all') {
-                $data['fuel_type'] = $request->fuel_type;
-                $fuel_type = $request->fuel_type;
-                $filter['fuel_type'] = $fuel_type;
-            }
-            if (!empty($request->destination) && $request->destination !== 'all') {
-                $data['destination'] = $request->destination;
-                $destination = $request->destination;
-                $filter['destination'] = $destination;
-            }
-            if (!empty($request->search)) {
-                $data['search'] = $request->search;
-                $search = $request->search;
-                $filter['search'] = $search;
-            }
-            if (!empty($filter)) {
-                $super_user = $super_user->whereHas('vehicle', function ($query) use($filter) {
-                    if (!empty($filter['terminal'])) {
-                        $query->where('terminal_id', $filter['terminal']);
-                    }
-                    if (!empty($filter['fuel_type'])) {
-                        $query->where('fuel_type', $filter['fuel_type']);
-                    }
-                    if (!empty($filter['status'])) {
-                        $query->where('status_id', $filter['status']);
-                    }
-                    if (!empty($filter['destination'])) {
-                        $query->where('destination_port_id', $filter['destination']);
-                    }
-                    if (!empty($filter['search'])) {
-                        $search = $filter['search'];
-                        $query->where(function ($q) use ($search) {
-                            $q->where('delivery_date', 'LIKE', '%'.$search.'%')
-                            ->orWhere('company_name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('modal', 'LIKE', '%'.$search.'%')
-                            ->orWhere('vin', 'LIKE', '%'.$search.'%')
-                            ->orWhere('client_name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
-                            ->orWhere('notes', 'LIKE', '%'.$search.'%');
-                        });
-                    }
-                });
-                $admin = $admin->whereHas('vehicle', function ($query) use($filter) {
-                    if (!empty($filter['terminal'])) {
-                        $query->where('terminal_id', $filter['terminal']);
-                    }
-                    if (!empty($filter['fuel_type'])) {
-                        $query->where('fuel_type', $filter['fuel_type']);
-                    }
-                    if (!empty($filter['status'])) {
-                        $query->where('status_id', $filter['status']);
-                    }
-                    if (!empty($filter['destination'])) {
-                        $query->where('destination_port_id', $filter['destination']);
-                    }
-                    if (!empty($filter['search'])) {
-                        $search = $filter['search'];
-                        $query->where(function ($q) use ($search) {
-                            $q->where('delivery_date', 'LIKE', '%'.$search.'%')
-                            ->orWhere('company_name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('modal', 'LIKE', '%'.$search.'%')
-                            ->orWhere('vin', 'LIKE', '%'.$search.'%')
-                            ->orWhere('client_name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('destination_manual', 'LIKE', '%'.$search.'%')
-                            ->orWhere('notes', 'LIKE', '%'.$search.'%');
-                        });
-                    }
-                });
-            }
-            if ((!empty($request->pay_status) && $request->pay_status !== 'all') || $request->pay_status == "0") {
-                $data['pay_status'] = $request->pay_status;
-                $super_user = $super_user->where('payment_status', $request->pay_status);
-                $admin = $admin->where('payment_status', $request->pay_status);
-            }
-
-            if (!empty($request->page)) {
-                if ($request->page > 1) {
-                    $offset = ($request->page - 1) * 20;
-                    $super_user = $super_user->offset((int)$offset);
-                    $admin = $admin->offset((int)$offset);
-                    if (count($super_user->get()) < 20 && count($admin->get()) < 20) {
-                        $admin = $admin->offset(0);
-                        $super_user = $super_user->offset(0);
-                        $request->page = 1;
-                    }
-                }
-                $data['page'] = $request->page;
-            }
-            
-            $data['super_user'] = $super_user->orderBy("id", "DESC")->get();
-            $data['admin'] = $admin->orderBy("id", "DESC")->get();
-        }
-
+        $data['page'] = '1';
         $data['sub_buyers'] = User::where("main_user_id", $user_id)->get();
         $data['vehicles'] = AssignVehicle::with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->whereHas("vehicle", function ($q) {
             $q->where("status_id", "11");
@@ -490,6 +419,46 @@ class HomeController extends Controller
         $data['all_buyer'] = User::where('role', '2')->get();
         $data['all_destination_port'] = DestinationPort::all();
         $data['countries'] = Country::all();
+        /*
+        GET RECORDS
+        */
+        $records = new AssignVehicle;
+        if (\Auth::user()->role == "3") {
+            $sub_user_records = $records->orderBy('id','DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "super_user")->where('user_id', $user_id);
+            $records = $this->search($sub_user_records,$request,$data);
+
+            $records = $records->paginate($this->perpage);
+            $records->appends($request->all())->links();
+            $links = $records->links();
+
+            $records = $records->toArray();
+            $records['pagination'] = $links;
+            $data['admin'] = [];
+            $data['user'] = $records;
+        } else {
+            $admin_records = $records->orderBy('id','DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "admin")->where('user_id', $user_id);
+            $admin_records = $this->search($admin_records,$request,$data);
+            $user_records = $records->orderBy('id','DESC')->with('user', 'vehicle', 'container', 'vehicle.vehicle_images', 'vehicle.vehicle_documents', 'vehicle.fines', 'vehicle.auction', 'vehicle.auction_location', 'vehicle.terminal', 'vehicle.status', 'vehicle.buyer')->where("assigned_by", "super_user")->where('user_id', $user_id);
+            $user_records = $this->search($user_records,$request,$data);
+
+            $admin_records = $admin_records->paginate($this->perpage);
+            $admin_records->appends($request->all())->links();
+            $links = $admin_records->links();
+
+            $admin_records = $admin_records->toArray();
+            $admin_records['pagination'] = $links;
+
+            $user_records = $user_records->paginate($this->perpage);
+            $user_records->appends($request->all())->links();
+            $links2 = $user_records->links();
+
+            $user_records = $user_records->toArray();
+            $user_records['pagination'] = $links2;
+
+            $data['admin'] = $admin_records;
+            $data['user'] = $user_records;
+        }
+
         return view('user.vehicles', $data);
     }
 
@@ -625,74 +594,53 @@ class HomeController extends Controller
         }
     }
 
-    public function containers(Request $request)
-    {
-        $data['type'] = "containers";
-        $data['page'] = "1";
-
-        $user_id = Auth::user()->id;
-        // if (Auth::user()->role == "3") {
-        //     $user_id = Auth::user()->main_user_id;
-        // }
-        $admin = Container::orderBy('id', 'DESC')->with('container_vehicle', 'container_documents', 'status', 'shipping_line', 'loading_port', 'discharge_port', 'destination_port', 'measurement')->limit(20)->where("buyers", "LIKE", "%-".$user_id."-%");
-
+    public function cont_search($records,$request,&$data) {
+        /*
+        SET DEFAULT VALUES
+        */
+        if($request->perpage)
+            $this->perpage = $request->perpage;
+        $data['sindex'] = ($request->page != NULL)?($this->perpage*$request->page - $this->perpage+1):1;
+        /*
+        FILTER THE DATA
+        */
+        $params = [];
+        if($request->is_active) {
+            $params['is_active'] = $request->is_active;
+            $records = $records->where("is_active",$params['is_active']);
+        }
         if (!empty($request->port) && $request->port !== 'all') {
             $data['port'] = $request->port;
-            $admin = $admin->where('loading_port_id', $request->port);
+            $records = $records->where('loading_port_id', $request->port);
         }
         if (!empty($request->status) && $request->status !== 'all') {
             $data['status'] = $request->status;
-            $admin = $admin->where('status_id', $request->status);
+            $records = $records->where('status_id', $request->status);
         }
         if (!empty($request->search)) {
             $data['search'] = $request->search;
             $search = $request->search;
-            $admin = $admin->where(function ($query) use ($search) {
+            $records = $records->where(function ($query) use ($search) {
                 $query->where('booking_no', 'LIKE', '%'.$search.'%')
                     ->orWhere('container_no', 'LIKE', '%'.$search.'%')
+                    ->orWhere('export_reference', 'LIKE', '%'.$search.'%')
                     ->orWhere('departure', 'LIKE', '%'.$search.'%')
                     ->orWhere('arrival', 'LIKE', '%'.$search.'%');
             });
         }
         if ((!empty($request->pay_status) && $request->pay_status !== 'all') || @$request->pay_status == '0') {
             $data['pay_status'] = $request->pay_status;
-            $admin = $admin->where('all_paid', $request->pay_status);
+            $records = $records->where('all_paid', $request->pay_status);
         }
+        $data['request'] = $params;
+        return $records;    
+    }
 
-        if (!empty($request->page)) {
-            if ($request->page > 1) {
-                $offset = ($request->page - 1) * 20;
-                $admin = $admin->offset((int)$offset);
-                if (count($admin->get()) < 20) {
-                    $admin = $admin->offset(0);
-                    $request->page = 1;
-                }
-            }
-            $data['page'] = $request->page;
-        }
-
-        $admin = $admin->get();
-
-        foreach ($admin as $key => $value) {
-            $buyer = ContainerVehicle::with("user")->where("container_id", $value->id)->get();
-            $unique = [];
-            $buyers = [];
-            foreach ($buyer as $k => $v) {
-                $user_id = $v->user_id;
-                if (!in_array($user_id, $unique)) {
-                    array_push($unique, $user_id);
-                    $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value->id)->get();
-                    if (count($vehicles) > 0) {
-                        $v->vehicles = $vehicles;
-                        array_push($buyers, $v);
-                    }
-                }
-            }
-            $admin[$key]->buyers = $buyers;
-        }
-
-        $data['admin'] = $admin;
-        $data['super_user'] = [];
+    public function containers(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $data['type'] = "containers";
+        $data['page'] = '1';
         $data['all_port'] = LoadingPort::all();
         $data['all_status'] = ContStatus::all();
         foreach ($data['all_status'] as $key => $value) {
@@ -701,6 +649,48 @@ class HomeController extends Controller
         }
 
         $data['countries'] = Country::all();
+        /*
+        GET RECORDS
+        */
+        $records = new Container;
+        $records = $records->orderBy('id','DESC')->with('container_vehicle', 'container_documents', 'status', 'shipping_line', 'loading_port', 'discharge_port', 'destination_port', 'measurement')->where("buyers", "LIKE", "%-".$user_id."-%");
+        $records = $this->cont_search($records,$request,$data);
+        /*
+        GET TOTAL RECORD BEFORE BEFORE PAGINATE
+        */
+        $data['count'] = $records->count();
+        /*
+        PAGINATE THE RECORDS
+        */
+        $records = $records->paginate($this->perpage);
+        $records->appends($request->all())->links();
+        $links = $records->links();
+
+        $records = $records->toArray();
+        $records['pagination'] = $links;
+
+        foreach ($records['data'] as $key => $value) {
+            $buyer = ContainerVehicle::with("user")->where("container_id", $value['id'])->get();
+            $unique = [];
+            $buyers = [];
+            foreach ($buyer as $k => $v) {
+                $user_id = $v->user_id;
+                if (!in_array($user_id, $unique)) {
+                    array_push($unique, $user_id);
+                    $vehicles = AssignVehicle::with('vehicle')->where("user_id", $user_id)->where('assigned_to', $value['id'])->get();
+                    if (count($vehicles) > 0) {
+                        $v->vehicles = $vehicles;
+                        array_push($buyers, $v);
+                    }
+                }
+            }
+            $records['data'][$key]['buyers'] = $buyers;
+        }
+        $data['admin'] = $records;     
+        $data['user'] = [
+            "data" => []
+        ];     
+        
         return view('user.containers', $data);
     }
 

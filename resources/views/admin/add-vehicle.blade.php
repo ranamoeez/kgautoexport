@@ -899,7 +899,12 @@
 
             $(document).on("change", ".carrier", function () {
                 var phone_numbers = $(this).find("option:selected").attr("data-phone");
-                $("#phone_numbers").text(phone_numbers);
+                if (phone_numbers.indexOf(",") > -1) {
+                    var phone_numbers = phone_numbers.split(",");
+                    $(phone_numbers).each(function (key, value) {
+                        $("#phone_numbers").append(`<p class="mt-1 mb-0">${value}</p>`);
+                    });
+                }
             });
 
             $(document).on("click", ".submit-form", function () {
